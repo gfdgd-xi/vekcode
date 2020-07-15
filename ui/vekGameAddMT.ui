@@ -98,7 +98,7 @@
         </property>
         <widget class="QWidget" name="tab_3">
          <attribute name="title">
-          <string>游戏参数</string>
+          <string>参数</string>
          </attribute>
          <widget class="QGroupBox" name="groupBox_4">
           <property name="geometry">
@@ -135,7 +135,7 @@
            </rect>
           </property>
           <property name="title">
-           <string>Wine选项</string>
+           <string>游戏参数</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="10,50">
            <property name="spacing">
@@ -329,7 +329,7 @@
            </rect>
           </property>
           <property name="title">
-           <string>容器选项-&gt;针对运行程序容器的特殊设定,其中容器路径和容器名不可缺少,mono和gecko组件可以使容器支持.NET程序运行</string>
+           <string>容器功能选项-&gt;针对运行程序容器的特殊设定,其中容器路径和容器名不可缺少,mono和gecko组件可以使容器支持.NET程序运行</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
            <property name="spacing">
