@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/css/Dark.qss</file>
+        <file>res/img/vek.png</file>
+        <file>res/img/vek.ico</file>
+        <file>res/css/Light.qss</file>
+        <file>res/css/Default.qss</file>
+        <file>res/reg/dxvk.reg</file>
+        <file>res/reg/dxvkhud.reg</file>
+    </qresource>
+</RCC>
