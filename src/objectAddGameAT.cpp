@@ -133,9 +133,6 @@ void objectAddGameAT::dataToBase(){
         }
     }
 }
-void objectAddGameAT::objInstallLibs(){
-
-}
 void objectAddGameAT::objectAutoObj(){
     if(objDiyAddGame!=nullptr){
         delete objDiyAddGame;
@@ -156,8 +153,9 @@ void objectAddGameAT::run(){
     if(!jsonUnserialize(_objAddDataAT.pJsonPath)){
         emit Error("配置容器出错!",true);
         return;
+    }else{
+        dataToBase();
+        objectAutoObj();
+        emit Done();
     }
-    dataToBase();
-    objectAutoObj();
-    emit Done();
 }

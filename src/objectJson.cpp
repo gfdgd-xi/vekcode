@@ -44,14 +44,14 @@ json objectJson::DataSerialize(json jsonData,const BaseLocalData _baseLocalData)
                     jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockEnv)][fa.toStdString()]=yz.toStdString();
                 }
             }else{
-                jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockEnv)]={};
+                jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockEnv)]=json({});
             }
             if(!bx.second.dockLibs.empty()){
                 for(auto&ya:bx.second.dockLibs){
                     jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockLibs)].push_back(ya.toStdString());
                 }
             }else{
-                jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockLibs)]={};
+                jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockLibs)]=json({});
             }
             if(!bx.second.dockRegs.empty()){
                 int i=-1;
@@ -63,14 +63,14 @@ json objectJson::DataSerialize(json jsonData,const BaseLocalData _baseLocalData)
                     jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockRegs)][i][toStr(rValue)]=a.rValue.toStdString();
                 }
             }else{
-                jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockRegs)]={};
+                jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockRegs)]=json::array();
             }
             if(!bx.second.attachProc.empty()){
                 for(auto rs:bx.second.attachProc){
                     jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(attachProc)].push_back(rs.toStdString());
                 }
             }else{
-                jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(attachProc)]={};
+                jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(attachProc)]=json::array();
             }
         }
     }
@@ -295,21 +295,36 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
                 for(auto&[iu,zu]:j.items()){
                     _baseAutoSetJson->Option.insert(pair<QString,QString>(QString::fromStdString(iu),QString::fromStdString(zu)));
                 }
-            }
+            }           
             if(QString::fromStdString(k)=="AttachProc"){
-                for(auto&zu:j.items()){
-                    _baseAutoSetJson->AttachProc.push_back(QString::fromStdString(zu.value()));
+                if(!j.empty()){
+                    for(auto&zu:j.items()){
+                        _baseAutoSetJson->AttachProc.push_back(QString::fromStdString(zu.value()));
+                    }
+                }else{
+                    _baseAutoSetJson->AttachProc={};
                 }
+
             }
             if(QString::fromStdString(k)=="Env"){
-                for(auto&[iu,zu]:j.items()){
-                    _baseAutoSetJson->Env.insert(pair<QString,QString>(QString::fromStdString(iu),QString::fromStdString(zu)));
+                if(!j.empty()){
+                    for(auto&[iu,zu]:j.items()){
+                        _baseAutoSetJson->Env.insert(pair<QString,QString>(QString::fromStdString(iu),QString::fromStdString(zu)));
+                    }
+                }else{
+                    _baseAutoSetJson->Env={};
                 }
+
             }
             if(QString::fromStdString(k)=="Libs"){
-                for(auto& d:j.items()){
-                    _baseAutoSetJson->Libs.push_back(QString::fromStdString(d.value()));
+                if(!j.empty()){
+                    for(auto& d:j.items()){
+                        _baseAutoSetJson->Libs.push_back(QString::fromStdString(d.value()));
+                    }
+                }else{
+                    _baseAutoSetJson->Libs={};
                 }
+
             }
             if(QString::fromStdString(k)=="Dxvk"){
                 for(auto&[iy,zy]:j.items()){
@@ -317,15 +332,18 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
                 }
             }
             if(QString::fromStdString(k)=="Regs"){
-                for(auto ad:j.items()){
-                    BaseDockRegs rbaseRegs;
-                    rbaseRegs.rPath=QString::fromStdString(ad.value().at("rPath"));
-                    rbaseRegs.rKey=QString::fromStdString(ad.value().at("rKey"));
-                    rbaseRegs.rTValue=QString::fromStdString(ad.value().at("rTValue"));
-                    rbaseRegs.rValue=QString::fromStdString(ad.value().at("rValue"));
-                    _baseAutoSetJson->Regs.push_back(rbaseRegs);
+                if(!j.empty()){
+                    for(auto ad:j.items()){
+                        BaseDockRegs rbaseRegs;
+                        rbaseRegs.rPath=QString::fromStdString(ad.value().at("rPath"));
+                        rbaseRegs.rKey=QString::fromStdString(ad.value().at("rKey"));
+                        rbaseRegs.rTValue=QString::fromStdString(ad.value().at("rTValue"));
+                        rbaseRegs.rValue=QString::fromStdString(ad.value().at("rValue"));
+                        _baseAutoSetJson->Regs.push_back(rbaseRegs);
+                    }
+                }else{
+                    _baseAutoSetJson->Regs={};
                 }
-
             }
             if(QString::fromStdString(k)=="Args"){
                 _baseAutoSetJson->Args=QString::fromStdString(j);
@@ -368,6 +386,81 @@ bool objectJson::unSerializeLocalWineGame(QString key,QString urlData,UNJSONTYPE
         return false;
     }
     return true;
+}
+json objectJson::exportJson(BaseGameData _tBaseData){
+    json eJson=nullptr;
+    eJson["Option"][toStr(defaultFont)]=toStr(false);
+    eJson["Option"][toStr(sharedMemory)]=toStr(false);
+    eJson["Option"][toStr(writeCopy)]=toStr(false);
+    eJson["Option"][toStr(trServer)]=toStr(false);
+    eJson["Option"][toStr(monoState)]=toStr(false);
+    eJson["Option"][toStr(geckoState)]=toStr(false);
+    eJson[toStr(Dxvk)][toStr(dxvkState)]=toStr(false);
+    eJson[toStr(Dxvk)][toStr(dxvkHUD)]=toStr(false);
+    if(_tBaseData.defaultFonts){
+       eJson["Option"][toStr(defaultFont)]=toStr(true);
+    }
+    if(_tBaseData.taskMemorySharing){
+       eJson["Option"][toStr(taskMemorySharing)]=toStr(true);
+    }
+    if(_tBaseData.taskMemoryOptimization){
+       eJson["Option"][toStr(taskMemoryOptimization)]=toStr(true);
+    }
+    if(_tBaseData.taskRealTimePriority){
+       eJson["Option"][toStr(taskRealTimePriority)]=toStr(true);
+    }
+    if(_tBaseData.monoState){
+       eJson["Option"][toStr(monoState)]=toStr(true);
+    }
+    if(_tBaseData.geckoState){
+       eJson["Option"][toStr(geckoState)]=toStr(true);
+    }
+    if(_tBaseData.dxvkState){
+        eJson[toStr(Dxvk)][toStr(dxvkState)]=toStr(true);
+    }
+    if(_tBaseData.dxvkHUD){
+        eJson[toStr(Dxvk)][toStr(dxvkHUD)]=toStr(true);
+    }
+    eJson["Option"][toStr(gameName)]=_tBaseData.gameName.toStdString();
+    eJson["Option"][toStr(dockSystemVersion)]=_tBaseData.dockSystemVersion.toStdString();
+    eJson["Option"][toStr(mainPrcoName)]=_tBaseData.mainPrcoName.toStdString();
+    if(!_tBaseData.attachProc.empty()){
+        for(auto rs:_tBaseData.attachProc){
+            eJson[toStr(AttachProc)].push_back(rs.toStdString());
+        }
+    }else{
+        eJson[toStr(AttachProc)]=json::array();
+    }
+    if(!_tBaseData.dockEnv.empty()){
+        for(auto&[fa,yz]:_tBaseData.dockEnv){
+            eJson[toStr(Env)][fa.toStdString()]=yz.toStdString();
+        }
+    }else{
+        eJson[toStr(Env)]=json({});
+    }
+    if(!_tBaseData.dockLibs.empty()){
+        for(auto&ya:_tBaseData.dockLibs){
+            eJson[toStr(Libs)].push_back(ya.toStdString());
+        }
+    }else{
+        eJson[toStr(Libs)]=json::array();
+    }
+    if(!_tBaseData.dockRegs.empty()){
+        int i=-1;
+        for(auto a:_tBaseData.dockRegs){
+            i+=1;
+            eJson[toStr(Regs)][i][toStr(rPath)]=a.rPath.toStdString();
+            eJson[toStr(Regs)][i][toStr(rKey)]=a.rKey.toStdString();
+            eJson[toStr(Regs)][i][toStr(rTValue)]=a.rTValue.toStdString();
+            eJson[toStr(Regs)][i][toStr(rValue)]=a.rValue.toStdString();
+        }
+    }else{
+        eJson[toStr(Regs)]=json::array();
+    }
+    eJson[toStr(Args)]=_tBaseData.gameOtherAgrs.toStdString();
+    eJson[toStr(Dxvk)][toStr(dxvkVersion)]=_tBaseData.dxvkVerson.toStdString();
+
+    return eJson;
 }
 //写入文件
 void objectJson::WriteJsonToFile(QString filePath,json jsonData){

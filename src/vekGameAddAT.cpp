@@ -90,18 +90,19 @@ QString vekGameAddAT::JsonType(QString str){
     if(str.startsWith("https",Qt::CaseSensitive)){
         return str;
     }
-    if(str.startsWith("json",Qt::CaseSensitive)){
+    if(str.endsWith("json",Qt::CaseSensitive)){
         return str;
     }
     for(auto & v:g_vekLocalData.gameJsonList){
         if(v.first==ui->comboBox_SrcGame->currentText()){
             for(auto & y:v.second){
                 if(y.first==str){
-                    return y.second;
+                    str=y.second;
                 }
             }
         }
     }
+    return str;
 }
 void vekGameAddAT::addAutoGame(){
     if(ui->comboBox_JsonUrl->currentText()==nullptr){
@@ -125,7 +126,7 @@ void vekGameAddAT::addAutoGame(){
          vekTip("请设置游戏运行exe文件路径");
          return;
     }
-    ObjectAddDataAT objAddDataAT;
+    ObjectAddDataAT objAddDataAT;  
     objAddDataAT.pJsonPath=JsonType(ui->comboBox_JsonUrl->currentText());
     objAddDataAT.pDockName=ui->comboBox_DockName->currentText();
     objAddDataAT.pDckPath=ui->lineEdit_DockPath->text();

@@ -9,4 +9,5 @@
 #include "ui_vekGameAddMulti.h"
 #include "ui_vekGameAddAT.h"
 #include "ui_vekSourceEdit.h"
+#include "ui_vekExportJson.h"
 #endif // UI_COMMON_H

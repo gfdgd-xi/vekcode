@@ -31,7 +31,6 @@ private:
     bool jsonUnserialize(QString);
     void dataToBase();
     void objectAutoObj();
-    void objInstallLibs();
     void objInstallRes();
 signals:
     void Tips(QString TipsStr);

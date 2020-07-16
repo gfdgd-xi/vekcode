@@ -26,7 +26,7 @@ void vekGameListView::contextMenuEvent( QContextMenuEvent * event )
         {
             if (!pSubMenu)
             {
-                pSubMenu = new QMenu(tr("转至软件到容器=>") ,pMenu);
+                pSubMenu = new QMenu(tr("转移软件到容器=>") ,pMenu);
                 pMenu->addMenu(pSubMenu);
             }
             if (it->second != this)
@@ -95,11 +95,26 @@ void vekGameListView::ObjectRun(){
             deleteItemSlot();
             return;
             break;
+        case object_exportJson:
+            ExportJson();
+            return;
+            break;
         }
         std::vector<QStringList> _codeAgrs;
         connect(this, SIGNAL(toObjectArgs(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)), _objectExtend, SLOT(setDockOptionObjectData(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)));
         emit(toObjectArgs(*m_pModel->getItem(index),_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default));
         _objectExtend->start();
+    }
+}
+void vekGameListView::ExportJson(){
+    int index = this->currentIndex().row();
+    if(_vExportJson==nullptr){
+        BaseGameData bGameData=*m_pModel->getItem(index);
+        _vExportJson=new vekExportJson();
+        _vExportJson->setAttribute(Qt::WA_DeleteOnClose,true);
+        _vExportJson->show();
+        connect(_vExportJson,&vekExportJson::_unExportJson,this,&vekGameListView::unExportJson);
+        _vExportJson->ExportJson(bGameData);
     }
 }
 void vekGameListView::objectExtendGame(){
@@ -138,6 +153,9 @@ void vekGameListView::upData(BaseGameData* data){
 }
 void vekGameListView::unGameAdd(){
     _vek_Game_Add=nullptr;
+}
+void vekGameListView::unExportJson(){
+    _vExportJson=nullptr;
 }
 void vekGameListView::deleteItemSlot()
 {

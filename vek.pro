@@ -32,6 +32,7 @@ SOURCES += \
     src/objectSource.cpp \
     src/vek.cpp \
     src/vekAbout.cpp \
+  src/vekExportJson.cpp \
   src/vekGameAddAT.cpp \
   src/vekGameAddMT.cpp \
   src/vekGameAddMulti.cpp \
@@ -58,6 +59,7 @@ HEADERS += \
     src/ui_common.h \
     src/vek.h \
     src/vekAbout.h \
+    src/vekExportJson.h \
     src/vekExtendDebug.h \
     src/vekGameAddAT.h \
     src/vekGameAddMT.h \
@@ -72,6 +74,7 @@ HEADERS += \
     src/vekWineOption.h
 
 FORMS += \
+    ui/vekExportJson.ui \
     ui/vekGameAddAT.ui \
     ui/vekGameAddMT.ui \
     ui/vekGameAddMulti.ui \

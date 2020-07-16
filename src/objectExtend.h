@@ -15,6 +15,7 @@ typedef enum{
     object_start,
     object_debugstart,
     object_setgame,
+    object_exportJson,
     object_forcekill,
     object_deletegame,
     object_regobject,

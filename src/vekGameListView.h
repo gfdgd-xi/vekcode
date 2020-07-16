@@ -6,6 +6,7 @@
 #include "objectExtend.h"
 #include "vekInitObject.h"
 #include "vekExtendDebug.h"
+#include "vekExportJson.h"
 #include "common.h"
 //static std::vector<QString> tabWidgetName= {"游戏列表"};
 
@@ -29,6 +30,7 @@ private slots:
         void setItemSlot();
         void unGameAdd();
         void upData(BaseGameData*);
+        void unExportJson();
 public slots:
         void ObjectRun();
 
@@ -39,6 +41,7 @@ signals:
 private:
         vekGameAddMT *_vek_Game_Add=nullptr;
         vekExtendDebug* _vExtendDebug=nullptr;
+        vekExportJson* _vExportJson=nullptr;
         int  m_hitIndex;
         vekGameData* m_pModel;
         QTabWidget* mBox;
@@ -50,7 +53,8 @@ private:
         void vekWriteJsonData();
         void vekReadJsonData(QString jsonPath);
         void vekInitJsonData();
-        std::vector<QString> objectTypeStr={"容器设置","容器注册表","容器控制面板","容器软件删除|增加","winetricks","运行程序","调试运行(测试功能)","修改程序设置","强行关闭本程序","删除本程序"};
+        void ExportJson();
+        std::vector<QString> objectTypeStr={"容器设置","容器注册表","容器控制面板","容器软件删除|增加","winetricks","运行程序","调试运行(测试功能)","修改程序设置","导出自动配置文件","强行关闭本程序","删除本程序"};
         QMenu *pMenu=nullptr;
 };
 #endif // VEKGAMELISTVIEW_H
