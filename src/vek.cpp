@@ -63,11 +63,13 @@ void vek::installApp(){
         basegamedata.geckoState=true;
         basegamedata.defaultFonts=true;
         objNewDock->newDock();
-    }else{
+    }else{       
         if(g_vekLocalData.dockerVec.empty()){
             return;
+        }else{
+            qDebug()<<g_vekLocalData.dockerVec.begin()->first;
+            basegamedata=g_vekLocalData.dockerVec.begin()->second.begin()->second;
         }
-       basegamedata=g_vekLocalData.dockerVec.begin()->second.begin()->second;
     }
     objectExtend* _objectExtend=new objectExtend();
     objectType _objType=object_uninstall;

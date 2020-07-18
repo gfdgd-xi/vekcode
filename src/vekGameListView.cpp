@@ -104,10 +104,10 @@ void vekGameListView::ObjectRun(){
             taskList.push_back(m_pModel->getItem(index)->mainPrcoName);
             auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
             connect(_objectExtend, SIGNAL(objexitTray(bool)), pObjectVek, SLOT(exitTray(bool)));
+            emit _startTray();
         }
         connect(this, SIGNAL(toObjectArgs(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)), _objectExtend, SLOT(setDockOptionObjectData(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)));
-        emit(toObjectArgs(*m_pModel->getItem(index),_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default));
-        emit _startTray();
+        emit(toObjectArgs(*m_pModel->getItem(index),_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default));      
         _objectExtend->start();
     }
 }
@@ -181,6 +181,8 @@ void vekGameListView::deleteItemSlot()
                     dockPath.removeRecursively();
                 }
             }
+            g_vekLocalData.dockerVec.erase(dockNameStr);
+            m_pListMap->erase(dockNameStr);
         }
     }
 }

@@ -156,10 +156,13 @@ void vekGamePanel::addGameObject(BaseGameData* data){
     for (it;it != m_pListMap->end();++it)
     {
         if(it->first==nowTabName){
+            qDebug()<<it->first;
+            qDebug()<<"页存在";
             tabState=true;
         }
     }
     if(!tabState){
+        qDebug()<<"增加页";
         addGroupSlot(_tempBaseData);
     }
     for(std::map<QString,vekGameListView*>::iterator it = m_pListMap->begin();it!=m_pListMap->end();it++)
@@ -169,12 +172,14 @@ void vekGamePanel::addGameObject(BaseGameData* data){
     }
     pList->setViewMode(QListView::IconMode);
     pList->setFlow(QListView::LeftToRight);
+    connect(pList, SIGNAL(_startTray()), this->parentWidget()->parentWidget()->parentWidget(), SLOT(startTray()));
     pList->addItem(_tempBaseData);
 }
 void vekGamePanel::addGroupSlot(BaseGameData* data)
 {
     if (!data->dockName.isEmpty())
     {
+        qDebug()<<"no nullptr";
         vekGameListView *pListView1 = new vekGameListView(this);
         pListView1->setViewMode(QListView::IconMode);
         pListView1->setFlow(QListView::LeftToRight);
