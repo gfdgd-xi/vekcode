@@ -43,7 +43,6 @@ typedef enum{
     object_wineserver_w,
     object_wineserver_default
 }objectWineServer;
-
 class objectExtend :public QThread
 {
     Q_OBJECT
@@ -77,6 +76,8 @@ private:
     void forcekill();
 private slots:
     void setDockOptionObjectData(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
+signals:
+    void objexitTray(bool);
 };
 
 #endif // VEKSTARTOPTINOBJECT_H

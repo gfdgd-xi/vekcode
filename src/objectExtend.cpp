@@ -7,7 +7,6 @@ objectExtend::objectExtend(QObject *parent) : QThread(parent)
 objectExtend::~objectExtend(){
     delete m_cmd;
     m_cmd=nullptr;
-    qDebug()<<"kill!";
 }
 void objectExtend::setDockOptionObjectData(BaseGameData _data,std::vector<QStringList> _agrsList,objectType _objType,objectWineBoot _objWineBootType,objectWineServer _objWineServer){
     data=_data;
@@ -134,17 +133,23 @@ void objectExtend::baseExecuteAppCode(QString code,QStringList codeArgs){
     m_cmd->closeReadChannel(QProcess::StandardError);
     m_cmd->setWorkingDirectory(data.workPath);
     m_cmd->execute(code,codeArgs);
-    //m_cmd->start("bash");
-    //QString codes=data.winePath+"wine/bin/wine64"+" "+codeArgs.join(" ");
-    //m_cmd->write(codes.toLocal8Bit()+'\n');
     qDebug()<<"|++++++++++++++++++++++++++++|";
     qDebug()<<"writeCode:"+code;
     qDebug()<<"workPath:"+data.workPath;
     qDebug()<<"WineArgs:"+codeArgs.join(" ");
     qDebug()<<"|++++++++++++++++++++++++++++|";
-    //m_cmd->waitForFinished(-1);
     monitorProc();
     waitObjectDone(true);
+    vector<QString>::iterator it;
+    for(it=taskList.begin();it!=taskList.end();)
+    {
+        if(it->toStdString()==data.mainPrcoName.toStdString())
+        {
+           taskList.erase(it);
+           break;
+        }
+    }
+    emit objexitTray(false);
 }
 
 void objectExtend::baseExecuteWineCode(QString code,QStringList codeArgs){

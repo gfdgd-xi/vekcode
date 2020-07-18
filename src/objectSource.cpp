@@ -21,21 +21,18 @@ void objectSource::updateSrcDataObject(){
         string sdata=GetReData(k);
         if(sdata!="error"){
             _objectJson.unSerializeLocalWineGame(d,QString::fromStdString(sdata),unJsonWineList);
+        }else{
+            vekError("更新wine源数据失败");
         }
     }
     for(auto &[i,o]:g_vekLocalData.gameScrSource){
         string sdata=GetReData(o);
         if(sdata!="error"){
             _objectJson.unSerializeLocalWineGame(i,QString::fromStdString(sdata),unJsonGameList);
+        }else{
+            vekError("更新游戏源数据失败");
         }
     }
-    /*
-    for(auto x:g_vekLocalData.gameVec){
-        for(auto y:x.second.attachProc){
-             qDebug()<<"写入："+x.first<<y;
-        }
-    }
-    */
 }
 void objectSource::loadAllData(){
     QString jsonPath=QDir::currentPath()+"/data.json";

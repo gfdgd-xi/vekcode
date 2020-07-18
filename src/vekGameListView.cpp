@@ -11,7 +11,6 @@ vekGameListView::vekGameListView( QWidget *parent):QListView(parent)
 
 vekGameListView::~vekGameListView()
 {
-
 }
 void vekGameListView::contextMenuEvent( QContextMenuEvent * event )
 {
@@ -101,8 +100,14 @@ void vekGameListView::ObjectRun(){
             break;
         }
         std::vector<QStringList> _codeAgrs;
+        if(_objType==object_start){
+            taskList.push_back(m_pModel->getItem(index)->mainPrcoName);
+            auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
+            connect(_objectExtend, SIGNAL(objexitTray(bool)), pObjectVek, SLOT(exitTray(bool)));
+        }
         connect(this, SIGNAL(toObjectArgs(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)), _objectExtend, SLOT(setDockOptionObjectData(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)));
         emit(toObjectArgs(*m_pModel->getItem(index),_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default));
+        emit _startTray();
         _objectExtend->start();
     }
 }
@@ -211,7 +216,7 @@ void vekGameListView::moveSlot()
             _objectJson.deleteGameNodeData(pItem->gameCID);
             _objectJson.updateGameNodeData(pItem->dockName,*pItem);
         }
-    } 
+    }
     //操作完了要把这个临时的映射清空
     m_ActionMap.clear();
 }

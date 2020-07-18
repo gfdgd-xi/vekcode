@@ -2,7 +2,6 @@
 #include "ui_common.h"
 #include <QDesktopServices>
 #include <QUrl>
-
 vek::vek(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::vek)
@@ -16,9 +15,31 @@ vek::vek(QWidget *parent)
 }
 vek::~vek()
 {
+    exitTray(true);
     delete ui;
 }
+void vek::startTray(){
+    if(!g_vekLocalData.wineVec.empty()){
+        for(auto a:g_vekLocalData.wineVec){
+            if(objTray==nullptr){
+                objTray=new objectTray();
+                objTray->_baseWineData=a.second;
+                objTray->start();
+            }
+            break;
+        }
+    }
+}
+void vek::exitTray(bool trayState){
+    if(trayState){
+        objTray->exitTray();
+    }else{
+        if(taskList.empty()){
+        objTray->exitTray();
+        }
+    }
 
+}
 void vek::installApp(){
     bool dState=false;
     if(g_vekLocalData.wineVec.empty()){

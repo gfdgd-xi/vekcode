@@ -30,6 +30,7 @@ SOURCES += \
     src/objectJson.cpp \
   src/objectProcManage.cpp \
     src/objectSource.cpp \
+  src/objectTray.cpp \
     src/vek.cpp \
     src/vekAbout.cpp \
   src/vekExportJson.cpp \
@@ -56,6 +57,7 @@ HEADERS += \
     src/objectJson.h \
     src/objectProcManage.h \
     src/objectSource.h \
+    src/objectTray.h \
     src/ui_common.h \
     src/vek.h \
     src/vekAbout.h \

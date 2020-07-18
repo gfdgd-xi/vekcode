@@ -31,15 +31,11 @@ std::string vekGetCurl::vekGetData(std::string url){
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &strTmpStr);
         curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
         CURLcode res = curl_easy_perform(curl);
-        if (res != CURLE_OK)
+        if (res != CURLE_OK||QString::fromStdString(strTmpStr).contains("404",Qt::CaseSensitive)||res==CURLE_QUOTE_ERROR)
         {
             strRsp = "error";
-        }
-        else if(QString::fromStdString(strTmpStr).contains("404",Qt::CaseSensitive))
-        {
-            strRsp = "error";
-        }
-        else{
+            break;
+        }else{
             strRsp = strTmpStr;
             break;
         }

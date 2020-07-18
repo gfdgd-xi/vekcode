@@ -5,7 +5,6 @@
 #include <iostream>
 #include <map>
 #include <vector>
-
 typedef struct{
     QString rPath=nullptr;
     QString rKey=nullptr;
@@ -125,5 +124,6 @@ extern std::map<QString,std::map<QString,QString>> fontRes;
 extern std::map<QString,std::map<QString,QString>> dxvkResCof;
 extern std::map<QString,std::map<QString,QString>> dxvkResHUD;
 extern std::map<QString,std::map<QString,QString>> dxvkRes;
+extern std::vector<QString> taskList;
 static QString vekIPAPI="http://ip-api.com/json/";
 #endif // BASEDATA_H

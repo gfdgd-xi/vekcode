@@ -6,14 +6,13 @@
 #include "vekGameAddMulti.h"
 #include "vekGameAddAT.h"
 #include "common.h"
-#include "objectSource.h"
+#include "objectTray.h"
 class vekGamePanel : public QWidget
 {
     Q_OBJECT
 public:
     vekGamePanel(QWidget *parent = 0);
     ~vekGamePanel();
-
 protected:
     void contextMenuEvent ( QContextMenuEvent * event );
 public slots:
@@ -25,6 +24,7 @@ private:
     vekGameAddMT* vek_game_add=nullptr;
     vekGameAddMulti* vek_game_multi_add=nullptr;
     vekGameAddAT* vek_game_add_auto=nullptr;
+    objectTray* objTray=nullptr;
     void unMultGameAdd();
     void unDiyGameAdd();
     void unAutoDock();

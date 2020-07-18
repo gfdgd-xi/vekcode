@@ -3,6 +3,7 @@
 #include "common.h"
 //全局数据结构
 BaseLocalData g_vekLocalData={};
+std::vector<QString> taskList={};
 //dxvk注册表固定字符串
 std::map<QString,std::map<QString,QString>> dxvkRes={
    {"HKEY_CURRENT_USER\\Software\\Wine\\DllOverrides",{{"","native"}}}

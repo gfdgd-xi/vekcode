@@ -9,6 +9,8 @@
 #include "vekExtendDebug.h"
 #include "vekSourceEdit.h"
 #include "objectProcManage.h"
+#include "src/objectTray.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class vek;
@@ -20,12 +22,16 @@ class vek : public QWidget
 
 public:
     explicit vek(QWidget *parent = nullptr);
-    ~vek();
+    ~vek();  
 private:
     Ui::vek *ui=nullptr;
     vekWineOption *_vek_wine_option=nullptr;
-    vekAbout* _vek_About=nullptr; 
+    vekAbout* _vek_About=nullptr;
     vekSourceEdit* _vek_source_esit=nullptr;
+    objectTray* objTray=nullptr;
+public slots:
+    void startTray();
+    void exitTray(bool);
 private slots:
     void vekAddGame();
     void vekRunGame();
@@ -33,12 +39,12 @@ private slots:
     void on_action_About_triggered();
     void on_action_Exit_triggered();
     void on_action_WineInstall_triggered();
-    void on_action_EditSource_triggered();   
+    void on_action_EditSource_triggered();
     void unInitWineOption();
     void unVekAbout();
     void installApp();
     void unSourceEdit();
 signals:
-        void toObjectArgs(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
+    void toObjectArgs(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
 };
 #endif // VEK_H

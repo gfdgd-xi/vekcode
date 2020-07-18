@@ -8,8 +8,6 @@
 #include "vekExtendDebug.h"
 #include "vekExportJson.h"
 #include "common.h"
-//static std::vector<QString> tabWidgetName= {"游戏列表"};
-
 using namespace std;
 using json = nlohmann::json;
 
@@ -33,11 +31,11 @@ private slots:
         void unExportJson();
 public slots:
         void ObjectRun();
-
 signals:
         void toObjectArgs(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
         void toObjectArgs_ptr(BaseGameData*);
         void toObjectArgs_cl(BaseGameData);
+        void _startTray();
 private:
         vekGameAddMT *_vek_Game_Add=nullptr;
         vekExtendDebug* _vExtendDebug=nullptr;

@@ -4,7 +4,7 @@
 #include "common.h"
 #include "vekGetCurl.h"
 #include "objectJson.h"
-
+#include "vekInitObject.h"
 class objectSource
 {
 public:

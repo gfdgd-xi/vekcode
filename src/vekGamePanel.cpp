@@ -3,19 +3,15 @@
 vekGamePanel::vekGamePanel(QWidget *parent)
     : QWidget(parent)
 {   
-    objectSource* objSource=new objectSource;
-    objSource->loadAllData();
-    vek_InitTabWidgetListGame();
-    vekLoadJsonData();
-    delete objSource;
-    objSource=nullptr;
+
+    vek_InitTabWidgetListGame();   
+    vekLoadJsonData();   
 }
 
 vekGamePanel::~vekGamePanel()
 {
 
 }
-
 //初始化容器列表
 void vekGamePanel::vek_InitTabWidgetListGame(){
     m_pBox = new QTabWidget(this);
@@ -33,7 +29,6 @@ void vekGamePanel::vek_InitTabWidgetListGame(){
     m_pBox->setMaximumSize(788,510);
     m_pBox->setMinimumSize(788,510);
     this->setMinimumSize(788,513);
-
 }
 //读取数据to容器列表
 void vekGamePanel::vekLoadJsonData(){
@@ -79,6 +74,7 @@ void vekGamePanel::vekLoadJsonData(){
                     }
                     pList->setViewMode(QListView::IconMode);
                     pList->setFlow(QListView::LeftToRight);
+                    connect(pList, SIGNAL(_startTray()), this->parentWidget()->parentWidget()->parentWidget(), SLOT(startTray()));
                     pList->addItem(LID);
                 }
             }
