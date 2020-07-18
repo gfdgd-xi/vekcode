@@ -5,8 +5,6 @@ objectTray::objectTray(QObject *parent) : QThread(parent)
     parent=nullptr;
 }
 objectTray::~objectTray(){
-    delete m_cmd;
-    m_cmd=nullptr;
 }
 void objectTray::startTray(){
     m_cmd->closeReadChannel(QProcess::StandardOutput);
@@ -19,6 +17,8 @@ void objectTray::exitTray(){
    m_cmd->write("\x03");
    m_cmd->close();
    m_cmd->kill();
+   delete m_cmd;
+   m_cmd=nullptr;
 }
 void objectTray::run(){
     m_cmd=new QProcess();

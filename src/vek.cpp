@@ -36,9 +36,12 @@ void vek::exitTray(bool trayState){
     }else{
         if(taskList.empty()){
         objTray->exitTray();
+        }else{
+            return;
         }
     }
-
+    delete objTray;
+    objTray=nullptr;
 }
 void vek::installApp(){
     bool dState=false;

@@ -15,7 +15,7 @@ QString objectProcManage::objGetProcList(procInfo pInfo){
     m_cmd->start("bash");
     QString pCodes="WINEPREFIX="+pInfo.dockPath+"/"+pInfo.dockName+" "+pInfo.winePath+"wine/bin/winedbg"+" "+"--command \"info proc\"";
     m_cmd->write(pCodes.toLocal8Bit()+'\n');
-    m_cmd->waitForFinished(10);
+    m_cmd->waitForFinished(1000);
     QString procData=m_cmd->readAll();
     qDebug()<<procData;
     m_cmd->close();
@@ -35,14 +35,17 @@ void objectProcManage::objDelProc(QProcess* prc,QString prPid,procInfo _pInfo){
     QString qCodes="quit";
     //进入当前容器的winedbg
     prc->write(pCodes.toLocal8Bit()+'\n');
+    QThread::msleep(100);
     //通过pid选择进程
     prc->write(dCodes.toLocal8Bit()+'\n');
+    QThread::msleep(100);
     //写入关闭指令
     prc->write(kCodes.toLocal8Bit()+'\n');
+    QThread::msleep(100);
     //退出winedbg
     prc->write(qCodes.toLocal8Bit()+'\n');
     //关闭并kill QProcess;
-    prc->waitForFinished(10);
+    prc->waitForFinished(1000);
     prc->close();
     prc->kill();
     delete prc;
@@ -77,6 +80,5 @@ void objectProcManage::getAllProc(){
     delAttachProc(iprocInfo);
 }
 void objectProcManage::run(){
-    qDebug()<<"删除进程";
     getAllProc();
 }
