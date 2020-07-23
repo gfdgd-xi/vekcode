@@ -125,5 +125,5 @@ extern std::map<QString,std::map<QString,QString>> dxvkResCof;
 extern std::map<QString,std::map<QString,QString>> dxvkResHUD;
 extern std::map<QString,std::map<QString,QString>> dxvkRes;
 extern std::vector<QString> taskList;
-static QString vekIPAPI="http://ip-api.com/json/";
+static QString vekUpInfo="https://gitee.com/JackLee02/vekGame/raw/master/upLogs.txt";
 #endif // BASEDATA_H

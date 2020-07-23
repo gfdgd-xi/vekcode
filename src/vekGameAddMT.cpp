@@ -2,14 +2,13 @@
 #include "ui_common.h"
 #include "vekInitObject.h"
 
-
 vekGameAddMT::vekGameAddMT(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::vekGameAddMT)
 {
     ui->setupUi(this);
     vek_Style(this,0);
-    setAttribute(Qt::WA_InputMethodEnabled, true);
+    qwidgetGeometry(this);
 }
 
 vekGameAddMT::~vekGameAddMT()

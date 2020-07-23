@@ -6,14 +6,21 @@ vekAbout::vekAbout(QWidget *parent) :
     ui(new Ui::vekAbout)
 {
     ui->setupUi(this);
-    setWindowFlags(windowFlags()&~Qt::WindowMaximizeButtonHint & Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint);
-    setFixedSize(this->width(),this->height());
-    this->setWindowTitle("关于");
+    qwidgetGeometry(this);
     vek_Style(this,0);
 }
 
 vekAbout::~vekAbout()
 {
+    delete vekgetcurl;
+    vekgetcurl=nullptr;
     delete ui;
     emit _unVekAbout();
+}
+void vekAbout::getUpdateLogs(){
+    if(vekgetcurl==nullptr){
+        vekgetcurl=new vekGetCurl;
+    }
+    QString upinfo=QString::fromStdString(vekgetcurl->vekGetData(vekUpInfo.toStdString()));
+    ui->textEdit_UpLogs->append(upinfo);
 }

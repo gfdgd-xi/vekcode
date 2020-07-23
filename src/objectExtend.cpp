@@ -14,7 +14,12 @@ void objectExtend::setDockOptionObjectData(BaseGameData _data,std::vector<QStrin
     objType=_objType;
     objWineBootType=_objWineBootType;
     objWineServer=_objWineServer;
-    startArgs=data.winePath+"wine/bin/wine64";
+    if(data.wineVersion.contains("dev",Qt::CaseSensitive)){
+        startArgs=data.winePath+"wine/bin/wine";
+    }else{
+        startArgs=data.winePath+"wine/bin/wine64";
+    }
+
 }
 //运行环境变量设置
 void objectExtend::executeArgsEnv(){
@@ -26,6 +31,7 @@ void objectExtend::executeArgsEnv(){
     qputenv("WINEPREFIX", dockPath.toStdString().c_str());
     //设置工作目录
     qputenv("PWD", data.workPath.toStdString().c_str());
+    qputenv("WINETRICKS_DOWNLOADER", "aria2c");
     if(!data.dockEnv.empty()){
         for(auto& [a,u]:data.dockEnv){
             qputenv(a.toStdString().c_str(),u.toStdString().c_str());
@@ -103,8 +109,8 @@ void objectExtend::executeWineServer(objectWineServer objWineServer){
 //运行Winetricks
 void objectExtend::executeWinetricks(){
     //遗留问题->在运行WineTricks之前需要强制结束当前所有运行的wineserver
-    executeWineServer(object_wineserver_k);
-    executeWineBoot(object_wineboot_k);
+    //executeWineServer(object_wineserver_k);
+    //executeWineBoot(object_wineboot_k);
     QStringList codeArgs;
     codeArgs.append(data.winePath+"wine/bin/winetricks");
     if(objType==object_winetricks_gui){
@@ -119,13 +125,11 @@ void objectExtend::executeWinetricks(){
     QString mdCode = codeArgs.join(" ");
     m_cmd->start(mdCode,QIODevice::ReadWrite);
     m_cmd->waitForFinished(-1);
-    waitObjectDone(false);
     dockEditSystemVersion();
+    waitObjectDone(false);   
 }
 //执行游戏
 void objectExtend::baseExecuteAppCode(QString code,QStringList codeArgs){
-    //executeWineServer(object_wineserver_k);
-    //executeWineBoot(object_wineboot_k);
     monitorProc();
     m_cmd->setProcessChannelMode(QProcess::MergedChannels);
     m_cmd->setReadChannel(QProcess::StandardOutput);

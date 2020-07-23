@@ -6,6 +6,7 @@ vekGameAddAT::vekGameAddAT(QWidget *parent) :
     ui(new Ui::vekGameAddAT)
 {
     ui->setupUi(this);
+    qwidgetGeometry(this);
 }
 
 vekGameAddAT::~vekGameAddAT()

@@ -33,6 +33,9 @@ using namespace std;
 #include <QTabWidget>
 #include <QThread>
 #include <QProgressBar>
+#include <QDesktopWidget>
+#include <QDesktopServices>
+#include <QApplication>
 //###################C++ head################//
 #include <stdlib.h>
 #include <vector>

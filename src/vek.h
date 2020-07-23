@@ -22,7 +22,8 @@ class vek : public QWidget
 
 public:
     explicit vek(QWidget *parent = nullptr);
-    ~vek();  
+    ~vek();
+    void connectObject();
 private:
     Ui::vek *ui=nullptr;
     vekWineOption *_vek_wine_option=nullptr;
@@ -32,11 +33,11 @@ private:
 public slots:
     void startTray();
     void exitTray(bool);
+    void on_action_About_triggered();
 private slots:
     void vekAddGame();
     void vekRunGame();
-    void on_action_AddGame_triggered();
-    void on_action_About_triggered();
+    void on_action_AddGame_triggered();   
     void on_action_Exit_triggered();
     void on_action_WineInstall_triggered();
     void on_action_EditSource_triggered();

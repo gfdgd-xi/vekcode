@@ -98,4 +98,7 @@ void vek_Style(QWidget *parent,int styleType)
         file.close();
     }
 }
-
+void qwidgetGeometry(QWidget* qwidget){
+    QDesktopWidget *deskdop = QApplication::desktop();
+    qwidget->move((deskdop->width() - qwidget->width())/2, (deskdop->height() - qwidget->height())/2);
+}

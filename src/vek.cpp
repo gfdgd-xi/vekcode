@@ -1,22 +1,23 @@
 ﻿#include "vek.h"
 #include "ui_common.h"
-#include <QDesktopServices>
-#include <QUrl>
 vek::vek(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::vek)
 
 {
     ui->setupUi(this);
-    vek_Style(this,0);
-    connect(ui->pushButton_vekAddGame,&QPushButton::clicked,this,&vek::vekAddGame);
-    connect(ui->pushButton_vekRunGame,&QPushButton::clicked,this,&vek::vekRunGame);
-    connect(ui->pushButton_InstallApp,&QPushButton::clicked,this,&vek::installApp);
+    vek_Style(this,0);  
+    qwidgetGeometry(this);
 }
 vek::~vek()
 {
     exitTray(true);
     delete ui;
+}
+void vek::connectObject(){
+    connect(ui->pushButton_vekAddGame,&QPushButton::clicked,this,&vek::vekAddGame);
+    connect(ui->pushButton_vekRunGame,&QPushButton::clicked,this,&vek::vekRunGame);
+    connect(ui->pushButton_InstallApp,&QPushButton::clicked,this,&vek::installApp);
 }
 void vek::startTray(){
     if(!g_vekLocalData.wineVec.empty()){
@@ -32,13 +33,16 @@ void vek::startTray(){
 }
 void vek::exitTray(bool trayState){
     if(trayState){
-        objTray->exitTray();
+        if(objTray!=nullptr){
+           objTray->exitTray();
+        }
     }else{
         if(taskList.empty()){
         objTray->exitTray();
-        }else{
-            return;
-        }
+        }else{return;}
+    }
+    if(objTray==nullptr){
+        return;
     }
     delete objTray;
     objTray=nullptr;
@@ -84,6 +88,7 @@ void vek::on_action_EditSource_triggered(){
     if(_vek_source_esit==nullptr){
         _vek_source_esit=new vekSourceEdit();
         _vek_source_esit->setAttribute(Qt::WA_DeleteOnClose,true);
+        _vek_source_esit->setWindowFlags(Qt::WindowStaysOnTopHint);
         _vek_source_esit->setGeometry(this->geometry());
         _vek_source_esit->show();
         connect(_vek_source_esit,&vekSourceEdit::_unSourveEdit,this,&vek::unSourceEdit);
@@ -107,8 +112,10 @@ void vek::on_action_About_triggered()
     if(_vek_About==nullptr){
         _vek_About=new vekAbout();
         _vek_About->setAttribute(Qt::WA_DeleteOnClose,true);
+        _vek_About->setWindowFlags(Qt::WindowStaysOnTopHint);
         _vek_About->setGeometry(this->geometry());
         _vek_About->show();
+        _vek_About->getUpdateLogs();
         connect(_vek_About,&vekAbout::_unVekAbout,this,&vek::unVekAbout);
     }
 }

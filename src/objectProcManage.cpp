@@ -13,7 +13,7 @@ QString objectProcManage::objGetProcList(procInfo pInfo){
     m_cmd->setProcessChannelMode(QProcess::MergedChannels);
     m_cmd->setReadChannel(QProcess::StandardOutput);
     m_cmd->start("bash");
-    QString pCodes="WINEPREFIX="+pInfo.dockPath+"/"+pInfo.dockName+" "+pInfo.winePath+"wine/bin/winedbg"+" "+"--command \"info proc\"";
+    QString pCodes="WINEPREFIX="+pInfo.dockPath+"/"+pInfo.dockName+" "+pInfo.winePath+"wine/bin/wine winedbg"+" "+"--command \"info proc\"";
     m_cmd->write(pCodes.toLocal8Bit()+'\n');
     m_cmd->waitForFinished(1000);
     QString procData=m_cmd->readAll();

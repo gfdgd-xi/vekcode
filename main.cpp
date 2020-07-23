@@ -1,5 +1,4 @@
-﻿#include <QApplication>
-#include "src/vek.h"
+﻿#include "src/vek.h"
 #include "src/baseRes.h"
 #include "src/objectSource.h"
 
@@ -9,10 +8,11 @@ int main(int argc, char *argv[])
     objectSource* objSource=new objectSource;
     objSource->loadAllData();
     delete objSource;
-    objSource=nullptr;
+    objSource=nullptr;    
     vek w;
-    //w.startTray();
     w.show();
+    w.connectObject();
+    w.on_action_About_triggered();
     return a.exec();
 }
 
