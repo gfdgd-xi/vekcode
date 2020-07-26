@@ -5,7 +5,8 @@
 #include "objectJson.h"
 #include "objectAddGameAT.h"
 #include "vekInitObject.h"
-#include <QtConcurrent>
+#include "vekATJsonView.h"
+#include "vekATJsonModel.h"
 namespace Ui {
 class vekGameAddAT;
 }

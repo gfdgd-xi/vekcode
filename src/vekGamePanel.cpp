@@ -21,7 +21,8 @@ void vekGamePanel::vek_InitTabWidgetListGame(){
         pListView->setViewMode(QListView::IconMode);
         pListView->setFlow(QListView::LeftToRight);
         pListView->setResizeMode(QListView::Adjust);
-        pListView->setStyleSheet("QListView{icon-size:50px;font:14px;margin-bottom:1px;selection-color: #0a214c;selection-background-color: #C19A6B;} QListView::item{background:#FFFFFF;margin-top:20px;}");
+        //pListView->setStyleSheet("QListView{icon-size:50px;font:14px;margin-bottom:1px;selection-color: #0a214c;selection-background-color: #C19A6B;} QListView::item{background:#222222;margin-top:20px;}");
+        //pListView->setStyleSheet("QListView{icon-size:50px;font:14px;margin-bottom:1px;selection-color: #0a214c;selection-background-color: #C19A6B;} QListView::item{background:#FFFFFF;margin-top:20px;}");
         m_pBox->addTab(pListView,twn.first);
         m_pListMap->insert(std::pair<QString,vekGameListView*>(twn.first,pListView));
         pListView->setListMap(m_pListMap,m_pBox);
@@ -183,7 +184,8 @@ void vekGamePanel::addGroupSlot(BaseGameData* data)
         vekGameListView *pListView1 = new vekGameListView(this);
         pListView1->setViewMode(QListView::IconMode);
         pListView1->setFlow(QListView::LeftToRight);
-        pListView1->setStyleSheet("QListView{icon-size:50px;font:14px;margin-bottom:1px;selection-color: #0a214c;selection-background-color: #C19A6B;} QListView::item{background:#FFFFFF;margin-top:20px;}");
+        //pListView1->setStyleSheet("QListView{icon-size:50px;font:14px;margin-bottom:1px;selection-color: #0a214c;selection-background-color: #C19A6B;} QListView::item{background:#222222;margin-top:20px;}");
+        //pListView1->setStyleSheet("QListView{icon-size:50px;font:14px;margin-bottom:1px;selection-color: #0a214c;selection-background-color: #C19A6B;} QListView::item{background:#FFFFFF;margin-top:20px;}");
         m_pBox->addTab(pListView1,data->dockName);
         m_pListMap->insert(std::pair<QString,vekGameListView*>(data->dockName,pListView1));
     }

@@ -6,6 +6,7 @@ vekGameAddMulti::vekGameAddMulti(QWidget *parent) :
     ui(new Ui::vekGameAddMulti)
 {
     ui->setupUi(this);
+    vek_Style(this,0);
     connectObject();
 }
 

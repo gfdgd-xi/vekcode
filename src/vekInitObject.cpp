@@ -89,11 +89,10 @@ void vek_Style(QWidget *parent,int styleType)
         strStyle="Light.qss";
     }
     QFile file(":/res/css/"+strStyle);
-    file.open(QFile::ReadOnly);
+    file.open(QFile::ReadOnly|QFile::Text);
     if (file.isOpen())
     {
-        QString styleSheet = parent->styleSheet();
-        styleSheet += QLatin1String(file.readAll());
+        QString styleSheet = QString::fromUtf8(file.readAll());
         parent->setStyleSheet(styleSheet);
         file.close();
     }

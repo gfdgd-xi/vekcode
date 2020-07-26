@@ -6,6 +6,7 @@ vekExtendDebug::vekExtendDebug(QWidget *parent) :
     ui(new Ui::vekExtendDebug)
 {
     ui->setupUi(this);
+    vek_Style(this,0);
 }
 
 vekExtendDebug::~vekExtendDebug()

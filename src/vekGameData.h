@@ -17,7 +17,6 @@ public:
     int	rowCount ( const QModelIndex & parent = QModelIndex() ) const;
     void deleteItem(int index);
     BaseGameData* getItem(int index );
-protected:
 private:
     std::vector<BaseGameData*> m_ItemDataVec;
 };

@@ -1,12 +1,29 @@
 #include "vekGameAddAT.h"
 #include "ui_common.h"
-
+#include <QListWidget>
 vekGameAddAT::vekGameAddAT(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::vekGameAddAT)
 {
     ui->setupUi(this);
+    vek_Style(this,0);
     qwidgetGeometry(this);
+    QTabWidget *qtab=new QTabWidget();
+    QListWidget *item_list=new QListWidget();
+    item_list->setMinimumWidth(500);
+    item_list->setMinimumHeight(400);
+    QListWidgetItem* item_wrap = new QListWidgetItem(item_list);
+    ui->comboBox_JsonUrl->setModel(item_list->model());
+    ui->comboBox_JsonUrl->setView(item_list);
+    ui->comboBox_JsonUrl->setCurrentIndex(-1);
+    qtab->setMaximumWidth(500);
+    qtab->setMinimumHeight(400);
+    QString tabName[]={"网络游戏","单机游戏","聊天软件","工业软件","其他"};
+    for(int i=0;i<=tabName->size();i++){
+        QWidget *item_widget=new QWidget();
+        qtab->addTab(item_widget,tabName[i]);
+    }
+    item_list->setItemWidget(item_wrap,qtab);
 }
 
 vekGameAddAT::~vekGameAddAT()
@@ -36,6 +53,7 @@ void vekGameAddAT::connectDockObject(BaseGameData* _data){
     for(auto & d:g_vekLocalData.gameScrSource){
         ui->comboBox_SrcGame->addItem(d.first);
     }
+    /*
     for(auto & v:g_vekLocalData.gameJsonList){
         if(v.first==ui->comboBox_SrcGame->currentText()){
             for(auto & y:v.second){
@@ -44,6 +62,7 @@ void vekGameAddAT::connectDockObject(BaseGameData* _data){
             break;
         }
     }
+    */
     QStringList _tempDockName;
     if(!g_vekLocalData.dockerVec.empty()){
         for(auto &a:g_vekLocalData.dockerVec){
@@ -65,7 +84,7 @@ void vekGameAddAT::SetObject(){
     if(action_obnject->objectName()=="pushButton_AutoJson"){
         QString strPath=QFileDialog::getOpenFileName(qwidget,"选择JSON脚本","","Json Files(*.json)");
         if(strPath!=NULL){
-           ui->comboBox_JsonUrl->setCurrentText(strPath);
+            ui->comboBox_JsonUrl->setCurrentText(strPath);
         }
     }
     if(action_obnject->objectName()=="pushButton_AutoDockPath"){
@@ -77,8 +96,8 @@ void vekGameAddAT::SetObject(){
     if(action_obnject->objectName()=="pushButton_SetExePath"){
         QString strPath=QFileDialog::getOpenFileName(qwidget,"选择游戏EXE执行文件","","EXE Files(*.exe)");
         if(strPath!=NULL){
-           QFileInfo fi = QFileInfo(strPath);
-           ui->lineEdit_GameExePath->setText(strPath);
+            QFileInfo fi = QFileInfo(strPath);
+            ui->lineEdit_GameExePath->setText(strPath);
         }
     }
 
@@ -107,16 +126,16 @@ QString vekGameAddAT::JsonType(QString str){
 }
 void vekGameAddAT::addAutoGame(){
     if(ui->comboBox_JsonUrl->currentText()==nullptr){
-         vekTip("请设置Json文件");
-         return;
+        vekTip("请设置Json文件");
+        return;
     }
     if(ui->comboBox_DockName->currentText()==nullptr){
-         vekTip("请为容器命名");
-         return;
+        vekTip("请为容器命名");
+        return;
     }
     if(ui->lineEdit_DockPath->text()==nullptr){
-         vekTip("请指定容器保存路径");
-         return;
+        vekTip("请指定容器保存路径");
+        return;
     }
     if(ui->comboBox_WinVersion->currentText()==nullptr){
         vekTip("请安装wine!");
@@ -124,10 +143,10 @@ void vekGameAddAT::addAutoGame(){
         this->close();
     }
     if(ui->lineEdit_GameExePath->text()==nullptr){
-         vekTip("请设置游戏运行exe文件路径");
-         return;
+        vekTip("请设置游戏运行exe文件路径");
+        return;
     }
-    ObjectAddDataAT objAddDataAT;  
+    ObjectAddDataAT objAddDataAT;
     objAddDataAT.pJsonPath=JsonType(ui->comboBox_JsonUrl->currentText());
     objAddDataAT.pDockName=ui->comboBox_DockName->currentText();
     objAddDataAT.pDckPath=ui->lineEdit_DockPath->text();

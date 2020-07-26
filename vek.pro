@@ -32,6 +32,8 @@ SOURCES += \
     src/objectSource.cpp \
   src/objectTray.cpp \
     src/vek.cpp \
+  src/vekATJsonModel.cpp \
+  src/vekATJsonView.cpp \
     src/vekAbout.cpp \
   src/vekExportJson.cpp \
   src/vekGameAddAT.cpp \
@@ -60,6 +62,8 @@ HEADERS += \
     src/objectTray.h \
     src/ui_common.h \
     src/vek.h \
+    src/vekATJsonModel.h \
+    src/vekATJsonView.h \
     src/vekAbout.h \
     src/vekExportJson.h \
     src/vekExtendDebug.h \

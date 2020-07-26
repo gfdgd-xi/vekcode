@@ -12,7 +12,7 @@ std::map<QString,std::map<QString,QString>> dxvkRes={
 std::map<QString,std::map<QString,QString>> dxvkResHUD={
    {"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment",{{"DXVK_HUD","devinfo,fps,frametimes,submissions,drawcalls,pipelines,memory,version"}}}
 };
-//dxvkCOnfig注册表固定字符串
+//dxvkConfig注册表固定字符串
 std::map<QString,std::map<QString,QString>> dxvkResCof={
    {"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment",{{"DXVK_CONFIG_FILE",""}}}
 };
