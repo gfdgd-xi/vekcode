@@ -2,7 +2,7 @@
 
 vekGameData::vekGameData( QObject *parent):QAbstractListModel(parent)
 {
-    //init();
+
 }
 
 vekGameData::~vekGameData()
@@ -10,7 +10,7 @@ vekGameData::~vekGameData()
 
 }
 
-QVariant vekGameData::data( const QModelIndex & index, int role /*= Qt::DisplayRole */ ) const
+QVariant vekGameData::data( const QModelIndex & index, int role ) const
 {
     if (index.row() > m_ItemDataVec.size())
     {
@@ -45,24 +45,6 @@ QVariant vekGameData::data( const QModelIndex & index, int role /*= Qt::DisplayR
 int vekGameData::rowCount( const QModelIndex & parent /*= QModelIndex() */ ) const
 {
     return m_ItemDataVec.size();
-}
-
-void vekGameData::init()
-{
-    /*
-    for (int i = 1; i < 26; ++i)
-    {
-        vekGameData *pItem = new vekGameData;
-        pItem->gmeName = QString::number(i).toStdString();;
-        pItem->gameIco = QString(":/QQPanel/Resources/%1.jpg").arg(i).toStdString();;
-        QFile Iconfile(QString::fromStdString(pItem->gameIco));
-        if (Iconfile.exists())
-        {
-            m_ItemDataVec.push_back(pItem);
-        }
-
-    }
-    */
 }
 
 void vekGameData::deleteItem( int index )

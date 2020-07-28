@@ -6,7 +6,6 @@
 #include "objectAddGameAT.h"
 #include "vekInitObject.h"
 #include "vekATJsonView.h"
-#include "vekATJsonModel.h"
 namespace Ui {
 class vekGameAddAT;
 }
@@ -14,7 +13,6 @@ class vekGameAddAT;
 class vekGameAddAT : public QWidget
 {
     Q_OBJECT
-
 public:
     explicit vekGameAddAT(QWidget *parent = nullptr);
     ~vekGameAddAT();

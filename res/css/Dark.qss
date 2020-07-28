@@ -329,8 +329,17 @@ QLineEdit, QListView, QTreeView, QTableView, QAbstractSpinBox {
 background-color: #222222;
 color: #BBBBBB;
 border: 1px solid #333333;
+icon-size:50px;
+font:14px;
+margin-bottom:1px;
+selection-color: #0a214c;
+selection-background-color: #C19A6B;
 }
+QListView::item{
+background:#222222;
+margin-top:20px;
 
+}
 QAbstractScrollArea, QLineEdit, QTextEdit, QAbstractSpinBox, QComboBox {
 border-color: #333333;
 border: 1px solid #333333;
@@ -350,7 +359,7 @@ background: #222222;
 }
 
 QListView::item:selected {
-background: #111111;
+background: #222222;
 color: #fba414;
 }
 

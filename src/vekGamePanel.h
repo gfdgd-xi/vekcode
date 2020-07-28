@@ -13,8 +13,6 @@ class vekGamePanel : public QWidget
 public:
     vekGamePanel(QWidget *parent = 0);
     ~vekGamePanel();
-protected:
-    void contextMenuEvent ( QContextMenuEvent * event );
 public slots:
     void addGroupSlot(BaseGameData* data);
     void addGameSlot();

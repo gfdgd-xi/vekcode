@@ -8,22 +8,7 @@ vekGameAddAT::vekGameAddAT(QWidget *parent) :
     ui->setupUi(this);
     vek_Style(this,0);
     qwidgetGeometry(this);
-    QTabWidget *qtab=new QTabWidget();
-    QListWidget *item_list=new QListWidget();
-    item_list->setMinimumWidth(500);
-    item_list->setMinimumHeight(400);
-    QListWidgetItem* item_wrap = new QListWidgetItem(item_list);
-    ui->comboBox_JsonUrl->setModel(item_list->model());
-    ui->comboBox_JsonUrl->setView(item_list);
-    ui->comboBox_JsonUrl->setCurrentIndex(-1);
-    qtab->setMaximumWidth(500);
-    qtab->setMinimumHeight(400);
-    QString tabName[]={"网络游戏","单机游戏","聊天软件","工业软件","其他"};
-    for(int i=0;i<=tabName->size();i++){
-        QWidget *item_widget=new QWidget();
-        qtab->addTab(item_widget,tabName[i]);
-    }
-    item_list->setItemWidget(item_wrap,qtab);
+
 }
 
 vekGameAddAT::~vekGameAddAT()

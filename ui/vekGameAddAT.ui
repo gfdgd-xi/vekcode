@@ -112,7 +112,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="comboBox_JsonUrl">
+         <widget class="vekATJsonView" name="comboBox_JsonUrl">
           <property name="editable">
            <bool>true</bool>
           </property>
@@ -332,6 +332,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>vekATJsonView</class>
+   <extends>QComboBox</extends>
+   <header>src/vekATJsonView.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

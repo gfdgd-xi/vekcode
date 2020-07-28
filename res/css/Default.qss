@@ -359,7 +359,7 @@ background: #222222;
 }
 
 QListView::item:selected {
-background: #111111;
+background: #222222;
 color: #fba414;
 }
 
