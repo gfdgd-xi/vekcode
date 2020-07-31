@@ -68,8 +68,10 @@ void vekGamePanel::vekLoadJsonData(){
                     LID->dockRegs=x.second.dockRegs;
                     for(std::map<QString,vekGameListView*>::iterator it = m_pListMap->begin();it!=m_pListMap->end();it++)
                     {
-                        if(it->first==nowTabName)
+                        if(it->first==nowTabName){
                             pList=it->second;
+                            break;
+                        }
                     }
                     pList->setViewMode(QListView::IconMode);
                     pList->setFlow(QListView::LeftToRight);

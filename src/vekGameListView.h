@@ -18,7 +18,7 @@ public:
         vekGameListView(QWidget *parent = NULL);
         ~vekGameListView();
         void setListMap(std::map<QString,vekGameListView*> *pListMap,QTabWidget*);
-        void addItem(BaseGameData *pItem);
+        void addItem(BaseGameData*);
         void objectExtendGame();
 protected:
         void contextMenuEvent ( QContextMenuEvent * event );

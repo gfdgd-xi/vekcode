@@ -23,31 +23,31 @@ QMAKE_CXXFLAGS_RELEASE += -O3       # Release -O3
 TRANSLATIONS += vek_zh_CN.ts\
                 vek_us_EN.ts
 SOURCES += \
-    main.cpp \
+  main.cpp \
   src/objectAddGameAT.cpp \
   src/objectAddGameMT.cpp \
-    src/objectExtend.cpp \
-    src/objectJson.cpp \
+  src/objectExtend.cpp \
+  src/objectJson.cpp \
   src/objectProcManage.cpp \
-    src/objectSource.cpp \
+  src/objectSource.cpp \
   src/objectTray.cpp \
-    src/vek.cpp \
+  src/vek.cpp \
   src/vekATJsonModel.cpp \
   src/vekATJsonView.cpp \
-    src/vekAbout.cpp \
+  src/vekAbout.cpp \
   src/vekExportJson.cpp \
   src/vekGameAddAT.cpp \
   src/vekGameAddMT.cpp \
   src/vekGameAddMulti.cpp \
-    src/vekGameData.cpp \
-    src/vekGameListView.cpp \
-    src/vekGamePanel.cpp \
-    src/vekGetCurl.cpp \
-    src/vekGitWine.cpp \
+  src/vekGameData.cpp \
+  src/vekGameListView.cpp \
+  src/vekGamePanel.cpp \
+  src/vekGetCurl.cpp \
+  src/vekGitWine.cpp \
   src/vekInitObject.cpp \
-    src/vekSourceEdit.cpp \
-    src/vekExtendDebug.cpp \
-    src/vekWineOption.cpp \
+  src/vekSourceEdit.cpp \
+  src/vekExtendDebug.cpp \
+  src/vekWineOption.cpp \
 
 HEADERS += \
     src/baseData.h \
@@ -91,12 +91,12 @@ FORMS += \
     ui/vekWineOption.ui
 
 #DEBUG
-QMAKE_CXXFLAGS_RELEASE = $$QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO
-QMAKE_LFLAGS_RELEASE = $$QMAKE_LFLAGS_RELEASE_WITH_DEBUGINFO
+#QMAKE_CXXFLAGS_RELEASE = $$QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO
+#QMAKE_LFLAGS_RELEASE = $$QMAKE_LFLAGS_RELEASE_WITH_DEBUGINFO
 
 #UPX
 #Release:QMAKE_POST_LINK += ./upx -9 $(DESTDIR_TARGET)
-
+QMAKE_CXXFLAGS_RELEASE += -Ofast
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin

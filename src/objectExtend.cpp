@@ -131,6 +131,7 @@ void objectExtend::executeWinetricks(){
 //执行游戏
 void objectExtend::baseExecuteAppCode(QString code,QStringList codeArgs){
     monitorProc();
+    //设置注册表定位dxvkCache和log
     m_cmd->setProcessChannelMode(QProcess::MergedChannels);
     m_cmd->setReadChannel(QProcess::StandardOutput);
     m_cmd->closeReadChannel(QProcess::StandardOutput);
@@ -231,8 +232,20 @@ void objectExtend::extendApp(){
     }
     if(data.gameOtherAgrs!=nullptr){
         codeArgs.append(data.gameOtherAgrs);
-    }
+    }    
+    dyncDxvkRegs(dxvkResCache);
+    dyncDxvkRegs(dxvkResLog);
+
     baseExecuteAppCode(startArgs,codeArgs);
+}
+void objectExtend::dyncDxvkRegs(std::map<QString,std::map<QString,QString>> dxvkResStr){
+    for(auto a:dxvkResStr){
+        for(auto b:a.second){
+         argsList.clear();
+         argsList.push_back(DockRegeditStr("add",a.first,b.first,"REG_SZ",data.workPath));
+        }
+    }
+    extendWineRegeditCode(startArgs);
 }
 void objectExtend::extendPlugs(){
     QStringList codeArgs;

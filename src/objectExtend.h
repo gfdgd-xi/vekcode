@@ -6,6 +6,7 @@
 #include <QTextCodec>
 #include "vekInitObject.h"
 #include "objectProcManage.h"
+#include "baseRes.h"
 typedef enum{
     object_winecfg,
     object_regedit,
@@ -74,6 +75,7 @@ private:
     void extendPlugs();
     void monitorProc();
     void forcekill();
+    void dyncDxvkRegs(std::map<QString,std::map<QString,QString>>);
 private slots:
     void setDockOptionObjectData(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
 signals:
