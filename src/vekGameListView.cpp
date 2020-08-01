@@ -156,17 +156,19 @@ void vekGameListView::setUpDelData(BaseGameData* data,objectTypeView objTypeView
     if(index>-1){
         QString deleteCID=m_pModel->getItem(index)->gameCID;
         QString dockPathStr=m_pModel->getItem(index)->dockPath+"/";
-        QString dockNameStr=m_pModel->getItem(index)->dockName;
-        //delete game tab json
-        m_pModel->deleteItem(index);
+        QString dockNameStr=m_pModel->getItem(index)->dockName;    
         if(objTypeView==object_delApp){
-            objectJson _objectJson;
-            _objectJson.deleteGameNodeData(deleteCID);
-            if(m_pModel->rowCount()<=0){
-                deleteDockerTab(dockPathStr,dockNameStr);
+            if(m_pModel->rowCount()<=1){
+                if(vekMesg("提示:这是"+dockNameStr+"最后一个程序,若是执意删除则Vek将删除"+dockNameStr+"容器")){
+                  m_pModel->deleteItem(index);
+                  objectJson _objectJson;
+                  _objectJson.deleteGameNodeData(deleteCID);
+                  deleteDockerTab(dockPathStr,dockNameStr);
+                }
             }
         }
         if(objTypeView==object_setApp){
+            m_pModel->deleteItem(index);
             QString currentTabText =mBox->tabText(mBox->currentIndex());
             if(currentTabText==data->dockName){
                m_pModel->addItem(data);
