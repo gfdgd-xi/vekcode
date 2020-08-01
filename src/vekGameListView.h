@@ -23,19 +23,19 @@ public:
 protected:
         void contextMenuEvent ( QContextMenuEvent * event );
 private slots:
-        void deleteItemSlot();
         void moveSlot();
         void setItemSlot();
         void unGameAdd();
-        void upData(BaseGameData*);
+        void setUpDelData(BaseGameData*,objectTypeView);
         void unExportJson();
 public slots:
         void ObjectRun();
 signals:
         void toObjectArgs(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
-        void toObjectArgs_ptr(BaseGameData*);
+        void toObjectArgs_ptr(BaseGameData*,objectTypeView);
         void toObjectArgs_cl(BaseGameData);
         void _startTray();
+        void setUpDelDataSignal(BaseGameData* cGameData);
 private:
         vekGameAddMT *_vek_Game_Add=nullptr;
         vekExtendDebug* _vExtendDebug=nullptr;

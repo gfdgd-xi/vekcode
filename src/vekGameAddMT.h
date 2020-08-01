@@ -23,7 +23,8 @@ private:
     BaseGameData* tempData=nullptr;
     BaseGameData* oldData=nullptr;
     QString tempCID=nullptr;
-    vector<QString> _dockSystemVersion={"win10","win7","win81","win8"};
+    objectTypeView objType;
+    vector<QString> _dockSystemVersion={"win10","win7","win81","win8","winxp64"};
     bool vekGameAddObj(bool _forceState);
     bool vekGameConfigObj();
     void loadTableView(QTableView* qtv,BaseGameData*);
@@ -36,11 +37,11 @@ signals:
     void doneAddGame(BaseGameData*);
     void toObjectArgs(BaseGameData);
     void _unDiyGameAdd();
-    void _upData(BaseGameData*);
+    void _upData(BaseGameData*,objectTypeView);
 private slots:
     void objectButton();
     void dxvkOptionLink();
-    void vekGameAddConnectObject(BaseGameData* _data);
+    void vekGameAddConnectObject(BaseGameData* _data,objectTypeView);
     void clicked_rightMenu(const QPoint &pos);  //右键信号槽函数
     void onTaskBoxContextMenuEvent();
 };

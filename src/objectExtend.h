@@ -6,7 +6,6 @@
 #include <QTextCodec>
 #include "vekInitObject.h"
 #include "objectProcManage.h"
-#include "baseRes.h"
 typedef enum{
     object_winecfg,
     object_regedit,
@@ -44,6 +43,11 @@ typedef enum{
     object_wineserver_w,
     object_wineserver_default
 }objectWineServer;
+typedef enum{
+    object_delApp,
+    object_setApp,
+    object_addApp
+}objectTypeView;
 class objectExtend :public QThread
 {
     Q_OBJECT

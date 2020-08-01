@@ -16,7 +16,8 @@ vekGameAddMT::~vekGameAddMT()
     emit _unDiyGameAdd();
 }
 //绑定槽
-void vekGameAddMT::vekGameAddConnectObject(BaseGameData* _data){
+void vekGameAddMT::vekGameAddConnectObject(BaseGameData* _data,objectTypeView _objType){
+    objType=_objType;
     //检测增加游戏必要的设置
     connect(ui->pushButton_Set,&QPushButton::clicked,this,&vekGameAddMT::objectButton);
     //设置游戏安装目录
@@ -528,7 +529,7 @@ bool vekGameAddMT::vekGameAddObj(bool _forceState){
     }else{
         vGameAddObj->SaveDataToJson(tempData->dockName,*tempData);
     }
-    emit _upData(tempData);
+    emit _upData(tempData,objType);
     delete vGameAddObj;
     vGameAddObj=nullptr;
     return true;

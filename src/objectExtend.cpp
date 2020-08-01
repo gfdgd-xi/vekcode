@@ -131,7 +131,7 @@ void objectExtend::executeWinetricks(){
 //执行游戏
 void objectExtend::baseExecuteAppCode(QString code,QStringList codeArgs){
     monitorProc();
-    //设置注册表定位dxvkCache和log
+    dockEditSystemVersion();
     m_cmd->setProcessChannelMode(QProcess::MergedChannels);
     m_cmd->setReadChannel(QProcess::StandardOutput);
     m_cmd->closeReadChannel(QProcess::StandardOutput);
@@ -235,7 +235,6 @@ void objectExtend::extendApp(){
     }    
     dyncDxvkRegs(dxvkResCache);
     dyncDxvkRegs(dxvkResLog);
-
     baseExecuteAppCode(startArgs,codeArgs);
 }
 void objectExtend::dyncDxvkRegs(std::map<QString,std::map<QString,QString>> dxvkResStr){

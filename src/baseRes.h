@@ -4,6 +4,7 @@
 //全局数据结构
 BaseLocalData g_vekLocalData={};
 std::vector<QString> taskList={};
+
 //dxvk
 std::map<QString,std::map<QString,QString>> dxvkRes={
    {"HKEY_CURRENT_USER\\Software\\Wine\\DllOverrides",{{"","native"}}}
@@ -34,6 +35,7 @@ std::map<QString,std::map<QString,QString>> fontRes={
     }
    }
 };
+
 //阻止部分软件or程序or平台附加进程，子进程自动启动，如EPIC这类游戏平台
 
 #endif // BASERES_H

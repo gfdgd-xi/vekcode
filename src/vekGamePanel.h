@@ -35,7 +35,7 @@ private:
     void vekLoadJsonData();
     string GetReData(QString);
 signals:
-    void toObjDiyArgs_ptr(BaseGameData*);
+    void toObjDiyArgs_ptr(BaseGameData*,objectTypeView);
     void toObjAutoArgs_ptr(BaseGameData*);
 };
 #endif // VEKGAMEPANEL_H

@@ -91,7 +91,7 @@ void vekGameListView::ObjectRun(){
             return;
             break;
         case object_deletegame:
-            deleteItemSlot();
+            setUpDelData(m_pModel->getItem(index),object_delApp);
             return;
             break;
         case object_exportJson:
@@ -140,39 +140,29 @@ void vekGameListView::setItemSlot(){
         if(_vek_Game_Add==nullptr){
             //绑定传参槽
             _vek_Game_Add=new vekGameAddMT();
-            connect(this, SIGNAL(toObjectArgs_ptr(BaseGameData*)), _vek_Game_Add, SLOT(vekGameAddConnectObject(BaseGameData*)));
+            connect(this, SIGNAL(toObjectArgs_ptr(BaseGameData*,objectTypeView)), _vek_Game_Add, SLOT(vekGameAddConnectObject(BaseGameData*,objectTypeView)));
             _vek_Game_Add->setAttribute(Qt::WA_DeleteOnClose,true);
             _vek_Game_Add->setGeometry(this->geometry());
             _vek_Game_Add->setWindowTitle("VekGameSet");
-            emit(toObjectArgs_ptr(bGameData));
+            emit(toObjectArgs_ptr(bGameData,object_setApp));
             _vek_Game_Add->show();
             connect(_vek_Game_Add,&vekGameAddMT::_unDiyGameAdd,this,&vekGameListView::unGameAdd);
-            connect(_vek_Game_Add,SIGNAL(_upData(BaseGameData*)),this,SLOT(upData(BaseGameData*)));
+            connect(_vek_Game_Add,SIGNAL(_upData(BaseGameData*,objectTypeView)),this,SLOT(setUpDelData(BaseGameData*,objectTypeView)));
         }
     }
 }
-void vekGameListView::upData(BaseGameData* data){
+void vekGameListView::setUpDelData(BaseGameData* data,objectTypeView objTypeView){
     int index = this->currentIndex().row();
-    m_pModel->deleteItem(index);
-    m_pModel->addItem(data);
-}
-void vekGameListView::unGameAdd(){
-    _vek_Game_Add=nullptr;
-}
-void vekGameListView::unExportJson(){
-    _vExportJson=nullptr;
-}
-void vekGameListView::deleteItemSlot()
-{
-    int index = this->currentIndex().row();
-    if (index > -1)
-    {
+    if(index>-1){
         QString deleteCID=m_pModel->getItem(index)->gameCID;
         QString dockPathStr=m_pModel->getItem(index)->dockPath+"/";
         QString dockNameStr=m_pModel->getItem(index)->dockName;
+        //delete game tab json
         m_pModel->deleteItem(index);
-        objectJson _objectJson;
-        _objectJson.deleteGameNodeData(deleteCID);
+        if(objTypeView==object_delApp){
+            objectJson _objectJson;
+            _objectJson.deleteGameNodeData(deleteCID);
+        }
         if(m_pModel->rowCount()<=0){
             mBox->removeTab(mBox->currentIndex());
             if(dockPathStr!=NULL&dockNameStr!=NULL){
@@ -184,7 +174,18 @@ void vekGameListView::deleteItemSlot()
             g_vekLocalData.dockerVec.erase(dockNameStr);
             m_pListMap->erase(dockNameStr);
         }
+        if(objTypeView==object_setApp){
+            auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget();
+            connect(this,SIGNAL(setUpDelDataSignal(BaseGameData*)),pObjectVek,SLOT(addGameObject(BaseGameData*)));
+            emit setUpDelDataSignal(data);
+        }
     }
+}
+void vekGameListView::unGameAdd(){
+    _vek_Game_Add=nullptr;
+}
+void vekGameListView::unExportJson(){
+    _vExportJson=nullptr;
 }
 
 void vekGameListView::setListMap( std::map<QString,vekGameListView*> *pListMap,QTabWidget* pBox)

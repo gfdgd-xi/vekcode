@@ -100,8 +100,8 @@ void vekGamePanel::addGameDiy(){
         vek_game_add->setGeometry(this->geometry());
         vek_game_add->setWindowTitle("VekGameAdd");
         vek_game_add->show();
-        connect(this, SIGNAL(toObjDiyArgs_ptr(BaseGameData*)), vek_game_add, SLOT(vekGameAddConnectObject(BaseGameData*)));
-        emit(toObjDiyArgs_ptr(nullptr));
+        connect(this, SIGNAL(toObjDiyArgs_ptr(BaseGameData*,objectTypeView)), vek_game_add, SLOT(vekGameAddConnectObject(BaseGameData*,objectTypeView)));
+        emit(toObjDiyArgs_ptr(nullptr,object_addApp));
         connect(vek_game_add,&vekGameAddMT::_unDiyGameAdd,this,&vekGamePanel::unDiyGameAdd);
         connect(vek_game_add,SIGNAL(doneAddGame(BaseGameData*)), this, SLOT(addGameObject(BaseGameData*)));
     }
@@ -145,15 +145,11 @@ void vekGamePanel::addGameObject(BaseGameData* data){
     {
         if(it->first==nowTabName){
             tabState=true;
+            pList=it->second;
         }
     }
     if(!tabState){
         addGroupSlot(_tempBaseData);
-    }
-    for(std::map<QString,vekGameListView*>::iterator it = m_pListMap->begin();it!=m_pListMap->end();it++)
-    {
-        if(it->first==nowTabName)
-            pList=it->second;
     }
     pList->setViewMode(QListView::IconMode);
     pList->setFlow(QListView::LeftToRight);
