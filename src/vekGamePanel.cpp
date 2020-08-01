@@ -4,8 +4,8 @@ vekGamePanel::vekGamePanel(QWidget *parent)
     : QWidget(parent)
 {   
 
-    vek_InitTabWidgetListGame();   
-    vekLoadJsonData();   
+    vek_InitTabWidgetListGame();
+    vekLoadJsonData();
 }
 
 vekGamePanel::~vekGamePanel()
@@ -123,7 +123,7 @@ void vekGamePanel::addGameAuto(){
 
 void vekGamePanel::objectRunGame(){
     if(m_pListMap!=nullptr){
-       m_pListMap->at(m_pBox->tabText(m_pBox->currentIndex()))->ObjectRun();
+        m_pListMap->at(m_pBox->tabText(m_pBox->currentIndex()))->ObjectRun();
     }
 }
 void vekGamePanel::unAutoDock(){
@@ -136,7 +136,7 @@ void vekGamePanel::unDiyGameAdd(){
     vek_game_add=nullptr;
 }
 void vekGamePanel::addGameObject(BaseGameData* data){
-    vekGameListView* pList;
+    vekGameListView* pList=new vekGameListView(this);
     BaseGameData* _tempBaseData=data;
     QString nowTabName=_tempBaseData->dockName;
     bool tabState=false;
@@ -145,11 +145,18 @@ void vekGamePanel::addGameObject(BaseGameData* data){
     {
         if(it->first==nowTabName){
             tabState=true;
-            pList=it->second;
+            break;
         }
     }
     if(!tabState){
         addGroupSlot(_tempBaseData);
+    }
+    for(std::map<QString,vekGameListView*>::iterator it = m_pListMap->begin();it!=m_pListMap->end();it++)
+    {
+        if(it->first==nowTabName){
+           pList=it->second;
+           break;
+        }
     }
     pList->setViewMode(QListView::IconMode);
     pList->setFlow(QListView::LeftToRight);

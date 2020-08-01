@@ -162,24 +162,35 @@ void vekGameListView::setUpDelData(BaseGameData* data,objectTypeView objTypeView
         if(objTypeView==object_delApp){
             objectJson _objectJson;
             _objectJson.deleteGameNodeData(deleteCID);
-        }
-        if(m_pModel->rowCount()<=0){
-            mBox->removeTab(mBox->currentIndex());
-            if(dockPathStr!=NULL&dockNameStr!=NULL){
-                QDir dockPath(dockPathStr+dockNameStr);
-                if(dockPath.exists()){
-                    dockPath.removeRecursively();
-                }
+            if(m_pModel->rowCount()<=0){
+                deleteDockerTab(dockPathStr,dockNameStr);
             }
-            g_vekLocalData.dockerVec.erase(dockNameStr);
-            m_pListMap->erase(dockNameStr);
         }
         if(objTypeView==object_setApp){
-            auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget();
-            connect(this,SIGNAL(setUpDelDataSignal(BaseGameData*)),pObjectVek,SLOT(addGameObject(BaseGameData*)));
-            emit setUpDelDataSignal(data);
+            QString currentTabText =mBox->tabText(mBox->currentIndex());
+            if(currentTabText==data->dockName){
+               m_pModel->addItem(data);
+            }else{
+                if(m_pModel->rowCount()<=0){
+                    deleteDockerTab(dockPathStr,dockNameStr);
+                }
+                auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget();
+                connect(this,SIGNAL(setUpDelDataSignal(BaseGameData*)),pObjectVek,SLOT(addGameObject(BaseGameData*)));
+                emit setUpDelDataSignal(data);
+            }
         }
     }
+}
+void vekGameListView::deleteDockerTab(QString dockPathStr,QString dockNameStr){
+        mBox->removeTab(mBox->currentIndex());
+        if(dockPathStr!=NULL&dockNameStr!=NULL){
+            QDir dockPath(dockPathStr+dockNameStr);
+            if(dockPath.exists()){
+                dockPath.removeRecursively();
+            }
+        }
+        g_vekLocalData.dockerVec.erase(dockNameStr);
+        m_pListMap->erase(dockNameStr);
 }
 void vekGameListView::unGameAdd(){
     _vek_Game_Add=nullptr;
@@ -202,13 +213,17 @@ void vekGameListView::addItem(BaseGameData *pItem )
 void vekGameListView::moveSlot()
 {
     QAction *pSender = qobject_cast<QAction*>(sender());
+    int index = this->currentIndex().row();
     if (pSender)
     {
+        if(index-1<=-1){
+            vekTip("移动失败!移动后容器程序列表不能为空");
+            return;
+        }
         //根据点击的菜单，找到相应的列表，然后才能把图标转移过去
         vekGameListView *pList = m_ActionMap.find(pSender)->second;
         if (pList)
-        {
-            int index = this->currentIndex().row();
+        {          
             BaseGameData *pItem = m_pModel->getItem(index);
             pList->setViewMode(QListView::IconMode);
             pList->setFlow(QListView::LeftToRight);

@@ -52,6 +52,7 @@ private:
         void vekReadJsonData(QString jsonPath);
         void vekInitJsonData();
         void ExportJson();
+        void deleteDockerTab(QString,QString);
         std::vector<QString> objectTypeStr={"容器设置","容器注册表","容器控制面板","容器软件删除|增加","winetricks","运行程序","调试运行(测试功能)","修改程序设置","导出自动配置文件","强行关闭本程序","删除本程序"};
         QMenu *pMenu=nullptr;
 };

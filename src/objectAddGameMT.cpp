@@ -48,7 +48,6 @@ void objectAddGameMT::DxvkFileInstall(){
             dxvkTargetFile=_baseGameData->dockPath+"/"+_baseGameData->dockName+"/drive_c/windows/system32/";
         }
         for(auto d:dxvkFileList){
-            QFile::setPermissions(dxvkTargetFile+d,QFile::ReadOther | QFile::WriteOther);
             //卸载
             if(!_baseGameData->dxvkState){
                 if(QFile(dxvkTargetFile+d+".a").exists()){
@@ -63,6 +62,7 @@ void objectAddGameMT::DxvkFileInstall(){
                 }
                 QFile::copy(dxvkSourceFile+d, dxvkTargetFile+d);
             }
+            QFile::setPermissions(dxvkTargetFile+d,QFile::ReadOther|QFile::ReadOwner|QFile::WriteOwner|QFile::ReadGroup);
         }
     }
     DxvkRegedit(dxvkFileList);
