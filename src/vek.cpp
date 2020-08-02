@@ -15,8 +15,8 @@ vek::~vek()
     delete ui;
 }
 void vek::connectObject(){
-    connect(ui->pushButton_vekAddGame,&QPushButton::clicked,this,&vek::vekAddGame);
-    connect(ui->pushButton_vekRunGame,&QPushButton::clicked,this,&vek::vekRunGame);
+    connect(ui->pushButton_vekAddApp,&QPushButton::clicked,this,&vek::vekAddApp);
+    connect(ui->pushButton_vekRunApp,&QPushButton::clicked,this,&vek::vekRunApp);
     connect(ui->pushButton_InstallApp,&QPushButton::clicked,this,&vek::installApp);
 }
 void vek::startTray(){
@@ -48,41 +48,7 @@ void vek::exitTray(bool trayState){
     objTray=nullptr;
 }
 void vek::installApp(){
-    bool dState=false;
-    if(g_vekLocalData.wineVec.empty()){
-        vekTip("未发现您的电脑上装有wine请安装wine后重试");
-        return;
-    }
-    if(g_vekLocalData.dockerVec.empty()){
-        dState=vekMesg("您的电脑上未发现容器无法安装软件,是否初始化一个容器用于软件安装");
-    }
-    BaseGameData basegamedata;
-    objectAddGameMT* objNewDock=new objectAddGameMT(&basegamedata,nullptr);
-    if(dState){
-        QString dockName="vekON1";//自动以CID为名创建
-        basegamedata.winePath=g_vekLocalData.wineVec.begin()->second.wineInstallPath;
-        basegamedata.dockPath=QDir::currentPath()+"/vekDock";
-        basegamedata.dockName=dockName;
-        basegamedata.monoState=true;
-        basegamedata.geckoState=true;
-        basegamedata.defaultFonts=true;
-        objNewDock->newDock();
-    }else{       
-        if(g_vekLocalData.dockerVec.empty()){
-            return;
-        }else{
-            qDebug()<<g_vekLocalData.dockerVec.begin()->first;
-            basegamedata=g_vekLocalData.dockerVec.begin()->second.begin()->second;
-        }
-    }
-    objectExtend* _objectExtend=new objectExtend();
-    objectType _objType=object_uninstall;
-    std::vector<QStringList> _codeAgrs;
-    connect(this, SIGNAL(toObjectArgs(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)), _objectExtend, SLOT(setDockOptionObjectData(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)));
-    emit(toObjectArgs(basegamedata,_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default));
-    _objectExtend->start();
-    delete objNewDock;
-    objNewDock=nullptr;
+    ui->tabWidget->objAppInstall();
 }
 void vek::on_action_EditSource_triggered(){
     if(_vek_source_esit==nullptr){
@@ -94,17 +60,17 @@ void vek::on_action_EditSource_triggered(){
         connect(_vek_source_esit,&vekSourceEdit::_unSourveEdit,this,&vek::unSourceEdit);
     }
 }
-void vek::vekAddGame()
+void vek::vekAddApp()
 {   
-     ui->tabWidget->addGameSlot();
+     ui->tabWidget->addAppSlot();
 }
-void vek::vekRunGame()
+void vek::vekRunApp()
 {
-    ui->tabWidget->objectRunGame();
+    ui->tabWidget->objectRunApp();
 }
-void vek::on_action_AddGame_triggered()
+void vek::on_action_AddApp_triggered()
 {
-    ui->tabWidget->addGameSlot();
+    ui->tabWidget->addAppSlot();
 }
 
 void vek::on_action_About_triggered()

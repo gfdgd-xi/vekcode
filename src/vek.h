@@ -2,9 +2,9 @@
 #define VEK_H
 #include "vekWineOption.h"
 #include "vekAbout.h"
-#include "vekGameAddMT.h"
+#include "vekAppAddMT.h"
 #include "vekInitObject.h"
-#include "vekGameListView.h"
+#include "vekAppListView.h"
 #include "common.h"
 #include "vekExtendDebug.h"
 #include "vekSourceEdit.h"
@@ -35,9 +35,9 @@ public slots:
     void exitTray(bool);
     void on_action_About_triggered();
 private slots:
-    void vekAddGame();
-    void vekRunGame();
-    void on_action_AddGame_triggered();   
+    void vekAddApp();
+    void vekRunApp();
+    void on_action_AddApp_triggered();
     void on_action_Exit_triggered();
     void on_action_WineInstall_triggered();
     void on_action_EditSource_triggered();
@@ -45,7 +45,5 @@ private slots:
     void unVekAbout();
     void installApp();
     void unSourceEdit();
-signals:
-    void toObjectArgs(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
 };
 #endif // VEK_H

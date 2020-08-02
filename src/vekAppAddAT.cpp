@@ -1,30 +1,29 @@
-#include "vekGameAddAT.h"
+#include "vekAppAddAT.h"
 #include "ui_common.h"
 #include <QListWidget>
-vekGameAddAT::vekGameAddAT(QWidget *parent) :
+vekAppAddAT::vekAppAddAT(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::vekGameAddAT)
+    ui(new Ui::vekAppAddAT)
 {
     ui->setupUi(this);
     vek_Style(this,0);
     qwidgetGeometry(this);
-
 }
 
-vekGameAddAT::~vekGameAddAT()
+vekAppAddAT::~vekAppAddAT()
 {
     delete ui;
     emit _unAutoDock();
 }
-void vekGameAddAT::connectDockObject(BaseGameData* _data){
-    autoGameData=_data;
-    if(autoGameData==nullptr){
-        autoGameData=new BaseGameData();
+void vekAppAddAT::connectDockObject(BaseAppData* _data){
+    autoAppData=_data;
+    if(autoAppData==nullptr){
+        autoAppData=new BaseAppData();
     }
-    connect(ui->pushButton_DockDone,&QPushButton::clicked,this,&vekGameAddAT::addAutoGame);
-    connect(ui->pushButton_AutoJson,&QPushButton::clicked,this,&vekGameAddAT::SetObject);
-    connect(ui->pushButton_AutoDockPath,&QPushButton::clicked,this,&vekGameAddAT::SetObject);
-    connect(ui->pushButton_SetExePath,&QPushButton::clicked,this,&vekGameAddAT::SetObject);
+    connect(ui->pushButton_DockDone,&QPushButton::clicked,this,&vekAppAddAT::addAutoApp);
+    connect(ui->pushButton_AutoJson,&QPushButton::clicked,this,&vekAppAddAT::SetObject);
+    connect(ui->pushButton_AutoDockPath,&QPushButton::clicked,this,&vekAppAddAT::SetObject);
+    connect(ui->pushButton_SetExePath,&QPushButton::clicked,this,&vekAppAddAT::SetObject);
     if(!g_vekLocalData.wineVec.empty())
     {
         for(auto & x :g_vekLocalData.wineVec)
@@ -35,19 +34,17 @@ void vekGameAddAT::connectDockObject(BaseGameData* _data){
         vekTip("请先安装Wine");
         this->close();
     }
-    for(auto & d:g_vekLocalData.gameScrSource){
-        ui->comboBox_SrcGame->addItem(d.first);
+    for(auto & d:g_vekLocalData.appScrSource){
+        ui->comboBox_SrcApp->addItem(d.first);
     }
-    /*
-    for(auto & v:g_vekLocalData.gameJsonList){
-        if(v.first==ui->comboBox_SrcGame->currentText()){
+    for(auto & v:g_vekLocalData.appJsonList){
+        if(v.first==ui->comboBox_SrcApp->currentText()){
             for(auto & y:v.second){
                 ui->comboBox_JsonUrl->addItem(y.first);
             }
             break;
         }
     }
-    */
     QStringList _tempDockName;
     if(!g_vekLocalData.dockerVec.empty()){
         for(auto &a:g_vekLocalData.dockerVec){
@@ -62,7 +59,7 @@ void vekGameAddAT::connectDockObject(BaseGameData* _data){
     }
     ui->lineEdit_DockPath->setText(QDir::currentPath()+"/vekDock");
 }
-void vekGameAddAT::SetObject(){
+void vekAppAddAT::SetObject(){
     QObject *object = QObject::sender();
     QPushButton *action_obnject = qobject_cast<QPushButton *>(object);
     QWidget *qwidget = new QWidget();
@@ -82,12 +79,12 @@ void vekGameAddAT::SetObject(){
         QString strPath=QFileDialog::getOpenFileName(qwidget,"选择游戏EXE执行文件","","EXE Files(*.exe)");
         if(strPath!=NULL){
             QFileInfo fi = QFileInfo(strPath);
-            ui->lineEdit_GameExePath->setText(strPath);
+            ui->lineEdit_AppExePath->setText(strPath);
         }
     }
 
 }
-QString vekGameAddAT::JsonType(QString str){
+QString vekAppAddAT::JsonType(QString str){
     //查看jsonPaht头是否为http或者https
     if(str.startsWith("http",Qt::CaseSensitive)){
         return str;
@@ -98,8 +95,8 @@ QString vekGameAddAT::JsonType(QString str){
     if(str.endsWith("json",Qt::CaseSensitive)){
         return str;
     }
-    for(auto & v:g_vekLocalData.gameJsonList){
-        if(v.first==ui->comboBox_SrcGame->currentText()){
+    for(auto & v:g_vekLocalData.appJsonList){
+        if(v.first==ui->comboBox_SrcApp->currentText()){
             for(auto & y:v.second){
                 if(y.first==str){
                     str=y.second;
@@ -109,7 +106,7 @@ QString vekGameAddAT::JsonType(QString str){
     }
     return str;
 }
-void vekGameAddAT::addAutoGame(){
+void vekAppAddAT::addAutoApp(){
     if(ui->comboBox_JsonUrl->currentText()==nullptr){
         vekTip("请设置Json文件");
         return;
@@ -127,7 +124,7 @@ void vekGameAddAT::addAutoGame(){
         return;
         this->close();
     }
-    if(ui->lineEdit_GameExePath->text()==nullptr){
+    if(ui->lineEdit_AppExePath->text()==nullptr){
         vekTip("请设置游戏运行exe文件路径");
         return;
     }
@@ -136,40 +133,40 @@ void vekGameAddAT::addAutoGame(){
     objAddDataAT.pDockName=ui->comboBox_DockName->currentText();
     objAddDataAT.pDckPath=ui->lineEdit_DockPath->text();
     objAddDataAT.pWineVersion=ui->comboBox_WinVersion->currentText();
-    objAddDataAT.pGameExePath=ui->lineEdit_GameExePath->text();
-    objAddDataAT.pBaseGameData=autoGameData;
-    if(objAutoAddGame!=nullptr){
-        delete objAutoAddGame;
-        objAutoAddGame=nullptr;
+    objAddDataAT.pAppExePath=ui->lineEdit_AppExePath->text();
+    objAddDataAT.pBaseAppData=autoAppData;
+    if(objAutoAddApp!=nullptr){
+        delete objAutoAddApp;
+        objAutoAddApp=nullptr;
     }
-    objAutoAddGame=new objectAddGameAT(objAddDataAT);
-    connect(objAutoAddGame,SIGNAL(Tips(QString)),this,SLOT(TipText(QString)));
-    connect(objAutoAddGame,SIGNAL(Error(QString,bool)),this,SLOT(ErrorText(QString,bool)));
-    connect(objAutoAddGame,SIGNAL(Done()),this,SLOT(ObjDone()));
-    objAutoAddGame->start();
+    objAutoAddApp=new objectAppAddAT(objAddDataAT);
+    connect(objAutoAddApp,SIGNAL(Tips(QString)),this,SLOT(TipText(QString)));
+    connect(objAutoAddApp,SIGNAL(Error(QString,bool)),this,SLOT(ErrorText(QString,bool)));
+    connect(objAutoAddApp,SIGNAL(Done()),this,SLOT(ObjDone()));
+    objAutoAddApp->start();
     controlState(false);
 }
-void vekGameAddAT::controlState(bool pState){
-    ui->comboBox_SrcGame->setEnabled(pState);
+void vekAppAddAT::controlState(bool pState){
+    ui->comboBox_SrcApp->setEnabled(pState);
     ui->comboBox_JsonUrl->setEnabled(pState);
     ui->pushButton_AutoJson->setEnabled(pState);
     ui->comboBox_WinVersion->setEnabled(pState);
     ui->lineEdit_DockPath->setEnabled(pState);
     ui->pushButton_AutoDockPath->setEnabled(pState);
     ui->comboBox_DockName->setEnabled(pState);
-    ui->lineEdit_GameExePath->setEnabled(pState);
+    ui->lineEdit_AppExePath->setEnabled(pState);
     ui->pushButton_SetExePath->setEnabled(pState);
     ui->pushButton_DockDone->setEnabled(pState);
 }
-void vekGameAddAT::TipText(QString TipInfo)
+void vekAppAddAT::TipText(QString TipInfo)
 {
     ui->label_ProgText->setText(TipInfo);
 }
-void vekGameAddAT::ErrorText(QString ErrorInfo,bool cState){
+void vekAppAddAT::ErrorText(QString ErrorInfo,bool cState){
     ui->label_ProgText->setText(ErrorInfo);
     controlState(cState);
 }
-void vekGameAddAT::ObjDone(){
-    emit autoObjDock(autoGameData);
+void vekAppAddAT::ObjDone(){
+    emit autoObjDock(autoAppData);
     this->close();
 }

@@ -58,7 +58,7 @@ public:
 protected:
     void run();
 private:
-    BaseGameData data;
+    BaseAppData data;
     std::vector<QStringList> argsList;
     objectType objType;
     objectWineBoot objWineBootType;
@@ -81,7 +81,7 @@ private:
     void forcekill();
     void dyncDxvkRegs(std::map<QString,std::map<QString,QString>>);
 private slots:
-    void setDockOptionObjectData(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
+    void setDockOptionObjectData(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
 signals:
     void objexitTray(bool);
 };

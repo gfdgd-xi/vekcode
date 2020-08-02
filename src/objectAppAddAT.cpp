@@ -1,15 +1,15 @@
-#include "objectAddGameAT.h"
+#include "objectAppAddAT.h"
 
-objectAddGameAT::objectAddGameAT(ObjectAddDataAT objAddDataAT)
+objectAppAddAT::objectAppAddAT(ObjectAddDataAT objAddDataAT)
 {
    _objAddDataAT=objAddDataAT;
 }
 
-objectAddGameAT::~objectAddGameAT(){
+objectAppAddAT::~objectAppAddAT(){
     delete _baseAutoSetJson;
     _baseAutoSetJson=nullptr;
 }
-QString objectAddGameAT::jsonPathTypeToStr(QString jsonPathFile){  
+QString objectAppAddAT::jsonPathTypeToStr(QString jsonPathFile){
     try {
         QString jsonDataStr=nullptr;
         if(jsonPathFile.contains("http",Qt::CaseSensitive)||jsonPathFile.contains("https",Qt::CaseSensitive)){
@@ -35,7 +35,7 @@ QString objectAddGameAT::jsonPathTypeToStr(QString jsonPathFile){
         return nullptr;
     }
 }
-bool objectAddGameAT::jsonUnserialize(QString jsonPathFile){
+bool objectAppAddAT::jsonUnserialize(QString jsonPathFile){
     QString jsonData=jsonPathTypeToStr(jsonPathFile);
         if(jsonData==nullptr){
             return false;
@@ -46,110 +46,110 @@ bool objectAddGameAT::jsonUnserialize(QString jsonPathFile){
         }
     return true;
 }
-void objectAddGameAT::dataToBase(){
+void objectAppAddAT::dataToBase(){
     if(!_baseAutoSetJson->Option.empty()){
         for(auto a:_baseAutoSetJson->Option){
-            if(a.first=="gameName"){
-                baseGameData->gameName=a.second;
+            if(a.first=="appName"){
+                baseAppData->appName=a.second;
             }
             if(a.first=="defaultFont"){
                 QVariant defaultFontValue=a.second;
-                baseGameData->defaultFonts=(defaultFontValue).toBool();
+                baseAppData->defaultFonts=(defaultFontValue).toBool();
             }
             if(a.first=="sharedMemory"){
                 QVariant sharedMemoryValue=a.second;
-                baseGameData->taskMemorySharing=(sharedMemoryValue).toBool();
+                baseAppData->taskMemorySharing=(sharedMemoryValue).toBool();
             }
             if(a.first=="writeCopy"){
                 QVariant writeCopyValue=a.second;
-                baseGameData->taskMemoryOptimization=(writeCopyValue).toBool();
+                baseAppData->taskMemoryOptimization=(writeCopyValue).toBool();
             }
             if(a.first=="rtServer"){
                 QVariant rtServerValue=a.second;
-                baseGameData->taskRealTimePriority=(rtServerValue).toBool();
+                baseAppData->taskRealTimePriority=(rtServerValue).toBool();
             }
             if(a.first=="dockSystemVersion"){
-                baseGameData->dockSystemVersion=a.second;
+                baseAppData->dockSystemVersion=a.second;
             }
             if(a.first=="monoState"){
                 QVariant monoState=a.second;
-                baseGameData->monoState=(monoState).toBool();;
+                baseAppData->monoState=(monoState).toBool();;
             }
             if(a.first=="geckoState"){
                 QVariant geckoState=a.second;
-                baseGameData->geckoState=(geckoState).toBool();;
+                baseAppData->geckoState=(geckoState).toBool();;
             }
             if(a.first=="mainPrcoName"){
-                baseGameData->mainPrcoName=a.second;
+                baseAppData->mainPrcoName=a.second;
             }
-            baseGameData->wineVersion=_objAddDataAT.pWineVersion;
+            baseAppData->wineVersion=_objAddDataAT.pWineVersion;
         }
     }
     if(!_baseAutoSetJson->Dxvk.empty()){
         for(auto a:_baseAutoSetJson->Dxvk){
             if(a.first=="dxvkVersion"){
-                baseGameData->dxvkVerson=a.second;
+                baseAppData->dxvkVerson=a.second;
             }
             if(a.first=="dxvkState"){
                 QVariant dxvkStateValue=a.second;
-                baseGameData->dxvkState=(dxvkStateValue).toBool();
+                baseAppData->dxvkState=(dxvkStateValue).toBool();
             }
             if(a.first=="dxvkHUD"){
                 QVariant dxvkHUDValue=a.second;
-                baseGameData->dxvkHUD=(dxvkHUDValue).toBool();
+                baseAppData->dxvkHUD=(dxvkHUDValue).toBool();
             }
         }
     }
     if(!_baseAutoSetJson->Regs.empty()){
-        baseGameData->dockRegs=_baseAutoSetJson->Regs;
+        baseAppData->dockRegs=_baseAutoSetJson->Regs;
     }
     if(!_baseAutoSetJson->Libs.empty()){
-        baseGameData->dockLibs=_baseAutoSetJson->Libs;
+        baseAppData->dockLibs=_baseAutoSetJson->Libs;
     }
     if(!_baseAutoSetJson->Env.empty()){
-        baseGameData->dockEnv=_baseAutoSetJson->Env;
+        baseAppData->dockEnv=_baseAutoSetJson->Env;
     }
     if(_baseAutoSetJson->Args!=nullptr){
-        baseGameData->gameOtherAgrs=_baseAutoSetJson->Args;
+        baseAppData->appOtherAgrs=_baseAutoSetJson->Args;
     }
     if(!_baseAutoSetJson->AttachProc.empty()){
-        baseGameData->attachProc=_baseAutoSetJson->AttachProc;
+        baseAppData->attachProc=_baseAutoSetJson->AttachProc;
     }
-    baseGameData->dockPath=_objAddDataAT.pDckPath;
-    baseGameData->dockName=_objAddDataAT.pDockName;
-    baseGameData->gameExe=_objAddDataAT.pGameExePath;
-    QFileInfo fi = QFileInfo(_objAddDataAT.pGameExePath);
-    baseGameData->workPath=fi.path();
+    baseAppData->dockPath=_objAddDataAT.pDckPath;
+    baseAppData->dockName=_objAddDataAT.pDockName;
+    baseAppData->appExe=_objAddDataAT.pAppExePath;
+    QFileInfo fi = QFileInfo(_objAddDataAT.pAppExePath);
+    baseAppData->workPath=fi.path();
     objectJson* _objectJson=new objectJson();
-    baseGameData->gameCID=_objectJson->GetRandomCID();
+    baseAppData->appCID=_objectJson->GetRandomCID();
     delete _objectJson;
     _objectJson=nullptr;
-    baseGameData->gameIco=":/res/img/vek.ico";
+    baseAppData->appIco=":/res/img/vek.ico";
     for(auto &x : g_vekLocalData.wineVec){
         if(x.first==_objAddDataAT.pWineVersion){
-            baseGameData->wineVersion=x.second.WineInstallName;
-            baseGameData->winePath=x.second.wineInstallPath;
+            baseAppData->wineVersion=x.second.WineInstallName;
+            baseAppData->winePath=x.second.wineInstallPath;
             break;
         }
     }
 }
-void objectAddGameAT::objectAutoObj(){
-    if(objDiyAddGame!=nullptr){
-        delete objDiyAddGame;
-        objDiyAddGame=nullptr;
+void objectAppAddAT::objectAutoObj(){
+    if(objDiyAddApp!=nullptr){
+        delete objDiyAddApp;
+        objDiyAddApp=nullptr;
     }
     emit Tips("配置容器中请稍候!");
-    objDiyAddGame=new objectAddGameMT(baseGameData,nullptr);
-    objDiyAddGame->InitDockObj(false);
-    objDiyAddGame->optionRegs();
-    objDiyAddGame->DockLibsInstall();
-    objDiyAddGame->SaveDataToJson(baseGameData->dockName,*baseGameData);
-    delete objDiyAddGame;
-    objDiyAddGame=nullptr;
+    objDiyAddApp=new objectAppAddMT(baseAppData,nullptr);
+    objDiyAddApp->InitDockObj(false);
+    objDiyAddApp->optionRegs();
+    objDiyAddApp->DockLibsInstall();
+    objDiyAddApp->SaveDataToJson(baseAppData->dockName,*baseAppData);
+    delete objDiyAddApp;
+    objDiyAddApp=nullptr;
 }
-void objectAddGameAT::run(){
+void objectAppAddAT::run(){
     _baseAutoSetJson=new BaseAutoSetJson();
-    baseGameData=_objAddDataAT.pBaseGameData;
+    baseAppData=_objAddDataAT.pBaseAppData;
     if(!jsonUnserialize(_objAddDataAT.pJsonPath)){
         emit Error("配置容器出错!",true);
         return;

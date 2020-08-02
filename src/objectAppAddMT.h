@@ -1,27 +1,27 @@
-#ifndef OBJECTADDGAMEMT_H
-#define OBJECTADDGAMEMT_H
+#ifndef OBJECTAPPADDGAMEMT_H
+#define OBJECTAPPADDGAMEMT_H
 
 #include "objectJson.h"
 #include "objectExtend.h"
 #include "vekInitObject.h"
-class objectAddGameMT :public QObject
+class objectAppAddMT :public QObject
 {
     Q_OBJECT
 public:
-    objectAddGameMT(BaseGameData*,BaseGameData*);
-    ~objectAddGameMT();
+    objectAppAddMT(BaseAppData*,BaseAppData*);
+    ~objectAppAddMT();
     QString GetRandomCID();
     bool InitDockObj(bool);
     std::vector<QStringList> argsList;
     //写入数据
-    void SaveDataToJson(QString dockName,BaseGameData writeData);
+    void SaveDataToJson(QString dockName,BaseAppData writeData);
     void DockLibsInstall();
     void ExecuteObj(objectType,objectWineBoot,objectWineServer);
     void newDock();
     void optionRegs();
 private:
-    BaseGameData* _baseGameData=nullptr;
-    BaseGameData* _oldGameData=nullptr;   
+    BaseAppData* _BaseAppData=nullptr;
+    BaseAppData* _oldAppData=nullptr;
     void InitDockDir(bool foceState,QDir _dockPath,QDir _dockDir);
     QStringList GetDxvkFileList(QString basedxvkDir);
     void DxvkFileInstall();
@@ -37,7 +37,7 @@ private:
     void installGeckoPlugs();
 
 signals:
-    void ExecutetoObjectArgs(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
+    void ExecutetoObjectArgs(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
 
 };
 

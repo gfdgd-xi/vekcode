@@ -1,38 +1,37 @@
-#include "vekGameAddMT.h"
+#include "vekAppAddMT.h"
 #include "ui_common.h"
-#include "vekInitObject.h"
 
-vekGameAddMT::vekGameAddMT(QWidget *parent) :
+vekAppAddMT::vekAppAddMT(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::vekGameAddMT)
+    ui(new Ui::vekAppAddMT)
 {
     ui->setupUi(this);
     vek_Style(this,0);
     qwidgetGeometry(this);
 }
 
-vekGameAddMT::~vekGameAddMT()
+vekAppAddMT::~vekAppAddMT()
 {
-    emit _unDiyGameAdd();
+    emit _unDiyAppAdd();
 }
 //绑定槽
-void vekGameAddMT::vekGameAddConnectObject(BaseGameData* _data,objectTypeView _objType){
+void vekAppAddMT::vekAppAddConnectObject(BaseAppData* _data,objectTypeView _objType){
     objType=_objType;
     //检测增加游戏必要的设置
-    connect(ui->pushButton_Set,&QPushButton::clicked,this,&vekGameAddMT::objectButton);
+    connect(ui->pushButton_Set,&QPushButton::clicked,this,&vekAppAddMT::objectButton);
     //设置游戏安装目录
-    connect(ui->pushButton_SetGameExe,&QPushButton::clicked,this,&vekGameAddMT::objectButton);
+    connect(ui->pushButton_SetAppExe,&QPushButton::clicked,this,&vekAppAddMT::objectButton);
     //设置游戏安装目录
-    connect(ui->pushButton_workPath,&QPushButton::clicked,this,&vekGameAddMT::objectButton);
+    connect(ui->pushButton_workPath,&QPushButton::clicked,this,&vekAppAddMT::objectButton);
     //设置Wine容器目录
-    connect(ui->pushButton_SetDockPath,&QPushButton::clicked,this,&vekGameAddMT::objectButton);
+    connect(ui->pushButton_SetDockPath,&QPushButton::clicked,this,&vekAppAddMT::objectButton);
     //设置ICO文件路径
-    connect(ui->pushButton_setIco,&QPushButton::clicked,this,&vekGameAddMT::objectButton);
+    connect(ui->pushButton_setIco,&QPushButton::clicked,this,&vekAppAddMT::objectButton);
     //init Dock
-    connect(ui->pushButton_initDock,&QPushButton::clicked,this,&vekGameAddMT::objectButton);
-    connect(ui->pushButton_SaveDxvkConfFile,&QPushButton::clicked,this,&vekGameAddMT::objectButton);
-    connect(ui->checkBox_dxvkConfigState,&QCheckBox::stateChanged,this,&vekGameAddMT::dxvkOptionLink);
-    connect(ui->checkBox_stateDxvk,&QCheckBox::stateChanged,this,&vekGameAddMT::dxvkOptionLink);
+    connect(ui->pushButton_initDock,&QPushButton::clicked,this,&vekAppAddMT::objectButton);
+    connect(ui->pushButton_SaveDxvkConfFile,&QPushButton::clicked,this,&vekAppAddMT::objectButton);
+    connect(ui->checkBox_dxvkConfigState,&QCheckBox::stateChanged,this,&vekAppAddMT::dxvkOptionLink);
+    connect(ui->checkBox_stateDxvk,&QCheckBox::stateChanged,this,&vekAppAddMT::dxvkOptionLink);
     //显示当前安装wine
     ui->comboBox_RunWine->clear();
     if(!g_vekLocalData.wineVec.empty())
@@ -72,13 +71,13 @@ void vekGameAddMT::vekGameAddConnectObject(BaseGameData* _data,objectTypeView _o
     if(_data!=nullptr){
         //读取配置修改设置
         oldData=_data;
-        tempCID=_data->gameCID;
+        tempCID=_data->appCID;
         ui->comboBox_RunWine->setCurrentIndex(ui->comboBox_RunWine->findText(_data->wineVersion));
         ui->comboBox_dockSystemVersion->setCurrentIndex(ui->comboBox_dockSystemVersion->findText(_data->dockSystemVersion));
         //读取游戏名字
-        ui->lineEdit_GameName->setText(_data->gameName);
+        ui->lineEdit_AppName->setText(_data->appName);
         //读取游戏安装路径
-        ui->lineEdit_GameInstallExe->setText(_data->gameExe);
+        ui->lineEdit_AppInstallExe->setText(_data->appExe);
         //读取容器路径
         ui->lineEdit_RunDockPath->setText(_data->dockPath);
         //工作路径
@@ -87,7 +86,7 @@ void vekGameAddMT::vekGameAddConnectObject(BaseGameData* _data,objectTypeView _o
         ui->comboBox_DockName->setCurrentText(_data->dockName);
         //运行日志
         ui->checkBox_winerunlog->setChecked(_data->taskLog);
-        ui->lineEdit_otherAgrs->setText(_data->gameOtherAgrs);
+        ui->lineEdit_otherAgrs->setText(_data->appOtherAgrs);
         //dxvk配置文件
         ui->lineEdit_dxvkConfigFIle->setText(_data->dxvkConfigFile);
         ui->checkBox_wineMemorySharing->setChecked(_data->taskMemorySharing);
@@ -124,7 +123,7 @@ void vekGameAddMT::vekGameAddConnectObject(BaseGameData* _data,objectTypeView _o
         }
     }
 }
-void vekGameAddMT::dxvkOptionLinkState(bool cState){
+void vekAppAddMT::dxvkOptionLinkState(bool cState){
     ui->comboBox_dxvkversion->setEnabled(cState);
     ui->checkBox_statedxvkhud->setEnabled(cState);
     ui->checkBox_dxvkConfigState->setEnabled(cState);
@@ -135,7 +134,7 @@ void vekGameAddMT::dxvkOptionLinkState(bool cState){
     ui->pushButton_SaveDxvkConfFile->setEnabled(cState);
 
 }
-void vekGameAddMT::dxvkOptionLink(){
+void vekAppAddMT::dxvkOptionLink(){
     dxvkOptionLinkState(false);
     if(ui->checkBox_stateDxvk->checkState()){
         dxvkOptionLinkState(true);
@@ -165,7 +164,7 @@ void vekGameAddMT::dxvkOptionLink(){
     }
 }
 //SetTable
-void vekGameAddMT::setTableView(QTableView* qtv){
+void vekAppAddMT::setTableView(QTableView* qtv){
     qtv->setSelectionBehavior(QAbstractItemView::SelectRows);
     qtv->setSelectionMode(QAbstractItemView::SingleSelection);
     qtv->setSortingEnabled(false);
@@ -182,7 +181,7 @@ void vekGameAddMT::setTableView(QTableView* qtv){
 
 }
 //loadTable
-void vekGameAddMT::loadTableView(QTableView* qtv,BaseGameData* ePdata){
+void vekAppAddMT::loadTableView(QTableView* qtv,BaseAppData* ePdata){
     tableModel=new QStandardItemModel();
     // set columns
     int i=0;
@@ -232,7 +231,7 @@ void vekGameAddMT::loadTableView(QTableView* qtv,BaseGameData* ePdata){
     qtv->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(qtv,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(clicked_rightMenu(QPoint)));
 }
-void vekGameAddMT::clicked_rightMenu(const QPoint &/*pos*/)
+void vekAppAddMT::clicked_rightMenu(const QPoint &/*pos*/)
 {
     QTableView* signalSrc = (QTableView*)sender();  // 获取到了发送该信号按钮的指针
     //创建菜单对象
@@ -255,7 +254,7 @@ void vekGameAddMT::clicked_rightMenu(const QPoint &/*pos*/)
     foreach (QAction* pAction, list) delete pAction;
     delete pMenu;
 }
-void vekGameAddMT::onTaskBoxContextMenuEvent()
+void vekAppAddMT::onTaskBoxContextMenuEvent()
 {
     QAction *pEven = qobject_cast<QAction *>(this->sender());
     int iType = pEven->data().toInt();
@@ -279,12 +278,12 @@ void vekGameAddMT::onTaskBoxContextMenuEvent()
         break;
     }
 }
-void vekGameAddMT::objectAdd(QTableView* qTableView){
+void vekAppAddMT::objectAdd(QTableView* qTableView){
     QAbstractItemModel *modessl = qTableView->model();
     modessl->insertRow(modessl->rowCount());
     qTableView->setModel(modessl);
 }
-void vekGameAddMT::objectDelete(QTableView* qTableView){
+void vekAppAddMT::objectDelete(QTableView* qTableView){
     int curRow=qTableView->currentIndex().row();
     int curRows = qTableView->model()->rowCount();
     if(curRows==0){
@@ -299,27 +298,27 @@ void vekGameAddMT::objectDelete(QTableView* qTableView){
     }
 }
 //控件数据to Class
-bool vekGameAddMT::vekGameConfigObj(){
+bool vekAppAddMT::vekAppConfigObj(){
     if(tempData!=nullptr){
         tempData=nullptr;
     }
-    tempData=new BaseGameData();
+    tempData=new BaseAppData();
     if(tempCID!=NULL){
-        tempData->gameCID=tempCID;
+        tempData->appCID=tempCID;
     }else{
         objectJson* _objectJson=new objectJson();
-        tempData->gameCID=_objectJson->GetRandomCID();
-        tempCID=tempData->gameCID;
+        tempData->appCID=_objectJson->GetRandomCID();
+        tempCID=tempData->appCID;
         delete _objectJson;
         _objectJson=nullptr;
     }
     tempData->wineVersion=ui->comboBox_RunWine->currentText();
-    tempData->gameExe=ui->lineEdit_GameInstallExe->text();
-    tempData->gameName=ui->lineEdit_GameName->text();
+    tempData->appExe=ui->lineEdit_AppInstallExe->text();
+    tempData->appName=ui->lineEdit_AppName->text();
     tempData->workPath=ui->lineEdit_workPath->text();
     tempData->dockPath=QDir::currentPath()+"/vekDock";
     tempData->dockName="vekON1";
-    tempData->gameOtherAgrs=ui->lineEdit_otherAgrs->text();
+    tempData->appOtherAgrs=ui->lineEdit_otherAgrs->text();
     tempData->dockSystemVersion=ui->comboBox_dockSystemVersion->currentText();
     //默认设置dockPath和dockName
     if(ui->lineEdit_RunDockPath->text()!=NULL){
@@ -331,8 +330,8 @@ bool vekGameAddMT::vekGameConfigObj(){
     if(ui->lineEdit_dxvkConfigFIle->text()!=NULL){
         tempData->dxvkConfigFile=ui->lineEdit_dxvkConfigFIle->text();
     }
-    if(tempData->gameIco==NULL){
-        tempData->gameIco=":/res/img/vek.ico";
+    if(tempData->appIco==NULL){
+        tempData->appIco=":/res/img/vek.ico";
     }
     //wine 参数
     for(auto &x : g_vekLocalData.wineVec){
@@ -401,12 +400,12 @@ bool vekGameAddMT::vekGameConfigObj(){
         vekError("请先安装wine");
         return false;
     }
-    if(tempData->gameName==NULL)
+    if(tempData->appName==NULL)
     {
         vekError("请填写游戏名");
         return false;
     }
-    if(tempData->gameExe==NULL)
+    if(tempData->appExe==NULL)
     {
         vekError("请设置游戏执行文件");
         return false;
@@ -443,7 +442,7 @@ bool vekGameAddMT::vekGameConfigObj(){
     return true;
 }
 //按钮事件集中处理
-void vekGameAddMT::objectButton(){
+void vekAppAddMT::objectButton(){
     QObject *object = QObject::sender();
     QPushButton *action_obnject = qobject_cast<QPushButton *>(object);
     QWidget *qwidget = new QWidget();
@@ -457,14 +456,14 @@ void vekGameAddMT::objectButton(){
         }
     }
     //设置游戏exe
-    if(action_obnject->objectName()=="pushButton_SetGameExe"){
+    if(action_obnject->objectName()=="pushButton_SetappExe"){
         QString exePath=QFileDialog::getOpenFileName(qwidget,"选择要添加的程序","","exe Files(*.exe)");
         if(exePath!=NULL){
             QFileInfo fi = QFileInfo(exePath);
-            if(ui->lineEdit_GameName->text()==nullptr){
-                ui->lineEdit_GameName->setText(fi.baseName());
+            if(ui->lineEdit_AppName->text()==nullptr){
+                ui->lineEdit_AppName->setText(fi.baseName());
             }
-            ui->lineEdit_GameInstallExe->setText(exePath);
+            ui->lineEdit_AppInstallExe->setText(exePath);
             ui->lineEdit_workPath->setText(fi.path());
         }
     }
@@ -507,31 +506,31 @@ void vekGameAddMT::objectButton(){
     //确定事件
     if(action_obnject->objectName()=="pushButton_Set"){
         ui->label_TipsText->setText("保存配置中请稍后!");
-        if(vekGameAddObj(false)){
-            emit doneAddGame(tempData);
+        if(vekAppAddObj(false)){
+            emit doneAddApp(tempData);
             this->close();
         }
     }
     //初始化
     if(action_obnject->objectName()=="pushButton_initDock"){
         ui->label_TipsText->setText("正在初始化容器请稍后!");
-        vekGameAddObj(true);
+        vekAppAddObj(true);
     }
 }
 
-bool vekGameAddMT::vekGameAddObj(bool _forceState){
-    if(!vekGameConfigObj()){
+bool vekAppAddMT::vekAppAddObj(bool _forceState){
+    if(!vekAppConfigObj()){
         return false;
     }
-    objectAddGameMT* vGameAddObj=new objectAddGameMT(tempData,oldData);
-    if(!vGameAddObj->InitDockObj(_forceState)){
+    objectAppAddMT* vappAddObj=new objectAppAddMT(tempData,oldData);
+    if(!vappAddObj->InitDockObj(_forceState)){
         vekError("初始化失败!");
     }else{
-        vGameAddObj->SaveDataToJson(tempData->dockName,*tempData);
+        vappAddObj->SaveDataToJson(tempData->dockName,*tempData);
     }
     emit _upData(tempData,objType);
-    delete vGameAddObj;
-    vGameAddObj=nullptr;
+    delete vappAddObj;
+    vappAddObj=nullptr;
     return true;
 }
 

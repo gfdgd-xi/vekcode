@@ -1,16 +1,16 @@
-﻿#include "vekGameData.h"
+﻿#include "vekAppData.h"
 
-vekGameData::vekGameData( QObject *parent):QAbstractListModel(parent)
+vekAppData::vekAppData( QObject *parent):QAbstractListModel(parent)
 {
 
 }
 
-vekGameData::~vekGameData()
+vekAppData::~vekAppData()
 {
 
 }
 
-QVariant vekGameData::data( const QModelIndex & index, int role ) const
+QVariant vekAppData::data( const QModelIndex & index, int role ) const
 {
     if (index.row() > m_ItemDataVec.size())
     {
@@ -22,12 +22,12 @@ QVariant vekGameData::data( const QModelIndex & index, int role ) const
        {
        case Qt::DisplayRole:
            {
-               return m_ItemDataVec[index.row()]->gameName;
+               return m_ItemDataVec[index.row()]->appName;
            }
         break;
        case Qt::DecorationRole:
            {
-               return QIcon(m_ItemDataVec[index.row()]->gameIco);
+               return QIcon(m_ItemDataVec[index.row()]->appIco);
            }
            break;
        case Qt::SizeHintRole:
@@ -42,18 +42,18 @@ QVariant vekGameData::data( const QModelIndex & index, int role ) const
 
 
 
-int vekGameData::rowCount( const QModelIndex & parent /*= QModelIndex() */ ) const
+int vekAppData::rowCount( const QModelIndex & parent /*= QModelIndex() */ ) const
 {
     return m_ItemDataVec.size();
 }
 
-void vekGameData::deleteItem( int index )
+void vekAppData::deleteItem( int index )
 {
-    std::vector<BaseGameData*>::iterator it = m_ItemDataVec.begin();
+    std::vector<BaseAppData*>::iterator it = m_ItemDataVec.begin();
     m_ItemDataVec.erase(it + index);
 }
 
-void vekGameData::addItem( BaseGameData *pItem )
+void vekAppData::addItem( BaseAppData *pItem )
 {
     if (pItem)
     {
@@ -64,7 +64,7 @@ void vekGameData::addItem( BaseGameData *pItem )
 
 }
 
-BaseGameData* vekGameData::getItem( int index )
+BaseAppData* vekAppData::getItem( int index )
 {
     if (index > -1 && index < m_ItemDataVec.size())
     {

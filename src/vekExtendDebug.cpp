@@ -61,7 +61,7 @@ void vekExtendDebug::onReadyRead(){
     ui->logTextEdit->setTextCursor(cursor);
 }
 //运行环境变量设置
-void vekExtendDebug::executeArgsEnv(BaseGameData data){
+void vekExtendDebug::executeArgsEnv(BaseAppData data){
     QString dockPath =data.dockPath+"/"+data.dockName;
     QDir dockDir(dockPath);
     QString winePath=data.winePath+"wine/bin/wine";
@@ -82,14 +82,14 @@ void vekExtendDebug::executeArgsEnv(BaseGameData data){
     }
 }
 //执行游戏
-void vekExtendDebug::ExtendGame(BaseGameData _dataGame){
+void vekExtendDebug::ExtendApp(BaseAppData _dataApp){
     if(m_cmd!=nullptr){
         delete m_cmd;
         m_cmd=nullptr;
     }
     m_cmd=new QProcess();
-    _data=_dataGame;
-    executeArgsEnv(_dataGame);
+    _data=_dataApp;
+    executeArgsEnv(_dataApp);
     /*下面代码用于调试winedbg
    m_cmd->setProcessChannelMode(QProcess::MergedChannels);
    m_cmd->setReadChannel(QProcess::StandardOutput);
@@ -103,37 +103,37 @@ void vekExtendDebug::ExtendGame(BaseGameData _dataGame){
    qDebug()<<pCodes;
    */
     QStringList codeArgs;
-    QString gameExe=_dataGame.gameExe;
+    QString gameExe=_dataApp.appExe;
     if(gameExe.contains(" ",Qt::CaseSensitive)){
         gameExe="\""+gameExe+"\"";
     }
     codeArgs.append(gameExe);
-    if(_dataGame.taskMemorySharing){
+    if(_dataApp.taskMemorySharing){
         codeArgs.append("STAGING_SHARED_MEMORY=1");
     }
-    if(_dataGame.taskRealTimePriority){
+    if(_dataApp.taskRealTimePriority){
         codeArgs.append("STAGING_RT_PRIORITY_SERVER=60");
     }
-    if(_dataGame.taskMemoryOptimization){
+    if(_dataApp.taskMemoryOptimization){
         codeArgs.append("STAGING_WRITECOPY=1");
     }
-    if(_dataGame.taskLog){
+    if(_dataApp.taskLog){
         codeArgs.append("WINEDEBUG=-all");
     }
-    if(_dataGame.gameOtherAgrs!=nullptr){
-        codeArgs.append(_dataGame.gameOtherAgrs);
+    if(_dataApp.appOtherAgrs!=nullptr){
+        codeArgs.append(_dataApp.appOtherAgrs);
     }
     m_cmd->setProcessChannelMode(QProcess::MergedChannels);
     m_cmd->setReadChannel(QProcess::StandardOutput);
-    m_cmd->setWorkingDirectory(_dataGame.workPath);
+    m_cmd->setWorkingDirectory(_dataApp.workPath);
     m_cmd->start("bash");
     connect(m_cmd,SIGNAL(readyReadStandardOutput()),this,SLOT(onReadyRead()));
-    QString codes=_dataGame.winePath+"wine/bin/wine64"+" "+codeArgs.join(" ");
+    QString codes=_dataApp.winePath+"wine/bin/wine64"+" "+codeArgs.join(" ");
     m_cmd->write(codes.toLocal8Bit()+'\n');
 
     qDebug()<<"|++++++++++++++++++++++++++++|";
     qDebug()<<"writeCode:"+codes;
-    qDebug()<<"workPath:"+_dataGame.workPath;
+    qDebug()<<"workPath:"+_dataApp.workPath;
     qDebug()<<"WineArgs:"+codeArgs.join(" ");
     qDebug()<<"|++++++++++++++++++++++++++++|";
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>vekGameAddMT</class>
- <widget class="QWidget" name="vekGameAddMT">
+ <class>vekAppAddMT</class>
+ <widget class="QWidget" name="vekAppAddMT">
   <property name="windowModality">
    <enum>Qt::NonModal</enum>
   </property>
@@ -213,7 +213,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="lineEdit_GameName"/>
+                <widget class="QLineEdit" name="lineEdit_AppName"/>
                </item>
                <item>
                 <widget class="QLabel" name="label_10">
@@ -243,10 +243,10 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="lineEdit_GameInstallExe"/>
+                <widget class="QLineEdit" name="lineEdit_AppInstallExe"/>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton_SetGameExe">
+                <widget class="QPushButton" name="pushButton_SetAppExe">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                    <horstretch>0</horstretch>

@@ -24,8 +24,8 @@ TRANSLATIONS += vek_zh_CN.ts\
                 vek_us_EN.ts
 SOURCES += \
   main.cpp \
-  src/objectAddGameAT.cpp \
-  src/objectAddGameMT.cpp \
+  src/objectAppAddAT.cpp \
+  src/objectAppAddMT.cpp \
   src/objectExtend.cpp \
   src/objectJson.cpp \
   src/objectProcManage.cpp \
@@ -35,13 +35,13 @@ SOURCES += \
   src/vekATJsonModel.cpp \
   src/vekATJsonView.cpp \
   src/vekAbout.cpp \
+  src/vekAppAddAT.cpp \
+  src/vekAppAddMT.cpp \
+  src/vekAppAddMulti.cpp \
+  src/vekAppData.cpp \
+  src/vekAppListView.cpp \
+  src/vekAppPanel.cpp \
   src/vekExportJson.cpp \
-  src/vekGameAddAT.cpp \
-  src/vekGameAddMT.cpp \
-  src/vekGameAddMulti.cpp \
-  src/vekGameData.cpp \
-  src/vekGameListView.cpp \
-  src/vekGamePanel.cpp \
   src/vekGetCurl.cpp \
   src/vekGitWine.cpp \
   src/vekInitObject.cpp \
@@ -53,8 +53,8 @@ HEADERS += \
     src/baseData.h \
     src/baseRes.h \
     src/common.h \
-    src/objectAddGameAT.h \
-    src/objectAddGameMT.h \
+    src/objectAppAddAT.h \
+    src/objectAppAddMT.h \
     src/objectExtend.h \
     src/objectJson.h \
     src/objectProcManage.h \
@@ -65,14 +65,14 @@ HEADERS += \
     src/vekATJsonModel.h \
     src/vekATJsonView.h \
     src/vekAbout.h \
+    src/vekAppAddAT.h \
+    src/vekAppAddMT.h \
+    src/vekAppAddMulti.h \
+    src/vekAppData.h \
+    src/vekAppListView.h \
+    src/vekAppPanel.h \
     src/vekExportJson.h \
     src/vekExtendDebug.h \
-    src/vekGameAddAT.h \
-    src/vekGameAddMT.h \
-    src/vekGameAddMulti.h \
-    src/vekGameData.h \
-    src/vekGameListView.h \
-    src/vekGamePanel.h \
     src/vekGetCurl.h \
     src/vekGitWine.h \
     src/vekInitObject.h \
@@ -80,10 +80,10 @@ HEADERS += \
     src/vekWineOption.h
 
 FORMS += \
+    ui/vekAppAddAT.ui \
+    ui/vekAppAddMT.ui \
+    ui/vekAppAddMulti.ui \
     ui/vekExportJson.ui \
-    ui/vekGameAddAT.ui \
-    ui/vekGameAddMT.ui \
-    ui/vekGameAddMulti.ui \
     ui/vekSourceEdit.ui \
     ui/vek.ui \
     ui/vekAbout.ui \

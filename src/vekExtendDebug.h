@@ -15,14 +15,14 @@ public:
     explicit vekExtendDebug(QWidget *parent = nullptr);
     ~vekExtendDebug();
 public slots:
-    void ExtendGame(BaseGameData _dataGame);
+    void ExtendApp(BaseAppData _dataApp);
 private:
     Ui::vekExtendDebug *ui;
     QProcess *m_cmd=nullptr;
     QProcess *d_cmd=nullptr;
-    BaseGameData _data;
+    BaseAppData _data;
     QMutex mutex;
-    void executeArgsEnv(BaseGameData data);
+    void executeArgsEnv(BaseAppData data);
     void exitProc(QString);
 private slots:
     void onReadyRead();

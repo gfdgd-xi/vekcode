@@ -19,12 +19,12 @@ QVariant vekATJsonModel::data( const QModelIndex & index, int role ) const
        {
        case Qt::DisplayRole:
            {
-               return m_ItemDataVec[index.row()]->gameName;
+               return m_ItemDataVec[index.row()]->appName;
            }
         break;
        case Qt::DecorationRole:
            {
-               return QIcon(m_ItemDataVec[index.row()]->gameIco);
+               return QIcon(m_ItemDataVec[index.row()]->appIco);
            }
            break;
        case Qt::SizeHintRole:
@@ -44,3 +44,4 @@ int vekATJsonModel::rowCount( const QModelIndex & parent ) const
     UNUSED(parent);
     return m_ItemDataVec.size();
 }
+

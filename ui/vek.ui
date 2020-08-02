@@ -115,7 +115,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_vekAddGame">
+          <widget class="QPushButton" name="pushButton_vekAddApp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -128,7 +128,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_vekRunGame">
+          <widget class="QPushButton" name="pushButton_vekRunApp">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -184,7 +184,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="vekGamePanel" name="tabWidget"/>
+          <widget class="vekAppPanel" name="tabWidget"/>
          </item>
         </layout>
        </widget>
@@ -206,7 +206,7 @@
     <property name="title">
      <string>菜单</string>
     </property>
-    <addaction name="action_AddGame"/>
+    <addaction name="action_AddApp"/>
     <addaction name="action_Exit"/>
    </widget>
    <widget class="QMenu" name="menuWine">
@@ -232,7 +232,7 @@
    <addaction name="menu_3"/>
    <addaction name="menu_2"/>
   </widget>
-  <action name="action_AddGame">
+  <action name="action_AddApp">
    <property name="text">
     <string>增加游戏</string>
    </property>
@@ -260,9 +260,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>vekGamePanel</class>
+   <class>vekAppPanel</class>
    <extends>QTabWidget</extends>
-   <header location="global">src/vekGamePanel.h</header>
+   <header location="global">src/vekAppPanel.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -15,7 +15,7 @@ class vekExportJson : public QWidget
 public:
     explicit vekExportJson(QWidget *parent = nullptr);
     ~vekExportJson();
-    void ExportJson(BaseGameData);
+    void ExportJson(BaseAppData);
 private:
     Ui::vekExportJson *ui;
 private slots:

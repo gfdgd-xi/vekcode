@@ -8,7 +8,7 @@ objectExtend::~objectExtend(){
     delete m_cmd;
     m_cmd=nullptr;
 }
-void objectExtend::setDockOptionObjectData(BaseGameData _data,std::vector<QStringList> _agrsList,objectType _objType,objectWineBoot _objWineBootType,objectWineServer _objWineServer){
+void objectExtend::setDockOptionObjectData(BaseAppData _data,std::vector<QStringList> _agrsList,objectType _objType,objectWineBoot _objWineBootType,objectWineServer _objWineServer){
     data=_data;
     argsList=_agrsList;
     objType=_objType;
@@ -211,7 +211,7 @@ void objectExtend::optionExtend(){
 }
 void objectExtend::extendApp(){
     QStringList codeArgs;
-    QString gameExe=data.gameExe;
+    QString gameExe=data.appExe;
     /*
     if(gameExe.contains(" ",Qt::CaseSensitive)){
         gameExe="\""+gameExe+"\"";
@@ -230,8 +230,8 @@ void objectExtend::extendApp(){
     if(data.taskLog){
         codeArgs.append("WINEDEBUG=-all");
     }
-    if(data.gameOtherAgrs!=nullptr){
-        codeArgs.append(data.gameOtherAgrs);
+    if(data.appOtherAgrs!=nullptr){
+        codeArgs.append(data.appOtherAgrs);
     }    
     dyncDxvkRegs(dxvkResCache);
     dyncDxvkRegs(dxvkResLog);

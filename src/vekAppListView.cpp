@@ -1,18 +1,18 @@
-﻿#include "vekGameListView.h"
+﻿#include "vekAppListView.h"
 
 
-vekGameListView::vekGameListView( QWidget *parent):QListView(parent)
+vekAppListView::vekAppListView( QWidget *parent):QListView(parent)
 {
     parent=nullptr;
     m_hitIndex = -1;
-    m_pModel = new vekGameData;
+    m_pModel = new vekAppData;
     this->setModel(m_pModel);
     m_pListMap = NULL;}
 
-vekGameListView::~vekGameListView()
+vekAppListView::~vekAppListView()
 {
 }
-void vekGameListView::contextMenuEvent( QContextMenuEvent * event )
+void vekAppListView::contextMenuEvent( QContextMenuEvent * event )
 {
     int hitIndex = this->indexAt(event->pos()).row();
     if (hitIndex > -1)
@@ -20,7 +20,7 @@ void vekGameListView::contextMenuEvent( QContextMenuEvent * event )
         //增加容器转移功能
         QMenu *pSubMenu = NULL;
         pMenu = new QMenu(this);
-        std::map<QString,vekGameListView*>::iterator it = m_pListMap->begin();
+        std::map<QString,vekAppListView*>::iterator it = m_pListMap->begin();
         for (it;it != m_pListMap->end();++it)
         {
             if (!pSubMenu)
@@ -32,7 +32,7 @@ void vekGameListView::contextMenuEvent( QContextMenuEvent * event )
             {
                 QAction *pMoveAct = new QAction( it->first,pMenu);
                 //记录菜单与分组的映射，在moveSlot()响应时需要用到。
-                m_ActionMap.insert(std::pair<QAction*,vekGameListView*>(pMoveAct,it->second));
+                m_ActionMap.insert(std::pair<QAction*,vekAppListView*>(pMoveAct,it->second));
                 pSubMenu->addAction(pMoveAct);
                 connect(pMoveAct,SIGNAL(triggered ()),this,SLOT(moveSlot()));
             }
@@ -47,7 +47,7 @@ void vekGameListView::contextMenuEvent( QContextMenuEvent * event )
         pMenu->popup(mapToGlobal(event->pos()));
     }
 }
-void vekGameListView::ObjectRun(){
+void vekAppListView::ObjectRun(){
     int index = this->currentIndex().row();
     if (index > -1)
     {
@@ -83,7 +83,7 @@ void vekGameListView::ObjectRun(){
             _objType=object_forcekill;
             break;
         case object_debugstart:
-            objectExtendGame();
+            objectExtendApp();
             return;
             break;
         case object_setgame:
@@ -106,66 +106,68 @@ void vekGameListView::ObjectRun(){
             connect(_objectExtend, SIGNAL(objexitTray(bool)), pObjectVek, SLOT(exitTray(bool)));
             emit _startTray();
         }
-        connect(this, SIGNAL(toObjectArgs(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)), _objectExtend, SLOT(setDockOptionObjectData(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)));
+        connect(this, SIGNAL(toObjectArgs(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)), _objectExtend, SLOT(setDockOptionObjectData(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)));
         emit(toObjectArgs(*m_pModel->getItem(index),_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default));      
         _objectExtend->start();
     }
 }
-void vekGameListView::ExportJson(){
+void vekAppListView::ExportJson(){
     int index = this->currentIndex().row();
     if(_vExportJson==nullptr){
-        BaseGameData bGameData=*m_pModel->getItem(index);
+        BaseAppData bGameData=*m_pModel->getItem(index);
         _vExportJson=new vekExportJson();
         _vExportJson->setAttribute(Qt::WA_DeleteOnClose,true);
         _vExportJson->show();
-        connect(_vExportJson,&vekExportJson::_unExportJson,this,&vekGameListView::unExportJson);
+        connect(_vExportJson,&vekExportJson::_unExportJson,this,&vekAppListView::unExportJson);
         _vExportJson->ExportJson(bGameData);
     }
 }
-void vekGameListView::objectExtendGame(){
+void vekAppListView::objectExtendApp(){
     _vExtendDebug=new vekExtendDebug();
     _vExtendDebug->setAttribute(Qt::WA_DeleteOnClose,true);
     _vExtendDebug->setGeometry(this->geometry());
     _vExtendDebug->show();
-    connect(this,SIGNAL(toObjectArgs_cl(BaseGameData)),_vExtendDebug,SLOT(ExtendGame(BaseGameData)));
+    connect(this,SIGNAL(toObjectArgs_cl(BaseAppData)),_vExtendDebug,SLOT(ExtendApp(BaseAppData)));
     int index = this->currentIndex().row();
     emit toObjectArgs_cl(*m_pModel->getItem(index));
 }
 //设置选项
-void vekGameListView::setItemSlot(){
+void vekAppListView::setItemSlot(){
     int index = this->currentIndex().row();
     if (index > -1)
     {
-        BaseGameData* bGameData=m_pModel->getItem(index);
-        if(_vek_Game_Add==nullptr){
+        BaseAppData* bGameData=m_pModel->getItem(index);
+        if(_vek_App_Add==nullptr){
             //绑定传参槽
-            _vek_Game_Add=new vekGameAddMT();
-            connect(this, SIGNAL(toObjectArgs_ptr(BaseGameData*,objectTypeView)), _vek_Game_Add, SLOT(vekGameAddConnectObject(BaseGameData*,objectTypeView)));
-            _vek_Game_Add->setAttribute(Qt::WA_DeleteOnClose,true);
-            _vek_Game_Add->setGeometry(this->geometry());
-            _vek_Game_Add->setWindowTitle("VekGameSet");
+            _vek_App_Add=new vekAppAddMT();
+            connect(this, SIGNAL(toObjectArgs_ptr(BaseAppData*,objectTypeView)), _vek_App_Add, SLOT(vekAppAddConnectObject(BaseAppData*,objectTypeView)));
+            _vek_App_Add->setAttribute(Qt::WA_DeleteOnClose,true);
+            _vek_App_Add->setGeometry(this->geometry());
+            _vek_App_Add->setWindowTitle("VekAppSet");
             emit(toObjectArgs_ptr(bGameData,object_setApp));
-            _vek_Game_Add->show();
-            connect(_vek_Game_Add,&vekGameAddMT::_unDiyGameAdd,this,&vekGameListView::unGameAdd);
-            connect(_vek_Game_Add,SIGNAL(_upData(BaseGameData*,objectTypeView)),this,SLOT(setUpDelData(BaseGameData*,objectTypeView)));
+            _vek_App_Add->show();
+            connect(_vek_App_Add,&vekAppAddMT::_unDiyAppAdd,this,&vekAppListView::unAppAdd);
+            connect(_vek_App_Add,SIGNAL(_upData(BaseAppData*,objectTypeView)),this,SLOT(setUpDelData(BaseAppData*,objectTypeView)));
         }
     }
 }
-void vekGameListView::setUpDelData(BaseGameData* data,objectTypeView objTypeView){
+void vekAppListView::setUpDelData(BaseAppData* data,objectTypeView objTypeView){
     int index = this->currentIndex().row();
     if(index>-1){
-        QString deleteCID=m_pModel->getItem(index)->gameCID;
+        QString deleteCID=m_pModel->getItem(index)->appCID;
         QString dockPathStr=m_pModel->getItem(index)->dockPath+"/";
         QString dockNameStr=m_pModel->getItem(index)->dockName;    
         if(objTypeView==object_delApp){
             if(m_pModel->rowCount()<=1){
                 if(vekMesg("提示:这是"+dockNameStr+"最后一个程序,若是执意删除则Vek将删除"+dockNameStr+"容器")){
-                  m_pModel->deleteItem(index);
-                  objectJson _objectJson;
-                  _objectJson.deleteGameNodeData(deleteCID);
                   deleteDockerTab(dockPathStr,dockNameStr);
+                }else{
+                    return;
                 }
             }
+            m_pModel->deleteItem(index);
+            objectJson _objectJson;
+            _objectJson.deleteAppNodeData(deleteCID);
         }
         if(objTypeView==object_setApp){
             m_pModel->deleteItem(index);
@@ -177,13 +179,13 @@ void vekGameListView::setUpDelData(BaseGameData* data,objectTypeView objTypeView
                     deleteDockerTab(dockPathStr,dockNameStr);
                 }
                 auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget();
-                connect(this,SIGNAL(setUpDelDataSignal(BaseGameData*)),pObjectVek,SLOT(addGameObject(BaseGameData*)));
+                connect(this,SIGNAL(setUpDelDataSignal(BaseAppData*)),pObjectVek,SLOT(addGameObject(BaseAppData*)));
                 emit setUpDelDataSignal(data);
             }
         }
     }
 }
-void vekGameListView::deleteDockerTab(QString dockPathStr,QString dockNameStr){
+void vekAppListView::deleteDockerTab(QString dockPathStr,QString dockNameStr){
         mBox->removeTab(mBox->currentIndex());
         if(dockPathStr!=NULL&dockNameStr!=NULL){
             QDir dockPath(dockPathStr+dockNameStr);
@@ -194,25 +196,25 @@ void vekGameListView::deleteDockerTab(QString dockPathStr,QString dockNameStr){
         g_vekLocalData.dockerVec.erase(dockNameStr);
         m_pListMap->erase(dockNameStr);
 }
-void vekGameListView::unGameAdd(){
-    _vek_Game_Add=nullptr;
+void vekAppListView::unAppAdd(){
+    _vek_App_Add=nullptr;
 }
-void vekGameListView::unExportJson(){
+void vekAppListView::unExportJson(){
     _vExportJson=nullptr;
 }
 
-void vekGameListView::setListMap( std::map<QString,vekGameListView*> *pListMap,QTabWidget* pBox)
+void vekAppListView::setListMap( std::map<QString,vekAppListView*> *pListMap,QTabWidget* pBox)
 {
     m_pListMap = pListMap;
     mBox=pBox;
 }
 
-void vekGameListView::addItem(BaseGameData *pItem )
+void vekAppListView::addItem(BaseAppData *pItem )
 {
     m_pModel->addItem(pItem);
 }
 
-void vekGameListView::moveSlot()
+void vekAppListView::moveSlot()
 {
     QAction *pSender = qobject_cast<QAction*>(sender());
     int index = this->currentIndex().row();
@@ -223,18 +225,18 @@ void vekGameListView::moveSlot()
             return;
         }
         //根据点击的菜单，找到相应的列表，然后才能把图标转移过去
-        vekGameListView *pList = m_ActionMap.find(pSender)->second;
+        vekAppListView *pList = m_ActionMap.find(pSender)->second;
         if (pList)
         {          
-            BaseGameData *pItem = m_pModel->getItem(index);
+            BaseAppData *pItem = m_pModel->getItem(index);
             pList->setViewMode(QListView::IconMode);
             pList->setFlow(QListView::LeftToRight);
             pList->addItem(pItem);
             m_pModel->deleteItem(index);
             pItem->dockName=m_ActionMap.find(pSender)->first->text();
             objectJson _objectJson;
-            _objectJson.deleteGameNodeData(pItem->gameCID);
-            _objectJson.updateGameNodeData(pItem->dockName,*pItem);
+            _objectJson.deleteAppNodeData(pItem->appCID);
+            _objectJson.updateAppNodeData(pItem->dockName,*pItem);
         }
     }
     //操作完了要把这个临时的映射清空

@@ -15,62 +15,62 @@ json objectJson::DataSerialize(json jsonData,const BaseLocalData _baseLocalData)
     for(auto ax:g_vekLocalData.dockerVec){
         //bx.first->游戏CID
         for(auto bx:ax.second){
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(gameCID)]=bx.second.gameCID.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(gameName)]=bx.second.gameName.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(gameIco)]=bx.second.gameIco.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(gameExe)]=bx.second.gameExe.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(winePath)]=bx.second.winePath.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(wineVersion)]=bx.second.wineVersion.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(gameOtherAgrs)]=bx.second.gameOtherAgrs.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockSystemVersion)]=bx.second.dockSystemVersion.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dxvkHUD)]=bx.second.dxvkHUD;
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dxvkVerson)]=bx.second.dxvkVerson.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dxvkConfigFile)]=bx.second.dxvkConfigFile.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockPath)]=bx.second.dockPath.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockName)]=bx.second.dockName.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(workPath)]=bx.second.workPath.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(mainPrcoName)]=bx.second.mainPrcoName.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(taskLog)]=bx.second.taskLog;
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dxvkState)]=bx.second.dxvkState;
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(taskMemoryOptimization)]=bx.second.taskMemoryOptimization;
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(taskMemorySharing)]=bx.second.taskMemorySharing;
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(taskRealTimePriority)]=bx.second.taskRealTimePriority;
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(defaultFonts)]=bx.second.defaultFonts;
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(monoState)]=bx.second.monoState;
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(geckoState)]=bx.second.geckoState;
-            jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dxvkConfigFileState)]=bx.second.dxvkConfigFileState;
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(appCID)]=bx.second.appCID.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(appName)]=bx.second.appName.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(appIco)]=bx.second.appIco.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(appExe)]=bx.second.appExe.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(winePath)]=bx.second.winePath.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(wineVersion)]=bx.second.wineVersion.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(appOtherAgrs)]=bx.second.appOtherAgrs.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockSystemVersion)]=bx.second.dockSystemVersion.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dxvkHUD)]=bx.second.dxvkHUD;
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dxvkVerson)]=bx.second.dxvkVerson.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dxvkConfigFile)]=bx.second.dxvkConfigFile.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockPath)]=bx.second.dockPath.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockName)]=bx.second.dockName.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(workPath)]=bx.second.workPath.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(mainPrcoName)]=bx.second.mainPrcoName.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(taskLog)]=bx.second.taskLog;
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dxvkState)]=bx.second.dxvkState;
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(taskMemoryOptimization)]=bx.second.taskMemoryOptimization;
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(taskMemorySharing)]=bx.second.taskMemorySharing;
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(taskRealTimePriority)]=bx.second.taskRealTimePriority;
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(defaultFonts)]=bx.second.defaultFonts;
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(monoState)]=bx.second.monoState;
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(geckoState)]=bx.second.geckoState;
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dxvkConfigFileState)]=bx.second.dxvkConfigFileState;
             if(!bx.second.dockEnv.empty()){
                 for(auto&[fa,yz]:bx.second.dockEnv){
-                    jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockEnv)][fa.toStdString()]=yz.toStdString();
+                    jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockEnv)][fa.toStdString()]=yz.toStdString();
                 }
             }else{
-                jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockEnv)]=json({});
+                jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockEnv)]=json({});
             }
             if(!bx.second.dockLibs.empty()){
                 for(auto&ya:bx.second.dockLibs){
-                    jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockLibs)].push_back(ya.toStdString());
+                    jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockLibs)].push_back(ya.toStdString());
                 }
             }else{
-                jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockLibs)]=json({});
+                jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockLibs)]=json({});
             }
             if(!bx.second.dockRegs.empty()){
                 int i=-1;
                 for(auto a:bx.second.dockRegs){
                     i+=1;
-                    jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockRegs)][i][toStr(rPath)]=a.rPath.toStdString();
-                    jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockRegs)][i][toStr(rKey)]=a.rKey.toStdString();
-                    jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockRegs)][i][toStr(rTValue)]=a.rTValue.toStdString();
-                    jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockRegs)][i][toStr(rValue)]=a.rValue.toStdString();
+                    jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockRegs)][i][toStr(rPath)]=a.rPath.toStdString();
+                    jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockRegs)][i][toStr(rKey)]=a.rKey.toStdString();
+                    jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockRegs)][i][toStr(rTValue)]=a.rTValue.toStdString();
+                    jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockRegs)][i][toStr(rValue)]=a.rValue.toStdString();
                 }
             }else{
-                jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(dockRegs)]=json::array();
+                jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockRegs)]=json::array();
             }
             if(!bx.second.attachProc.empty()){
                 for(auto rs:bx.second.attachProc){
-                    jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(attachProc)].push_back(rs.toStdString());
+                    jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(attachProc)].push_back(rs.toStdString());
                 }
             }else{
-                jsonData["Docker"][ax.first.toStdString()][bx.second.gameCID.toStdString()][toStr(attachProc)]=json::array();
+                jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(attachProc)]=json::array();
             }
         }
     }
@@ -88,11 +88,11 @@ json objectJson::DataSerialize(json jsonData,const BaseLocalData _baseLocalData)
             jsonData["Wine"][k.second.WineInstallName.toStdString()][toStr(wineInstallDxvk)].push_back(dx.toStdString());
         }
     }
-    for(auto &[x,y]: _baseLocalData.gameScrSource){
-        jsonData["GameScrSource"][x.toStdString()]=y.toStdString();
-        for(auto &[a,b]: _baseLocalData.gameJsonList){
+    for(auto &[x,y]: _baseLocalData.appScrSource){
+        jsonData["AppScrSource"][x.toStdString()]=y.toStdString();
+        for(auto &[a,b]: _baseLocalData.appJsonList){
             for(auto&[u,i]:b){
-                jsonData["GameJsonList"][x.toStdString()][u.toStdString()]=i.toStdString();
+                jsonData["AppJsonList"][x.toStdString()][u.toStdString()]=i.toStdString();
             }
         }
     }
@@ -148,48 +148,48 @@ bool objectJson::unDataSerializeLocalData(){
                 for(auto [ax,bx]:v.items()){
                     //cx->游戏CID bx->游戏数据
                     for(auto [cx,dx]:bx.items()){
-                        BaseGameData _base_game_data={};
-                        _base_game_data.gameCID=QString::fromStdString(dx.at("gameCID"));
-                        _base_game_data.gameName=QString::fromStdString(dx.at("gameName"));
-                        _base_game_data.gameExe=QString::fromStdString(dx.at("gameExe"));
-                        _base_game_data.gameIco=QString::fromStdString(dx.at("gameIco"));
-                        _base_game_data.winePath=QString::fromStdString(dx.at("winePath"));
-                        _base_game_data.wineVersion=QString::fromStdString(dx.at("wineVersion"));
-                        _base_game_data.gameOtherAgrs=QString::fromStdString(dx.at("gameOtherAgrs"));
-                        _base_game_data.dockPath=QString::fromStdString(dx.at("dockPath"));
-                        _base_game_data.dxvkVerson=QString::fromStdString(dx.at("dxvkVerson"));
-                        _base_game_data.dockName=QString::fromStdString(dx.at("dockName"));
-                        _base_game_data.dockSystemVersion=QString::fromStdString(dx.at("dockSystemVersion"));
-                        _base_game_data.workPath=QString::fromStdString(dx.at("workPath"));
-                        _base_game_data.dxvkConfigFile=QString::fromStdString(dx.at("dxvkConfigFile"));
-                        _base_game_data.mainPrcoName=QString::fromStdString(dx.at("mainPrcoName"));
-                        _base_game_data.dxvkState=dx.at("dxvkState");
-                        _base_game_data.dxvkHUD=dx.at("dxvkHUD");
-                        _base_game_data.taskLog=dx.at("taskLog");
-                        _base_game_data.taskMemoryOptimization=dx.at("taskMemoryOptimization");
-                        _base_game_data.taskMemorySharing=dx.at("taskMemorySharing");
-                        _base_game_data.taskRealTimePriority=dx.at("taskRealTimePriority");
-                        _base_game_data.defaultFonts=dx.at("defaultFonts");
-                        _base_game_data.monoState=dx.at("monoState");
-                        _base_game_data.geckoState=dx.at("geckoState");
-                        _base_game_data.dxvkConfigFileState=dx.at("dxvkConfigFileState");
-                        _base_game_data.attachProc.clear();
+                        BaseAppData _base_app_data={};
+                        _base_app_data.appCID=QString::fromStdString(dx.at("appCID"));
+                        _base_app_data.appName=QString::fromStdString(dx.at("appName"));
+                        _base_app_data.appExe=QString::fromStdString(dx.at("appExe"));
+                        _base_app_data.appIco=QString::fromStdString(dx.at("appIco"));
+                        _base_app_data.winePath=QString::fromStdString(dx.at("winePath"));
+                        _base_app_data.wineVersion=QString::fromStdString(dx.at("wineVersion"));
+                        _base_app_data.appOtherAgrs=QString::fromStdString(dx.at("appOtherAgrs"));
+                        _base_app_data.dockPath=QString::fromStdString(dx.at("dockPath"));
+                        _base_app_data.dxvkVerson=QString::fromStdString(dx.at("dxvkVerson"));
+                        _base_app_data.dockName=QString::fromStdString(dx.at("dockName"));
+                        _base_app_data.dockSystemVersion=QString::fromStdString(dx.at("dockSystemVersion"));
+                        _base_app_data.workPath=QString::fromStdString(dx.at("workPath"));
+                        _base_app_data.dxvkConfigFile=QString::fromStdString(dx.at("dxvkConfigFile"));
+                        _base_app_data.mainPrcoName=QString::fromStdString(dx.at("mainPrcoName"));
+                        _base_app_data.dxvkState=dx.at("dxvkState");
+                        _base_app_data.dxvkHUD=dx.at("dxvkHUD");
+                        _base_app_data.taskLog=dx.at("taskLog");
+                        _base_app_data.taskMemoryOptimization=dx.at("taskMemoryOptimization");
+                        _base_app_data.taskMemorySharing=dx.at("taskMemorySharing");
+                        _base_app_data.taskRealTimePriority=dx.at("taskRealTimePriority");
+                        _base_app_data.defaultFonts=dx.at("defaultFonts");
+                        _base_app_data.monoState=dx.at("monoState");
+                        _base_app_data.geckoState=dx.at("geckoState");
+                        _base_app_data.dxvkConfigFileState=dx.at("dxvkConfigFileState");
+                        _base_app_data.attachProc.clear();
                         if(dx.at("attachProc")!=NULL){
                             for(auto idx:dx.at("attachProc")){
-                                _base_game_data.attachProc.push_back(QString::fromStdString(idx));
+                                _base_app_data.attachProc.push_back(QString::fromStdString(idx));
                             }
                         }else{
-                            _base_game_data.attachProc={};
+                            _base_app_data.attachProc={};
                         }
-                        _base_game_data.dockEnv.clear();
+                        _base_app_data.dockEnv.clear();
                         if(dx.at("dockEnv")!=NULL){
                             for(auto&[vx,vy]:dx.at("dockEnv").items()){
-                                _base_game_data.dockEnv.insert(pair<QString,QString>(QString::fromStdString(vx),QString::fromStdString(vy)));
+                                _base_app_data.dockEnv.insert(pair<QString,QString>(QString::fromStdString(vx),QString::fromStdString(vy)));
                             }
                         }else{
-                            _base_game_data.dockEnv={};
+                            _base_app_data.dockEnv={};
                         }
-                        _base_game_data.dockRegs.clear();
+                        _base_app_data.dockRegs.clear();
                         if(dx.at("dockRegs")!=NULL){
                             for(auto&wy:dx.at("dockRegs")){
                                 BaseDockRegs _rbaseRegs;
@@ -197,10 +197,10 @@ bool objectJson::unDataSerializeLocalData(){
                                 _rbaseRegs.rKey=QString::fromStdString(wy.at("rKey"));
                                 _rbaseRegs.rTValue=QString::fromStdString(wy.at("rTValue"));
                                 _rbaseRegs.rValue=QString::fromStdString(wy.at("rValue"));
-                                _base_game_data.dockRegs.push_back(_rbaseRegs);
+                                _base_app_data.dockRegs.push_back(_rbaseRegs);
                             }
                         }
-                     g_vekLocalData.dockerVec[QString::fromStdString(ax)].insert(pair<QString,BaseGameData>(_base_game_data.gameCID,_base_game_data));
+                     g_vekLocalData.dockerVec[QString::fromStdString(ax)].insert(pair<QString,BaseAppData>(_base_app_data.appCID,_base_app_data));
                     }
                 }
             //禁止修改
@@ -220,17 +220,17 @@ bool objectJson::unDataSerializeLocalData(){
                     }
                     g_vekLocalData.wineVec.insert(pair<QString,BaseWineData>(_base_wine_data.WineInstallName,_base_wine_data));
                 }
-            }else if(k=="GameScrSource"){
+            }else if(k=="AppScrSource"){
                 for(auto &[b, c] :v.items())
                 {
-                    g_vekLocalData.gameScrSource.insert(pair<QString,QString>(QString::fromStdString(b),QString::fromStdString(c)));
+                    g_vekLocalData.appScrSource.insert(pair<QString,QString>(QString::fromStdString(b),QString::fromStdString(c)));
                     for (auto& [d, j] : j3.items())
                     {
-                        if(d=="GameJsonList"){
+                        if(d=="AppJsonList"){
                             for(auto&[u,i]:j.items()){
                                 if(u==b){
                                     for(auto&[w,o]:i.items()){
-                                        g_vekLocalData.gameJsonList[QString::fromStdString(u)].insert(pair<QString,QString>(QString::fromStdString(w),QString::fromStdString(o)));
+                                        g_vekLocalData.appJsonList[QString::fromStdString(u)].insert(pair<QString,QString>(QString::fromStdString(w),QString::fromStdString(o)));
                                     }
                                 }
                             }
@@ -355,7 +355,7 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
     return _baseAutoSetJson;
 }
 //反序列化列表
-bool objectJson::unSerializeLocalWineGame(QString key,QString urlData,UNJSONTYPE jsonType){
+bool objectJson::unSerializeLocalWineApp(QString key,QString urlData,UNJSONTYPE jsonType){
     json jdata=json::parse(urlData.toStdString());
     try {
         switch (jsonType) {
@@ -377,7 +377,7 @@ bool objectJson::unSerializeLocalWineGame(QString key,QString urlData,UNJSONTYPE
         case unJsonGameList:
             for(auto &[x, y] :jdata.items())
             {
-                g_vekLocalData.gameJsonList[key][QString::fromStdString(x)]=QString::fromStdString(y);
+                g_vekLocalData.appJsonList[key][QString::fromStdString(x)]=QString::fromStdString(y);
             }
             break;
         }
@@ -387,7 +387,7 @@ bool objectJson::unSerializeLocalWineGame(QString key,QString urlData,UNJSONTYPE
     }
     return true;
 }
-json objectJson::exportJson(BaseGameData _tBaseData){
+json objectJson::exportJson(BaseAppData _tBaseData){
     json eJson=nullptr;
     eJson["Option"][toStr(defaultFont)]=toStr(false);
     eJson["Option"][toStr(sharedMemory)]=toStr(false);
@@ -421,7 +421,7 @@ json objectJson::exportJson(BaseGameData _tBaseData){
     if(_tBaseData.dxvkHUD){
         eJson[toStr(Dxvk)][toStr(dxvkHUD)]=toStr(true);
     }
-    eJson["Option"][toStr(gameName)]=_tBaseData.gameName.toStdString();
+    eJson["Option"][toStr(appName)]=_tBaseData.appName.toStdString();
     eJson["Option"][toStr(dockSystemVersion)]=_tBaseData.dockSystemVersion.toStdString();
     eJson["Option"][toStr(mainPrcoName)]=_tBaseData.mainPrcoName.toStdString();
     if(!_tBaseData.attachProc.empty()){
@@ -457,7 +457,7 @@ json objectJson::exportJson(BaseGameData _tBaseData){
     }else{
         eJson[toStr(Regs)]=json::array();
     }
-    eJson[toStr(Args)]=_tBaseData.gameOtherAgrs.toStdString();
+    eJson[toStr(Args)]=_tBaseData.appOtherAgrs.toStdString();
     eJson[toStr(Dxvk)][toStr(dxvkVersion)]=_tBaseData.dxvkVerson.toStdString();
 
     return eJson;
@@ -479,11 +479,11 @@ void objectJson::WriteLocalData(){
     WriteJsonToFile(localDataFilePath,jsonData);
 }
 //删除游戏节点
-void objectJson::deleteGameNodeData(QString nGameCID){
+void objectJson::deleteAppNodeData(QString nappCID){
     for(auto& h:g_vekLocalData.dockerVec){
         for(auto &w:h.second){
-            if(w.second.gameCID==nGameCID){
-                h.second.erase(nGameCID);
+            if(w.second.appCID==nappCID){
+                h.second.erase(nappCID);
                 break;
             }
         }
@@ -501,11 +501,11 @@ void objectJson::deleteWineNodeData(QString nWineName){
     WriteLocalData();
 }
 //更新或者增加Game节点
-void objectJson::updateGameNodeData(QString dockName,BaseGameData _base_game_data){
-    if(_base_game_data.gameCID!=nullptr){
-        deleteGameNodeData(_base_game_data.gameCID);
+void objectJson::updateAppNodeData(QString dockName,BaseAppData _base_app_data){
+    if(_base_app_data.appCID!=nullptr){
+        deleteAppNodeData(_base_app_data.appCID);
     }
-    g_vekLocalData.dockerVec[dockName].insert(pair<QString,BaseGameData>(_base_game_data.gameCID,_base_game_data));
+    g_vekLocalData.dockerVec[dockName].insert(pair<QString,BaseAppData>(_base_app_data.appCID,_base_app_data));
     WriteLocalData();
 }
 //更新Wine节点

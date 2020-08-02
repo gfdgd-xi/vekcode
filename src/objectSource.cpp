@@ -20,15 +20,15 @@ void objectSource::updateSrcDataObject(){
     for(auto &[d,k]:g_vekLocalData.wineSource){
         string sdata=GetReData(k);
         if(sdata!="error"){
-            _objectJson.unSerializeLocalWineGame(d,QString::fromStdString(sdata),unJsonWineList);
+            _objectJson.unSerializeLocalWineApp(d,QString::fromStdString(sdata),unJsonWineList);
         }else{
             vekError("更新wine源数据失败");
         }
     }
-    for(auto &[i,o]:g_vekLocalData.gameScrSource){
+    for(auto &[i,o]:g_vekLocalData.appScrSource){
         string sdata=GetReData(o);
         if(sdata!="error"){
-            _objectJson.unSerializeLocalWineGame(i,QString::fromStdString(sdata),unJsonGameList);
+            _objectJson.unSerializeLocalWineApp(i,QString::fromStdString(sdata),unJsonGameList);
         }else{
             vekError("更新游戏源数据失败");
         }
@@ -40,11 +40,11 @@ void objectSource::loadAllData(){
     if(!QFile(jsonPath).exists()){
         //默认源数据
         g_vekLocalData.wineSource.insert(pair<QString,QString>("DefaultWineSrc","https://gitee.com/JackLee02/vekGame/raw/master/wineJsonSource.json"));
-        g_vekLocalData.gameScrSource.insert(pair<QString,QString>("DefaultGameSrc","https://gitee.com/JackLee02/vekGame/raw/master/gameJsonSource.json"));
+        g_vekLocalData.appScrSource.insert(pair<QString,QString>("DefaultGameSrc","https://gitee.com/JackLee02/vekGame/raw/master/gameJsonSource.json"));
         updateSrcDataObject();
     }else{
         if(_objectJson.unDataSerializeLocalData()){
-            g_vekLocalData.gameJsonList.clear();
+            g_vekLocalData.appJsonList.clear();
             g_vekLocalData.wineJsonList.clear();
             updateSrcDataObject();
         }

@@ -1,47 +1,47 @@
-﻿#ifndef VEKGAMEADDMT_H
-#define VEKGAMEADDMT_H
+﻿#ifndef VEKAPPADDMT_H
+#define VEKAPPADDMT_H
 
 #include "common.h"
 #include "objectJson.h"
-#include "objectAddGameMT.h"
+#include "objectAppAddMT.h"
 #include "vekInitObject.h"
 #include <QTableView>
 #include <QStandardItemModel>
 namespace Ui {
-class vekGameAddMT;
+class vekAppAddMT;
 }
 
-class vekGameAddMT : public QWidget
+class vekAppAddMT : public QWidget
 {
     Q_OBJECT
 public:
-    explicit vekGameAddMT(QWidget *parent = nullptr);
-    ~vekGameAddMT();
+    explicit vekAppAddMT(QWidget *parent = nullptr);
+    ~vekAppAddMT();
 public:
-    Ui::vekGameAddMT *ui;
+    Ui::vekAppAddMT *ui;
 private:
-    BaseGameData* tempData=nullptr;
-    BaseGameData* oldData=nullptr;
+    BaseAppData* tempData=nullptr;
+    BaseAppData* oldData=nullptr;
     QString tempCID=nullptr;
     objectTypeView objType;
     vector<QString> _dockSystemVersion={"win10","win7","win81","win8","winxp64"};
-    bool vekGameAddObj(bool _forceState);
-    bool vekGameConfigObj();
-    void loadTableView(QTableView* qtv,BaseGameData*);
+    bool vekAppAddObj(bool _forceState);
+    bool vekAppConfigObj();
+    void loadTableView(QTableView* qtv,BaseAppData*);
     void setTableView(QTableView*);
     QStandardItemModel* tableModel;
     void objectAdd(QTableView*);
     void objectDelete(QTableView*);
     void dxvkOptionLinkState(bool cState);
 signals:
-    void doneAddGame(BaseGameData*);
-    void toObjectArgs(BaseGameData);
-    void _unDiyGameAdd();
-    void _upData(BaseGameData*,objectTypeView);
+    void doneAddApp(BaseAppData*);
+    void toObjectArgs(BaseAppData);
+    void _unDiyAppAdd();
+    void _upData(BaseAppData*,objectTypeView);
 private slots:
     void objectButton();
     void dxvkOptionLink();
-    void vekGameAddConnectObject(BaseGameData* _data,objectTypeView);
+    void vekAppAddConnectObject(BaseAppData* _data,objectTypeView);
     void clicked_rightMenu(const QPoint &pos);  //右键信号槽函数
     void onTaskBoxContextMenuEvent();
 };

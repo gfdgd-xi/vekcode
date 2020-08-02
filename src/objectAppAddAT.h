@@ -1,8 +1,8 @@
-#ifndef OBJECTADDGAMEAT_H
-#define OBJECTADDGAMEAT_H
+#ifndef OBJECTAPPADDGAMEAT_H
+#define OBJECTAPPADDGAMEAT_H
 #include "common.h"
 #include "objectJson.h"
-#include "objectAddGameMT.h"
+#include "objectAppAddMT.h"
 #include "vekInitObject.h"
 #include "vekGetCurl.h"
 
@@ -11,22 +11,22 @@ typedef struct{
     QString pDockName=nullptr;
     QString pDckPath=nullptr;
     QString pWineVersion=nullptr;
-    QString pGameExePath=nullptr;
-    BaseGameData* pBaseGameData=nullptr;
+    QString pAppExePath=nullptr;
+    BaseAppData* pBaseAppData=nullptr;
 }ObjectAddDataAT;
-class objectAddGameAT : public QThread
+class objectAppAddAT : public QThread
 {
     Q_OBJECT
 public:
-    objectAddGameAT(ObjectAddDataAT);
-    ~objectAddGameAT();
+    objectAppAddAT(ObjectAddDataAT);
+    ~objectAppAddAT();
 protected:
     void run();
 private:
     BaseAutoSetJson* _baseAutoSetJson=nullptr;
-    BaseGameData* baseGameData=nullptr;
+    BaseAppData* baseAppData=nullptr;
     ObjectAddDataAT _objAddDataAT;
-    objectAddGameMT* objDiyAddGame=nullptr;
+    objectAppAddMT* objDiyAddApp=nullptr;
     QString jsonPathTypeToStr(QString);
     bool jsonUnserialize(QString);
     void dataToBase();

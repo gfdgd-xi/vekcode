@@ -1,36 +1,36 @@
-#ifndef VEKGAMEADDAT_H
-#define VEKGAMEADDAT_H
+#ifndef VEKAPPADDAT_H
+#define VEKAPPADDAT_H
 
 #include "common.h"
 #include "objectJson.h"
-#include "objectAddGameAT.h"
+#include "objectAppAddAT.h"
 #include "vekInitObject.h"
 #include "vekATJsonView.h"
 namespace Ui {
-class vekGameAddAT;
+class vekAppAddAT;
 }
 
-class vekGameAddAT : public QWidget
+class vekAppAddAT : public QWidget
 {
     Q_OBJECT
 public:
-    explicit vekGameAddAT(QWidget *parent = nullptr);
-    ~vekGameAddAT();
+    explicit vekAppAddAT(QWidget *parent = nullptr);
+    ~vekAppAddAT();
 
 private:
-    Ui::vekGameAddAT *ui;
-    BaseGameData* autoGameData=nullptr;
-    objectAddGameAT* objAutoAddGame=nullptr;
+    Ui::vekAppAddAT *ui;
+    BaseAppData* autoAppData=nullptr;
+    objectAppAddAT* objAutoAddApp=nullptr;
     void connectDockObject();
     void SetObject();
-    void addAutoGame();
+    void addAutoApp();
     QString JsonType(QString);
     void controlState(bool pState);
 signals:
     void _unAutoDock();
-    void autoObjDock(BaseGameData*);
+    void autoObjDock(BaseAppData*);
 private slots:
-    void connectDockObject(BaseGameData* _data);
+    void connectDockObject(BaseAppData* _data);
     void TipText(QString TipInfo);
     void ErrorText(QString ErrorInfo,bool cState);
     void ObjDone();

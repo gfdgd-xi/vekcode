@@ -14,18 +14,18 @@ class objectJson
 public:
     objectJson();
     ~objectJson();
-    void updateWineNodeData(BaseWineData base_game_data);
-    void updateGameNodeData(QString dockName,BaseGameData base_wine_data);
-    void deleteGameNodeData(QString nodeName);
+    void updateWineNodeData(BaseWineData);
+    void updateAppNodeData(QString dockName,BaseAppData base_wine_data);
+    void deleteAppNodeData(QString nodeName);
     void deleteWineNodeData(QString nwineName);
     bool unDataSerializeLocalData();
-    bool unSerializeLocalWineGame(QString,QString urlData,UNJSONTYPE jsonType);
+    bool unSerializeLocalWineApp(QString,QString urlData,UNJSONTYPE jsonType);
     void WriteLocalData();
     bool RemoteWineGitInfo(string info);
     BaseAutoSetJson* unDataSerializeScriptData(BaseAutoSetJson*,QString);
     QString GetRandomCID();
     void unSerializeBlackList(QString);
-    json exportJson(BaseGameData);
+    json exportJson(BaseAppData);
 private:
     json DataSerialize(json jsonData,const BaseLocalData);
     void WriteJsonToFile(QString filePath,json jsonData);

@@ -1,23 +1,23 @@
-#include "objectAddGameMT.h"
+#include "objectAppAddMT.h"
 
-objectAddGameMT::objectAddGameMT(BaseGameData* _data,BaseGameData* _olddata)
+objectAppAddMT::objectAppAddMT(BaseAppData* _data,BaseAppData* _olddata)
 {
-    _baseGameData=_data;
-    _oldGameData=_olddata;
+    _BaseAppData=_data;
+    _oldAppData=_olddata;
 }
-objectAddGameMT::~objectAddGameMT(){
+objectAppAddMT::~objectAppAddMT(){
 }
 //写入json
-void objectAddGameMT::SaveDataToJson(QString dName,BaseGameData writeData){
+void objectAppAddMT::SaveDataToJson(QString dName,BaseAppData writeData){
     objectJson _objectJson;
-    _objectJson.updateGameNodeData(dName,writeData);
+    _objectJson.updateAppNodeData(dName,writeData);
 }
 //返回dxvk文件列表
-QStringList objectAddGameMT::GetDxvkFileList(QString basedxvkDir){
+QStringList objectAppAddMT::GetDxvkFileList(QString basedxvkDir){
     QStringList dxvkFileList;
     dxvkFileList.clear();
-    QString dxvkTarFile=basedxvkDir+"/"+_baseGameData->dxvkVerson+".tar.gz";
-    QString dxvkTarDir=basedxvkDir+"/"+_baseGameData->dxvkVerson;
+    QString dxvkTarFile=basedxvkDir+"/"+_BaseAppData->dxvkVerson+".tar.gz";
+    QString dxvkTarDir=basedxvkDir+"/"+_BaseAppData->dxvkVerson;
     QDir _dxvkTarDir(dxvkTarDir);
     if(!_dxvkTarDir.exists()){
         char* dxvkFile=("tar -xvf "+dxvkTarFile+" -C "+basedxvkDir).toLocal8Bit().data();
@@ -30,9 +30,9 @@ QStringList objectAddGameMT::GetDxvkFileList(QString basedxvkDir){
     return dxvkFileList;
 }
 //安装dxvk
-void objectAddGameMT::DxvkFileInstall(){
+void objectAppAddMT::DxvkFileInstall(){
     //wine下的dxvk目录
-    QString baseDxvkDir=_baseGameData->winePath+"dxvk";
+    QString baseDxvkDir=_BaseAppData->winePath+"dxvk";
     //获取dxvk目录下的文件列表
     QStringList dxvkFileList=GetDxvkFileList(baseDxvkDir);
     //dock下的系统区别
@@ -42,14 +42,14 @@ void objectAddGameMT::DxvkFileInstall(){
     dockSystemDir.append("x64");
     QString dxvkTargetFile=nullptr;
     for(auto c:dockSystemDir){
-        QString dxvkSourceFile=baseDxvkDir+"/"+_baseGameData->dxvkVerson+"/"+c+"/";
-        dxvkTargetFile=_baseGameData->dockPath+"/"+_baseGameData->dockName+"/drive_c/windows/syswow64/";
+        QString dxvkSourceFile=baseDxvkDir+"/"+_BaseAppData->dxvkVerson+"/"+c+"/";
+        dxvkTargetFile=_BaseAppData->dockPath+"/"+_BaseAppData->dockName+"/drive_c/windows/syswow64/";
         if(c=="x64"){
-            dxvkTargetFile=_baseGameData->dockPath+"/"+_baseGameData->dockName+"/drive_c/windows/system32/";
+            dxvkTargetFile=_BaseAppData->dockPath+"/"+_BaseAppData->dockName+"/drive_c/windows/system32/";
         }
         for(auto d:dxvkFileList){
             //卸载
-            if(!_baseGameData->dxvkState){
+            if(!_BaseAppData->dxvkState){
                 if(QFile(dxvkTargetFile+d+".a").exists()){
                     QFile(dxvkTargetFile+d).remove();
                     QFile::rename(dxvkTargetFile+d+".a",dxvkTargetFile+d);
@@ -68,7 +68,7 @@ void objectAddGameMT::DxvkFileInstall(){
     DxvkRegedit(dxvkFileList);
 }
 //dxvk注册表操作
-void objectAddGameMT::DxvkRegedit(QStringList dxvkFileList){
+void objectAppAddMT::DxvkRegedit(QStringList dxvkFileList){
     argsList.clear();
     QString _rPath;
     QString _rValue;
@@ -79,7 +79,7 @@ void objectAddGameMT::DxvkRegedit(QStringList dxvkFileList){
         }
     }
     QString _rObj;
-    if(_baseGameData->dxvkState)
+    if(_BaseAppData->dxvkState)
     {
         _rObj="add";
     }else{
@@ -92,7 +92,7 @@ void objectAddGameMT::DxvkRegedit(QStringList dxvkFileList){
     ExecuteObj(object_regobject,object_wineboot_default,object_wineserver_default);
 }
 //dxvkHUD注册表操作
-void objectAddGameMT::DxvkHUDRegs(){
+void objectAppAddMT::DxvkHUDRegs(){
     argsList.clear();
     QString _rPath;
     QString _rKey;
@@ -105,7 +105,7 @@ void objectAddGameMT::DxvkHUDRegs(){
         }
     }
     QString _rObj;
-    if(_baseGameData->dxvkHUD){
+    if(_BaseAppData->dxvkHUD){
         _rObj="add";
     }else{
         _rObj="delete";
@@ -114,7 +114,7 @@ void objectAddGameMT::DxvkHUDRegs(){
     ExecuteObj(object_regobject,object_wineboot_default,object_wineserver_default);
 }
 //dxvkConfig注册表增加环境变量
-void objectAddGameMT::DxvkConfigFile(){
+void objectAppAddMT::DxvkConfigFile(){
     QString _rPath;
     QString _rKey;
     argsList.clear();
@@ -124,9 +124,9 @@ void objectAddGameMT::DxvkConfigFile(){
             _rKey=b.first;
         }
     }
-    QString _rValue=_baseGameData->dxvkConfigFile;
+    QString _rValue=_BaseAppData->dxvkConfigFile;
     QString _rObj;
-    if(_baseGameData->dxvkConfigFileState){
+    if(_BaseAppData->dxvkConfigFileState){
         _rObj="add";
     }else{
         _rObj="delete";
@@ -136,25 +136,25 @@ void objectAddGameMT::DxvkConfigFile(){
 }
 
 //default fonts
-void objectAddGameMT::DefaultFontsFileInstall(){
-    QString fontsDirStr=_baseGameData->winePath+"fonts";
+void objectAppAddMT::DefaultFontsFileInstall(){
+    QString fontsDirStr=_BaseAppData->winePath+"fonts";
     QStringList fontsList;
     fontsList.clear();
     QDir _fontsDir(fontsDirStr);
     if (_fontsDir.exists()) {
         fontsList = _fontsDir.entryList(QDir::Files);
     }
-    if(_baseGameData->defaultFonts){
+    if(_BaseAppData->defaultFonts){
         if(QFile(fontsDirStr).exists()){
             for(auto f:fontsList){
-                QFile::copy(fontsDirStr+"/"+f, _baseGameData->dockPath+"/"+_baseGameData->dockName+"/drive_c/windows/Fonts/"+f);
+                QFile::copy(fontsDirStr+"/"+f, _BaseAppData->dockPath+"/"+_BaseAppData->dockName+"/drive_c/windows/Fonts/"+f);
             }
         }
     }
     DefaultFontsRegs();
 }
 //默认字体注册表
-void objectAddGameMT::DefaultFontsRegs(){
+void objectAppAddMT::DefaultFontsRegs(){
     argsList.clear();
     QString _rPath;
     QString _rKey;
@@ -170,9 +170,9 @@ void objectAddGameMT::DefaultFontsRegs(){
     ExecuteObj(object_regobject,object_wineboot_default,object_wineserver_default);
 }
 
-void objectAddGameMT::InitDockDir(bool foceState,QDir _dockPath,QDir _dockDir){
+void objectAppAddMT::InitDockDir(bool foceState,QDir _dockPath,QDir _dockDir){
     if(!_dockPath.exists()){
-        _dockDir.mkdir(_baseGameData->dockPath);
+        _dockDir.mkdir(_BaseAppData->dockPath);
     }
     if(_dockDir.exists())
     {
@@ -196,10 +196,10 @@ void objectAddGameMT::InitDockDir(bool foceState,QDir _dockPath,QDir _dockDir){
         }
     }
 }
-void objectAddGameMT::DockLibsInstall(){
+void objectAppAddMT::DockLibsInstall(){
     argsList.clear();
-    if(!_baseGameData->dockLibs.empty()){
-        for(auto af:_baseGameData->dockLibs){
+    if(!_BaseAppData->dockLibs.empty()){
+        for(auto af:_BaseAppData->dockLibs){
             QStringList libList;
             libList.clear();
             if(af!=NULL){
@@ -210,21 +210,21 @@ void objectAddGameMT::DockLibsInstall(){
         ExecuteObj(object_winetricks_libs,object_wineboot_default,object_wineserver_default);
     }  
 }
-void objectAddGameMT::installMonoPlugs(){
+void objectAppAddMT::installMonoPlugs(){
     argsList.clear();
     QStringList _tempPlugsList;
-    QString fileMono=_baseGameData->winePath+"plugs/Mono.msi";
+    QString fileMono=_BaseAppData->winePath+"plugs/Mono.msi";
     if(QFile(fileMono).exists()){
         _tempPlugsList.append(fileMono);
         argsList.push_back(_tempPlugsList);
         ExecuteObj(object_plugs,object_wineboot_default,object_wineserver_default);
     }
 }
-void objectAddGameMT::installGeckoPlugs(){
+void objectAppAddMT::installGeckoPlugs(){
     argsList.clear();
     QStringList _tempPlugsList;
-    QString fileGeckoX86_64=_baseGameData->winePath+"plugs/GeckoX86_64.msi";
-    QString fileGeckoX86=_baseGameData->winePath+"plugs/GeckoX86.msi";
+    QString fileGeckoX86_64=_BaseAppData->winePath+"plugs/GeckoX86_64.msi";
+    QString fileGeckoX86=_BaseAppData->winePath+"plugs/GeckoX86.msi";
     if(QFile(fileGeckoX86_64).exists()&QFile(fileGeckoX86).exists()){
         _tempPlugsList.append(fileGeckoX86_64);
         _tempPlugsList.append(fileGeckoX86);
@@ -232,80 +232,80 @@ void objectAddGameMT::installGeckoPlugs(){
         ExecuteObj(object_plugs,object_wineboot_default,object_wineserver_default);
     }
 }
-void objectAddGameMT::optionRegs(){
+void objectAppAddMT::optionRegs(){
     argsList.clear();
-    if(!_baseGameData->dockRegs.empty()){
-        for(auto d:_baseGameData->dockRegs)
+    if(!_BaseAppData->dockRegs.empty()){
+        for(auto d:_BaseAppData->dockRegs)
         {
             argsList.push_back(DockRegeditStr("add",d.rPath,d.rKey,d.rTValue,d.rValue));
         }
         ExecuteObj(object_regobject,object_wineboot_default,object_wineserver_default);
     }
 }
-void objectAddGameMT::newDock(){
-    QDir dockPath(_baseGameData->dockPath);
-    QDir dockDir(_baseGameData->dockPath+"/"+_baseGameData->dockName);
-    qDebug()<<_baseGameData->dockPath;
-    qDebug()<<_baseGameData->dockName;
-    if(_baseGameData->dockPath==NULL&&_baseGameData->dockName==NULL){
+void objectAppAddMT::newDock(){
+    QDir dockPath(_BaseAppData->dockPath);
+    QDir dockDir(_BaseAppData->dockPath+"/"+_BaseAppData->dockName);
+    qDebug()<<_BaseAppData->dockPath;
+    qDebug()<<_BaseAppData->dockName;
+    if(_BaseAppData->dockPath==NULL&&_BaseAppData->dockName==NULL){
         return;
     }
     InitDockDir(true,dockPath,dockDir);
-    if(_baseGameData->defaultFonts){
+    if(_BaseAppData->defaultFonts){
         DefaultFontsFileInstall();
     }
-    if(_baseGameData->monoState){
+    if(_BaseAppData->monoState){
         installMonoPlugs();
     }
-    if(_baseGameData->geckoState){
+    if(_BaseAppData->geckoState){
         installGeckoPlugs();
     }
 }
-bool objectAddGameMT::InitDockObj(bool _forceState){
-    QDir dockPath(_baseGameData->dockPath);
-    QDir dockDir(_baseGameData->dockPath+"/"+_baseGameData->dockName);
-    if(_baseGameData->dockPath==NULL&&_baseGameData->dockName==NULL){
+bool objectAppAddMT::InitDockObj(bool _forceState){
+    QDir dockPath(_BaseAppData->dockPath);
+    QDir dockDir(_BaseAppData->dockPath+"/"+_BaseAppData->dockName);
+    if(_BaseAppData->dockPath==NULL&&_BaseAppData->dockName==NULL){
         return false;
     }
     try {
         InitDockDir(_forceState,dockPath,dockDir);
-        if(_oldGameData==nullptr||_forceState){
-            if(_baseGameData->dxvkState){
+        if(_oldAppData==nullptr||_forceState){
+            if(_BaseAppData->dxvkState){
                 DxvkFileInstall();
-                if(_baseGameData->dxvkHUD){
+                if(_BaseAppData->dxvkHUD){
                     DxvkHUDRegs();
                 }
-                if(_baseGameData->dxvkConfigFileState){
+                if(_BaseAppData->dxvkConfigFileState){
                     DxvkConfigFile();
                 }
             }
-            if(_baseGameData->defaultFonts){
+            if(_BaseAppData->defaultFonts){
                 DefaultFontsFileInstall();
             }
-            if(_baseGameData->monoState){
+            if(_BaseAppData->monoState){
                 installMonoPlugs();
             }
-            if(_baseGameData->geckoState){
+            if(_BaseAppData->geckoState){
                 installGeckoPlugs();
             }
         }else{
-            if(_baseGameData->dxvkState!=_oldGameData->dxvkState){
+            if(_BaseAppData->dxvkState!=_oldAppData->dxvkState){
                 DxvkFileInstall();
-                if(_baseGameData->dxvkHUD!=_oldGameData->dxvkHUD){
+                if(_BaseAppData->dxvkHUD!=_oldAppData->dxvkHUD){
                     DxvkHUDRegs();
                 }
-                if(_baseGameData->dxvkConfigFileState!=_oldGameData->dxvkConfigFileState){
+                if(_BaseAppData->dxvkConfigFileState!=_oldAppData->dxvkConfigFileState){
                     DxvkConfigFile();
                 }
             }
 
-            if(_baseGameData->defaultFonts!=_oldGameData->defaultFonts){
+            if(_BaseAppData->defaultFonts!=_oldAppData->defaultFonts){
                 DefaultFontsFileInstall();
             }
-            if(_baseGameData->monoState!=_oldGameData->monoState){
+            if(_BaseAppData->monoState!=_oldAppData->monoState){
                 installMonoPlugs();
             }
-            if(_baseGameData->geckoState!=_oldGameData->geckoState){
+            if(_BaseAppData->geckoState!=_oldAppData->geckoState){
                 installGeckoPlugs();
             }
         }
@@ -317,17 +317,17 @@ bool objectAddGameMT::InitDockObj(bool _forceState){
     }
 }
 //等待任务结束
-void objectAddGameMT::WaitObjectDone(objectExtend* _waitObject){
+void objectAppAddMT::WaitObjectDone(objectExtend* _waitObject){
     _waitObject->start();
     _waitObject->wait(-1);
     delete _waitObject;
     _waitObject=nullptr;
 }
 //执行
-void objectAddGameMT::ExecuteObj(objectType _objType,objectWineBoot _objWineBootType,objectWineServer _objWineServer){
+void objectAppAddMT::ExecuteObj(objectType _objType,objectWineBoot _objWineBootType,objectWineServer _objWineServer){
     objectExtend* objExtend = new objectExtend();
-    if(_baseGameData->dockPath==NULL||_baseGameData->dockName==NULL){return;}
-    connect(this, SIGNAL(ExecutetoObjectArgs(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)), objExtend, SLOT(setDockOptionObjectData(BaseGameData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)));
-    emit(ExecutetoObjectArgs(*_baseGameData,argsList,_objType,_objWineBootType,_objWineServer));
+    if(_BaseAppData->dockPath==NULL||_BaseAppData->dockName==NULL){return;}
+    connect(this, SIGNAL(ExecutetoObjectArgs(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)), objExtend, SLOT(setDockOptionObjectData(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)));
+    emit(ExecutetoObjectArgs(*_BaseAppData,argsList,_objType,_objWineBootType,_objWineServer));
     WaitObjectDone(objExtend);
 }

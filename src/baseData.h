@@ -14,15 +14,15 @@ typedef struct{
 
 typedef struct {
     //CID
-    QString gameCID=nullptr;
+    QString appCID=nullptr;
     //游戏名字
-    QString gameName=nullptr;
+    QString appName=nullptr;
     //游戏图标
-    QString gameIco=nullptr;
+    QString appIco=nullptr;
     //游戏路径
-    QString gameExe=nullptr;
+    QString appExe=nullptr;
     //运行参数
-    QString gameOtherAgrs=nullptr;
+    QString appOtherAgrs=nullptr;
     //Wine路径
     QString winePath=nullptr;
     //wine版本
@@ -61,7 +61,7 @@ typedef struct {
     std::map<QString,QString> dockEnv={};
     std::vector<QString> dockLibs={};
     std::vector<BaseDockRegs> dockRegs={};
-}BaseGameData;
+}BaseAppData;
 
 
 typedef struct{
@@ -100,8 +100,6 @@ typedef struct {
 
 typedef struct {
     std::map<QString,QString> Option={};
-    //附加进程设定列表
-    //std::map<QString,std::vector<QString>> attachProc;
     std::vector<QString> AttachProc={};
     std::map<QString,QString> Env={};
     std::vector<QString> Libs={};
@@ -109,12 +107,16 @@ typedef struct {
     std::vector<BaseDockRegs> Regs={};
     QString Args=nullptr;
 }BaseAutoSetJson;
-
+typedef struct{
+    QString appName;
+    QString appUrl;
+    QString appIco;
+}BaseAppJson;
 typedef struct {
-    std::map<QString,std::map<QString,BaseGameData>> dockerVec={};
+    std::map<QString,std::map<QString,BaseAppData>> dockerVec={};
     std::map<QString,BaseWineData> wineVec={};
-    std::map<QString,QString> gameScrSource={};
-    std::map<QString,std::map<QString,QString>> gameJsonList={};
+    std::map<QString,QString> appScrSource={};
+    std::map<QString,std::map<QString,QString>> appJsonList={};
     std::map<QString,QString> wineSource={};
     std::map<QString,std::map<QString,BaseWineGit>> wineJsonList={};
 }BaseLocalData;

@@ -50,7 +50,7 @@ void vekSourceEdit::loadSrcDataTableView(QTableView* qTableView)
     }else{
         columnTitles << "Game源名" << "源地址";
         int i=0;
-        for(auto &[k,j]:g_vekLocalData.gameScrSource){
+        for(auto &[k,j]:g_vekLocalData.appScrSource){
             int x=i++;
             tableModel->setItem(x,0,new QStandardItem(k));
             tableModel->setItem(x,1,new QStandardItem(j));
@@ -144,9 +144,9 @@ void vekSourceEdit::objectDeleteSrc(QTableView* qTableView){
                 }
             }
         }else{
-            for(auto[a,b]:g_vekLocalData.gameScrSource){
+            for(auto[a,b]:g_vekLocalData.appScrSource){
                 if(a==datatemp){
-                    g_vekLocalData.gameScrSource.erase(a);
+                    g_vekLocalData.appScrSource.erase(a);
                     break;
                 }
             }
@@ -167,8 +167,8 @@ void vekSourceEdit::objectUpdateSrc(QTableView* qTableView){
          g_vekLocalData.wineSource.clear();
          g_vekLocalData.wineJsonList.clear();
     }else{
-        g_vekLocalData.gameScrSource.clear();
-        g_vekLocalData.gameJsonList.clear();
+        g_vekLocalData.appScrSource.clear();
+        g_vekLocalData.appJsonList.clear();
     }
     if(curRow>-1){
         QAbstractItemModel *modessl = qTableView->model();
@@ -178,7 +178,7 @@ void vekSourceEdit::objectUpdateSrc(QTableView* qTableView){
             if(qTableView->objectName()=="tableView_WineSrcList"){
                 g_vekLocalData.wineSource.insert(pair<QString,QString>(dataTempA,dataTempB));
             }else{
-                g_vekLocalData.gameScrSource.insert(pair<QString,QString>(dataTempA,dataTempB));
+                g_vekLocalData.appScrSource.insert(pair<QString,QString>(dataTempA,dataTempB));
             }
         }
         objectSource* objSrc=new objectSource;

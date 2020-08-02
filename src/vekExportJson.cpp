@@ -14,9 +14,9 @@ vekExportJson::~vekExportJson()
     emit _unExportJson();
     delete ui;
 }
-void vekExportJson::ExportJson(BaseGameData _bGameData){
+void vekExportJson::ExportJson(BaseAppData _bAppData){
    objectJson* oJson=new objectJson;
-   QString tJson=QString::fromStdString(oJson->exportJson(_bGameData).dump(4));
+   QString tJson=QString::fromStdString(oJson->exportJson(_bAppData).dump(4));
    ui->textEdit_OutPutStr->setText(tJson);
 }
 void vekExportJson::SaveJson(){
