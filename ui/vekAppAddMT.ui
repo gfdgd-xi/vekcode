@@ -112,16 +112,29 @@
           <property name="title">
            <string>游戏选项-&gt;该功能主要针对特殊情况启动附加指令以达到绕过部分检测或者沙盒的功能</string>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,10">
            <item>
             <widget class="QLabel" name="label_6">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>执行附加命令:</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit_otherAgrs"/>
+            <widget class="QLineEdit" name="lineEdit_otherAgrs">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -133,6 +146,18 @@
             <width>787</width>
             <height>156</height>
            </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>787</width>
+            <height>156</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
           </property>
           <property name="title">
            <string>游戏参数</string>
@@ -184,6 +209,12 @@
                </property>
                <item>
                 <widget class="QLabel" name="label_3">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
                   <string>选择运行游戏Win版本:</string>
                  </property>
@@ -204,6 +235,12 @@
                </property>
                <item>
                 <widget class="QLabel" name="label">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
                   <string>游戏&amp;软件名:</string>
                  </property>
@@ -213,7 +250,14 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="lineEdit_AppName"/>
+                <widget class="QLineEdit" name="lineEdit_AppName">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QLabel" name="label_10">
@@ -223,7 +267,14 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="lineEdit_MainProcName"/>
+                <widget class="QLineEdit" name="lineEdit_MainProcName">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </item>
               </layout>
              </item>
@@ -234,6 +285,12 @@
                </property>
                <item>
                 <widget class="QLabel" name="label_2">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
                   <string>设置游戏启动程序</string>
                  </property>
@@ -243,7 +300,14 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="lineEdit_AppInstallExe"/>
+                <widget class="QLineEdit" name="lineEdit_AppInstallExe">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="pushButton_SetAppExe">
@@ -267,6 +331,12 @@
                </property>
                <item>
                 <widget class="QLabel" name="label_8">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
                   <string>设置游戏工作目录:</string>
                  </property>
@@ -276,10 +346,23 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="lineEdit_workPath"/>
+                <widget class="QLineEdit" name="lineEdit_workPath">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="pushButton_workPath">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="text">
                   <string>选择路径</string>
                  </property>
@@ -305,9 +388,22 @@
             <number>3</number>
            </property>
            <item>
+            <spacer name="horizontalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
             <widget class="QPushButton" name="pushButton_Set">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -316,6 +412,19 @@
               <string>保存</string>
              </property>
             </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </widget>
@@ -358,6 +467,12 @@
              <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="10,10,10,10,10,10,40">
               <item>
                <widget class="QCheckBox" name="checkBox_DefaultFonts">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="text">
                  <string>默认字体</string>
                 </property>
@@ -365,6 +480,12 @@
               </item>
               <item>
                <widget class="QCheckBox" name="checkBox_wineMemorySharing">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="text">
                  <string>内存共享</string>
                 </property>
@@ -372,6 +493,12 @@
               </item>
               <item>
                <widget class="QCheckBox" name="checkBox_wineRealTimePriority">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="text">
                  <string>实时优先级</string>
                 </property>
@@ -379,6 +506,12 @@
               </item>
               <item>
                <widget class="QCheckBox" name="checkBox_wineMemoryOptimization">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="text">
                  <string>多任务内存优化</string>
                 </property>
@@ -386,6 +519,12 @@
               </item>
               <item>
                <widget class="QCheckBox" name="checkBox_winerunlog">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="text">
                  <string>关闭运行日志输出</string>
                 </property>
@@ -393,6 +532,12 @@
               </item>
               <item>
                <widget class="QLabel" name="label_9">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="text">
                  <string>容器系统版本:</string>
                 </property>
@@ -421,6 +566,12 @@
                 <property name="enabled">
                  <bool>true</bool>
                 </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="text">
                  <string>Mono组件</string>
                 </property>
@@ -428,6 +579,12 @@
               </item>
               <item>
                <widget class="QCheckBox" name="checkBox_Gecko">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="text">
                  <string>Gecko组件</string>
                 </property>
@@ -435,6 +592,12 @@
               </item>
               <item>
                <widget class="QLabel" name="label_7">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="text">
                  <string>容器路径:</string>
                 </property>
@@ -444,10 +607,23 @@
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_RunDockPath"/>
+               <widget class="QLineEdit" name="lineEdit_RunDockPath">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
               </item>
               <item>
                <widget class="QPushButton" name="pushButton_SetDockPath">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="text">
                  <string>选择容器路径</string>
                 </property>
@@ -455,6 +631,12 @@
               </item>
               <item>
                <widget class="QLabel" name="label_5">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="text">
                  <string>容器名:</string>
                 </property>
@@ -487,6 +669,12 @@
               </item>
               <item>
                <widget class="QPushButton" name="pushButton_initDock">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="text">
                  <string>初始化容器</string>
                 </property>
@@ -554,6 +742,12 @@
            </property>
            <item>
             <widget class="QCheckBox" name="checkBox_stateDxvk">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>开启dxvk</string>
              </property>
@@ -564,6 +758,12 @@
            </item>
            <item>
             <widget class="QCheckBox" name="checkBox_statedxvkhud">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>开启DXVK HUD</string>
              </property>
@@ -571,6 +771,12 @@
            </item>
            <item>
             <widget class="QCheckBox" name="checkBox_dxvkConfigState">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>开启DXVK配置文件</string>
              </property>
@@ -578,13 +784,26 @@
            </item>
            <item>
             <widget class="QLabel" name="label_4">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string>DXVK配置文件:</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit_dxvkConfigFIle"/>
+            <widget class="QLineEdit" name="lineEdit_dxvkConfigFIle">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -637,7 +856,7 @@
              <item>
               <widget class="QPushButton" name="pushButton_SaveDxvkConfFile">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>

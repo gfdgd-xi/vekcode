@@ -456,7 +456,7 @@ void vekAppAddMT::objectButton(){
         }
     }
     //设置游戏exe
-    if(action_obnject->objectName()=="pushButton_SetappExe"){
+    if(action_obnject->objectName()=="pushButton_SetAppExe"){
         QString exePath=QFileDialog::getOpenFileName(qwidget,"选择要添加的程序","","exe Files(*.exe)");
         if(exePath!=NULL){
             QFileInfo fi = QFileInfo(exePath);

@@ -19,7 +19,6 @@ void objectExtend::setDockOptionObjectData(BaseAppData _data,std::vector<QString
     }else{
         startArgs=data.winePath+"wine/bin/wine64";
     }
-
 }
 //运行环境变量设置
 void objectExtend::executeArgsEnv(){
@@ -130,8 +129,9 @@ void objectExtend::executeWinetricks(){
 }
 //执行游戏
 void objectExtend::baseExecuteAppCode(QString code,QStringList codeArgs){
+    executeWineBoot(object_wineboot_r);
     monitorProc();
-    dockEditSystemVersion();
+    dockEditSystemVersion();  
     m_cmd->setProcessChannelMode(QProcess::MergedChannels);
     m_cmd->setReadChannel(QProcess::StandardOutput);
     m_cmd->closeReadChannel(QProcess::StandardOutput);
@@ -154,7 +154,6 @@ void objectExtend::baseExecuteAppCode(QString code,QStringList codeArgs){
            break;
         }
     }
-    emit objexitTray(false);
 }
 
 void objectExtend::baseExecuteWineCode(QString code,QStringList codeArgs){
@@ -174,7 +173,6 @@ void objectExtend::extendWineRegeditCode(QString code){
         qDebug()<<mdCode;
     }
     waitObjectDone(true);
-
 }
 void objectExtend::dockEditSystemVersion(){
    QStringList codeArgs;
@@ -236,6 +234,7 @@ void objectExtend::extendApp(){
     dyncDxvkRegs(dxvkResCache);
     dyncDxvkRegs(dxvkResLog);
     baseExecuteAppCode(startArgs,codeArgs);
+    emit objexitTray(false);
 }
 void objectExtend::dyncDxvkRegs(std::map<QString,std::map<QString,QString>> dxvkResStr){
     for(auto a:dxvkResStr){
@@ -315,4 +314,5 @@ void objectExtend::run(){
     }else if(objType==object_forcekill){
         forcekill();
     }
+    executeWineBoot(object_wineboot_r);
 }

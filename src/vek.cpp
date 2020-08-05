@@ -8,6 +8,9 @@ vek::vek(QWidget *parent)
     ui->setupUi(this);
     vek_Style(this,0);  
     qwidgetGeometry(this);
+    QString vStr="Vek-";
+    vStr.append(APP_VERSION);
+    this->setWindowTitle(vStr);
 }
 vek::~vek()
 {

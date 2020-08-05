@@ -35,7 +35,7 @@ private:
     void addJsonAuto(QString);
     void installMonoPlugs();
     void installGeckoPlugs();
-
+    void installObject();
 signals:
     void ExecutetoObjectArgs(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
 

@@ -13,7 +13,9 @@ void objectTray::startTray(){
     m_cmd->start(_baseWineData.wineInstallPath+"wine/bin/stalonetray");
 }
 void objectTray::exitTray(){
-   m_cmd->start();
+    if(m_cmd->state()!=QProcess::Starting){
+       m_cmd->start();
+    }
    m_cmd->write("\x03");
    m_cmd->close();
    m_cmd->kill();

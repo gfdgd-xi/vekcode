@@ -29,21 +29,18 @@ void objectProcManage::objDelProc(QProcess* prc,QString prPid,procInfo _pInfo){
     prc->setReadChannel(QProcess::StandardOutput);
     prc->start("bash");
     //设置工作目录
-    QString pCodes="WINEPREFIX="+_pInfo.dockPath+"/"+_pInfo.dockName+" "+_pInfo.winePath+"wine/bin/winedbg";
-    QString dCodes="attach "+prPid;
-    QString kCodes="kill";
-    QString qCodes="quit";
+    QString aCodes="WINEPREFIX="+_pInfo.dockPath+"/"+_pInfo.dockName+" "+_pInfo.winePath+"wine/bin/winedbg";
+    QString bCodes="attach "+prPid;
+    QString cCodes="kill";
+    QString dCodes="quit";
     //进入当前容器的winedbg
-    prc->write(pCodes.toLocal8Bit()+'\n');
-    QThread::msleep(100);
+    prc->write(aCodes.toLocal8Bit()+'\n');
     //通过pid选择进程
-    prc->write(dCodes.toLocal8Bit()+'\n');
-    QThread::msleep(100);
+    prc->write(bCodes.toLocal8Bit()+'\n');
     //写入关闭指令
-    prc->write(kCodes.toLocal8Bit()+'\n');
-    QThread::msleep(100);
+    prc->write(cCodes.toLocal8Bit()+'\n');
     //退出winedbg
-    prc->write(qCodes.toLocal8Bit()+'\n');
+    prc->write(dCodes.toLocal8Bit()+'\n');
     //关闭并kill QProcess;
     prc->waitForFinished(1000);
     prc->close();
@@ -67,7 +64,7 @@ void objectProcManage::delAttachProc(procInfo pInfo){
                     }
                 }
                 if(kPid!=NULL){
-                    prc=new QProcess();
+                    prc=new QProcess(this);
                     objDelProc(prc,kPid,pInfo);
                 }
             }

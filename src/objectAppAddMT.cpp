@@ -289,25 +289,12 @@ bool objectAppAddMT::InitDockObj(bool _forceState){
                 installGeckoPlugs();
             }
         }else{
-            if(_BaseAppData->dxvkState!=_oldAppData->dxvkState){
-                DxvkFileInstall();
-                if(_BaseAppData->dxvkHUD!=_oldAppData->dxvkHUD){
-                    DxvkHUDRegs();
-                }
-                if(_BaseAppData->dxvkConfigFileState!=_oldAppData->dxvkConfigFileState){
-                    DxvkConfigFile();
-                }
-            }
-
-            if(_BaseAppData->defaultFonts!=_oldAppData->defaultFonts){
-                DefaultFontsFileInstall();
-            }
-            if(_BaseAppData->monoState!=_oldAppData->monoState){
-                installMonoPlugs();
-            }
-            if(_BaseAppData->geckoState!=_oldAppData->geckoState){
-                installGeckoPlugs();
-            }
+            DxvkFileInstall();
+            DxvkHUDRegs();
+            DxvkConfigFile();
+            DefaultFontsFileInstall();
+            installMonoPlugs();
+            installGeckoPlugs();
         }
         optionRegs();
         ExecuteObj(object_dockSysver,object_wineboot_default,object_wineserver_default);
@@ -315,6 +302,9 @@ bool objectAppAddMT::InitDockObj(bool _forceState){
     } catch (nullopt_t) {
         return false;
     }
+}
+void objectAppAddMT::installObject(){
+
 }
 //等待任务结束
 void objectAppAddMT::WaitObjectDone(objectExtend* _waitObject){

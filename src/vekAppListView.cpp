@@ -102,7 +102,7 @@ void vekAppListView::ObjectRun(){
         std::vector<QStringList> _codeAgrs;
         if(_objType==object_start){
             taskList.push_back(m_pModel->getItem(index)->mainPrcoName);
-            auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
+            auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
             connect(_objectExtend, SIGNAL(objexitTray(bool)), pObjectVek, SLOT(exitTray(bool)));
             emit _startTray();
         }
@@ -179,7 +179,7 @@ void vekAppListView::setUpDelData(BaseAppData* data,objectTypeView objTypeView){
                     deleteDockerTab(dockPathStr,dockNameStr);
                 }
                 auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget();
-                connect(this,SIGNAL(setUpDelDataSignal(BaseAppData*)),pObjectVek,SLOT(addGameObject(BaseAppData*)));
+                connect(this,SIGNAL(setUpDelDataSignal(BaseAppData*)),pObjectVek,SLOT(addAppObject(BaseAppData*)));
                 emit setUpDelDataSignal(data);
             }
         }

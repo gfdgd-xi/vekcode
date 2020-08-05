@@ -1,5 +1,5 @@
 ﻿#include "vekAppPanel.h"
-
+#include <QGridLayout>
 vekAppPanel::vekAppPanel(QWidget *parent)
     : QWidget(parent)
 {   
@@ -14,10 +14,15 @@ vekAppPanel::~vekAppPanel()
 }
 //初始化容器列表
 void vekAppPanel::vek_InitTabWidgetListApp(){
+    QGridLayout *gridLayout = new QGridLayout(this);
     m_pBox = new QTabWidget(this);
+    gridLayout->addWidget(m_pBox);
+    gridLayout->setContentsMargins(0,0,0,0);
+    m_pBox->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
     m_pListMap = new std::map<QString,vekAppListView*>();
     for(auto twn :g_vekLocalData.dockerVec){
         vekAppListView *pListView = new vekAppListView();
+        pListView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
         pListView->setViewMode(QListView::IconMode);
         pListView->setFlow(QListView::LeftToRight);
         pListView->setResizeMode(QListView::Adjust);
@@ -25,9 +30,6 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
         m_pListMap->insert(std::pair<QString,vekAppListView*>(twn.first,pListView));
         pListView->setListMap(m_pListMap,m_pBox);
     }
-    m_pBox->setMaximumSize(788,510);
-    m_pBox->setMinimumSize(788,510);
-    this->setMinimumSize(788,513);
 }
 //读取数据to容器列表
 void vekAppPanel::vekLoadJsonData(){
@@ -75,7 +77,8 @@ void vekAppPanel::vekLoadJsonData(){
                     }
                     pList->setViewMode(QListView::IconMode);
                     pList->setFlow(QListView::LeftToRight);
-                    connect(pList, SIGNAL(_startTray()), this->parentWidget()->parentWidget()->parentWidget(), SLOT(startTray()));
+                    qDebug()<<this->parentWidget()->parentWidget();
+                    connect(pList, SIGNAL(_startTray()), this->parentWidget()->parentWidget(), SLOT(startTray()));
                     pList->addItem(LID);
                 }
             }
@@ -208,7 +211,7 @@ void vekAppPanel::addAppObject(BaseAppData* data){
     }
     pList->setViewMode(QListView::IconMode);
     pList->setFlow(QListView::LeftToRight);
-    connect(pList, SIGNAL(_startTray()), this->parentWidget()->parentWidget()->parentWidget(), SLOT(startTray()));
+    connect(pList, SIGNAL(_startTray()), this->parentWidget()->parentWidget(), SLOT(startTray()));
     pList->addItem(_tempBaseData);
 }
 void vekAppPanel::addGroupSlot(BaseAppData* data)
