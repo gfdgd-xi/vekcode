@@ -140,7 +140,7 @@ bool objectJson::unDataSerializeLocalData(){
             return false;
         }
         for (auto& [k, v] : j3.items())
-        { 
+        {
             BaseWineData _base_wine_data={};
             //反序列化容器表内数据
             if(k=="Docker"){
@@ -200,10 +200,10 @@ bool objectJson::unDataSerializeLocalData(){
                                 _base_app_data.dockRegs.push_back(_rbaseRegs);
                             }
                         }
-                     g_vekLocalData.dockerVec[QString::fromStdString(ax)].insert(pair<QString,BaseAppData>(_base_app_data.appCID,_base_app_data));
+                        g_vekLocalData.dockerVec[QString::fromStdString(ax)].insert(pair<QString,BaseAppData>(_base_app_data.appCID,_base_app_data));
                     }
                 }
-            //禁止修改
+                //禁止修改
             }else if(k=="Wine"){
                 for(auto& [x,y]: v.items()){
                     _base_wine_data.WineInstallName=QString::fromStdString(y.at("WineInstallName"));
@@ -295,7 +295,7 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
                 for(auto&[iu,zu]:j.items()){
                     _baseAutoSetJson->Option.insert(pair<QString,QString>(QString::fromStdString(iu),QString::fromStdString(zu)));
                 }
-            }           
+            }
             if(QString::fromStdString(k)=="AttachProc"){
                 if(!j.empty()){
                     for(auto&zu:j.items()){
@@ -398,22 +398,22 @@ json objectJson::exportJson(BaseAppData _tBaseData){
     eJson[toStr(Dxvk)][toStr(dxvkState)]=toStr(false);
     eJson[toStr(Dxvk)][toStr(dxvkHUD)]=toStr(false);
     if(_tBaseData.defaultFonts){
-       eJson["Option"][toStr(defaultFont)]=toStr(true);
+        eJson["Option"][toStr(defaultFont)]=toStr(true);
     }
     if(_tBaseData.taskMemorySharing){
-       eJson["Option"][toStr(taskMemorySharing)]=toStr(true);
+        eJson["Option"][toStr(taskMemorySharing)]=toStr(true);
     }
     if(_tBaseData.taskMemoryOptimization){
-       eJson["Option"][toStr(taskMemoryOptimization)]=toStr(true);
+        eJson["Option"][toStr(taskMemoryOptimization)]=toStr(true);
     }
     if(_tBaseData.taskRealTimePriority){
-       eJson["Option"][toStr(taskRealTimePriority)]=toStr(true);
+        eJson["Option"][toStr(taskRealTimePriority)]=toStr(true);
     }
     if(_tBaseData.monoState){
-       eJson["Option"][toStr(monoState)]=toStr(true);
+        eJson["Option"][toStr(monoState)]=toStr(true);
     }
     if(_tBaseData.geckoState){
-       eJson["Option"][toStr(geckoState)]=toStr(true);
+        eJson["Option"][toStr(geckoState)]=toStr(true);
     }
     if(_tBaseData.dxvkState){
         eJson[toStr(Dxvk)][toStr(dxvkState)]=toStr(true);
@@ -532,3 +532,4 @@ QString objectJson::GetRandomCID()
     qDebug()<<str;
     return str;
 }
+

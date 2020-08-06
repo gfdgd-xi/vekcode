@@ -5,6 +5,7 @@
 BaseLocalData g_vekLocalData={};
 std::vector<QString> taskList={};
 
+static QString vekUpInfo="https://gitee.com/JackLee02/vekGame/raw/master/vekUpdateInfo.json";
 //dxvk
 std::map<QString,std::map<QString,QString>> dxvkRes={
    {"HKEY_CURRENT_USER\\Software\\Wine\\DllOverrides",{{"","native"}}}

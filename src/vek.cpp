@@ -84,7 +84,6 @@ void vek::on_action_About_triggered()
         _vek_About->setWindowFlags(Qt::WindowStaysOnTopHint);
         _vek_About->setGeometry(this->geometry());
         _vek_About->show();
-        _vek_About->getUpdateLogs();
         connect(_vek_About,&vekAbout::_unVekAbout,this,&vek::unVekAbout);
     }
 }

@@ -7,5 +7,6 @@
         <file>res/css/Default.qss</file>
         <file>res/reg/dxvk.reg</file>
         <file>res/reg/dxvkhud.reg</file>
+        <file>res/vup/vUpdate</file>
     </qresource>
 </RCC>
