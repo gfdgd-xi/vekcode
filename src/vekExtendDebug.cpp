@@ -11,54 +11,61 @@ vekExtendDebug::vekExtendDebug(QWidget *parent) :
 
 vekExtendDebug::~vekExtendDebug()
 {
+    emit _unVekDebug();
     delete ui;
-    m_cmd->close();
-    m_cmd->kill();
-    delete m_cmd;
-    m_cmd=nullptr;
 }
-void vekExtendDebug::exitProc(QString info){
-    if(d_cmd){
-        delete d_cmd;
-        d_cmd=nullptr;
+void vekExtendDebug::ConnectDebugObject(){
+    connect(ui->pushButton_DebugStart,&QPushButton::clicked,this,&vekExtendDebug::startDebug);
+    connect(ui->pushButton_DebugDllAdd,&QPushButton::clicked,this,&vekExtendDebug::addDll);
+    connect(ui->pushButton_DebugDllDel,&QPushButton::clicked,this,&vekExtendDebug::delDll);
+    connect(ui->pushButton_DebugForceExit,&QPushButton::clicked,this,&vekExtendDebug::exitDebug);
+    for(auto xz:dllList){
+        ui->comboBox_DebugDllList->addItem(xz);
     }
-    d_cmd=new QProcess();
-    d_cmd->start("bash");
-    QStringList list1 = info.split("\n");
-    QString procName="onmyoji";
-    QString procPid;
-    for(auto a:list1){
-        if(a.contains(procName,Qt::CaseSensitive)){
-            bool ok;
-            procPid=QString::number(a.left(10).toLongLong(&ok,16));
-            qDebug()<<procPid;
-            break;
-        }
-    }
-    if(procPid!=NULL){
-        QString pCodes="WINEPREFIX="+_data.dockPath+"/"+_data.dockName+" "+_data.winePath+"wine/bin/winedbg";
-        QString dCodes="attach "+procPid;
-        QString kCodes="kill";
-        QString qCodes="quit";
-        d_cmd->write(pCodes.toLocal8Bit()+'\n');
-        d_cmd->write(dCodes.toLocal8Bit()+'\n');
-        d_cmd->write(kCodes.toLocal8Bit()+'\n');
-        d_cmd->write(qCodes.toLocal8Bit()+'\n');
-    }
+
 }
 void vekExtendDebug::onReadyRead(){
-    QByteArray cmdout = m_cmd->readAll();
+    QByteArray cmdout = m_cmd->readAllStandardOutput();
     if(!cmdout.isEmpty()){
         ui->logTextEdit->append(QString::fromLocal8Bit(cmdout));
-        /*
-        mutex.lock();
-        exitProc(QString::fromLocal8Bit(cmdout));
-        mutex.unlock();
-        */
     }
     QTextCursor cursor=ui->logTextEdit->textCursor();
     cursor.movePosition(QTextCursor::End);
     ui->logTextEdit->setTextCursor(cursor);
+}
+void vekExtendDebug::addDll(){
+    QString xData="+"+ui->comboBox_DebugDllList->currentText();
+    if(!DebugDllStr.empty()){
+        for(auto x:DebugDllStr){
+            if(x==xData){
+                return;
+            }
+        }
+        if(DebugDllStr.size()>=1){
+            DebugDllStr.append(",");
+        }
+    }
+    DebugDllStr.append(xData);
+    upDllStr();
+}
+void vekExtendDebug::delDll(){
+    QString tData;
+    if(DebugDllStr.empty()){
+        return;
+    }
+    for(auto x:DebugDllStr){
+        tData="+"+ui->comboBox_DebugDllList->currentText();
+        if(x==tData){
+            DebugDllStr.removeOne(tData);
+            if(DebugDllStr.size()>1){
+                DebugDllStr.removeLast();
+            }
+            upDllStr();
+        }
+    }
+}
+void vekExtendDebug::startDebug(){
+   ExtendApp(_data);
 }
 //运行环境变量设置
 void vekExtendDebug::executeArgsEnv(BaseAppData data){
@@ -72,7 +79,7 @@ void vekExtendDebug::executeArgsEnv(BaseAppData data){
     qputenv("PWD", data.workPath.toStdString().c_str());
     if(!data.dockEnv.empty()){
         for(auto& [a,u]:data.dockEnv){
-           qputenv(a.toStdString().c_str(),u.toStdString().c_str());
+            qputenv(a.toStdString().c_str(),u.toStdString().c_str());
         }
     }
     //输出环境变量
@@ -90,19 +97,11 @@ void vekExtendDebug::ExtendApp(BaseAppData _dataApp){
     m_cmd=new QProcess();
     _data=_dataApp;
     executeArgsEnv(_dataApp);
-    /*下面代码用于调试winedbg
-   m_cmd->setProcessChannelMode(QProcess::MergedChannels);
-   m_cmd->setReadChannel(QProcess::StandardOutput);
-   m_cmd->setWorkingDirectory(_dataGame.workPath);
-   m_cmd->start("bash");
-   m_cmd->setWorkingDirectory(_dataGame.workPath);  
-   connect(m_cmd,SIGNAL(readyReadStandardOutput()),this,SLOT(onReadyRead()));
-   QString dockPath =_dataGame.dockPath+"/"+_dataGame.dockName;
-   QString pCodes="WINEPREFIX="+dockPath+" "+_dataGame.winePath+"wine/bin/winedbg"+" "+"--command \'info proc\'";
-   m_cmd->write(pCodes.toLocal8Bit()+'\n');
-   qDebug()<<pCodes;
-   */
     QStringList codeArgs;
+    QString codeDebug;
+    if(!DebugDllStr.empty()){
+        codeDebug="WINEDEBUG="+ui->lineEdit_DebugDllStr->text();
+    }
     QString gameExe=_dataApp.appExe;
     if(gameExe.contains(" ",Qt::CaseSensitive)){
         gameExe="\""+gameExe+"\"";
@@ -117,9 +116,6 @@ void vekExtendDebug::ExtendApp(BaseAppData _dataApp){
     if(_dataApp.taskMemoryOptimization){
         codeArgs.append("STAGING_WRITECOPY=1");
     }
-    if(_dataApp.taskLog){
-        codeArgs.append("WINEDEBUG=-all");
-    }
     if(_dataApp.appOtherAgrs!=nullptr){
         codeArgs.append(_dataApp.appOtherAgrs);
     }
@@ -128,12 +124,29 @@ void vekExtendDebug::ExtendApp(BaseAppData _dataApp){
     m_cmd->setWorkingDirectory(_dataApp.workPath);
     m_cmd->start("bash");
     connect(m_cmd,SIGNAL(readyReadStandardOutput()),this,SLOT(onReadyRead()));
-    QString codes=_dataApp.winePath+"wine/bin/wine64"+" "+codeArgs.join(" ");
+    QString codes=codeDebug+" "+_data.winePath+"wine/bin/wine"+" "+codeArgs.join(" ");
     m_cmd->write(codes.toLocal8Bit()+'\n');
-
     qDebug()<<"|++++++++++++++++++++++++++++|";
     qDebug()<<"writeCode:"+codes;
     qDebug()<<"workPath:"+_dataApp.workPath;
     qDebug()<<"WineArgs:"+codeArgs.join(" ");
     qDebug()<<"|++++++++++++++++++++++++++++|";
+}
+void vekExtendDebug::exitDebug(){
+    std::vector<QStringList> _codeAgrs;
+    objectExtend* _objectExtend=new objectExtend();
+    objectType _objType=object_forcekill;
+    connect(this, SIGNAL(toObjectArgs(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)), _objectExtend, SLOT(setDockOptionObjectData(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)));
+    emit(toObjectArgs(_data,_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default));
+    _objectExtend->start();
+    _objectExtend->wait();
+    delete _objectExtend;
+    _objectExtend=nullptr;
+    if(m_cmd!=nullptr){
+       delete m_cmd;
+       m_cmd=nullptr;
+    }
+}
+void vekExtendDebug::upDllStr(){
+    ui->lineEdit_DebugDllStr->setText(DebugDllStr.join(""));
 }

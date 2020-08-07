@@ -67,8 +67,8 @@ private:
     void optionExtend();
     void extendApp();
     void executeArgsEnv();
-    void baseExecuteWineCode(QString code,QStringList codeargs);
-    void baseExecuteAppCode(QString code, QStringList codeargs);
+    void baseExecuteWineCode(QString,QStringList);
+    void baseExecuteAppCode(QString, QStringList);
     void extendWineRegeditCode(QString);
     void executeWineBoot(objectWineBoot);
     void executeWineServer(objectWineServer);

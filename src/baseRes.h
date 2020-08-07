@@ -41,7 +41,4 @@ std::map<QString,std::map<QString,QString>> fontRes={
     }
    }
 };
-
-//阻止部分软件or程序or平台附加进程，子进程自动启动，如EPIC这类游戏平台
-
 #endif // BASERES_H

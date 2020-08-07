@@ -28,6 +28,7 @@ private slots:
         void unAppAdd();
         void setUpDelData(BaseAppData*,objectTypeView);
         void unExportJson();
+        void unDebugApp();
 public slots:
         void ObjectRun();
 signals:

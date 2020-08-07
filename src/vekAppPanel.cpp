@@ -40,34 +40,7 @@ void vekAppPanel::vekLoadJsonData(){
                     vekAppListView* pList= new vekAppListView();
                     QString nowTabName=y.first;
                     BaseAppData *LID=new BaseAppData;
-                    LID->appCID=x.second.appCID;
-                    LID->appName=x.second.appName;
-                    LID->appIco=x.second.appIco;
-                    LID->appExe=x.second.appExe;
-                    LID->appOtherAgrs=x.second.appOtherAgrs;
-                    LID->winePath=x.second.winePath;
-                    LID->wineVersion=x.second.wineVersion;
-                    LID->dockPath=x.second.dockPath;
-                    LID->dockName=x.second.dockName;
-                    LID->dockSystemVersion=x.second.dockSystemVersion;
-                    LID->workPath=x.second.workPath;
-                    LID->dxvkState=x.second.dxvkState;
-                    LID->dxvkVerson=x.second.dxvkVerson;
-                    LID->dxvkHUD=x.second.dxvkHUD;
-                    LID->dxvkConfigFile=x.second.dxvkConfigFile;
-                    LID->dxvkConfigFileState=x.second.dxvkConfigFileState;
-                    LID->taskLog=x.second.taskLog;
-                    LID->taskMemoryOptimization=x.second.taskMemoryOptimization;
-                    LID->taskMemorySharing=x.second.taskMemorySharing;
-                    LID->taskRealTimePriority=x.second.taskRealTimePriority;
-                    LID->defaultFonts=x.second.defaultFonts;
-                    LID->monoState=x.second.monoState;
-                    LID->geckoState=x.second.geckoState;
-                    LID->mainPrcoName=x.second.mainPrcoName;
-                    LID->attachProc=x.second.attachProc;
-                    LID->dockEnv=x.second.dockEnv;
-                    LID->dockLibs=x.second.dockLibs;
-                    LID->dockRegs=x.second.dockRegs;
+                    *LID=x.second;
                     for(std::map<QString,vekAppListView*>::iterator it = m_pListMap->begin();it!=m_pListMap->end();it++)
                     {
                         if(it->first==nowTabName){

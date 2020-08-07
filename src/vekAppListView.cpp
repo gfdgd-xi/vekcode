@@ -123,13 +123,15 @@ void vekAppListView::ExportJson(){
     }
 }
 void vekAppListView::objectExtendApp(){
-    _vExtendDebug=new vekExtendDebug();
-    _vExtendDebug->setAttribute(Qt::WA_DeleteOnClose,true);
-    _vExtendDebug->setGeometry(this->geometry());
-    _vExtendDebug->show();
-    connect(this,SIGNAL(toObjectArgs_cl(BaseAppData)),_vExtendDebug,SLOT(ExtendApp(BaseAppData)));
-    int index = this->currentIndex().row();
-    emit toObjectArgs_cl(*m_pModel->getItem(index));
+    if(_vExtendDebug==nullptr){
+        _vExtendDebug=new vekExtendDebug();
+        _vExtendDebug->setAttribute(Qt::WA_DeleteOnClose,true);
+        _vExtendDebug->setGeometry(this->geometry());
+        _vExtendDebug->ConnectDebugObject();
+        _vExtendDebug->_data=*m_pModel->getItem(this->currentIndex().row());
+        connect(_vExtendDebug,&vekExtendDebug::_unVekDebug,this,&vekAppListView::unDebugApp);
+        _vExtendDebug->show();
+    }
 }
 //设置选项
 void vekAppListView::setItemSlot(){
@@ -201,6 +203,9 @@ void vekAppListView::unAppAdd(){
 }
 void vekAppListView::unExportJson(){
     _vExportJson=nullptr;
+}
+void vekAppListView::unDebugApp(){
+    _vExtendDebug=nullptr;
 }
 
 void vekAppListView::setListMap( std::map<QString,vekAppListView*> *pListMap,QTabWidget* pBox)

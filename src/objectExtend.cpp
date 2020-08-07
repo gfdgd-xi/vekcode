@@ -155,7 +155,6 @@ void objectExtend::baseExecuteAppCode(QString code,QStringList codeArgs){
         }
     }
 }
-
 void objectExtend::baseExecuteWineCode(QString code,QStringList codeArgs){
     QString mdCode;
     m_cmd->setReadChannel(QProcess::StandardOutput);
@@ -189,7 +188,6 @@ void objectExtend::waitObjectDone(bool objState){
         m_cmd->close();
         m_cmd->kill();
     }
-
 }
 void objectExtend::optionExtend(){
     QStringList codeArgs;
@@ -230,12 +228,13 @@ void objectExtend::extendApp(){
     }
     if(data.appOtherAgrs!=nullptr){
         codeArgs.append(data.appOtherAgrs);
-    }    
+    }
     dyncDxvkRegs(dxvkResCache);
     dyncDxvkRegs(dxvkResLog);
     baseExecuteAppCode(startArgs,codeArgs);
     emit objexitTray(false);
 }
+
 void objectExtend::dyncDxvkRegs(std::map<QString,std::map<QString,QString>> dxvkResStr){
     for(auto a:dxvkResStr){
         for(auto b:a.second){
@@ -292,8 +291,8 @@ void objectExtend::forcekill(){
     objProcMangs=nullptr;
 }
 void objectExtend::run(){
-    executeArgsEnv();
     m_cmd=new QProcess();
+    executeArgsEnv(); 
     if(objType==object_winecfg||objType==object_regedit||objType==object_control||objType==object_uninstall)
     {
         optionExtend();
