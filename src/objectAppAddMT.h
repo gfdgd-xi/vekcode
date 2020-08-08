@@ -19,6 +19,7 @@ public:
     void ExecuteObj(objectType,objectWineBoot,objectWineServer);
     void newDock();
     void optionRegs();
+    void sObjectInstall();
 private:
     BaseAppData* _BaseAppData=nullptr;
     BaseAppData* _oldAppData=nullptr;
@@ -35,7 +36,6 @@ private:
     void addJsonAuto(QString);
     void installMonoPlugs();
     void installGeckoPlugs();
-    void installObject();
 signals:
     void ExecutetoObjectArgs(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
 

@@ -22,5 +22,5 @@ void vekATJsonView::initQComboBox(){
         qTab->addTab(item_widget,tabName[i]);
     }
     item_list->setItemWidget(item_wrap,qTab);
-    this->showPopup();
+    //this->showPopup();
 }

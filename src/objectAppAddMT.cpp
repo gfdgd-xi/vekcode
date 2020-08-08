@@ -261,6 +261,11 @@ void objectAppAddMT::newDock(){
         installGeckoPlugs();
     }
 }
+void objectAppAddMT::sObjectInstall(){
+    DxvkFileInstall();
+    DxvkHUDRegs();
+    DxvkConfigFile();
+}
 bool objectAppAddMT::InitDockObj(bool _forceState){
     QDir dockPath(_BaseAppData->dockPath);
     QDir dockDir(_BaseAppData->dockPath+"/"+_BaseAppData->dockName);
@@ -289,12 +294,10 @@ bool objectAppAddMT::InitDockObj(bool _forceState){
                 installGeckoPlugs();
             }
         }else{
-            DxvkFileInstall();
-            DxvkHUDRegs();
-            DxvkConfigFile();
-            DefaultFontsFileInstall();
-            installMonoPlugs();
-            installGeckoPlugs();
+           sObjectInstall();
+           DefaultFontsFileInstall();
+           installMonoPlugs();
+           installGeckoPlugs();
         }
         optionRegs();
         ExecuteObj(object_dockSysver,object_wineboot_default,object_wineserver_default);
@@ -302,9 +305,6 @@ bool objectAppAddMT::InitDockObj(bool _forceState){
     } catch (nullopt_t) {
         return false;
     }
-}
-void objectAppAddMT::installObject(){
-
 }
 //等待任务结束
 void objectAppAddMT::WaitObjectDone(objectExtend* _waitObject){

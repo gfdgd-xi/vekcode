@@ -105,9 +105,13 @@ void vekAppListView::ObjectRun(){
             auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
             connect(_objectExtend, SIGNAL(objexitTray(bool)), pObjectVek, SLOT(exitTray(bool)));
             emit _startTray();
+            objectAppAddMT* oAMT=new objectAppAddMT(m_pModel->getItem(index),nullptr);
+            oAMT->sObjectInstall();
+            delete oAMT;
+            oAMT=nullptr;
         }
         connect(this, SIGNAL(toObjectArgs(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)), _objectExtend, SLOT(setDockOptionObjectData(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)));
-        emit(toObjectArgs(*m_pModel->getItem(index),_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default));      
+        emit(toObjectArgs(*m_pModel->getItem(index),_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default));
         _objectExtend->start();
     }
 }

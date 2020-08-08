@@ -65,7 +65,7 @@ void vekExtendDebug::delDll(){
     }
 }
 void vekExtendDebug::startDebug(){
-   ExtendApp(_data);
+    ExtendApp(_data);
 }
 //运行环境变量设置
 void vekExtendDebug::executeArgsEnv(BaseAppData data){
@@ -143,9 +143,11 @@ void vekExtendDebug::exitDebug(){
     delete _objectExtend;
     _objectExtend=nullptr;
     if(m_cmd!=nullptr){
-       delete m_cmd;
-       m_cmd=nullptr;
+        delete m_cmd;
+        m_cmd=nullptr;
     }
+    delete _objectExtend;
+    _objectExtend=nullptr;
 }
 void vekExtendDebug::upDllStr(){
     ui->lineEdit_DebugDllStr->setText(DebugDllStr.join(""));

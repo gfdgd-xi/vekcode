@@ -128,18 +128,16 @@ void objectExtend::executeWinetricks(){
     waitObjectDone(false);   
 }
 //执行游戏
-void objectExtend::baseExecuteAppCode(QString code,QStringList codeArgs){
+void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
     executeWineBoot(object_wineboot_r);
     monitorProc();
     dockEditSystemVersion();  
-    m_cmd->setProcessChannelMode(QProcess::MergedChannels);
-    m_cmd->setReadChannel(QProcess::StandardOutput);
     m_cmd->closeReadChannel(QProcess::StandardOutput);
     m_cmd->closeReadChannel(QProcess::StandardError);
     m_cmd->setWorkingDirectory(data.workPath);
-    m_cmd->execute(code,codeArgs);
+    m_cmd->execute(wcode,codeArgs);
     qDebug()<<"|++++++++++++++++++++++++++++|";
-    qDebug()<<"writeCode:"+code;
+    qDebug()<<"writeCode:"+wcode;
     qDebug()<<"workPath:"+data.workPath;
     qDebug()<<"WineArgs:"+codeArgs.join(" ");
     qDebug()<<"|++++++++++++++++++++++++++++|";
