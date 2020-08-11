@@ -105,7 +105,7 @@ void vekAppListView::ObjectRun(){
             auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
             connect(_objectExtend, SIGNAL(objexitTray(bool)), pObjectVek, SLOT(exitTray(bool)));
             emit _startTray();
-            objectAppAddMT* oAMT=new objectAppAddMT(m_pModel->getItem(index),nullptr);
+            objectAppMT* oAMT=new objectAppMT(m_pModel->getItem(index),nullptr);
             oAMT->sObjectInstall();
             delete oAMT;
             oAMT=nullptr;

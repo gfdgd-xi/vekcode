@@ -2,7 +2,7 @@
 #define VEKAPPADDMULTI_H
 
 #include "common.h"
-#include "objectAppAddMT.h"
+#include "objectAppMT.h"
 #include "vekInitObject.h"
 namespace Ui {
 class vekAppAddMulti;

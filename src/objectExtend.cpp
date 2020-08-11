@@ -14,11 +14,14 @@ void objectExtend::setDockOptionObjectData(BaseAppData _data,std::vector<QString
     objType=_objType;
     objWineBootType=_objWineBootType;
     objWineServer=_objWineServer;
+    /*
     if(data.wineVersion.contains("dev",Qt::CaseSensitive)){
         startArgs=data.winePath+"wine/bin/wine";
     }else{
         startArgs=data.winePath+"wine/bin/wine64";
     }
+    */
+    startArgs=data.winePath+"wine/bin/wine";
 }
 //运行环境变量设置
 void objectExtend::executeArgsEnv(){
@@ -28,6 +31,7 @@ void objectExtend::executeArgsEnv(){
     qputenv("WINE", winePath.toStdString().c_str());
     //设置容器目录
     qputenv("WINEPREFIX", dockPath.toStdString().c_str());
+    qputenv("WINEARCH", "win32");
     //设置工作目录
     qputenv("PWD", data.workPath.toStdString().c_str());
     qputenv("WINETRICKS_DOWNLOADER", "aria2c");

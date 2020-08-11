@@ -108,7 +108,7 @@ void vekAppPanel::objAppInstall(){
         }
     }
     BaseAppData baseAppdata;
-    objectAppAddMT* objNewDock=new objectAppAddMT(&baseAppdata,nullptr);
+    objectAppMT* objNewDock=new objectAppMT(&baseAppdata,nullptr);
     QString dockName="vekON1";
     if(m_pBox->count()!=0){
        dockName =m_pBox->tabText(m_pBox->currentIndex());

@@ -3,7 +3,7 @@
 
 #include "common.h"
 #include "objectJson.h"
-#include "objectAppAddAT.h"
+#include "objectAppAT.h"
 #include "vekInitObject.h"
 #include "vekATJsonView.h"
 namespace Ui {
@@ -20,7 +20,7 @@ public:
 private:
     Ui::vekAppAddAT *ui;
     BaseAppData* autoAppData=nullptr;
-    objectAppAddAT* objAutoAddApp=nullptr;
+    objectAppAT* objAutoAddApp=nullptr;
     void connectDockObject();
     void SetObject();
     void addAutoApp();

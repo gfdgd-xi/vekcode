@@ -120,7 +120,48 @@ typedef struct {
     std::map<QString,QString> wineSource={};
     std::map<QString,std::map<QString,BaseWineGit>> wineJsonList={};
 }BaseLocalData;
-
+typedef enum{
+    object_winecfg,
+    object_regedit,
+    object_control,
+    object_uninstall,
+    object_winetricks_gui,
+    object_start,
+    object_debugstart,
+    object_setgame,
+    object_exportJson,
+    object_forcekill,
+    object_deletegame,
+    object_regobject,
+    object_wineboot,
+    object_wineserver,
+    object_dockSysver,
+    object_disable,
+    object_winetricks_libs,
+    object_plugs,
+    object_default
+}objectType;
+typedef enum{
+    object_wineboot_e,
+    object_wineboot_f,
+    object_wineboot_i,
+    object_wineboot_k,
+    object_wineboot_r,
+    object_wineboot_s,
+    object_wineboot_u,
+    object_wineboot_default
+}objectWineBoot;
+typedef enum{
+    object_wineserver_k,
+    object_wineserver_p,
+    object_wineserver_w,
+    object_wineserver_default
+}objectWineServer;
+typedef enum{
+    object_delApp,
+    object_setApp,
+    object_addApp
+}objectTypeView;
 extern BaseLocalData g_vekLocalData;
 extern std::map<QString,std::map<QString,QString>> fontRes;
 extern std::map<QString,std::map<QString,QString>> dxvkResCof;

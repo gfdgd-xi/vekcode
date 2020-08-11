@@ -522,7 +522,7 @@ bool vekAppAddMT::vekAppAddObj(bool _forceState){
     if(!vekAppConfigObj()){
         return false;
     }
-    objectAppAddMT* vappAddObj=new objectAppAddMT(tempData,oldData);
+    objectAppMT* vappAddObj=new objectAppMT(tempData,oldData);
     if(!vappAddObj->InitDockObj(_forceState)){
         vekError("初始化失败!");
     }else{

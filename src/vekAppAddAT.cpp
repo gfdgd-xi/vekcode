@@ -142,7 +142,7 @@ void vekAppAddAT::addAutoApp(){
         delete objAutoAddApp;
         objAutoAddApp=nullptr;
     }
-    objAutoAddApp=new objectAppAddAT(objAddDataAT);
+    objAutoAddApp=new objectAppAT(objAddDataAT);
     connect(objAutoAddApp,SIGNAL(Tips(QString)),this,SLOT(TipText(QString)));
     connect(objAutoAddApp,SIGNAL(Error(QString,bool)),this,SLOT(ErrorText(QString,bool)));
     connect(objAutoAddApp,SIGNAL(Done()),this,SLOT(ObjDone()));

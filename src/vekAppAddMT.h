@@ -3,7 +3,7 @@
 
 #include "common.h"
 #include "objectJson.h"
-#include "objectAppAddMT.h"
+#include "objectAppMT.h"
 #include "vekInitObject.h"
 #include <QTableView>
 #include <QStandardItemModel>

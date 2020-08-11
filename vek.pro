@@ -26,8 +26,8 @@ TRANSLATIONS += vek_zh_CN.ts\
                 vek_us_EN.ts
 SOURCES += \
   main.cpp \
-  src/objectAppAddAT.cpp \
-  src/objectAppAddMT.cpp \
+  src/objectAppAT.cpp \
+  src/objectAppMT.cpp \
   src/objectExtend.cpp \
   src/objectJson.cpp \
   src/objectProcManage.cpp \
@@ -55,8 +55,8 @@ HEADERS += \
     src/baseData.h \
     src/baseRes.h \
     src/common.h \
-    src/objectAppAddAT.h \
-    src/objectAppAddMT.h \
+    src/objectAppAT.h \
+    src/objectAppMT.h \
     src/objectExtend.h \
     src/objectJson.h \
     src/objectProcManage.h \
