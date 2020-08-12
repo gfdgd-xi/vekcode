@@ -40,30 +40,39 @@ void objectAppMT::DxvkFileInstall(){
     QStringList dockSystemDir;
     dockSystemDir.clear();
     dockSystemDir.append("x32");
-    dockSystemDir.append("x64");
+    //dockSystemDir.append("x64");
     QString dxvkTargetFile=nullptr;
     for(auto c:dockSystemDir){
         QString dxvkSourceFile=baseDxvkDir+"/"+_BaseAppData->dxvkVerson+"/"+c+"/";
         dxvkTargetFile=_BaseAppData->dockPath+"/"+_BaseAppData->dockName+"/drive_c/windows/syswow64/";
-        if(c=="x64"){
-            dxvkTargetFile=_BaseAppData->dockPath+"/"+_BaseAppData->dockName+"/drive_c/windows/system32/";
+        if(_BaseAppData->dockVer=="win32"){
+           dxvkTargetFile=_BaseAppData->dockPath+"/"+_BaseAppData->dockName+"/drive_c/windows/system32/";
         }
-        for(auto d:dxvkFileList){
-            //卸载
-            if(!_BaseAppData->dxvkState){
-                if(QFile(dxvkTargetFile+d+".a").exists()){
-                    QFile(dxvkTargetFile+d).remove();
-                    QFile::rename(dxvkTargetFile+d+".a",dxvkTargetFile+d);
+        if(QDir(dxvkTargetFile).exists()){
+            for(auto d:dxvkFileList){
+                //卸载
+                if(!_BaseAppData->dxvkState){
+                    if(QFile(dxvkTargetFile+d+".a").exists()){
+                        QFile(dxvkTargetFile+d).remove();
+                        QFile::rename(dxvkTargetFile+d+".a",dxvkTargetFile+d);
+                    }
+                }else{//安装
+                    if(QFile(dxvkTargetFile+d+".a").exists()){
+                        QFile(dxvkTargetFile+d).remove();
+                    }else{
+                        QFile::rename(dxvkTargetFile+d,dxvkTargetFile+d+".a");
+                    }
+                    QFile::copy(dxvkSourceFile+d, dxvkTargetFile+d);
                 }
-            }else{//安装
-                if(QFile(dxvkTargetFile+d+".a").exists()){
-                    QFile(dxvkTargetFile+d).remove();
-                }else{
-                    QFile::rename(dxvkTargetFile+d,dxvkTargetFile+d+".a");
-                }
-                QFile::copy(dxvkSourceFile+d, dxvkTargetFile+d);
+                QFile::setPermissions(dxvkTargetFile+d,
+                                      QFile::ReadOther|
+                                      QFile::ExeOther|
+                                      QFile::ReadGroup|
+                                      QFile::ExeGroup|
+                                      QFile::ReadOwner|
+                                      QFile::WriteOwner|
+                                      QFile::ExeOwner);
             }
-            QFile::setPermissions(dxvkTargetFile+d,QFile::ReadOther|QFile::ReadOwner|QFile::WriteOwner|QFile::ReadGroup);
         }
     }
     DxvkRegedit(dxvkFileList);

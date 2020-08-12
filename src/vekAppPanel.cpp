@@ -225,11 +225,9 @@ void vekAppPanel::addGroupSlot(BaseAppData* data)
         if(data->dockVer=="win32"){
             QIcon icon(":/res/img/32.png");
             m_pBox->setTabIcon(m_pBox->currentIndex(),icon);
-            cTab+=1;
         }else{
             QIcon icon(":/res/img/64.png");
-            m_pBox->setTabIcon(cTab,icon);
-            cTab+=1;
+            m_pBox->setTabIcon(m_pBox->currentIndex(),icon);
         }
     }
     //要确保每个MyListView钟的m_pListMap都是一致的，不然就会有错了。

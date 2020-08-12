@@ -18,7 +18,7 @@ void objectExtend::setDockOptionObjectData(BaseAppData _data,std::vector<QString
 }
 //运行环境变量设置
 void objectExtend::executeArgsEnv(){
-    qputenv("WINE", (data.winePath+"wine/bin/wine").toStdString().c_str());
+    qputenv("WINE", (data.winePath+"wine/bin/"+data.dockWineVer).toStdString().c_str());
     //设置容器目录
     qputenv("WINEPREFIX", (data.dockPath+"/"+data.dockName).toStdString().c_str());
     qputenv("WINEARCH", data.dockVer.toStdString().c_str());

@@ -229,9 +229,10 @@ void vekAppListView::moveSlot()
 {
     QAction *pSender = qobject_cast<QAction*>(sender());
     int index = this->currentIndex().row();
+    int indexRow=this->m_pModel->rowCount();
     if (pSender)
     {
-        if(index-1<=-1){
+        if(indexRow<=1){
             vekTip("移动失败!移动后容器程序列表不能为空");
             return;
         }
