@@ -68,6 +68,12 @@ void vekAppAddMT::vekAppAddConnectObject(BaseAppData* _data,objectTypeView _objT
     }else{
         ui->comboBox_DockName->setCurrentText("vekON1");
     }
+    for(auto n:_dockVer){
+        ui->comboBox_dockbit->addItem(n);
+    }
+    for(auto m:_dockWineVer){
+        ui->comboBox_winebit->addItem(m);
+    }
     if(_data!=nullptr){
         //读取配置修改设置
         oldData=_data;
@@ -100,6 +106,9 @@ void vekAppAddMT::vekAppAddConnectObject(BaseAppData* _data,objectTypeView _objT
         ui->checkBox_Gecko->setChecked(_data->geckoState);
         ui->lineEdit_MainProcName->setText(_data->mainPrcoName);
         ui->checkBox_dxvkConfigState->setChecked(_data->dxvkConfigFileState);
+        ui->comboBox_dockbit->setCurrentText(_data->dockVer);
+        ui->comboBox_winebit->setCurrentText(_data->dockWineVer);
+        ui->comboBox_dockbit->setEnabled(false);
     }else{
         dxvkOptionLink();
     }
@@ -341,6 +350,8 @@ bool vekAppAddMT::vekAppConfigObj(){
             break;
         }
     }
+    tempData->dockVer=ui->comboBox_dockbit->currentText();
+    tempData->dockWineVer=ui->comboBox_winebit->currentText();
     //dxvk参数
     tempData->mainPrcoName=ui->lineEdit_MainProcName->text();
     tempData->dxvkState=ui->checkBox_stateDxvk->checkState();
@@ -513,8 +524,16 @@ void vekAppAddMT::objectButton(){
     }
     //初始化
     if(action_obnject->objectName()=="pushButton_initDock"){
-        ui->label_TipsText->setText("正在初始化容器请稍后!");
-        vekAppAddObj(true);
+        if(ui->comboBox_dockbit->isEnabled()){
+            if(vekMesg("强制初始化容器会导致部分软件无法运行和适配请慎重!")){
+                ui->label_TipsText->setText("正在初始化容器请稍后!");
+                vekAppAddObj(true);
+            }
+        }else{
+            if(vekMesg("是否解锁初始化功能限制请谨慎操作?")){
+                ui->comboBox_dockbit->setEnabled(true);
+            }
+        }
     }
 }
 

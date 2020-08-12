@@ -8,5 +8,7 @@
         <file>res/reg/dxvk.reg</file>
         <file>res/reg/dxvkhud.reg</file>
         <file>res/vup/vUpdate</file>
+        <file>res/img/64.png</file>
+        <file>res/img/32.png</file>
     </qresource>
 </RCC>

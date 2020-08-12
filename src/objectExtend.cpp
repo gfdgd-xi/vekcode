@@ -14,27 +14,20 @@ void objectExtend::setDockOptionObjectData(BaseAppData _data,std::vector<QString
     objType=_objType;
     objWineBootType=_objWineBootType;
     objWineServer=_objWineServer;
-    /*
-    if(data.wineVersion.contains("dev",Qt::CaseSensitive)){
-        startArgs=data.winePath+"wine/bin/wine";
-    }else{
-        startArgs=data.winePath+"wine/bin/wine64";
-    }
-    */
-    startArgs=data.winePath+"wine/bin/wine";
+    startArgs=data.winePath+"wine/bin/"+data.dockWineVer;
 }
 //运行环境变量设置
 void objectExtend::executeArgsEnv(){
-    QString dockPath =data.dockPath+"/"+data.dockName;
-    QDir dockDir(dockPath);
-    QString winePath=data.winePath+"wine/bin/wine";
-    qputenv("WINE", winePath.toStdString().c_str());
+    qputenv("WINE", startArgs.toStdString().c_str());
     //设置容器目录
-    qputenv("WINEPREFIX", dockPath.toStdString().c_str());
-    qputenv("WINEARCH", "win32");
+    qputenv("WINEPREFIX", (data.dockPath+"/"+data.dockName).toStdString().c_str());
+    qputenv("WINEARCH", data.dockVer.toStdString().c_str());
     //设置工作目录
     qputenv("PWD", data.workPath.toStdString().c_str());
     qputenv("WINETRICKS_DOWNLOADER", "aria2c");
+    if(data.taskLog){
+        qputenv("WINEDEBUG", "-all");
+    }
     if(!data.dockEnv.empty()){
         for(auto& [a,u]:data.dockEnv){
             qputenv(a.toStdString().c_str(),u.toStdString().c_str());
@@ -43,7 +36,6 @@ void objectExtend::executeArgsEnv(){
     for(auto _env:m_cmd->systemEnvironment()){
         qDebug()<<_env;
     }
-
 }
 void objectExtend::executeWineBoot(objectWineBoot objWineBootType){
     QStringList wineboot;
@@ -224,9 +216,6 @@ void objectExtend::extendApp(){
     }
     if(data.taskMemoryOptimization){
         codeArgs.append("STAGING_WRITECOPY=1");
-    }
-    if(data.taskLog){
-        codeArgs.append("WINEDEBUG=-all");
     }
     if(data.appOtherAgrs!=nullptr){
         codeArgs.append(data.appOtherAgrs);

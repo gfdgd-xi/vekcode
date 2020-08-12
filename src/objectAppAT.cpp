@@ -52,6 +52,12 @@ void objectAppAT::dataToBase(){
             if(a.first=="appName"){
                 baseAppData->appName=a.second;
             }
+            if(a.first=="dockVer"){
+                baseAppData->dockVer=a.second;
+            }
+            if(a.first=="dockWineVer"){
+                baseAppData->dockWineVer=a.second;
+            }
             if(a.first=="defaultFont"){
                 QVariant defaultFontValue=a.second;
                 baseAppData->defaultFonts=(defaultFontValue).toBool();

@@ -33,6 +33,8 @@ typedef struct {
     QString dockName=nullptr;
     //容器系统版本
     QString dockSystemVersion=nullptr;
+    QString dockVer=nullptr;
+    QString dockWineVer=nullptr;
     //工作路径
     QString workPath=nullptr;
     //DXVK状态

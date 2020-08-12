@@ -130,7 +130,8 @@ void vekAppListView::objectExtendApp(){
     if(_vExtendDebug==nullptr){
         _vExtendDebug=new vekExtendDebug();
         _vExtendDebug->setAttribute(Qt::WA_DeleteOnClose,true);
-        _vExtendDebug->setGeometry(this->geometry());
+        auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
+        _vExtendDebug->setGeometry(pObjectVek->geometry());
         _vExtendDebug->ConnectDebugObject();
         _vExtendDebug->_data=*m_pModel->getItem(this->currentIndex().row());
         connect(_vExtendDebug,&vekExtendDebug::_unVekDebug,this,&vekAppListView::unDebugApp);
@@ -148,7 +149,8 @@ void vekAppListView::setItemSlot(){
             _vek_App_Add=new vekAppAddMT();
             connect(this, SIGNAL(toObjectArgs_ptr(BaseAppData*,objectTypeView)), _vek_App_Add, SLOT(vekAppAddConnectObject(BaseAppData*,objectTypeView)));
             _vek_App_Add->setAttribute(Qt::WA_DeleteOnClose,true);
-            _vek_App_Add->setGeometry(this->geometry());
+            auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
+            _vek_App_Add->setGeometry(pObjectVek->geometry());
             _vek_App_Add->setWindowTitle("VekAppSet");
             emit(toObjectArgs_ptr(bGameData,object_setApp));
             _vek_App_Add->show();

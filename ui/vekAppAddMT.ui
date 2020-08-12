@@ -526,7 +526,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboBox"/>
+               <widget class="QComboBox" name="comboBox_dockbit"/>
               </item>
               <item>
                <widget class="QLabel" name="label_12">
@@ -536,7 +536,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboBox_2"/>
+               <widget class="QComboBox" name="comboBox_winebit"/>
               </item>
              </layout>
             </widget>
@@ -546,7 +546,7 @@
         </widget>
         <widget class="QWidget" name="tab_3">
          <attribute name="title">
-          <string>游戏参数</string>
+          <string>应用参数</string>
          </attribute>
          <widget class="QGroupBox" name="groupBox_4">
           <property name="geometry">

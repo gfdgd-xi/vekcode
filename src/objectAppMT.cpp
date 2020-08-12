@@ -33,6 +33,7 @@ QStringList objectAppMT::GetDxvkFileList(QString basedxvkDir){
 void objectAppMT::DxvkFileInstall(){
     //wine下的dxvk目录
     QString baseDxvkDir=_BaseAppData->winePath+"dxvk";
+    qDebug()<<baseDxvkDir;
     //获取dxvk目录下的文件列表
     QStringList dxvkFileList=GetDxvkFileList(baseDxvkDir);
     //dock下的系统区别

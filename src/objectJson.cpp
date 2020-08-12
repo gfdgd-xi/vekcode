@@ -23,6 +23,8 @@ json objectJson::DataSerialize(json jsonData,const BaseLocalData _baseLocalData)
             jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(wineVersion)]=bx.second.wineVersion.toStdString();
             jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(appOtherAgrs)]=bx.second.appOtherAgrs.toStdString();
             jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockSystemVersion)]=bx.second.dockSystemVersion.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockVer)]=bx.second.dockVer.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockWineVer)]=bx.second.dockWineVer.toStdString();
             jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dxvkHUD)]=bx.second.dxvkHUD;
             jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dxvkVerson)]=bx.second.dxvkVerson.toStdString();
             jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dxvkConfigFile)]=bx.second.dxvkConfigFile.toStdString();
@@ -160,6 +162,8 @@ bool objectJson::unDataSerializeLocalData(){
                         _base_app_data.dxvkVerson=QString::fromStdString(dx.at("dxvkVerson"));
                         _base_app_data.dockName=QString::fromStdString(dx.at("dockName"));
                         _base_app_data.dockSystemVersion=QString::fromStdString(dx.at("dockSystemVersion"));
+                        _base_app_data.dockVer=QString::fromStdString(dx.at("dockVer"));
+                        _base_app_data.dockWineVer=QString::fromStdString(dx.at("dockWineVer"));
                         _base_app_data.workPath=QString::fromStdString(dx.at("workPath"));
                         _base_app_data.dxvkConfigFile=QString::fromStdString(dx.at("dxvkConfigFile"));
                         _base_app_data.mainPrcoName=QString::fromStdString(dx.at("mainPrcoName"));
@@ -423,6 +427,8 @@ json objectJson::exportJson(BaseAppData _tBaseData){
     }
     eJson["Option"][toStr(appName)]=_tBaseData.appName.toStdString();
     eJson["Option"][toStr(dockSystemVersion)]=_tBaseData.dockSystemVersion.toStdString();
+    eJson["Option"][toStr(dockVer)]=_tBaseData.dockSystemVersion.toStdString();
+    eJson["Option"][toStr(dockWineVer)]=_tBaseData.dockSystemVersion.toStdString();
     eJson["Option"][toStr(mainPrcoName)]=_tBaseData.mainPrcoName.toStdString();
     if(!_tBaseData.attachProc.empty()){
         for(auto rs:_tBaseData.attachProc){

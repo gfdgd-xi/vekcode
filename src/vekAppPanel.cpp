@@ -12,6 +12,7 @@ vekAppPanel::~vekAppPanel()
 {
 
 }
+int cTab=0;
 //初始化容器列表
 void vekAppPanel::vek_InitTabWidgetListApp(){
     QGridLayout *gridLayout = new QGridLayout(this);
@@ -27,9 +28,23 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
         pListView->setFlow(QListView::LeftToRight);
         pListView->setResizeMode(QListView::Adjust);
         m_pBox->addTab(pListView,twn.first);
+        for(auto x:twn.second){
+            if(x.second.dockVer=="win32"){
+                QIcon icon(":/res/img/32.png");
+                m_pBox->setTabIcon(cTab,icon);
+                cTab+=1;
+                break;
+            }else{
+                QIcon icon(":/res/img/64.png");
+                m_pBox->setTabIcon(cTab,icon);
+                cTab+=1;
+                break;
+            }
+        }
         m_pListMap->insert(std::pair<QString,vekAppListView*>(twn.first,pListView));
         pListView->setListMap(m_pListMap,m_pBox);
     }
+    cTab=0;
 }
 //读取数据to容器列表
 void vekAppPanel::vekLoadJsonData(){
@@ -62,6 +77,9 @@ void vekAppPanel::addAppSlot(){
     if(vek_app_multi_add==nullptr){
         vek_app_multi_add=new vekAppAddMulti();
         vek_app_multi_add->setAttribute(Qt::WA_DeleteOnClose,true);
+        auto pObjectVek=this->parentWidget()->parentWidget();
+        vek_app_multi_add->setGeometry(pObjectVek->geometry());
+        vek_app_multi_add->setWindowFlags(Qt::WindowStaysOnTopHint);
         vek_app_multi_add->setWindowTitle("Vek游戏增加方式选择");
         connect(vek_app_multi_add,&vekAppAddMulti::_unMultAppAdd,this,&vekAppPanel::unMultAppAdd);
         connect(vek_app_multi_add,&vekAppAddMulti::_MultiAppDiy,this,&vekAppPanel::addAppDiy);
@@ -73,7 +91,9 @@ void vekAppPanel::addAppDiy(){
     if(vek_app_add==nullptr){
         vek_app_add=new vekAppAddMT();
         vek_app_add->setAttribute(Qt::WA_DeleteOnClose,true);
-        vek_app_add->setGeometry(this->geometry());
+        auto pObjectVek=this->parentWidget()->parentWidget();
+        vek_app_add->setGeometry(pObjectVek->geometry());
+        vek_app_add->setWindowFlags(Qt::WindowStaysOnTopHint);
         vek_app_add->setWindowTitle("VekAppAdd");
         vek_app_add->show();
         connect(this, SIGNAL(toObjDiyArgs_ptr(BaseAppData*,objectTypeView)), vek_app_add, SLOT(vekAppAddConnectObject(BaseAppData*,objectTypeView)));
@@ -86,7 +106,9 @@ void vekAppPanel::addAppAuto(){
     if(vek_app_add_auto==nullptr){
         vek_app_add_auto=new vekAppAddAT();
         vek_app_add_auto->setAttribute(Qt::WA_DeleteOnClose,true);
-        vek_app_add_auto->setGeometry(this->geometry());
+        auto pObjectVek=this->parentWidget()->parentWidget();
+        vek_app_add_auto->setGeometry(pObjectVek->geometry());
+        vek_app_add_auto->setWindowFlags(Qt::WindowStaysOnTopHint);
         vek_app_add_auto->setWindowTitle("自动配置容器");
         vek_app_add_auto->show();
         connect(this, SIGNAL(toObjAutoArgs_ptr(BaseAppData*)), vek_app_add_auto, SLOT(connectDockObject(BaseAppData*)));
@@ -111,9 +133,9 @@ void vekAppPanel::objAppInstall(){
     objectAppMT* objNewDock=new objectAppMT(&baseAppdata,nullptr);
     QString dockName="vekON1";
     if(m_pBox->count()!=0){
-       dockName =m_pBox->tabText(m_pBox->currentIndex());
+        dockName =m_pBox->tabText(m_pBox->currentIndex());
     }else{
-       dState=true;
+        dState=true;
     }
     if(dState){
         baseAppdata.winePath=g_vekLocalData.wineVec.begin()->second.wineInstallPath;
@@ -122,6 +144,8 @@ void vekAppPanel::objAppInstall(){
         baseAppdata.monoState=true;
         baseAppdata.geckoState=true;
         baseAppdata.defaultFonts=true;
+        baseAppdata.dockVer="win32";
+        baseAppdata.dockWineVer="wine";
         objNewDock->newDock();
     }else{
         if(g_vekLocalData.dockerVec.empty()){
@@ -178,8 +202,8 @@ void vekAppPanel::addAppObject(BaseAppData* data){
     for(std::map<QString,vekAppListView*>::iterator it = m_pListMap->begin();it!=m_pListMap->end();it++)
     {
         if(it->first==nowTabName){
-           pList=it->second;
-           break;
+            pList=it->second;
+            break;
         }
     }
     pList->setViewMode(QListView::IconMode);
@@ -195,7 +219,18 @@ void vekAppPanel::addGroupSlot(BaseAppData* data)
         pListView1->setViewMode(QListView::IconMode);
         pListView1->setFlow(QListView::LeftToRight);
         m_pBox->addTab(pListView1,data->dockName);
+
+
         m_pListMap->insert(std::pair<QString,vekAppListView*>(data->dockName,pListView1));
+        if(data->dockVer=="win32"){
+            QIcon icon(":/res/img/32.png");
+            m_pBox->setTabIcon(m_pBox->currentIndex(),icon);
+            cTab+=1;
+        }else{
+            QIcon icon(":/res/img/64.png");
+            m_pBox->setTabIcon(cTab,icon);
+            cTab+=1;
+        }
     }
     //要确保每个MyListView钟的m_pListMap都是一致的，不然就会有错了。
     //因为弹出的菜单进行转移的时候需要用到

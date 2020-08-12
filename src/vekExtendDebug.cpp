@@ -69,21 +69,18 @@ void vekExtendDebug::startDebug(){
 }
 //运行环境变量设置
 void vekExtendDebug::executeArgsEnv(BaseAppData data){
-    QString dockPath =data.dockPath+"/"+data.dockName;
-    QDir dockDir(dockPath);
-    QString winePath=data.winePath+"wine/bin/wine";
-    qputenv("WINE", winePath.toStdString().c_str());
+    qputenv("WINE", (data.winePath+"wine/bin/"+data.dockWineVer).toStdString().c_str());
     //设置容器目录
-    qputenv("WINEPREFIX", dockPath.toStdString().c_str());
+    qputenv("WINEPREFIX", (data.dockPath+"/"+data.dockName).toStdString().c_str());
+    qputenv("WINEARCH", data.dockVer.toStdString().c_str());
     //设置工作目录
     qputenv("PWD", data.workPath.toStdString().c_str());
+    qputenv("WINETRICKS_DOWNLOADER", "aria2c");
     if(!data.dockEnv.empty()){
         for(auto& [a,u]:data.dockEnv){
             qputenv(a.toStdString().c_str(),u.toStdString().c_str());
         }
     }
-    //输出环境变量
-
     for(auto _env:m_cmd->systemEnvironment()){
         qDebug()<<_env;
     }
@@ -124,7 +121,7 @@ void vekExtendDebug::ExtendApp(BaseAppData _dataApp){
     m_cmd->setWorkingDirectory(_dataApp.workPath);
     m_cmd->start("bash");
     connect(m_cmd,SIGNAL(readyReadStandardOutput()),this,SLOT(onReadyRead()));
-    QString codes=codeDebug+" "+_data.winePath+"wine/bin/wine"+" "+codeArgs.join(" ");
+    QString codes=codeDebug+" "+_dataApp.winePath+"wine/bin/"+_dataApp.dockWineVer+" "+codeArgs.join(" ");
     m_cmd->write(codes.toLocal8Bit()+'\n');
     qDebug()<<"|++++++++++++++++++++++++++++|";
     qDebug()<<"writeCode:"+codes;
