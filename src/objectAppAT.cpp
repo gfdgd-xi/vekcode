@@ -164,14 +164,18 @@ void objectAppAT::run(){
         bool dockState=true;
         for(auto x:g_vekLocalData.dockerVec){
            for(auto y:x.second){
-               if(y.first==_objAddDataAT.pDockName){
+               qDebug()<<y.second.dockName;
+               qDebug()<<_objAddDataAT.pDockName;
+               if(y.second.dockName==_objAddDataAT.pDockName){
                    if(y.second.dockVer!=baseAppData->dockVer){
-                       vekError("当前容器和配置容器版本不同请检查当前容器版本,或者更换容器");
+                       vekError("当前容器和配置容器版本不同,请检查当前容器版本或者更换容器");
                        dockState=false;
+                       break;
                    }
                    if(y.second.dockWineVer!=baseAppData->dockWineVer){
                        vekError("当前容器和配置容器Wine执行程序不同请检查当前容器Wine执行版本");
                        dockState=false;
+                       break;
                    }
                }
            }
@@ -179,6 +183,8 @@ void objectAppAT::run(){
         if(dockState){
             objectAutoObj();
             emit Done();
+        }else{
+            emit Error("配置容器出错!",true);
         }
     }
 }

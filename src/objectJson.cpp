@@ -427,8 +427,8 @@ json objectJson::exportJson(BaseAppData _tBaseData){
     }
     eJson["Option"][toStr(appName)]=_tBaseData.appName.toStdString();
     eJson["Option"][toStr(dockSystemVersion)]=_tBaseData.dockSystemVersion.toStdString();
-    eJson["Option"][toStr(dockVer)]=_tBaseData.dockSystemVersion.toStdString();
-    eJson["Option"][toStr(dockWineVer)]=_tBaseData.dockSystemVersion.toStdString();
+    eJson["Option"][toStr(dockVer)]=_tBaseData.dockVer.toStdString();
+    eJson["Option"][toStr(dockWineVer)]=_tBaseData.dockWineVer.toStdString();
     eJson["Option"][toStr(mainPrcoName)]=_tBaseData.mainPrcoName.toStdString();
     if(!_tBaseData.attachProc.empty()){
         for(auto rs:_tBaseData.attachProc){
