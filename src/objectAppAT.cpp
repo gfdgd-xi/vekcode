@@ -46,6 +46,19 @@ bool objectAppAT::jsonUnserialize(QString jsonPathFile){
         }
     return true;
 }
+void objectAppAT::objDockerData(QString dockName){
+    bool dockState=false;
+    BaseDockData baseDockData;
+    for(auto a:g_vekLocalData.dockerVec){
+        if(a.first==dockName){
+            dockState=true;
+            baseDockData=a.second;
+        }
+    }
+    if(!dockState){
+
+    }
+}
 void objectAppAT::dataToBase(){
     if(!_baseAutoSetJson->Option.empty()){
         for(auto a:_baseAutoSetJson->Option){

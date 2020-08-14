@@ -25,7 +25,7 @@ public:
     BaseAutoSetJson* unDataSerializeScriptData(BaseAutoSetJson*,QString);
     QString GetRandomCID();
     void unSerializeBlackList(QString);
-    json exportJson(BaseAppData);
+    json exportJson(QString);
 private:
     json DataSerialize(json jsonData,const BaseLocalData);
     void WriteJsonToFile(QString filePath,json jsonData);

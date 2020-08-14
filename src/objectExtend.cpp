@@ -8,20 +8,28 @@ objectExtend::~objectExtend(){
     delete m_cmd;
     m_cmd=nullptr;
 }
-void objectExtend::setDockOptionObjectData(BaseAppData _data,std::vector<QStringList> _agrsList,objectType _objType,objectWineBoot _objWineBootType,objectWineServer _objWineServer){
-    data=_data;
+void objectExtend::setDockOptionObjectData(BaseDockData _dockData,QString _appCID,std::vector<QStringList> _agrsList,objectType _objType,objectWineBoot _objWineBootType,objectWineServer _objWineServer){
+    if(_appCID!=nullptr){
+        for(auto a:_dockData.dData){
+            if(a.first==_appCID){
+                data=a.second;
+                break;
+            }
+        }
+    }
+    dockData=_dockData;
     argsList=_agrsList;
     objType=_objType;
     objWineBootType=_objWineBootType;
     objWineServer=_objWineServer;
-    startArgs=data.winePath+"wine/bin/"+data.dockWineVer;
+    startArgs=_dockData.winePath+"wine/bin/"+_dockData.dockVer;
 }
 //运行环境变量设置
 void objectExtend::executeArgsEnv(){
-    qputenv("WINE", (data.winePath+"wine/bin/"+data.dockWineVer).toStdString().c_str());
+    qputenv("WINE", (dockData.winePath+"wine/bin/"+dockData.wineVersion).toStdString().c_str());
     //设置容器目录
-    qputenv("WINEPREFIX", (data.dockPath+"/"+data.dockName).toStdString().c_str());
-    qputenv("WINEARCH", data.dockVer.toStdString().c_str());
+    qputenv("WINEPREFIX", (dockData.dockPath+"/"+dockData.dockName).toStdString().c_str());
+    qputenv("WINEARCH", dockData.dockVer.toStdString().c_str());
     //设置工作目录
     qputenv("PWD", data.workPath.toStdString().c_str());
     qputenv("WINETRICKS_DOWNLOADER", "aria2c");
@@ -39,7 +47,7 @@ void objectExtend::executeArgsEnv(){
 }
 void objectExtend::executeWineBoot(objectWineBoot objWineBootType){
     QStringList wineboot;
-    wineboot.append(data.winePath+"wine/bin/");
+    wineboot.append(dockData.winePath+"wine/bin/");
     switch (objWineBootType) {
     case object_wineboot_e:
         //结束会话
@@ -79,7 +87,7 @@ void objectExtend::executeWineBoot(objectWineBoot objWineBootType){
 }
 void objectExtend::executeWineServer(objectWineServer objWineServer){
     QStringList wineserver;
-    wineserver.append(data.winePath+"wine/bin/");
+    wineserver.append(dockData.winePath+"wine/bin/");
     switch (objWineServer) {
     case object_wineserver_k:
         //结束会话
@@ -107,7 +115,7 @@ void objectExtend::executeWinetricks(){
     //executeWineServer(object_wineserver_k);
     //executeWineBoot(object_wineboot_k);
     QStringList codeArgs;
-    codeArgs.append(data.winePath+"wine/bin/winetricks");
+    codeArgs.append(dockData.winePath+"wine/bin/winetricks");
     if(objType==object_winetricks_gui){
         codeArgs.append("--gui");
     }else if(objType==object_winetricks_libs){
@@ -171,7 +179,7 @@ void objectExtend::dockEditSystemVersion(){
    QStringList codeArgs;
    codeArgs.append("winecfg");
    codeArgs.append("/v");
-   codeArgs.append(data.dockSystemVersion);
+   codeArgs.append(dockData.dockSystemVersion);
    baseExecuteWineCode(startArgs,codeArgs);
 }
 //等待任务结束
@@ -251,9 +259,9 @@ void objectExtend::monitorProc(){
     procInfo pi;
     if(!data.attachProc.empty()){
         objectProcManage* objProcMangs=new objectProcManage();
-        pi.dockName=data.dockName;
-        pi.dockPath=data.dockPath;
-        pi.winePath=data.winePath;
+        pi.dockName=dockData.dockName;
+        pi.dockPath=dockData.dockPath;
+        pi.winePath=dockData.winePath;
         pi.attachProc=data.attachProc;
         pi.attachProc.push_back(data.mainPrcoName);
         objProcMangs->iprocInfo=pi;
@@ -267,9 +275,9 @@ void objectExtend::monitorProc(){
 void objectExtend::forcekill(){
     procInfo pi;
     objectProcManage* objProcMangs=new objectProcManage();
-    pi.dockName=data.dockName;
-    pi.dockPath=data.dockPath;
-    pi.winePath=data.winePath;
+    pi.dockName=dockData.dockName;
+    pi.dockPath=dockData.dockPath;
+    pi.winePath=dockData.winePath;
     pi.attachProc=data.attachProc;
     if(objType==object_forcekill){;
         pi.attachProc.push_back(data.mainPrcoName);

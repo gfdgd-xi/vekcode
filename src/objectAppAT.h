@@ -23,8 +23,10 @@ public:
 protected:
     void run();
 private:
+    //配置参数
     BaseAutoSetJson* _baseAutoSetJson=nullptr;
     BaseAppData* baseAppData=nullptr;
+
     ObjectAddDataAT _objAddDataAT;
     objectAppMT* objDiyAddApp=nullptr;
     QString jsonPathTypeToStr(QString);
@@ -32,6 +34,7 @@ private:
     void dataToBase();
     void objectAutoObj();
     void objInstallRes();
+    void objDockerData(QString);
 signals:
     void Tips(QString TipsStr);
     void Error(QString ErrorInfo,bool cState);

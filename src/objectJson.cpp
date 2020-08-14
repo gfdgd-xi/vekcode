@@ -14,22 +14,23 @@ json objectJson::DataSerialize(json jsonData,const BaseLocalData _baseLocalData)
     //ax.first->容器名
     for(auto ax:g_vekLocalData.dockerVec){
         //bx.first->游戏CID
-        for(auto bx:ax.second){
+        jsonData["Docker"][ax.first.toStdString()][toStr(wineVersion)]=ax.second.wineVersion.toStdString();
+        jsonData["Docker"][ax.first.toStdString()][toStr(winePath)]=ax.second.winePath.toStdString();
+        jsonData["Docker"][ax.first.toStdString()][toStr(dockSystemVersion)]=ax.second.dockSystemVersion.toStdString();
+        jsonData["Docker"][ax.first.toStdString()][toStr(dockVer)]=ax.second.dockVer.toStdString();
+        jsonData["Docker"][ax.first.toStdString()][toStr(dockPath)]=ax.second.dockPath.toStdString();
+        jsonData["Docker"][ax.first.toStdString()][toStr(dockName)]=ax.second.dockName.toStdString();
+        jsonData["Docker"][ax.first.toStdString()][toStr(monoState)]=ax.second.monoState;
+        jsonData["Docker"][ax.first.toStdString()][toStr(geckoState)]=ax.second.geckoState;
+        for(auto bx:ax.second.dData){
             jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(appCID)]=bx.second.appCID.toStdString();
             jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(appName)]=bx.second.appName.toStdString();
             jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(appIco)]=bx.second.appIco.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(appExe)]=bx.second.appExe.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(winePath)]=bx.second.winePath.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(wineVersion)]=bx.second.wineVersion.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(appOtherAgrs)]=bx.second.appOtherAgrs.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockSystemVersion)]=bx.second.dockSystemVersion.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockVer)]=bx.second.dockVer.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockWineVer)]=bx.second.dockWineVer.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(appExe)]=bx.second.appExe.toStdString();           
             jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dxvkHUD)]=bx.second.dxvkHUD;
             jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dxvkVerson)]=bx.second.dxvkVerson.toStdString();
             jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dxvkConfigFile)]=bx.second.dxvkConfigFile.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockPath)]=bx.second.dockPath.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dockName)]=bx.second.dockName.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(appOtherAgrs)]=bx.second.appOtherAgrs.toStdString();
             jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(workPath)]=bx.second.workPath.toStdString();
             jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(mainPrcoName)]=bx.second.mainPrcoName.toStdString();
             jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(taskLog)]=bx.second.taskLog;
@@ -38,8 +39,6 @@ json objectJson::DataSerialize(json jsonData,const BaseLocalData _baseLocalData)
             jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(taskMemorySharing)]=bx.second.taskMemorySharing;
             jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(taskRealTimePriority)]=bx.second.taskRealTimePriority;
             jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(defaultFonts)]=bx.second.defaultFonts;
-            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(monoState)]=bx.second.monoState;
-            jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(geckoState)]=bx.second.geckoState;
             jsonData["Docker"][ax.first.toStdString()][bx.second.appCID.toStdString()][toStr(dxvkConfigFileState)]=bx.second.dxvkConfigFileState;
             if(!bx.second.dockEnv.empty()){
                 for(auto&[fa,yz]:bx.second.dockEnv){
@@ -143,27 +142,28 @@ bool objectJson::unDataSerializeLocalData(){
         }
         for (auto& [k, v] : j3.items())
         {
-            BaseWineData _base_wine_data={};
             //反序列化容器表内数据
             if(k=="Docker"){
                 //ax->容器名 bx->容器下的游戏列表
                 for(auto [ax,bx]:v.items()){
+                    BaseDockData baseDockData={};
+                    baseDockData.winePath=QString::fromStdString(bx.at("winePath"));
+                    baseDockData.wineVersion=QString::fromStdString(bx.at("wineVersion"));
+                    baseDockData.dockPath=QString::fromStdString(bx.at("dockPath"));
+                    baseDockData.dockName=QString::fromStdString(bx.at("dockName"));
+                    baseDockData.dockSystemVersion=QString::fromStdString(bx.at("dockSystemVersion"));
+                    baseDockData.dockVer=QString::fromStdString(bx.at("dockVer"));
+                    baseDockData.monoState=bx.at("monoState");
+                    baseDockData.geckoState=bx.at("geckoState");
                     //cx->游戏CID bx->游戏数据
-                    for(auto [cx,dx]:bx.items()){
+                    for(auto [cx,dx]:bx.at("dData").items()){
                         BaseAppData _base_app_data={};
                         _base_app_data.appCID=QString::fromStdString(dx.at("appCID"));
                         _base_app_data.appName=QString::fromStdString(dx.at("appName"));
                         _base_app_data.appExe=QString::fromStdString(dx.at("appExe"));
-                        _base_app_data.appIco=QString::fromStdString(dx.at("appIco"));
-                        _base_app_data.winePath=QString::fromStdString(dx.at("winePath"));
-                        _base_app_data.wineVersion=QString::fromStdString(dx.at("wineVersion"));
-                        _base_app_data.appOtherAgrs=QString::fromStdString(dx.at("appOtherAgrs"));
-                        _base_app_data.dockPath=QString::fromStdString(dx.at("dockPath"));
-                        _base_app_data.dxvkVerson=QString::fromStdString(dx.at("dxvkVerson"));
-                        _base_app_data.dockName=QString::fromStdString(dx.at("dockName"));
-                        _base_app_data.dockSystemVersion=QString::fromStdString(dx.at("dockSystemVersion"));
-                        _base_app_data.dockVer=QString::fromStdString(dx.at("dockVer"));
-                        _base_app_data.dockWineVer=QString::fromStdString(dx.at("dockWineVer"));
+                        _base_app_data.appIco=QString::fromStdString(dx.at("appIco"));                    
+                        _base_app_data.appOtherAgrs=QString::fromStdString(dx.at("appOtherAgrs"));        
+                        _base_app_data.dxvkVerson=QString::fromStdString(dx.at("dxvkVerson"));              
                         _base_app_data.workPath=QString::fromStdString(dx.at("workPath"));
                         _base_app_data.dxvkConfigFile=QString::fromStdString(dx.at("dxvkConfigFile"));
                         _base_app_data.mainPrcoName=QString::fromStdString(dx.at("mainPrcoName"));
@@ -174,8 +174,6 @@ bool objectJson::unDataSerializeLocalData(){
                         _base_app_data.taskMemorySharing=dx.at("taskMemorySharing");
                         _base_app_data.taskRealTimePriority=dx.at("taskRealTimePriority");
                         _base_app_data.defaultFonts=dx.at("defaultFonts");
-                        _base_app_data.monoState=dx.at("monoState");
-                        _base_app_data.geckoState=dx.at("geckoState");
                         _base_app_data.dxvkConfigFileState=dx.at("dxvkConfigFileState");
                         _base_app_data.attachProc.clear();
                         if(dx.at("attachProc")!=NULL){
@@ -204,11 +202,13 @@ bool objectJson::unDataSerializeLocalData(){
                                 _base_app_data.dockRegs.push_back(_rbaseRegs);
                             }
                         }
-                        g_vekLocalData.dockerVec[QString::fromStdString(ax)].insert(pair<QString,BaseAppData>(_base_app_data.appCID,_base_app_data));
+                        baseDockData.dData.insert(pair<QString,BaseAppData>(_base_app_data.appCID,_base_app_data));
                     }
+                     g_vekLocalData.dockerVec.insert(pair<QString,BaseDockData>(QString::fromStdString(ax),baseDockData));
                 }
                 //禁止修改
             }else if(k=="Wine"){
+                BaseWineData _base_wine_data={};
                 for(auto& [x,y]: v.items()){
                     _base_wine_data.WineInstallName=QString::fromStdString(y.at("WineInstallName"));
                     _base_wine_data.wineInstallPath=QString::fromStdString(y.at("wineInstallPath"));
@@ -391,80 +391,86 @@ bool objectJson::unSerializeLocalWineApp(QString key,QString urlData,UNJSONTYPE 
     }
     return true;
 }
-json objectJson::exportJson(BaseAppData _tBaseData){
+json objectJson::exportJson(QString appCid){
     json eJson=nullptr;
-    eJson["Option"][toStr(defaultFont)]=toStr(false);
-    eJson["Option"][toStr(sharedMemory)]=toStr(false);
-    eJson["Option"][toStr(writeCopy)]=toStr(false);
-    eJson["Option"][toStr(trServer)]=toStr(false);
-    eJson["Option"][toStr(monoState)]=toStr(false);
-    eJson["Option"][toStr(geckoState)]=toStr(false);
-    eJson[toStr(Dxvk)][toStr(dxvkState)]=toStr(false);
-    eJson[toStr(Dxvk)][toStr(dxvkHUD)]=toStr(false);
-    if(_tBaseData.defaultFonts){
-        eJson["Option"][toStr(defaultFont)]=toStr(true);
-    }
-    if(_tBaseData.taskMemorySharing){
-        eJson["Option"][toStr(taskMemorySharing)]=toStr(true);
-    }
-    if(_tBaseData.taskMemoryOptimization){
-        eJson["Option"][toStr(taskMemoryOptimization)]=toStr(true);
-    }
-    if(_tBaseData.taskRealTimePriority){
-        eJson["Option"][toStr(taskRealTimePriority)]=toStr(true);
-    }
-    if(_tBaseData.monoState){
-        eJson["Option"][toStr(monoState)]=toStr(true);
-    }
-    if(_tBaseData.geckoState){
-        eJson["Option"][toStr(geckoState)]=toStr(true);
-    }
-    if(_tBaseData.dxvkState){
-        eJson[toStr(Dxvk)][toStr(dxvkState)]=toStr(true);
-    }
-    if(_tBaseData.dxvkHUD){
-        eJson[toStr(Dxvk)][toStr(dxvkHUD)]=toStr(true);
-    }
-    eJson["Option"][toStr(appName)]=_tBaseData.appName.toStdString();
-    eJson["Option"][toStr(dockSystemVersion)]=_tBaseData.dockSystemVersion.toStdString();
-    eJson["Option"][toStr(dockVer)]=_tBaseData.dockVer.toStdString();
-    eJson["Option"][toStr(dockWineVer)]=_tBaseData.dockWineVer.toStdString();
-    eJson["Option"][toStr(mainPrcoName)]=_tBaseData.mainPrcoName.toStdString();
-    if(!_tBaseData.attachProc.empty()){
-        for(auto rs:_tBaseData.attachProc){
-            eJson[toStr(AttachProc)].push_back(rs.toStdString());
+    for(auto a:g_vekLocalData.dockerVec){
+        for(auto b:a.second.dData){
+            if(b.second.appCID==appCid){
+                eJson["Option"][toStr(defaultFont)]=toStr(false);
+                eJson["Option"][toStr(sharedMemory)]=toStr(false);
+                eJson["Option"][toStr(writeCopy)]=toStr(false);
+                eJson["Option"][toStr(trServer)]=toStr(false);
+                eJson["Option"][toStr(monoState)]=toStr(false);
+                eJson["Option"][toStr(geckoState)]=toStr(false);
+                eJson[toStr(Dxvk)][toStr(dxvkState)]=toStr(false);
+                eJson[toStr(Dxvk)][toStr(dxvkHUD)]=toStr(false);
+                if(b.second.defaultFonts){
+                    eJson["Option"][toStr(defaultFont)]=toStr(true);
+                }
+                if(b.second.taskMemorySharing){
+                    eJson["Option"][toStr(taskMemorySharing)]=toStr(true);
+                }
+                if(b.second.taskMemoryOptimization){
+                    eJson["Option"][toStr(taskMemoryOptimization)]=toStr(true);
+                }
+                if(b.second.taskRealTimePriority){
+                    eJson["Option"][toStr(taskRealTimePriority)]=toStr(true);
+                }
+                if(a.second.monoState){
+                    eJson["Option"][toStr(monoState)]=toStr(true);
+                }
+                if(a.second.geckoState){
+                    eJson["Option"][toStr(geckoState)]=toStr(true);
+                }
+                if(b.second.dxvkState){
+                    eJson[toStr(Dxvk)][toStr(dxvkState)]=toStr(true);
+                }
+                if(b.second.dxvkHUD){
+                    eJson[toStr(Dxvk)][toStr(dxvkHUD)]=toStr(true);
+                }
+                eJson["Option"][toStr(appName)]=b.second.appName.toStdString();
+                eJson["Option"][toStr(dockSystemVersion)]=a.second.dockSystemVersion.toStdString();
+                eJson["Option"][toStr(dockVer)]=a.second.dockVer.toStdString();
+                eJson["Option"][toStr(wineVersion)]=a.second.wineVersion.toStdString();
+                eJson["Option"][toStr(mainPrcoName)]=b.second.mainPrcoName.toStdString();
+                if(!b.second.attachProc.empty()){
+                    for(auto rs:b.second.attachProc){
+                        eJson[toStr(AttachProc)].push_back(rs.toStdString());
+                    }
+                }else{
+                    eJson[toStr(AttachProc)]=json::array();
+                }
+                if(!b.second.dockEnv.empty()){
+                    for(auto&[fa,yz]:b.second.dockEnv){
+                        eJson[toStr(Env)][fa.toStdString()]=yz.toStdString();
+                    }
+                }else{
+                    eJson[toStr(Env)]=json({});
+                }
+                if(!b.second.dockLibs.empty()){
+                    for(auto&ya:b.second.dockLibs){
+                        eJson[toStr(Libs)].push_back(ya.toStdString());
+                    }
+                }else{
+                    eJson[toStr(Libs)]=json::array();
+                }
+                if(!b.second.dockRegs.empty()){
+                    int i=-1;
+                    for(auto a:b.second.dockRegs){
+                        i+=1;
+                        eJson[toStr(Regs)][i][toStr(rPath)]=a.rPath.toStdString();
+                        eJson[toStr(Regs)][i][toStr(rKey)]=a.rKey.toStdString();
+                        eJson[toStr(Regs)][i][toStr(rTValue)]=a.rTValue.toStdString();
+                        eJson[toStr(Regs)][i][toStr(rValue)]=a.rValue.toStdString();
+                    }
+                }else{
+                    eJson[toStr(Regs)]=json::array();
+                }
+                eJson[toStr(Args)]=b.second.appOtherAgrs.toStdString();
+                eJson[toStr(Dxvk)][toStr(dxvkVersion)]=b.second.dxvkVerson.toStdString();
+            }
         }
-    }else{
-        eJson[toStr(AttachProc)]=json::array();
     }
-    if(!_tBaseData.dockEnv.empty()){
-        for(auto&[fa,yz]:_tBaseData.dockEnv){
-            eJson[toStr(Env)][fa.toStdString()]=yz.toStdString();
-        }
-    }else{
-        eJson[toStr(Env)]=json({});
-    }
-    if(!_tBaseData.dockLibs.empty()){
-        for(auto&ya:_tBaseData.dockLibs){
-            eJson[toStr(Libs)].push_back(ya.toStdString());
-        }
-    }else{
-        eJson[toStr(Libs)]=json::array();
-    }
-    if(!_tBaseData.dockRegs.empty()){
-        int i=-1;
-        for(auto a:_tBaseData.dockRegs){
-            i+=1;
-            eJson[toStr(Regs)][i][toStr(rPath)]=a.rPath.toStdString();
-            eJson[toStr(Regs)][i][toStr(rKey)]=a.rKey.toStdString();
-            eJson[toStr(Regs)][i][toStr(rTValue)]=a.rTValue.toStdString();
-            eJson[toStr(Regs)][i][toStr(rValue)]=a.rValue.toStdString();
-        }
-    }else{
-        eJson[toStr(Regs)]=json::array();
-    }
-    eJson[toStr(Args)]=_tBaseData.appOtherAgrs.toStdString();
-    eJson[toStr(Dxvk)][toStr(dxvkVersion)]=_tBaseData.dxvkVerson.toStdString();
 
     return eJson;
 }
@@ -487,9 +493,9 @@ void objectJson::WriteLocalData(){
 //删除游戏节点
 void objectJson::deleteAppNodeData(QString nappCID){
     for(auto& h:g_vekLocalData.dockerVec){
-        for(auto &w:h.second){
+        for(auto &w:h.second.dData){
             if(w.second.appCID==nappCID){
-                h.second.erase(nappCID);
+                h.second.dData.erase(nappCID);
                 break;
             }
         }
@@ -511,7 +517,7 @@ void objectJson::updateAppNodeData(QString dockName,BaseAppData _base_app_data){
     if(_base_app_data.appCID!=nullptr){
         deleteAppNodeData(_base_app_data.appCID);
     }
-    g_vekLocalData.dockerVec[dockName].insert(pair<QString,BaseAppData>(_base_app_data.appCID,_base_app_data));
+    g_vekLocalData.dockerVec[dockName].dData.insert(pair<QString,BaseAppData>(_base_app_data.appCID,_base_app_data));
     WriteLocalData();
 }
 //更新Wine节点

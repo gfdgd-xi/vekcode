@@ -8,7 +8,7 @@ class objectAppMT :public QObject
 {
     Q_OBJECT
 public:
-    objectAppMT(BaseAppData*,BaseAppData*);
+    objectAppMT(BaseAppData*,BaseDockData*);
     ~objectAppMT();
     QString GetRandomCID();
     bool InitDockObj(bool);
@@ -21,8 +21,8 @@ public:
     void optionRegs();
     void sObjectInstall();
 private:
-    BaseAppData* _BaseAppData=nullptr;
-    BaseAppData* _oldAppData=nullptr;
+    BaseAppData* appData=nullptr;
+    BaseDockData* dockData=nullptr;
     void InitDockDir(bool foceState,QDir _dockPath,QDir _dockDir);
     QStringList GetDxvkFileList(QString basedxvkDir);
     void DxvkFileInstall();

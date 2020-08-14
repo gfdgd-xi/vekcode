@@ -1,9 +1,9 @@
 #include "objectAppMT.h"
 
-objectAppMT::objectAppMT(BaseAppData* _data,BaseAppData* _olddata)
+objectAppMT::objectAppMT(BaseAppData* _appData,BaseDockData* _dockData)
 {
-    _BaseAppData=_data;
-    _oldAppData=_olddata;
+    appData=_appData;
+    dockData=_dockData;
 }
 objectAppMT::~objectAppMT(){
 }
@@ -16,8 +16,8 @@ void objectAppMT::SaveDataToJson(QString dName,BaseAppData writeData){
 QStringList objectAppMT::GetDxvkFileList(QString basedxvkDir){
     QStringList dxvkFileList;
     dxvkFileList.clear();
-    QString dxvkTarFile=basedxvkDir+"/"+_BaseAppData->dxvkVerson+".tar.gz";
-    QString dxvkTarDir=basedxvkDir+"/"+_BaseAppData->dxvkVerson;
+    QString dxvkTarFile=basedxvkDir+"/"+appData->dxvkVerson+".tar.gz";
+    QString dxvkTarDir=basedxvkDir+"/"+appData->dxvkVerson;
     QDir _dxvkTarDir(dxvkTarDir);
     if(!_dxvkTarDir.exists()){
         char* dxvkFile=("tar -xvf "+dxvkTarFile+" -C "+basedxvkDir).toLocal8Bit().data();
@@ -32,7 +32,7 @@ QStringList objectAppMT::GetDxvkFileList(QString basedxvkDir){
 //安装dxvk
 void objectAppMT::DxvkFileInstall(){
     //wine下的dxvk目录
-    QString baseDxvkDir=_BaseAppData->winePath+"dxvk";
+    QString baseDxvkDir=dockData->winePath+"dxvk";
     qDebug()<<baseDxvkDir;
     //获取dxvk目录下的文件列表
     QStringList dxvkFileList=GetDxvkFileList(baseDxvkDir);
@@ -43,15 +43,15 @@ void objectAppMT::DxvkFileInstall(){
     //dockSystemDir.append("x64");
     QString dxvkTargetFile=nullptr;
     for(auto c:dockSystemDir){
-        QString dxvkSourceFile=baseDxvkDir+"/"+_BaseAppData->dxvkVerson+"/"+c+"/";
-        dxvkTargetFile=_BaseAppData->dockPath+"/"+_BaseAppData->dockName+"/drive_c/windows/syswow64/";
-        if(_BaseAppData->dockVer=="win32"){
-           dxvkTargetFile=_BaseAppData->dockPath+"/"+_BaseAppData->dockName+"/drive_c/windows/system32/";
+        QString dxvkSourceFile=baseDxvkDir+"/"+appData->dxvkVerson+"/"+c+"/";
+        dxvkTargetFile=dockData->dockPath+"/"+dockData->dockName+"/drive_c/windows/syswow64/";
+        if(dockData->dockVer=="win32"){
+           dxvkTargetFile=dockData->dockPath+"/"+dockData->dockName+"/drive_c/windows/system32/";
         }
         if(QDir(dxvkTargetFile).exists()){
             for(auto d:dxvkFileList){
                 //卸载
-                if(!_BaseAppData->dxvkState){
+                if(!appData->dxvkState){
                     if(QFile(dxvkTargetFile+d+".a").exists()){
                         QFile(dxvkTargetFile+d).remove();
                         QFile::rename(dxvkTargetFile+d+".a",dxvkTargetFile+d);
@@ -89,7 +89,7 @@ void objectAppMT::DxvkRegedit(QStringList dxvkFileList){
         }
     }
     QString _rObj;
-    if(_BaseAppData->dxvkState)
+    if(appData->dxvkState)
     {
         _rObj="add";
     }else{
@@ -115,7 +115,7 @@ void objectAppMT::DxvkHUDRegs(){
         }
     }
     QString _rObj;
-    if(_BaseAppData->dxvkHUD){
+    if(appData->dxvkHUD){
         _rObj="add";
     }else{
         _rObj="delete";
@@ -134,9 +134,9 @@ void objectAppMT::DxvkConfigFile(){
             _rKey=b.first;
         }
     }
-    QString _rValue=_BaseAppData->dxvkConfigFile;
+    QString _rValue=appData->dxvkConfigFile;
     QString _rObj;
-    if(_BaseAppData->dxvkConfigFileState){
+    if(appData->dxvkConfigFileState){
         _rObj="add";
     }else{
         _rObj="delete";
@@ -147,17 +147,17 @@ void objectAppMT::DxvkConfigFile(){
 
 //default fonts
 void objectAppMT::DefaultFontsFileInstall(){
-    QString fontsDirStr=_BaseAppData->winePath+"fonts";
+    QString fontsDirStr=dockData->winePath+"fonts";
     QStringList fontsList;
     fontsList.clear();
     QDir _fontsDir(fontsDirStr);
     if (_fontsDir.exists()) {
         fontsList = _fontsDir.entryList(QDir::Files);
     }
-    if(_BaseAppData->defaultFonts){
+    if(appData->defaultFonts){
         if(QFile(fontsDirStr).exists()){
             for(auto f:fontsList){
-                QFile::copy(fontsDirStr+"/"+f, _BaseAppData->dockPath+"/"+_BaseAppData->dockName+"/drive_c/windows/Fonts/"+f);
+                QFile::copy(fontsDirStr+"/"+f, dockData->dockPath+"/"+dockData->dockName+"/drive_c/windows/Fonts/"+f);
             }
         }
     }
@@ -182,7 +182,7 @@ void objectAppMT::DefaultFontsRegs(){
 
 void objectAppMT::InitDockDir(bool foceState,QDir _dockPath,QDir _dockDir){
     if(!_dockPath.exists()){
-        _dockDir.mkdir(_BaseAppData->dockPath);
+        _dockDir.mkdir(dockData->dockPath);
     }
     if(_dockDir.exists())
     {
@@ -208,8 +208,8 @@ void objectAppMT::InitDockDir(bool foceState,QDir _dockPath,QDir _dockDir){
 }
 void objectAppMT::DockLibsInstall(){
     argsList.clear();
-    if(!_BaseAppData->dockLibs.empty()){
-        for(auto af:_BaseAppData->dockLibs){
+    if(!appData->dockLibs.empty()){
+        for(auto af:appData->dockLibs){
             QStringList libList;
             libList.clear();
             if(af!=NULL){
@@ -223,7 +223,7 @@ void objectAppMT::DockLibsInstall(){
 void objectAppMT::installMonoPlugs(){
     argsList.clear();
     QStringList _tempPlugsList;
-    QString fileMono=_BaseAppData->winePath+"plugs/Mono.msi";
+    QString fileMono=dockData->winePath+"plugs/Mono.msi";
     if(QFile(fileMono).exists()){
         _tempPlugsList.append(fileMono);
         argsList.push_back(_tempPlugsList);
@@ -233,8 +233,8 @@ void objectAppMT::installMonoPlugs(){
 void objectAppMT::installGeckoPlugs(){
     argsList.clear();
     QStringList _tempPlugsList;
-    QString fileGeckoX86_64=_BaseAppData->winePath+"plugs/GeckoX86_64.msi";
-    QString fileGeckoX86=_BaseAppData->winePath+"plugs/GeckoX86.msi";
+    QString fileGeckoX86_64=dockData->winePath+"plugs/GeckoX86_64.msi";
+    QString fileGeckoX86=dockData->winePath+"plugs/GeckoX86.msi";
     if(QFile(fileGeckoX86_64).exists()&QFile(fileGeckoX86).exists()){
         _tempPlugsList.append(fileGeckoX86_64);
         _tempPlugsList.append(fileGeckoX86);
@@ -244,8 +244,8 @@ void objectAppMT::installGeckoPlugs(){
 }
 void objectAppMT::optionRegs(){
     argsList.clear();
-    if(!_BaseAppData->dockRegs.empty()){
-        for(auto d:_BaseAppData->dockRegs)
+    if(!appData->dockRegs.empty()){
+        for(auto d:appData->dockRegs)
         {
             argsList.push_back(DockRegeditStr("add",d.rPath,d.rKey,d.rTValue,d.rValue));
         }
@@ -253,21 +253,21 @@ void objectAppMT::optionRegs(){
     }
 }
 void objectAppMT::newDock(){
-    QDir dockPath(_BaseAppData->dockPath);
-    QDir dockDir(_BaseAppData->dockPath+"/"+_BaseAppData->dockName);
-    qDebug()<<_BaseAppData->dockPath;
-    qDebug()<<_BaseAppData->dockName;
-    if(_BaseAppData->dockPath==NULL&&_BaseAppData->dockName==NULL){
+    QDir dockPath(dockData->dockPath);
+    QDir dockDir(dockData->dockPath+"/"+dockData->dockName);
+    qDebug()<<dockData->dockPath;
+    qDebug()<<dockData->dockName;
+    if(dockData->dockPath==NULL&&dockData->dockName==NULL){
         return;
     }
     InitDockDir(true,dockPath,dockDir);
-    if(_BaseAppData->defaultFonts){
+    if(appData->defaultFonts){
         DefaultFontsFileInstall();
     }
-    if(_BaseAppData->monoState){
+    if(dockData->monoState){
         installMonoPlugs();
     }
-    if(_BaseAppData->geckoState){
+    if(dockData->geckoState){
         installGeckoPlugs();
     }
 }
@@ -277,30 +277,30 @@ void objectAppMT::sObjectInstall(){
     DxvkConfigFile();
 }
 bool objectAppMT::InitDockObj(bool _forceState){
-    QDir dockPath(_BaseAppData->dockPath);
-    QDir dockDir(_BaseAppData->dockPath+"/"+_BaseAppData->dockName);
-    if(_BaseAppData->dockPath==NULL&&_BaseAppData->dockName==NULL){
+    QDir dockPath(dockData->dockPath);
+    QDir dockDir(dockData->dockPath+"/"+dockData->dockName);
+    if(dockData->dockPath==NULL&&dockData->dockName==NULL){
         return false;
     }
     try {
         InitDockDir(_forceState,dockPath,dockDir);
-        if(_oldAppData==nullptr||_forceState){
-            if(_BaseAppData->dxvkState){
+        if(appData==nullptr||_forceState){
+            if(appData->dxvkState){
                 DxvkFileInstall();
-                if(_BaseAppData->dxvkHUD){
+                if(appData->dxvkHUD){
                     DxvkHUDRegs();
                 }
-                if(_BaseAppData->dxvkConfigFileState){
+                if(appData->dxvkConfigFileState){
                     DxvkConfigFile();
                 }
             }
-            if(_BaseAppData->defaultFonts){
+            if(appData->defaultFonts){
                 DefaultFontsFileInstall();
             }
-            if(_BaseAppData->monoState){
+            if(dockData->monoState){
                 installMonoPlugs();
             }
-            if(_BaseAppData->geckoState){
+            if(dockData->geckoState){
                 installGeckoPlugs();
             }
         }else{
@@ -326,8 +326,8 @@ void objectAppMT::WaitObjectDone(objectExtend* _waitObject){
 //执行
 void objectAppMT::ExecuteObj(objectType _objType,objectWineBoot _objWineBootType,objectWineServer _objWineServer){
     objectExtend* objExtend = new objectExtend();
-    if(_BaseAppData->dockPath==NULL||_BaseAppData->dockName==NULL){return;}
+    if(dockData->dockPath==NULL||dockData->dockName==NULL){return;}
     connect(this, SIGNAL(ExecutetoObjectArgs(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)), objExtend, SLOT(setDockOptionObjectData(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)));
-    emit(ExecutetoObjectArgs(*_BaseAppData,argsList,_objType,_objWineBootType,_objWineServer));
+    emit(ExecutetoObjectArgs(*appData,argsList,_objType,_objWineBootType,_objWineServer));
     WaitObjectDone(objExtend);
 }
