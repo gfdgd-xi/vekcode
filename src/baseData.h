@@ -13,66 +13,64 @@ typedef struct{
 }BaseDockRegs;
 
 typedef struct {
-    QString appCID=nullptr;
-    QString appName=nullptr;
-    QString appIco=nullptr;
-    QString appExe=nullptr;
-    QString appOtherAgrs=nullptr;
-    QString workPath=nullptr;
-    QString dxvkVerson=nullptr;
-    QString dxvkConfigFile=nullptr;
-    QString mainPrcoName=nullptr;
-    bool dxvkState=false;    
-    bool dxvkHUD=false;   
-    bool dxvkConfigFileState=false;      
-    bool taskLog=false;
-    bool taskMemoryOptimization=false;
-    bool taskMemorySharing=false;
-    bool taskRealTimePriority=false;
-    bool defaultFonts=false;    
-    std::vector<QString> attachProc={};
-    std::map<QString,QString> dockEnv={};
-    std::vector<QString> dockLibs={};
-    std::vector<BaseDockRegs> dockRegs={};
+    QString AppCID=nullptr;
+    QString AppName=nullptr;
+    QString AppIco=nullptr;
+    QString AppExe=nullptr;
+    QString AppOtherAgrs=nullptr;
+    QString WorkPath=nullptr;
+    QString DxvkVerson=nullptr;
+    QString DxvkConfigFile=nullptr;
+    QString MainPrcoName=nullptr;
+    bool DxvkState=false;
+    bool DxvkHUD=false;
+    bool DxvkConfigFileState=false;
+    bool TaskLog=false;
+    bool TaskMemoryOptimization=false;
+    bool TaskMemorySharing=false;
+    bool TaskRealTimePriority=false;
+    bool DefaultFonts=false;
+    std::vector<QString> AttachProc={};
+    std::map<QString,QString> DockerEnv={};
+    std::vector<QString> DockerLibs={};
+    std::vector<BaseDockRegs> DockerRegs={};
 }BaseAppData;
 
-
+//本地安装wine数据结构
 typedef struct{
-    //Wine安装名字
-    QString WineInstallName=nullptr;
-    //Wine安装版本
-    QString wineInstallVer=nullptr;
-    //Wine安装路径
-    QString wineInstallPath=nullptr;
-    //Wine Url
-    QString wineInstallUrl=nullptr;
-    QString wineInstallSrc=nullptr;
-    QString wineInstallMono=nullptr;
-    QString wineInstallGeckoX86=nullptr;
-    QString wineInstallGeckoX86_64=nullptr;
-    std::vector<QString> wineInstallDxvk={};
+    QString IwineName=nullptr;
+    QString IwineVer=nullptr;
+    QString IwinePath=nullptr;
+    QString IwineUrl=nullptr;
+    QString IwineSrc=nullptr;
+    QString IwineMono=nullptr;
+    QString IwineGeckoX86=nullptr;
+    QString IwineGeckoX86_64=nullptr;
+    std::vector<QString> IwineDxvk={};
 }BaseWineData;
 
+//远程wine数据结构
 typedef struct {
-    QString wineName=nullptr;
-    QString wineVersion=nullptr;
-    QString wineGit=nullptr;
-    QString Mono=nullptr;
-    QString GeckoX86=nullptr;
-    QString GeckoX86_64=nullptr;
-    std::vector<QString> wineDxvk={};
+    QString rWineName=nullptr;
+    QString rWineVersion=nullptr;
+    QString rWineGit=nullptr;
+    QString rMono=nullptr;
+    QString rGeckoX86=nullptr;
+    QString rGeckoX86_64=nullptr;
+    std::vector<QString> rWineDxvk={};
 }BaseWineGit;
 
 typedef struct {
-    QString dockPath=nullptr;
-    QString dockName=nullptr;
-    QString winePath=nullptr;
-    QString mainProc=nullptr;
-    std::vector<QString> attachProc={};
+    QString pDockPath=nullptr;
+    QString pDockName=nullptr;
+    QString pWinePath=nullptr;
+    QString pMainProc=nullptr;
+    std::vector<QString> pAttachProc={};
 }procInfo;
 
 typedef struct {
     std::map<QString,QString> Option={};
+    std::map<QString,QString> Docker={};
     std::vector<QString> AttachProc={};
     std::map<QString,QString> Env={};
     std::vector<QString> Libs={};
@@ -80,22 +78,26 @@ typedef struct {
     std::vector<BaseDockRegs> Regs={};
     QString Args=nullptr;
 }BaseAutoSetJson;
+
 typedef struct{
     QString appName;
     QString appUrl;
     QString appIco;
 }BaseAppJson;
+
 typedef struct{
     std::map<QString,BaseAppData> dData;
-    QString winePath=nullptr;
-    QString wineVersion=nullptr;
-    QString dockPath=nullptr;
-    QString dockName=nullptr;
-    QString dockSystemVersion=nullptr;
-    QString dockVer=nullptr;
-    bool monoState=false;
-    bool geckoState=false;
+    QString WinePath=nullptr;
+    QString WineVersion=nullptr;
+    QString DockerPath=nullptr;
+    QString DockerName=nullptr;
+    QString DockerSystemVersion=nullptr;
+    QString DockerWineVersion=nullptr;
+    QString DockerVer=nullptr;
+    bool MonoState=false;
+    bool GeckoState=false;
 }BaseDockData;
+
 typedef struct {
     std::map<QString,BaseDockData> dockerVec={};
     std::map<QString,BaseWineData> wineVec={};

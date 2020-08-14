@@ -20,9 +20,8 @@ public:
 public:
     Ui::vekAppAddMT *ui;
 private:
-    BaseAppData* tempData=nullptr;
-    BaseAppData* oldData=nullptr;
-    QString tempCID=nullptr;
+    BaseAppData* tempAppData=nullptr;
+    BaseDockData* temDockData=nullptr;
     objectTypeView objType;
     vector<QString> _dockSystemVersion={"win10","win7","win81","win8","winxp64"};
     vector<QString> _dockVer={"win32","win64"};
@@ -43,7 +42,7 @@ signals:
 private slots:
     void objectButton();
     void dxvkOptionLink();
-    void vekAppAddConnectObject(BaseAppData* _data,objectTypeView);
+    void vekAppAddConnectObject(BaseDockData*,QString,objectTypeView);
     void clicked_rightMenu(const QPoint &pos);  //右键信号槽函数
     void onTaskBoxContextMenuEvent();
 };

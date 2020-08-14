@@ -15,7 +15,7 @@ vekAppAddMT::~vekAppAddMT()
     emit _unDiyAppAdd();
 }
 //绑定槽
-void vekAppAddMT::vekAppAddConnectObject(BaseAppData* _data,objectTypeView _objType){
+void vekAppAddMT::vekAppAddConnectObject(BaseDockData* _data,QString _appCID,objectTypeView _objType){
     objType=_objType;
     //检测增加游戏必要的设置
     connect(ui->pushButton_Set,&QPushButton::clicked,this,&vekAppAddMT::objectButton);
@@ -41,7 +41,7 @@ void vekAppAddMT::vekAppAddConnectObject(BaseAppData* _data,objectTypeView _objT
             ui->comboBox_RunWine->addItem(x.first);
         }
         for(auto& d:g_vekLocalData.wineVec){
-            for(auto& dx:d.second.wineInstallDxvk){
+            for(auto& dx:d.second.IwineDxvk){
                 ui->comboBox_dxvkversion->addItem(dx);
             }
         }
@@ -74,56 +74,59 @@ void vekAppAddMT::vekAppAddConnectObject(BaseAppData* _data,objectTypeView _objT
     for(auto m:_dockWineVer){
         ui->comboBox_winebit->addItem(m);
     }
-    if(_data!=nullptr){
-        //读取配置修改设置
-        oldData=_data;
-        tempCID=_data->appCID;
-        ui->comboBox_RunWine->setCurrentIndex(ui->comboBox_RunWine->findText(_data->wineVersion));
-        ui->comboBox_dockSystemVersion->setCurrentIndex(ui->comboBox_dockSystemVersion->findText(_data->dockSystemVersion));
+    for(auto a:_data->dData){
+        if(a.first==_appCID){
+            *tempAppData=a.second;
+            break;
+        }
+    }
+    if(tempAppData!=nullptr){
+        ui->comboBox_RunWine->setCurrentIndex(ui->comboBox_RunWine->findText(_data->WineVersion));
+        ui->comboBox_dockSystemVersion->setCurrentIndex(ui->comboBox_dockSystemVersion->findText(_data->DockerSystemVersion));
         //读取游戏名字
-        ui->lineEdit_AppName->setText(_data->appName);
+        ui->lineEdit_AppName->setText(tempAppData->AppName);
         //读取游戏安装路径
-        ui->lineEdit_AppInstallExe->setText(_data->appExe);
+        ui->lineEdit_AppInstallExe->setText(tempAppData->AppExe);
         //读取容器路径
-        ui->lineEdit_RunDockPath->setText(_data->dockPath);
+        ui->lineEdit_RunDockPath->setText(_data->DockerPath);
         //工作路径
-        ui->lineEdit_workPath->setText(_data->workPath);
+        ui->lineEdit_workPath->setText(tempAppData->WorkPath);
         //容器名
-        ui->comboBox_DockName->setCurrentText(_data->dockName);
+        ui->comboBox_DockName->setCurrentText(_data->DockerName);
         //运行日志
-        ui->checkBox_winerunlog->setChecked(_data->taskLog);
-        ui->lineEdit_otherAgrs->setText(_data->appOtherAgrs);
+        ui->checkBox_winerunlog->setChecked(tempAppData->TaskLog);
+        ui->lineEdit_otherAgrs->setText(tempAppData->AppOtherAgrs);
         //dxvk配置文件
-        ui->lineEdit_dxvkConfigFIle->setText(_data->dxvkConfigFile);
-        ui->checkBox_wineMemorySharing->setChecked(_data->taskMemorySharing);
-        ui->checkBox_wineMemoryOptimization->setChecked(_data->taskMemoryOptimization);
-        ui->checkBox_wineRealTimePriority->setChecked(_data->taskRealTimePriority);
-        ui->checkBox_stateDxvk->setChecked(_data->dxvkState);
-        ui->comboBox_dxvkversion->setCurrentText(_data->dxvkVerson);
-        ui->checkBox_statedxvkhud->setChecked(_data->dxvkHUD);
-        ui->checkBox_DefaultFonts->setChecked(_data->defaultFonts);
-        ui->checkBox_Mono->setChecked(_data->monoState);
-        ui->checkBox_Gecko->setChecked(_data->geckoState);
-        ui->lineEdit_MainProcName->setText(_data->mainPrcoName);
-        ui->checkBox_dxvkConfigState->setChecked(_data->dxvkConfigFileState);
-        ui->comboBox_dockbit->setCurrentText(_data->dockVer);
-        ui->comboBox_winebit->setCurrentText(_data->dockWineVer);
+        ui->lineEdit_dxvkConfigFIle->setText(tempAppData->DxvkConfigFile);
+        ui->checkBox_wineMemorySharing->setChecked(tempAppData->TaskMemorySharing);
+        ui->checkBox_wineMemoryOptimization->setChecked(tempAppData->TaskMemoryOptimization);
+        ui->checkBox_wineRealTimePriority->setChecked(tempAppData->TaskRealTimePriority);
+        ui->checkBox_stateDxvk->setChecked(tempAppData->DxvkState);
+        ui->comboBox_dxvkversion->setCurrentText(tempAppData->DxvkVerson);
+        ui->checkBox_statedxvkhud->setChecked(tempAppData->DxvkHUD);
+        ui->checkBox_DefaultFonts->setChecked(tempAppData->DefaultFonts);
+        ui->checkBox_Mono->setChecked(_data->MonoState);
+        ui->checkBox_Gecko->setChecked(_data->GeckoState);
+        ui->lineEdit_MainProcName->setText(tempAppData->MainPrcoName);
+        ui->checkBox_dxvkConfigState->setChecked(tempAppData->DxvkConfigFileState);
+        ui->comboBox_dockbit->setCurrentText(_data->DockerVer);
+        ui->comboBox_winebit->setCurrentText(_data->DockerWineVersion);
         ui->comboBox_dockbit->setEnabled(false);
     }else{
         dxvkOptionLink();
     }
-    loadTableView(ui->tableView_EnvList,_data);
-    loadTableView(ui->tableView_ProcList,_data);
-    loadTableView(ui->tableView_RegsList,_data);  
+    loadTableView(ui->tableView_EnvList,tempAppData);
+    loadTableView(ui->tableView_ProcList,tempAppData);
+    loadTableView(ui->tableView_RegsList,tempAppData);
     for(auto a:g_vekLocalData.wineVec){
         if(a.first==ui->comboBox_RunWine->currentText()){
-            if(!QFile(a.second.wineInstallPath+"/plugs/Mono.msi").exists()){
+            if(!QFile(a.second.IwinePath+"/plugs/Mono.msi").exists()){
                 ui->checkBox_Mono->setEnabled(false);
             }
-            if(!QFile(a.second.wineInstallPath+"/plugs/GeckoX86.msi").exists()&&!QFile(a.second.wineInstallPath+"/plugs/GeckoX86_64.msi").exists()){
+            if(!QFile(a.second.IwinePath+"/plugs/GeckoX86.msi").exists()&&!QFile(a.second.IwinePath+"/plugs/GeckoX86_64.msi").exists()){
                 ui->checkBox_Gecko->setEnabled(false);
             }
-            if(a.second.wineInstallDxvk.empty()){
+            if(a.second.IwineDxvk.empty()){
                 ui->checkBox_stateDxvk->setEnabled(false);
                 ui->comboBox_dxvkversion->setEnabled(false);
                 ui->checkBox_statedxvkhud->setEnabled(false);
@@ -131,6 +134,7 @@ void vekAppAddMT::vekAppAddConnectObject(BaseAppData* _data,objectTypeView _objT
             }
         }
     }
+   temDockData=_data;
 }
 void vekAppAddMT::dxvkOptionLinkState(bool cState){
     ui->comboBox_dxvkversion->setEnabled(cState);
@@ -157,9 +161,9 @@ void vekAppAddMT::dxvkOptionLink(){
             {
                 for(auto a:g_vekLocalData.wineVec)
                 {
-                    if(a.second.WineInstallName==ui->comboBox_RunWine->currentText())
+                    if(a.second.IwineName==ui->comboBox_RunWine->currentText())
                     {
-                        dxvkPath=a.second.wineInstallPath+"dxvk/dxvk.conf";
+                        dxvkPath=a.second.IwinePath+"dxvk/dxvk.conf";
                         ui->lineEdit_dxvkConfigFIle->setText(dxvkPath);
                         break;
                     }
@@ -199,8 +203,8 @@ void vekAppAddMT::loadTableView(QTableView* qtv,BaseAppData* ePdata){
         columnTitles << "环境变量名" << "环境变量值";
 
         if(ePdata!=nullptr){
-            if(!ePdata->dockEnv.empty()){
-                for(auto &[k,j]:ePdata->dockEnv){
+            if(!ePdata->DockerEnv.empty()){
+                for(auto &[k,j]:ePdata->DockerEnv){
                     int x=i++;
                     tableModel->setItem(x,0,new QStandardItem(k));
                     tableModel->setItem(x,1,new QStandardItem(j));
@@ -212,8 +216,8 @@ void vekAppAddMT::loadTableView(QTableView* qtv,BaseAppData* ePdata){
         columnTitles <<"附加进程名";
         if(ePdata!=nullptr)
         {
-            if(!ePdata->attachProc.empty()){
-                for(auto j:ePdata->attachProc){
+            if(!ePdata->AttachProc.empty()){
+                for(auto j:ePdata->AttachProc){
                     int x=i++;
                     tableModel->setItem(x,0,new QStandardItem(j));
                 }
@@ -223,8 +227,8 @@ void vekAppAddMT::loadTableView(QTableView* qtv,BaseAppData* ePdata){
     if(qtv==ui->tableView_RegsList){
         columnTitles<<"注册表路径"<<"注册表键"<<"值类型"<<"注册表值";
         if(ePdata!=nullptr){
-            if(!ePdata->dockRegs.empty()){
-                for(auto j:ePdata->dockRegs){
+            if(!ePdata->DockerRegs.empty()){
+                for(auto j:ePdata->DockerRegs){
                     int x=i++;
                     tableModel->setItem(x,0,new QStandardItem(j.rPath));
                     tableModel->setItem(x,1,new QStandardItem(j.rKey));
@@ -308,92 +312,85 @@ void vekAppAddMT::objectDelete(QTableView* qTableView){
 }
 //控件数据to Class
 bool vekAppAddMT::vekAppConfigObj(){
-    if(tempData!=nullptr){
-        tempData=nullptr;
-    }
-    tempData=new BaseAppData();
-    if(tempCID!=NULL){
-        tempData->appCID=tempCID;
-    }else{
+    if(tempAppData==nullptr){
         objectJson* _objectJson=new objectJson();
-        tempData->appCID=_objectJson->GetRandomCID();
-        tempCID=tempData->appCID;
+        tempAppData->AppCID=_objectJson->GetRandomCID();
         delete _objectJson;
         _objectJson=nullptr;
     }
-    tempData->wineVersion=ui->comboBox_RunWine->currentText();
-    tempData->appExe=ui->lineEdit_AppInstallExe->text();
-    tempData->appName=ui->lineEdit_AppName->text();
-    tempData->workPath=ui->lineEdit_workPath->text();
-    tempData->dockPath=QDir::currentPath()+"/vekDock";
-    tempData->dockName="vekON1";
-    tempData->appOtherAgrs=ui->lineEdit_otherAgrs->text();
-    tempData->dockSystemVersion=ui->comboBox_dockSystemVersion->currentText();
+    temDockData->WineVersion=ui->comboBox_RunWine->currentText();
+    tempAppData->AppExe=ui->lineEdit_AppInstallExe->text();
+    tempAppData->AppName=ui->lineEdit_AppName->text();
+    tempAppData->WorkPath=ui->lineEdit_workPath->text();
+    temDockData->DockerPath=QDir::currentPath()+"/vekDock";
+    temDockData->DockerName="vekON1";
+    tempAppData->AppOtherAgrs=ui->lineEdit_otherAgrs->text();
+    temDockData->DockerSystemVersion=ui->comboBox_dockSystemVersion->currentText();
     //默认设置dockPath和dockName
     if(ui->lineEdit_RunDockPath->text()!=NULL){
-        tempData->dockPath=ui->lineEdit_RunDockPath->text();
+        temDockData->DockerPath=ui->lineEdit_RunDockPath->text();
     }
     if(ui->comboBox_DockName->currentText()!=NULL){
-        tempData->dockName=ui->comboBox_DockName->currentText();
+        temDockData->DockerName=ui->comboBox_DockName->currentText();
     }
     if(ui->lineEdit_dxvkConfigFIle->text()!=NULL){
-        tempData->dxvkConfigFile=ui->lineEdit_dxvkConfigFIle->text();
+        tempAppData->DxvkConfigFile=ui->lineEdit_dxvkConfigFIle->text();
     }
-    if(tempData->appIco==NULL){
-        tempData->appIco=":/res/img/vek.ico";
+    if(tempAppData->AppIco==NULL){
+        tempAppData->AppIco=":/res/img/vek.ico";
     }
     //wine 参数
     for(auto &x : g_vekLocalData.wineVec){
-        if(x.first==tempData->wineVersion){
-            tempData->wineVersion=x.second.WineInstallName;
-            tempData->winePath=x.second.wineInstallPath;
+        if(x.first==temDockData->WineVersion){
+            temDockData->WineVersion=x.second.IwineName;
+            temDockData->WinePath=x.second.IwinePath;
             break;
         }
     }
-    tempData->dockVer=ui->comboBox_dockbit->currentText();
-    tempData->dockWineVer=ui->comboBox_winebit->currentText();
+    temDockData->DockerVer=ui->comboBox_dockbit->currentText();
+    temDockData->DockerWineVersion=ui->comboBox_winebit->currentText();
     //dxvk参数
-    tempData->mainPrcoName=ui->lineEdit_MainProcName->text();
-    tempData->dxvkState=ui->checkBox_stateDxvk->checkState();
-    tempData->dxvkVerson=ui->comboBox_dxvkversion->currentText();
-    tempData->dxvkHUD=ui->checkBox_statedxvkhud->checkState();
-    tempData->dxvkConfigFileState=ui->checkBox_dxvkConfigState->checkState();    
-    tempData->dxvkConfigFile=ui->lineEdit_dxvkConfigFIle->text();
+    tempAppData->MainPrcoName=ui->lineEdit_MainProcName->text();
+    tempAppData->DxvkState=ui->checkBox_stateDxvk->checkState();
+    tempAppData->DxvkVerson=ui->comboBox_dxvkversion->currentText();
+    tempAppData->DxvkHUD=ui->checkBox_statedxvkhud->checkState();
+    tempAppData->DxvkConfigFileState=ui->checkBox_dxvkConfigState->checkState();
+    tempAppData->DxvkConfigFile=ui->lineEdit_dxvkConfigFIle->text();
     //优化参数
-    tempData->taskLog=ui->checkBox_winerunlog->checkState();
-    tempData->taskMemorySharing=ui->checkBox_wineMemorySharing->checkState();
-    tempData->taskMemoryOptimization=ui->checkBox_wineMemoryOptimization->checkState();
-    tempData->taskRealTimePriority=ui->checkBox_wineRealTimePriority->checkState();
-    tempData->defaultFonts=ui->checkBox_DefaultFonts->checkState();
-    tempData->monoState=ui->checkBox_Mono->checkState();
-    tempData->geckoState=ui->checkBox_Gecko->checkState();
+    tempAppData->TaskLog=ui->checkBox_winerunlog->checkState();
+    tempAppData->TaskMemorySharing=ui->checkBox_wineMemorySharing->checkState();
+    tempAppData->TaskMemoryOptimization=ui->checkBox_wineMemoryOptimization->checkState();
+    tempAppData->TaskRealTimePriority=ui->checkBox_wineRealTimePriority->checkState();
+    tempAppData->DefaultFonts=ui->checkBox_DefaultFonts->checkState();
+    temDockData->MonoState=ui->checkBox_Mono->checkState();
+    temDockData->GeckoState=ui->checkBox_Gecko->checkState();
     int envCurRow=ui->tableView_EnvList->model()->rowCount();
     int procCurRow=ui->tableView_ProcList->model()->rowCount();
     int regsCurRow=ui->tableView_RegsList->model()->rowCount();
     if(envCurRow>0){
-        tempData->dockEnv.clear();
+        tempAppData->DockerEnv.clear();
         QAbstractItemModel *modelEnv = ui->tableView_EnvList->model();
         for(int i=0;i<=envCurRow-1;i++){
             QString dataTempA = modelEnv->data(modelEnv->index(i,0)).value<QString>();
             QString dataTempB = modelEnv->data(modelEnv->index(i,1)).value<QString>();
             if(dataTempA!=NULL&dataTempB!=NULL){
-                tempData->dockEnv.insert(pair<QString,QString>(dataTempA,dataTempB));
+                tempAppData->DockerEnv.insert(pair<QString,QString>(dataTempA,dataTempB));
             }
         }
     }
     if(procCurRow>0){
-        tempData->attachProc.clear();
+        tempAppData->AttachProc.clear();
         QAbstractItemModel *modelProc = ui->tableView_ProcList->model();
         for(int i=0;i<=procCurRow-1;i++){
             QString dataTempC = modelProc->data(modelProc->index(i,0)).value<QString>();
             qDebug()<<dataTempC;
             if(dataTempC!=NULL){
-                tempData->attachProc.push_back(dataTempC);
+                tempAppData->AttachProc.push_back(dataTempC);
             }
         }
     }
     if(regsCurRow>0){
-        tempData->dockRegs.clear();
+        tempAppData->DockerRegs.clear();
         BaseDockRegs _tRegs;
         QAbstractItemModel *modelRegs = ui->tableView_RegsList->model();
         for(int i=0;i<=regsCurRow-1;i++){
@@ -402,51 +399,51 @@ bool vekAppAddMT::vekAppConfigObj(){
             _tRegs.rTValue= modelRegs->data(modelRegs->index(i,2)).value<QString>();
             _tRegs.rValue = modelRegs->data(modelRegs->index(i,3)).value<QString>();
             if(_tRegs.rPath!=NULL&_tRegs.rKey!=NULL&_tRegs.rTValue!=NULL){
-                tempData->dockRegs.push_back(_tRegs);
+                tempAppData->DockerRegs.push_back(_tRegs);
             }
         }
     }
     //检测必要参数
-    if(tempData->wineVersion==NULL){
+    if(temDockData->WineVersion==NULL){
         vekError("请先安装wine");
         return false;
     }
-    if(tempData->appName==NULL)
+    if(tempAppData->AppName==NULL)
     {
         vekError("请填写游戏名");
         return false;
     }
-    if(tempData->appExe==NULL)
+    if(tempAppData->AppExe==NULL)
     {
         vekError("请设置游戏执行文件");
         return false;
     }
-    if(tempData->workPath==NULL)
+    if(tempAppData->WorkPath==NULL)
     {
         vekError("请设置游戏工作目录");
         return false;
     }
-    if(tempData->dockPath==NULL)
+    if(temDockData->DockerPath==NULL)
     {
         vekError("请设置wine运行容器路径");
         return false;
     }
-    if(tempData->dockName==NULL){
+    if(temDockData->DockerName==NULL){
         vekError("请设置容器名字");
         return false;
     }
-    if(tempData->mainPrcoName==NULL){
+    if(tempAppData->MainPrcoName==NULL){
         vekError("主进程名不能为空");
         return false;
     }
-    if(tempData->dxvkConfigFileState){
-        if(tempData->dxvkConfigFile==NULL){
+    if(tempAppData->DxvkConfigFileState){
+        if(tempAppData->DxvkConfigFile==NULL){
             vekError("启用dxvk配置文件功能后,必须指定dxvk配置文件路径");
             return false;
         }
     }
     //检测核心参数是否为NULL
-    if(tempData->wineVersion==NULL||tempData->winePath==NULL){
+    if(temDockData->WineVersion==NULL||temDockData->WinePath==NULL){
         return false;
     }
 
@@ -518,7 +515,7 @@ void vekAppAddMT::objectButton(){
     if(action_obnject->objectName()=="pushButton_Set"){
         ui->label_TipsText->setText("保存配置中请稍后!");
         if(vekAppAddObj(false)){
-            emit doneAddApp(tempData);
+            emit doneAddApp(tempAppData);
             this->close();
         }
     }
@@ -541,13 +538,13 @@ bool vekAppAddMT::vekAppAddObj(bool _forceState){
     if(!vekAppConfigObj()){
         return false;
     }
-    objectAppMT* vappAddObj=new objectAppMT(tempData,oldData);
+    objectAppMT* vappAddObj=new objectAppMT(tempAppData,temDockData);
     if(!vappAddObj->InitDockObj(_forceState)){
         vekError("初始化失败!");
     }else{
-        vappAddObj->SaveDataToJson(tempData->dockName,*tempData);
+        vappAddObj->SaveDataToJson(temDockData->DockerName,*tempAppData);
     }
-    emit _upData(tempData,objType);
+    emit _upData(tempAppData,objType);
     delete vappAddObj;
     vappAddObj=nullptr;
     return true;

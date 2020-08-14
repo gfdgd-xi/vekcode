@@ -19,12 +19,12 @@ QVariant vekATJsonModel::data( const QModelIndex & index, int role ) const
        {
        case Qt::DisplayRole:
            {
-               return m_ItemDataVec[index.row()]->appName;
+               return m_ItemDataVec[index.row()]->AppName;
            }
         break;
        case Qt::DecorationRole:
            {
-               return QIcon(m_ItemDataVec[index.row()]->appIco);
+               return QIcon(m_ItemDataVec[index.row()]->AppIco);
            }
            break;
        case Qt::SizeHintRole:

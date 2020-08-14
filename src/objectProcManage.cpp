@@ -13,7 +13,7 @@ QString objectProcManage::objGetProcList(procInfo pInfo){
     m_cmd->setProcessChannelMode(QProcess::MergedChannels);
     m_cmd->setReadChannel(QProcess::StandardOutput);
     m_cmd->start("bash");
-    QString pCodes="WINEPREFIX="+pInfo.dockPath+"/"+pInfo.dockName+" "+pInfo.winePath+"wine/bin/wine winedbg"+" "+"--command \"info proc\"";
+    QString pCodes="WINEPREFIX="+pInfo.pDockPath+"/"+pInfo.pDockName+" "+pInfo.pWinePath+"wine/bin/wine winedbg"+" "+"--command \"info proc\"";
     m_cmd->write(pCodes.toLocal8Bit()+'\n');
     m_cmd->waitForFinished(1000);
     QString procData=m_cmd->readAll();
@@ -29,7 +29,7 @@ void objectProcManage::objDelProc(QProcess* prc,QString prPid,procInfo _pInfo){
     prc->setReadChannel(QProcess::StandardOutput);
     prc->start("bash");
     //设置工作目录
-    QString aCodes="WINEPREFIX="+_pInfo.dockPath+"/"+_pInfo.dockName+" "+_pInfo.winePath+"wine/bin/winedbg";
+    QString aCodes="WINEPREFIX="+_pInfo.pDockPath+"/"+_pInfo.pDockName+" "+_pInfo.pWinePath+"wine/bin/winedbg";
     QString bCodes="attach "+prPid;
     QString cCodes="kill";
     QString dCodes="quit";
@@ -50,7 +50,7 @@ void objectProcManage::objDelProc(QProcess* prc,QString prPid,procInfo _pInfo){
 }
 void objectProcManage::delAttachProc(procInfo pInfo){
     for(auto b:procAllInfoStr){
-        for(auto c:pInfo.attachProc){
+        for(auto c:pInfo.pAttachProc){
             if(b.second.contains(c,Qt::CaseSensitive)){
                 QStringList list;
                 list.clear();
@@ -73,7 +73,7 @@ void objectProcManage::delAttachProc(procInfo pInfo){
 }
 void objectProcManage::getAllProc(){
     procAllInfoStr.clear();
-    procAllInfoStr.insert(pair<QString,QString>(iprocInfo.dockName,objGetProcList(iprocInfo)));
+    procAllInfoStr.insert(pair<QString,QString>(iprocInfo.pDockName,objGetProcList(iprocInfo)));
     delAttachProc(iprocInfo);
 }
 void objectProcManage::run(){

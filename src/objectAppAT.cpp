@@ -1,8 +1,7 @@
 #include "objectAppAT.h"
 
-objectAppAT::objectAppAT(ObjectAddDataAT objAddDataAT)
+objectAppAT::objectAppAT()
 {
-   _objAddDataAT=objAddDataAT;
 }
 
 objectAppAT::~objectAppAT(){
@@ -37,120 +36,137 @@ QString objectAppAT::jsonPathTypeToStr(QString jsonPathFile){
 }
 bool objectAppAT::jsonUnserialize(QString jsonPathFile){
     QString jsonData=jsonPathTypeToStr(jsonPathFile);
-        if(jsonData==nullptr){
-            return false;
-        }
-        objectJson _objectJson;
-        if(_objectJson.unDataSerializeScriptData(_baseAutoSetJson,jsonData)==nullptr){
-            return false;
-        }
+    if(jsonData==nullptr){
+        return false;
+    }
+    objectJson _objectJson;
+    if(_objectJson.unDataSerializeScriptData(_baseAutoSetJson,jsonData)==nullptr){
+        return false;
+    }
     return true;
 }
-void objectAppAT::objDockerData(QString dockName){
+bool objectAppAT::objDockerData(QString dockName){
     bool dockState=false;
-    BaseDockData baseDockData;
     for(auto a:g_vekLocalData.dockerVec){
         if(a.first==dockName){
             dockState=true;
             baseDockData=a.second;
+            break;
         }
     }
-    if(!dockState){
-
+    //if docker exits
+    if(dockState){
+        if(baseDockData.DockerVer!=_baseAutoSetJson->Docker.at(toStr(DockerVersion))){
+            vekError("当前容器版本为:"+baseDockData.DockerVer+"配置文件容器版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerVersion)));
+            return false;
+        }
+        if(baseDockData.DockerSystemVersion!=_baseAutoSetJson->Docker.at(toStr(DockerSystemVersion))){
+            vekError("当前容器系统版本为:"+baseDockData.DockerSystemVersion+"配置文件容器系统版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerSystemVersion)));
+            return false;
+        }
+        if(baseDockData.WineVersion!=_baseAutoSetJson->Docker.at(toStr(WineVersion))){
+            vekError("当前容器Wine版本为:"+baseDockData.WineVersion+"配置文件容器Wine版本为:"+_baseAutoSetJson->Docker.at(toStr(WineVersion)));
+            return false;
+        }
+    }else{
+        //设置wine版本和路径
+        for(auto &x : g_vekLocalData.wineVec){
+            if(x.first==_objAddDataAT.pWineVersion){
+                baseDockData.WineVersion=x.second.IwineVer;
+                baseDockData.WinePath=x.second.IwinePath;
+                break;
+            }
+        }
+        if(_baseAutoSetJson->Docker.at(toStr(DockerVersion))!=NULL){
+            baseDockData.DockerVer=_baseAutoSetJson->Docker.at(toStr(DockerVersion));
+        }
+        if(_baseAutoSetJson->Docker.at(toStr(DockerWineVersion))!=NULL){
+            baseDockData.WineVersion=_baseAutoSetJson->Docker.at(toStr(DockerWineVersion));
+        }
+        if(_baseAutoSetJson->Docker.at(toStr(DockerSysVersion))!=NULL){
+            baseDockData.DockerSystemVersion=_baseAutoSetJson->Docker.at(toStr(DockerSysVersion));
+        }
+        if(_baseAutoSetJson->Docker.at(toStr(MonoState))!=NULL){
+            QVariant monoState=_baseAutoSetJson->Docker.at(toStr(MonoState));
+            baseDockData.MonoState=(monoState).toBool();;
+        }
+        if(_baseAutoSetJson->Docker.at(toStr(GeckoState))!=NULL){
+            QVariant geckoState=_baseAutoSetJson->Docker.at(toStr(GeckoState));
+            baseDockData.GeckoState=(geckoState).toBool();;
+        }
+        baseDockData.DockerPath=_objAddDataAT.pDockPath;
+        baseDockData.DockerName=_objAddDataAT.pDockName;
     }
+    return true;
 }
-void objectAppAT::dataToBase(){
+void objectAppAT::objAppData(){
     if(!_baseAutoSetJson->Option.empty()){
         for(auto a:_baseAutoSetJson->Option){
-            if(a.first=="appName"){
-                baseAppData->appName=a.second;
+            if(a.first=="AppName"){
+                baseAppData.AppName=a.second;
             }
-            if(a.first=="dockVer"){
-                baseAppData->dockVer=a.second;
-            }
-            if(a.first=="dockWineVer"){
-                baseAppData->dockWineVer=a.second;
-            }
-            if(a.first=="defaultFont"){
+
+            if(a.first=="DefaultFont"){
                 QVariant defaultFontValue=a.second;
-                baseAppData->defaultFonts=(defaultFontValue).toBool();
+                baseAppData.DefaultFonts=(defaultFontValue).toBool();
             }
-            if(a.first=="sharedMemory"){
+            if(a.first=="SharedMemory"){
                 QVariant sharedMemoryValue=a.second;
-                baseAppData->taskMemorySharing=(sharedMemoryValue).toBool();
+                baseAppData.TaskMemorySharing=(sharedMemoryValue).toBool();
             }
-            if(a.first=="writeCopy"){
+            if(a.first=="WriteCopy"){
                 QVariant writeCopyValue=a.second;
-                baseAppData->taskMemoryOptimization=(writeCopyValue).toBool();
+                baseAppData.TaskMemoryOptimization=(writeCopyValue).toBool();
             }
-            if(a.first=="rtServer"){
+            if(a.first=="RtServer"){
                 QVariant rtServerValue=a.second;
-                baseAppData->taskRealTimePriority=(rtServerValue).toBool();
+                baseAppData.TaskRealTimePriority=(rtServerValue).toBool();
             }
-            if(a.first=="dockSystemVersion"){
-                baseAppData->dockSystemVersion=a.second;
+
+            if(a.first=="MainPrcoName"){
+                baseAppData.MainPrcoName=a.second;
             }
-            if(a.first=="monoState"){
-                QVariant monoState=a.second;
-                baseAppData->monoState=(monoState).toBool();;
-            }
-            if(a.first=="geckoState"){
-                QVariant geckoState=a.second;
-                baseAppData->geckoState=(geckoState).toBool();;
-            }
-            if(a.first=="mainPrcoName"){
-                baseAppData->mainPrcoName=a.second;
-            }
-            baseAppData->wineVersion=_objAddDataAT.pWineVersion;
         }
     }
     if(!_baseAutoSetJson->Dxvk.empty()){
         for(auto a:_baseAutoSetJson->Dxvk){
-            if(a.first=="dxvkVersion"){
-                baseAppData->dxvkVerson=a.second;
+            if(a.first=="DxvkVersion"){
+                baseAppData.DxvkVerson=a.second;
             }
-            if(a.first=="dxvkState"){
+            if(a.first=="DxvkState"){
                 QVariant dxvkStateValue=a.second;
-                baseAppData->dxvkState=(dxvkStateValue).toBool();
+                baseAppData.DxvkState=(dxvkStateValue).toBool();
             }
-            if(a.first=="dxvkHUD"){
+            if(a.first=="DxvkHUD"){
                 QVariant dxvkHUDValue=a.second;
-                baseAppData->dxvkHUD=(dxvkHUDValue).toBool();
+                baseAppData.DxvkHUD=(dxvkHUDValue).toBool();
             }
         }
     }
     if(!_baseAutoSetJson->Regs.empty()){
-        baseAppData->dockRegs=_baseAutoSetJson->Regs;
+        baseAppData.DockerRegs=_baseAutoSetJson->Regs;
     }
     if(!_baseAutoSetJson->Libs.empty()){
-        baseAppData->dockLibs=_baseAutoSetJson->Libs;
+        baseAppData.DockerLibs=_baseAutoSetJson->Libs;
     }
     if(!_baseAutoSetJson->Env.empty()){
-        baseAppData->dockEnv=_baseAutoSetJson->Env;
+        baseAppData.DockerEnv=_baseAutoSetJson->Env;
     }
     if(_baseAutoSetJson->Args!=nullptr){
-        baseAppData->appOtherAgrs=_baseAutoSetJson->Args;
+        baseAppData.AppOtherAgrs=_baseAutoSetJson->Args;
     }
     if(!_baseAutoSetJson->AttachProc.empty()){
-        baseAppData->attachProc=_baseAutoSetJson->AttachProc;
+        baseAppData.AttachProc=_baseAutoSetJson->AttachProc;
     }
-    baseAppData->dockPath=_objAddDataAT.pDckPath;
-    baseAppData->dockName=_objAddDataAT.pDockName;
-    baseAppData->appExe=_objAddDataAT.pAppExePath;
+
+    baseAppData.AppExe=_objAddDataAT.pAppExePath;
     QFileInfo fi = QFileInfo(_objAddDataAT.pAppExePath);
-    baseAppData->workPath=fi.path();
+    baseAppData.WorkPath=fi.path();
     objectJson* _objectJson=new objectJson();
-    baseAppData->appCID=_objectJson->GetRandomCID();
+    baseAppData.AppCID=_objectJson->GetRandomCID();
     delete _objectJson;
     _objectJson=nullptr;
-    baseAppData->appIco=":/res/img/vek.ico";
-    for(auto &x : g_vekLocalData.wineVec){
-        if(x.first==_objAddDataAT.pWineVersion){
-            baseAppData->wineVersion=x.second.WineInstallName;
-            baseAppData->winePath=x.second.wineInstallPath;
-            break;
-        }
-    }
+    baseAppData.AppIco=":/res/img/vek.ico";
 }
 void objectAppAT::objectAutoObj(){
     if(objDiyAddApp!=nullptr){
@@ -158,46 +174,30 @@ void objectAppAT::objectAutoObj(){
         objDiyAddApp=nullptr;
     }
     emit Tips("配置容器中请稍候!");
-    objDiyAddApp=new objectAppMT(baseAppData,nullptr);
+    objDiyAddApp=new objectAppMT(&baseAppData,nullptr);
     objDiyAddApp->InitDockObj(false);
     objDiyAddApp->optionRegs();
     objDiyAddApp->DockLibsInstall();
-    objDiyAddApp->SaveDataToJson(baseAppData->dockName,*baseAppData);
+    objDiyAddApp->SaveDataToJson(baseDockData.DockerName,baseAppData);
     delete objDiyAddApp;
     objDiyAddApp=nullptr;
 }
 void objectAppAT::run(){
     _baseAutoSetJson=new BaseAutoSetJson();
-    baseAppData=_objAddDataAT.pBaseAppData;
     if(!jsonUnserialize(_objAddDataAT.pJsonPath)){
         emit Error("配置容器出错!",true);
         return;
-    }else{
-        dataToBase();
-        bool dockState=true;
-        for(auto x:g_vekLocalData.dockerVec){
-           for(auto y:x.second){
-               qDebug()<<y.second.dockName;
-               qDebug()<<_objAddDataAT.pDockName;
-               if(y.second.dockName==_objAddDataAT.pDockName){
-                   if(y.second.dockVer!=baseAppData->dockVer){
-                       vekError("当前容器和配置容器版本不同,请检查当前容器版本或者更换容器");
-                       dockState=false;
-                       break;
-                   }
-                   if(y.second.dockWineVer!=baseAppData->dockWineVer){
-                       vekError("当前容器和配置容器Wine执行程序不同请检查当前容器Wine执行版本");
-                       dockState=false;
-                       break;
-                   }
-               }
-           }
-        }
-        if(dockState){
-            objectAutoObj();
-            emit Done();
-        }else{
+    }
+    else
+    {
+        if(objDockerData(_objAddDataAT.pDockName)){
+            objAppData();
+        }else
+        {
             emit Error("配置容器出错!",true);
+            return;
         }
     }
+    objectAutoObj();
+    emit Done();
 }

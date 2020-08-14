@@ -96,11 +96,11 @@ void vekGitWine::vek_Clone(BaseWineData _wd){
     clone_opts.fetch_opts.callbacks.payload = &pd;
     /* Do the clone */
     QByteArray b2,b3;
-    b2.append(_wd.wineInstallPath);
+    b2.append(_wd.IwinePath);
     const char *path = b2.data();
-    b3.append(_wd.wineInstallUrl);
+    b3.append(_wd.IwineUrl);
     const char *url = b3.data();
-    pThis->outputPrgressSlots("clone:"+_wd.WineInstallName.toStdString());
+    pThis->outputPrgressSlots("clone:"+_wd.IwineName.toStdString());
     git_clone(&cloned_repo, url, path, &clone_opts);
     git_repository_free(cloned_repo);
     git_libgit2_shutdown();
@@ -112,10 +112,10 @@ void vekGitWine::vek_Clone(BaseWineData _wd){
 void vekGitWine::run()
 {
    pThis=this;   
-   if(_wd.wineInstallPath==NULL){
+   if(_wd.IwinePath==NULL){
        return;
    }
-   QDir dir(_wd.wineInstallPath);
+   QDir dir(_wd.IwinePath);
    if(dir.removeRecursively()){
        vek_Clone(_wd);
    }

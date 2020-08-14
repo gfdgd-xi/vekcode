@@ -101,7 +101,7 @@ void vekAppListView::ObjectRun(){
         }
         std::vector<QStringList> _codeAgrs;
         if(_objType==object_start){
-            taskList.push_back(m_pModel->getItem(index)->mainPrcoName);
+            taskList.push_back(m_pModel->getItem(index)->MainPrcoName);
             auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
             connect(_objectExtend, SIGNAL(objexitTray(bool)), pObjectVek, SLOT(exitTray(bool)));
             emit _startTray();
@@ -123,7 +123,7 @@ void vekAppListView::ExportJson(){
         _vExportJson->setAttribute(Qt::WA_DeleteOnClose,true);
         _vExportJson->show();
         connect(_vExportJson,&vekExportJson::_unExportJson,this,&vekAppListView::unExportJson);
-        _vExportJson->ExportJson(bGameData);
+        //_vExportJson->ExportJson(bGameData);
     }
 }
 void vekAppListView::objectExtendApp(){

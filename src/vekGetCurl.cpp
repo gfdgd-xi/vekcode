@@ -95,20 +95,20 @@ bool vekGetCurl::DownloadFile(std::string URLADDR,std::string path)
 void vekGetCurl::run(){
     dThis=this;
     curl= curl_easy_init();
-    if(!QDir(_wd.wineInstallPath+"/plugs").exists()){
-        QDir().mkdir(_wd.wineInstallPath+"/plugs");
+    if(!QDir(_wd.IwinePath+"/plugs").exists()){
+        QDir().mkdir(_wd.IwinePath+"/plugs");
     }
-    if(_wd.wineInstallMono!=NULL){
+    if(_wd.IwineMono!=NULL){
         fileName="Mono组件";
-        DownloadFile(_wd.wineInstallMono.toStdString(),(_wd.wineInstallPath+"/plugs/Mono.msi").toStdString());
+        DownloadFile(_wd.IwineMono.toStdString(),(_wd.IwinePath+"/plugs/Mono.msi").toStdString());
     }
-    if(_wd.wineInstallGeckoX86!=NULL){
+    if(_wd.IwineGeckoX86!=NULL){
         fileName="GeckoX86组件";
-        DownloadFile(_wd.wineInstallGeckoX86.toStdString(),(_wd.wineInstallPath+"/plugs/GeckoX86.msi").toStdString());
+        DownloadFile(_wd.IwineGeckoX86.toStdString(),(_wd.IwinePath+"/plugs/GeckoX86.msi").toStdString());
     }
-    if(_wd.wineInstallGeckoX86_64!=NULL){
+    if(_wd.IwineGeckoX86_64!=NULL){
         fileName="GeckoX86_64组件";
-        DownloadFile(_wd.wineInstallGeckoX86_64.toStdString(),(_wd.wineInstallPath+"/plugs/GeckoX86_64.msi").toStdString());
+        DownloadFile(_wd.IwineGeckoX86_64.toStdString(),(_wd.IwinePath+"/plugs/GeckoX86_64.msi").toStdString());
     }
     outLogText("组件下载完毕!");
     curl_easy_cleanup(curl);

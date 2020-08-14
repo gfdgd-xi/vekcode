@@ -9,8 +9,8 @@ objectTray::~objectTray(){
 void objectTray::startTray(){
     m_cmd->closeReadChannel(QProcess::StandardOutput);
     m_cmd->closeReadChannel(QProcess::StandardError);
-    m_cmd->setWorkingDirectory(_baseWineData.wineInstallPath+"wine/bin");
-    m_cmd->start(_baseWineData.wineInstallPath+"wine/bin/stalonetray");
+    m_cmd->setWorkingDirectory(_baseWineData.IwinePath+"wine/bin");
+    m_cmd->start(_baseWineData.IwinePath+"wine/bin/stalonetray");
 }
 void objectTray::exitTray(){
     if(m_cmd->state()!=QProcess::Starting){
