@@ -51,13 +51,13 @@ typedef struct{
 
 //远程wine数据结构
 typedef struct {
-    QString rWineName=nullptr;
-    QString rWineVersion=nullptr;
-    QString rWineGit=nullptr;
-    QString rMono=nullptr;
-    QString rGeckoX86=nullptr;
-    QString rGeckoX86_64=nullptr;
-    std::vector<QString> rWineDxvk={};
+    QString WineName=nullptr;
+    QString WineVersion=nullptr;
+    QString WineGit=nullptr;
+    QString Mono=nullptr;
+    QString GeckoX86=nullptr;
+    QString GeckoX86_64=nullptr;
+    std::vector<QString> WineDxvk={};
 }BaseWineGit;
 
 typedef struct {

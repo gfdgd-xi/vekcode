@@ -52,7 +52,7 @@ void vekWineOption::WineVersionComoboBox(){
         for(auto &d : g_vekLocalData.wineJsonList){
             if(d.first==nowWineSrc){
                 for(auto dx:d.second){
-                    ui->comboBox_wineVer->addItem(dx.second.rWineName);
+                    ui->comboBox_wineVer->addItem(dx.second.WineName);
                 }
             }
         }
@@ -73,14 +73,14 @@ void vekWineOption::onButton_Install()
             for(auto dx:p){
                 if(dx.first==selwine){
                     iWD.IwineSrc=selSrc;
-                    iWD.IwineName=dx.second.rWineName;
-                    iWD.IwineVer=dx.second.rWineVersion;
-                    iWD.IwineUrl=dx.second.rWineGit;
-                    iWD.IwinePath=selPath+"/vekWine/"+dx.second.rWineName+"/";
-                    iWD.IwineMono=dx.second.rMono;
-                    iWD.IwineGeckoX86=dx.second.rGeckoX86;
-                    iWD.IwineGeckoX86_64=dx.second.rGeckoX86_64;
-                    for(auto v:dx.second.rWineDxvk){
+                    iWD.IwineName=dx.second.WineName;
+                    iWD.IwineVer=dx.second.WineVersion;
+                    iWD.IwineUrl=dx.second.WineGit;
+                    iWD.IwinePath=selPath+"/vekWine/"+dx.second.WineName+"/";
+                    iWD.IwineMono=dx.second.Mono;
+                    iWD.IwineGeckoX86=dx.second.GeckoX86;
+                    iWD.IwineGeckoX86_64=dx.second.GeckoX86_64;
+                    for(auto v:dx.second.WineDxvk){
                         iWD.IwineDxvk.insert(iWD.IwineDxvk.end(),v);
                     }
                     break;
