@@ -14,9 +14,9 @@ public:
     vekAppPanel(QWidget *parent = 0);
     ~vekAppPanel();   
 public slots:
-    void addGroupSlot(BaseAppData* data);
     void addAppSlot();
-    void addAppObject(BaseAppData*);
+    void addGroupSlot(BaseDockData* dcokData);
+    void addAppObject(BaseDockData* dcokData,BaseAppData* appData);
     void objectRunApp();
     void objAppInstall();
 private:
@@ -36,8 +36,7 @@ private:
     void vekLoadJsonData();
     string GetReData(QString);
 signals:
-    void toObjDiyArgs_ptr(BaseAppData*,objectTypeView);
-    void toObjAutoArgs_ptr(BaseAppData*);
-    void toObjectArgs(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
+    void toObjAutoArgs_ptr();
+    void toObjectArgs(BaseDockData,QString,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
 };
 #endif // vekAppPanel_H

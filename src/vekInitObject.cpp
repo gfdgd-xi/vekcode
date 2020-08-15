@@ -17,7 +17,28 @@ bool vekMesg(QString tipText){
     return false;
 }
 
-
+BaseDockData GetDockerData(QString dockName){
+    BaseDockData tempDockData={};
+    if(!g_vekLocalData.dockerVec.empty()){
+        for(auto a:g_vekLocalData.dockerVec){
+            if(a.first==dockName){
+                tempDockData=a.second;
+                break;
+            }
+        }
+    }
+    return tempDockData;
+}
+BaseAppData GetDockerData(BaseDockData dockData,QString appCID){
+    BaseAppData tempAppData={};
+    for(auto a:dockData.dData){
+        if(a.first==appCID){
+            tempAppData=a.second;
+            break;
+        }
+    }
+    return tempAppData;
+}
 QString getFileStr(QString filePath){
     QFile file(filePath);
     if(!file.exists())

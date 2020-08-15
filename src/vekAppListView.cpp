@@ -91,7 +91,7 @@ void vekAppListView::ObjectRun(){
             return;
             break;
         case object_deletegame:
-            setUpDelData(m_pModel->getItem(index),object_delApp);
+            setUpDelData(GetDockerData(mBox->tabText(mBox->currentIndex())),m_pModel->getItem(index),object_delApp);
             return;
             break;
         case object_exportJson:
@@ -119,11 +119,12 @@ void vekAppListView::ExportJson(){
     int index = this->currentIndex().row();
     if(_vExportJson==nullptr){
         BaseAppData bGameData=*m_pModel->getItem(index);
+        BaseDockData bDockData=GetDockerData(mBox->tabText(mBox->currentIndex()));
         _vExportJson=new vekExportJson();
         _vExportJson->setAttribute(Qt::WA_DeleteOnClose,true);
         _vExportJson->show();
         connect(_vExportJson,&vekExportJson::_unExportJson,this,&vekAppListView::unExportJson);
-        //_vExportJson->ExportJson(bGameData);
+        _vExportJson->ExportJson(bDockData,bGameData.AppCID);
     }
 }
 void vekAppListView::objectExtendApp(){
@@ -132,8 +133,9 @@ void vekAppListView::objectExtendApp(){
         _vExtendDebug->setAttribute(Qt::WA_DeleteOnClose,true);
         auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
         _vExtendDebug->setGeometry(pObjectVek->geometry());
-        _vExtendDebug->ConnectDebugObject();
-        _vExtendDebug->_data=*m_pModel->getItem(this->currentIndex().row());
+        QString currentTabText =mBox->tabText(mBox->currentIndex());
+        QString currentAppCID=m_pModel->getItem(this->currentIndex().row())->AppCID;
+        _vExtendDebug->ConnectDebugObject(currentTabText,currentAppCID);
         connect(_vExtendDebug,&vekExtendDebug::_unVekDebug,this,&vekAppListView::unDebugApp);
         _vExtendDebug->show();
     }
@@ -159,12 +161,12 @@ void vekAppListView::setItemSlot(){
         }
     }
 }
-void vekAppListView::setUpDelData(BaseAppData* data,objectTypeView objTypeView){
+void vekAppListView::setUpDelData(BaseDockData dockData,BaseAppData* appData,objectTypeView objTypeView){
     int index = this->currentIndex().row();
     if(index>-1){
-        QString deleteCID=m_pModel->getItem(index)->appCID;
-        QString dockPathStr=m_pModel->getItem(index)->dockPath+"/";
-        QString dockNameStr=m_pModel->getItem(index)->dockName;    
+        QString deleteCID=m_pModel->getItem(index)->AppCID;
+        QString dockPathStr=dockData.DockerPath+"/";
+        QString dockNameStr=dockData.DockerName;
         if(objTypeView==object_delApp){
             if(m_pModel->rowCount()<=1){
                 if(vekMesg("提示:这是"+dockNameStr+"最后一个程序,若是执意删除则Vek将删除"+dockNameStr+"容器")){
@@ -180,15 +182,15 @@ void vekAppListView::setUpDelData(BaseAppData* data,objectTypeView objTypeView){
         if(objTypeView==object_setApp){
             m_pModel->deleteItem(index);
             QString currentTabText =mBox->tabText(mBox->currentIndex());
-            if(currentTabText==data->dockName){
-               m_pModel->addItem(data);
+            if(currentTabText==dockData.DockerName){
+               m_pModel->addItem(appData);
             }else{
                 if(m_pModel->rowCount()<=0){
                     deleteDockerTab(dockPathStr,dockNameStr);
                 }
                 auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget();
                 connect(this,SIGNAL(setUpDelDataSignal(BaseAppData*)),pObjectVek,SLOT(addAppObject(BaseAppData*)));
-                emit setUpDelDataSignal(data);
+                emit setUpDelDataSignal(appData);
             }
         }
     }
@@ -245,10 +247,10 @@ void vekAppListView::moveSlot()
             pList->setFlow(QListView::LeftToRight);
             pList->addItem(pItem);
             m_pModel->deleteItem(index);
-            pItem->dockName=m_ActionMap.find(pSender)->first->text();
+            QString dockName=m_ActionMap.find(pSender)->first->text();
             objectJson _objectJson;
-            _objectJson.deleteAppNodeData(pItem->appCID);
-            _objectJson.updateAppNodeData(pItem->dockName,*pItem);
+            _objectJson.deleteAppNodeData(pItem->AppCID);
+            _objectJson.updateAppNodeData(dockName,*pItem);
         }
     }
     //操作完了要把这个临时的映射清空

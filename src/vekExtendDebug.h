@@ -14,12 +14,13 @@ class vekExtendDebug : public QDialog
 public:
     explicit vekExtendDebug(QWidget *parent = nullptr);
     ~vekExtendDebug();
-    void ConnectDebugObject();
-    BaseAppData _data;
+    void ConnectDebugObject(QString dockName,QString appCID);
 private:
     Ui::vekExtendDebug *ui;   
     QStringList DebugDllStr;
     QProcess *m_cmd=nullptr;
+    BaseAppData appData;
+    BaseDockData dockData;
     void upDllStr();
     std::vector<QString> dllList={"accel","adpcm","advapi","animate","aspi",
     "atom","avicap","avifile","bidi","bitblt",
@@ -70,14 +71,14 @@ private:
     "xrandr","xrender","xvidmode"};
 private slots:
     void onReadyRead();
-    void executeArgsEnv(BaseAppData data);
-    void ExtendApp(BaseAppData _dataApp);
+    void executeArgsEnv();
+    void ExtendApp();
     void addDll();
     void delDll();
     void startDebug();
     void exitDebug();
 signals:
-    void toObjectArgs(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
+    void toObjectArgs(BaseDockData,QString,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
     void _unVekDebug();
 };
 

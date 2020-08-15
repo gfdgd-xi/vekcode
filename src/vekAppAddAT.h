@@ -16,12 +16,11 @@ class vekAppAddAT : public QWidget
 public:
     explicit vekAppAddAT(QWidget *parent = nullptr);
     ~vekAppAddAT();
-
+    void connectDockObject();
 private:
     Ui::vekAppAddAT *ui;
     BaseAppData* autoAppData=nullptr;
     objectAppAT* objAutoAddApp=nullptr;
-    void connectDockObject();
     void SetObject();
     void addAutoApp();
     QString JsonType(QString);
@@ -30,7 +29,6 @@ signals:
     void _unAutoDock();
     void autoObjDock(BaseAppData*);
 private slots:
-    void connectDockObject(BaseAppData* _data);
     void TipText(QString TipInfo);
     void ErrorText(QString ErrorInfo,bool cState);
     void ObjDone();

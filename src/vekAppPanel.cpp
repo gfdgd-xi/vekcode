@@ -28,18 +28,16 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
         pListView->setFlow(QListView::LeftToRight);
         pListView->setResizeMode(QListView::Adjust);
         m_pBox->addTab(pListView,twn.first);
-        for(auto x:twn.second){
-            if(x.second.dockVer=="win32"){
-                QIcon icon(":/res/img/32.png");
-                m_pBox->setTabIcon(cTab,icon);
-                cTab+=1;
-                break;
-            }else{
-                QIcon icon(":/res/img/64.png");
-                m_pBox->setTabIcon(cTab,icon);
-                cTab+=1;
-                break;
-            }
+        if(twn.second.DockerVer=="win32"){
+            QIcon icon(":/res/img/32.png");
+            m_pBox->setTabIcon(cTab,icon);
+            cTab+=1;
+            break;
+        }else{
+            QIcon icon(":/res/img/64.png");
+            m_pBox->setTabIcon(cTab,icon);
+            cTab+=1;
+            break;
         }
         m_pListMap->insert(std::pair<QString,vekAppListView*>(twn.first,pListView));
         pListView->setListMap(m_pListMap,m_pBox);
@@ -48,14 +46,16 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
 }
 //读取数据to容器列表
 void vekAppPanel::vekLoadJsonData(){
-    if(!g_vekLocalData.dockerVec.empty()){
+    if(g_vekLocalData.dockerVec.empty()){
+        return;
+    }else{
         for(auto& y:g_vekLocalData.dockerVec){
-            for(auto x:y.second){
-                if(y.first==x.second.dockName){
+            if(y.first==y.second.DockerName){
+                for(auto z:y.second.dData){
                     vekAppListView* pList= new vekAppListView();
                     QString nowTabName=y.first;
                     BaseAppData *LID=new BaseAppData;
-                    *LID=x.second;
+                    *LID=z.second;
                     for(std::map<QString,vekAppListView*>::iterator it = m_pListMap->begin();it!=m_pListMap->end();it++)
                     {
                         if(it->first==nowTabName){
@@ -69,6 +69,7 @@ void vekAppPanel::vekLoadJsonData(){
                     connect(pList, SIGNAL(_startTray()), this->parentWidget()->parentWidget(), SLOT(startTray()));
                     pList->addItem(LID);
                 }
+
             }
         }
     }
@@ -96,8 +97,7 @@ void vekAppPanel::addAppDiy(){
         vek_app_add->setWindowFlags(Qt::WindowStaysOnTopHint);
         vek_app_add->setWindowTitle("VekAppAdd");
         vek_app_add->show();
-        connect(this, SIGNAL(toObjDiyArgs_ptr(BaseAppData*,objectTypeView)), vek_app_add, SLOT(vekAppAddConnectObject(BaseAppData*,objectTypeView)));
-        emit(toObjDiyArgs_ptr(nullptr,object_addApp));
+        vek_app_add->vekAppAddConnectObject(nullptr,nullptr,object_addApp);
         connect(vek_app_add,&vekAppAddMT::_unDiyAppAdd,this,&vekAppPanel::unDiyAppAdd);
         connect(vek_app_add,SIGNAL(doneAddApp(BaseAppData*)), this, SLOT(addAppObject(BaseAppData*)));
     }
@@ -111,8 +111,7 @@ void vekAppPanel::addAppAuto(){
         vek_app_add_auto->setWindowFlags(Qt::WindowStaysOnTopHint);
         vek_app_add_auto->setWindowTitle("自动配置容器");
         vek_app_add_auto->show();
-        connect(this, SIGNAL(toObjAutoArgs_ptr(BaseAppData*)), vek_app_add_auto, SLOT(connectDockObject(BaseAppData*)));
-        emit(toObjAutoArgs_ptr(nullptr));
+        vek_app_add_auto->connectDockObject();
         connect(vek_app_add_auto,&vekAppAddAT::_unAutoDock,this,&vekAppPanel::unAutoDock);
         connect(vek_app_add_auto,SIGNAL(autoObjDock(BaseAppData*)),this,SLOT(addAppObject(BaseAppData*)));
     }
@@ -129,8 +128,8 @@ void vekAppPanel::objAppInstall(){
             return;
         }
     }
-    BaseAppData baseAppdata;
-    objectAppMT* objNewDock=new objectAppMT(&baseAppdata,nullptr);
+    BaseDockData baseDockerData;
+    objectAppMT* objNewDock=new objectAppMT(nullptr,&baseDockerData);
     QString dockName="vekON1";
     if(m_pBox->count()!=0){
         dockName =m_pBox->tabText(m_pBox->currentIndex());
@@ -138,14 +137,13 @@ void vekAppPanel::objAppInstall(){
         dState=true;
     }
     if(dState){
-        baseAppdata.winePath=g_vekLocalData.wineVec.begin()->second.wineInstallPath;
-        baseAppdata.dockPath=QDir::currentPath()+"/vekDock";
-        baseAppdata.dockName=dockName;
-        baseAppdata.monoState=true;
-        baseAppdata.geckoState=true;
-        baseAppdata.defaultFonts=true;
-        baseAppdata.dockVer="win32";
-        baseAppdata.dockWineVer="wine";
+        baseDockerData.WinePath=g_vekLocalData.wineVec.begin()->second.IwinePath;
+        baseDockerData.DockerPath=QDir::currentPath()+"/vekDock";
+        baseDockerData.DockerName=dockName;
+        baseDockerData.MonoState=true;
+        baseDockerData.GeckoState=true;
+        baseDockerData.DockerVer="win32";
+        baseDockerData.DockerWineVersion="wine";
         objNewDock->newDock();
     }else{
         if(g_vekLocalData.dockerVec.empty()){
@@ -153,7 +151,7 @@ void vekAppPanel::objAppInstall(){
         }else{
             for(auto a:g_vekLocalData.dockerVec){
                 if(dockName==a.first){
-                    baseAppdata=a.second.begin()->second;
+                    baseDockerData=a.second;
                     break;
                 }
             }
@@ -162,8 +160,8 @@ void vekAppPanel::objAppInstall(){
     objectExtend* _objectExtend=new objectExtend();
     objectType _objType=object_uninstall;
     std::vector<QStringList> _codeAgrs;
-    connect(this, SIGNAL(toObjectArgs(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)), _objectExtend, SLOT(setDockOptionObjectData(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)));
-    emit(toObjectArgs(baseAppdata,_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default));
+    connect(this, SIGNAL(toObjectArgs(BaseDockData,QString,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)), _objectExtend, SLOT(setDockOptionObjectData(BaseDockData,QString,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)));
+    emit(toObjectArgs(baseDockerData,nullptr,_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default));
     _objectExtend->start();
     delete objNewDock;
     objNewDock=nullptr;
@@ -183,10 +181,10 @@ void vekAppPanel::unMultAppAdd(){
 void vekAppPanel::unDiyAppAdd(){
     vek_app_add=nullptr;
 }
-void vekAppPanel::addAppObject(BaseAppData* data){
+void vekAppPanel::addAppObject(BaseDockData* dcokData,BaseAppData* appData){
     vekAppListView* pList=new vekAppListView(this);
-    BaseAppData* _tempBaseData=data;
-    QString nowTabName=_tempBaseData->dockName;
+    BaseAppData* _tempBaseData=appData;
+    QString nowTabName=dcokData->DockerName;
     bool tabState=false;
     std::map<QString,vekAppListView*>::iterator it = m_pListMap->begin();
     for (it;it != m_pListMap->end();++it)
@@ -197,7 +195,7 @@ void vekAppPanel::addAppObject(BaseAppData* data){
         }
     }
     if(!tabState){
-        addGroupSlot(_tempBaseData);
+        addGroupSlot(dcokData);
     }
     for(std::map<QString,vekAppListView*>::iterator it = m_pListMap->begin();it!=m_pListMap->end();it++)
     {
@@ -211,18 +209,16 @@ void vekAppPanel::addAppObject(BaseAppData* data){
     connect(pList, SIGNAL(_startTray()), this->parentWidget()->parentWidget(), SLOT(startTray()));
     pList->addItem(_tempBaseData);
 }
-void vekAppPanel::addGroupSlot(BaseAppData* data)
+void vekAppPanel::addGroupSlot(BaseDockData* dcokData)
 {
-    if (!data->dockName.isEmpty())
+    if (!dcokData->DockerName.isEmpty())
     {
         vekAppListView *pListView1 = new vekAppListView(this);
         pListView1->setViewMode(QListView::IconMode);
         pListView1->setFlow(QListView::LeftToRight);
-        m_pBox->addTab(pListView1,data->dockName);
-
-
-        m_pListMap->insert(std::pair<QString,vekAppListView*>(data->dockName,pListView1));
-        if(data->dockVer=="win32"){
+        m_pBox->addTab(pListView1,dcokData->DockerName);
+        m_pListMap->insert(std::pair<QString,vekAppListView*>(dcokData->DockerName,pListView1));
+        if(dcokData->DockerVer=="win32"){
             QIcon icon(":/res/img/32.png");
             m_pBox->setTabIcon(m_pBox->currentIndex(),icon);
         }else{

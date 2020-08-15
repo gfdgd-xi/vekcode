@@ -11,4 +11,6 @@ bool vekMesg(QString tipText);
 QString getFileStr(QString filePath);
 void saveStrToFile(QString strFile,QString filePath);
 void qwidgetGeometry(QWidget*);
+BaseDockData GetDockerData(QString dockName);
+BaseAppData GetDockerData(BaseDockData dockData,QString appCID);
 #endif // LOADSTYLE_H

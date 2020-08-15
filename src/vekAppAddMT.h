@@ -16,6 +16,7 @@ class vekAppAddMT : public QWidget
     Q_OBJECT
 public:
     explicit vekAppAddMT(QWidget *parent = nullptr);
+    void vekAppAddConnectObject(BaseDockData*,QString,objectTypeView);
     ~vekAppAddMT();
 public:
     Ui::vekAppAddMT *ui;
@@ -42,7 +43,6 @@ signals:
 private slots:
     void objectButton();
     void dxvkOptionLink();
-    void vekAppAddConnectObject(BaseDockData*,QString,objectTypeView);
     void clicked_rightMenu(const QPoint &pos);  //右键信号槽函数
     void onTaskBoxContextMenuEvent();
 };

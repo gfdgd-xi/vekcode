@@ -15,11 +15,7 @@ vekAppAddAT::~vekAppAddAT()
     delete ui;
     emit _unAutoDock();
 }
-void vekAppAddAT::connectDockObject(BaseAppData* _data){
-    autoAppData=_data;
-    if(autoAppData==nullptr){
-        autoAppData=new BaseAppData();
-    }
+void vekAppAddAT::connectDockObject(){
     connect(ui->pushButton_DockDone,&QPushButton::clicked,this,&vekAppAddAT::addAutoApp);
     connect(ui->pushButton_AutoJson,&QPushButton::clicked,this,&vekAppAddAT::SetObject);
     connect(ui->pushButton_AutoDockPath,&QPushButton::clicked,this,&vekAppAddAT::SetObject);
@@ -131,18 +127,17 @@ void vekAppAddAT::addAutoApp(){
         vekTip("请设置游戏运行exe文件路径");
         return;
     }
-    ObjectAddDataAT objAddDataAT;
+    ObjectDockAT objAddDataAT;
     objAddDataAT.pJsonPath=JsonType(ui->comboBox_JsonUrl->currentText());
     objAddDataAT.pDockName=ui->comboBox_DockName->currentText();
-    objAddDataAT.pDckPath=ui->lineEdit_DockPath->text();
+    objAddDataAT.pDockPath=ui->lineEdit_DockPath->text();
     objAddDataAT.pWineVersion=ui->comboBox_WinVersion->currentText();
     objAddDataAT.pAppExePath=ui->lineEdit_AppExePath->text();
-    objAddDataAT.pBaseAppData=autoAppData;
     if(objAutoAddApp!=nullptr){
         delete objAutoAddApp;
         objAutoAddApp=nullptr;
     }
-    objAutoAddApp=new objectAppAT(objAddDataAT);
+    objAutoAddApp=new objectAppAT();
     connect(objAutoAddApp,SIGNAL(Tips(QString)),this,SLOT(TipText(QString)));
     connect(objAutoAddApp,SIGNAL(Error(QString,bool)),this,SLOT(ErrorText(QString,bool)));
     connect(objAutoAddApp,SIGNAL(Done()),this,SLOT(ObjDone()));

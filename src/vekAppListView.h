@@ -26,7 +26,7 @@ private slots:
         void moveSlot();
         void setItemSlot();
         void unAppAdd();
-        void setUpDelData(BaseAppData*,objectTypeView);
+        void setUpDelData(BaseDockData,BaseAppData*,objectTypeView);
         void unExportJson();
         void unDebugApp();
 public slots:
