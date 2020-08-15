@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
             return 0;
         }
     }
-    objectSource* objSource=new objectSource;
+    objectSource* objSource=new objectSource;   
     objSource->loadAllData();
     delete objSource;
     objSource=nullptr;

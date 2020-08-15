@@ -106,12 +106,12 @@ json objectJson::DataSerialize(json jsonData,const BaseLocalData _baseLocalData)
         for(auto&[a,b]:_baseLocalData.wineJsonList){
             if(a==x){
                 for(auto& [d,e]:b){
-                    jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(rWineName)]=e.WineName.toStdString();
-                    jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(rWineVersion)]=e.WineVersion.toStdString();
-                    jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(rWineGit)]=e.WineGit.toStdString();
-                    jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(rMono)]=e.Mono.toStdString();
-                    jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(rGeckoX86)]=e.GeckoX86.toStdString();
-                    jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(rGeckoX86_64)]=e.GeckoX86_64.toStdString();
+                    jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(WineName)]=e.WineName.toStdString();
+                    jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(WineVersion)]=e.WineVersion.toStdString();
+                    jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(WineGit)]=e.WineGit.toStdString();
+                    jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(Mono)]=e.Mono.toStdString();
+                    jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(GeckoX86)]=e.GeckoX86.toStdString();
+                    jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(GeckoX86_64)]=e.GeckoX86_64.toStdString();
                     for(auto dy:e.WineDxvk){
                         jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(WineDxvk)].push_back(dy.toStdString());
                     }
@@ -261,9 +261,7 @@ bool objectJson::unDataSerializeLocalData(){
                             {
                                 if(u==b)
                                 {
-                                    for(auto& kj:i)
-                                    {
-                                        qDebug()<<QString::fromStdString(kj);
+                                    for(auto& kj:i){
                                         g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].WineName=QString::fromStdString(kj.at("WineName"));
                                         g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].WineVersion=QString::fromStdString(kj.at("WineVersion"));
                                         g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].WineGit=QString::fromStdString(kj.at("WineGit"));
