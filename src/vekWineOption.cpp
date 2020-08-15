@@ -76,7 +76,7 @@ void vekWineOption::onButton_Install()
                     iWD.IwineName=dx.second.WineName;
                     iWD.IwineVer=dx.second.WineVersion;
                     iWD.IwineUrl=dx.second.WineGit;
-                    iWD.IwinePath=selPath+"/vekWine/"+dx.second.WineName+"/";
+                    iWD.IwinePath=selPath+"/vekWine/"+dx.second.WineName;
                     iWD.IwineMono=dx.second.Mono;
                     iWD.IwineGeckoX86=dx.second.GeckoX86;
                     iWD.IwineGeckoX86_64=dx.second.GeckoX86_64;

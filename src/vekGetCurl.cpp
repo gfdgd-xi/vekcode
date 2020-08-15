@@ -1,12 +1,12 @@
 ﻿#include "vekGetCurl.h"
-static vekGetCurl *dThis;
+vekGetCurl *dThis=nullptr;
 vekGetCurl::vekGetCurl(QObject *parent) : QThread(parent)
 {
-
+    dThis=this;
 }
 vekGetCurl::~vekGetCurl()
 {
-
+    dThis=nullptr;
 }
 static size_t getData(void *buffer, size_t sz, size_t nmemb, void *writer)
 {
@@ -48,7 +48,7 @@ std::string vekGetCurl::vekGetData(std::string url){
     curl_easy_cleanup(curl);
     return strRsp;
 }
-static size_t DownloadCallback(void* pBuffer, size_t nSize, size_t nMemByte, void* pParam)
+size_t vekGetCurl::DownloadCallback(void* pBuffer, size_t nSize, size_t nMemByte, void* pParam)
 {
     FILE* fp = (FILE*)pParam;
     size_t nWrite = fwrite(pBuffer, nSize, nMemByte, fp);
@@ -56,7 +56,7 @@ static size_t DownloadCallback(void* pBuffer, size_t nSize, size_t nMemByte, voi
     return nWrite;
 }
 
-static int ProgressCallback(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow)
+int vekGetCurl::ProgressCallback(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow)
 {
     vekGetCurl* dd = (vekGetCurl*)clientp;
 
@@ -89,11 +89,10 @@ bool vekGetCurl::DownloadFile(std::string URLADDR,std::string path)
     CURLcode retcCode = curl_easy_perform(curl);
     const char* pError = curl_easy_strerror(retcCode);
     std::cout << "pError: " << pError << std::endl;
-    fclose(file);   
+    fclose(file);
     return !retcCode;
 }
-void vekGetCurl::run(){
-    dThis=this;
+void vekGetCurl::DoewloadPlugs(BaseWineData _wd){
     curl= curl_easy_init();
     if(!QDir(_wd.IwinePath+"/plugs").exists()){
         QDir().mkdir(_wd.IwinePath+"/plugs");

@@ -1,16 +1,16 @@
 ﻿#include "vekGitWine.h"
 
-static vekGitWine *pThis;
+//vekGitWine *pThis=nullptr;
 
 vekGitWine::vekGitWine(QObject *parent) : QThread(parent)
 {
-
+   //pThis=this;
 }
 vekGitWine::~vekGitWine(){
-   pThis=nullptr;
+   //pThis=nullptr;
 }
 //输出进度信息
-void output_progress(progress_data *pd)
+void vekGitWine::output_progress(progress_data *pd)
 {
     int network_percent = pd->fetch_progress.total_objects > 0 ?
         (100*pd->fetch_progress.received_objects) / pd->fetch_progress.total_objects :
@@ -29,21 +29,21 @@ void output_progress(progress_data *pd)
         "   idx:   "+std::to_string(index_percent)+"%"+"("+std::to_string(pd->fetch_progress.indexed_objects)+"/"+std::to_string(pd->fetch_progress.total_objects)+")"+
         "   chk:   "+std::to_string(checkout_percent)+"%"+"("+std::to_string(pd->completed_steps)+"/"+std::to_string(pd->total_steps)+")"+
         "   Resolving deltas:   "+"("+std::to_string(pd->fetch_progress.indexed_deltas)+"/"+std::to_string(pd->fetch_progress.total_deltas)+")";
-        pThis->outputPrgressSlots(prlog);
-
+        //pThis->outputPrgressSlots(prlog);
+        qDebug()<<QString::fromStdString(prlog);
 }
 //网络进度
-int sideband_progress(const char *str, int len, void *payload)
+int vekGitWine::sideband_progress(const char *str, int len, void *payload)
 {
     (void)payload; /* unused */
     string prlog="remote:"+std::to_string(len)+str;
-    pThis->outputPrgressSlots(prlog);
+    //pThis->outputPrgressSlots(prlog);
     //printf("remote: %.*s", len, str);
     fflush(stdout);
     return 0;
 }
 //拉取进度
-int fetch_progress(const git_indexer_progress *stats, void *payload)
+int vekGitWine::fetch_progress(const git_indexer_progress *stats, void *payload)
 {
     progress_data *pd = (progress_data*)payload;
     pd->fetch_progress = *stats;
@@ -51,7 +51,7 @@ int fetch_progress(const git_indexer_progress *stats, void *payload)
     return 0;
 }
 //检查输出进度
-void checkout_progress(const char *path, size_t cur, size_t tot, void *payload)
+void vekGitWine::checkout_progress(const char *path, size_t cur, size_t tot, void *payload)
 {
     progress_data *pd = (progress_data*)payload;
     pd->completed_steps = cur;
@@ -60,7 +60,7 @@ void checkout_progress(const char *path, size_t cur, size_t tot, void *payload)
     output_progress(pd);
 }
 //sslcert
-int ssl_cert(git_cert *cert, int valid, const char *host, void *payload)
+int vekGitWine::ssl_cert(git_cert *cert, int valid, const char *host, void *payload)
 {
 
    GIT_UNUSED(valid);
@@ -77,8 +77,9 @@ void vekGitWine::curlPrgressSlots(){
     outputPrgressText=_vekgetcurl.outputPrgressText;
     emit outputPrgressSignals();
 }
+
 void vekGitWine::vek_Clone(BaseWineData _wd){
-    pThis->outputPrgressSlots("Init Repo");
+    //pThis->outputPrgressSlots("Init Repo");
     if(!git_libgit2_init())
         return;
     progress_data pd = {{0}};
@@ -100,18 +101,17 @@ void vekGitWine::vek_Clone(BaseWineData _wd){
     const char *path = b2.data();
     b3.append(_wd.IwineUrl);
     const char *url = b3.data();
-    pThis->outputPrgressSlots("clone:"+_wd.IwineName.toStdString());
+    //pThis->outputPrgressSlots("clone:"+_wd.IwineName.toStdString());
     git_clone(&cloned_repo, url, path, &clone_opts);
     git_repository_free(cloned_repo);
     git_libgit2_shutdown();
     objectJson* _objectJson=new objectJson() ;
     _objectJson->updateWineNodeData(_wd);
-    pThis->outputPrgressSlots("Done clone!");
+    //pThis->outputPrgressSlots("Done clone!");
 }
 
 void vekGitWine::run()
 {
-   pThis=this;   
    if(_wd.IwinePath==NULL){
        return;
    }
@@ -119,10 +119,8 @@ void vekGitWine::run()
    if(dir.removeRecursively()){
        vek_Clone(_wd);
    }
-   outputPrgressSlots("开始下载组件请稍等!");
-   connect(&_vekgetcurl,&vekGetCurl::curlPrgressSignals,this,&vekGitWine::curlPrgressSlots);
-   _vekgetcurl._wd=_wd;
-   _vekgetcurl.start();
-   _vekgetcurl.wait(-1);
+   //outputPrgressSlots("开始下载组件请稍等!");
+   //connect(&_vekgetcurl,&vekGetCurl::curlPrgressSignals,this,&vekGitWine::curlPrgressSlots);
+   //_vekgetcurl.DoewloadPlugs(_wd);
    emit overThreadSignals();
 }
