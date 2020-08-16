@@ -49,62 +49,87 @@ size_t vekGetCurl::DownloadCallback(void* pBuffer, size_t nSize, size_t nMemByte
 {
     FILE* fp = (FILE*)pParam;
     size_t nWrite = fwrite(pBuffer, nSize, nMemByte, fp);
-
     return nWrite;
 }
-
+static vekGetCurl* dThis=nullptr;
+double olnow=0;
 int vekGetCurl::ProgressCallback(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow)
 {
-    vekGetCurl* dd = (vekGetCurl*)clientp;
-
+    dThis = (vekGetCurl*)clientp;
     if ( dltotal > -0.1 && dltotal < 0.1 )
     {
         return 0;
     }
-    int nPos = (int) ( (dlnow/dltotal)*100 );
-    QThread::msleep(5);
-    string logText="文件名:"+dd->fileName.toStdString()+"   总大小/当前下载进度:"+std::to_string((long)dltotal)+"/"+std::to_string((long)dlnow);
-    dd->outLogText(logText);
+    //int nPos = (int) ( (dlnow/dltotal)*100 );
+    //QThread::msleep(5);
+    if(olnow!=dlnow){
+        string logText="文件名:"+dThis->fileName.toStdString()+"   总大小/当前下载进度:"+std::to_string((long)dltotal)+"/"+std::to_string((long)dlnow);
+        dThis->outLogText(logText);
+        olnow=dlnow;
+    }
     return 0;
 }
 void vekGetCurl::outLogText(string text){
     outputPrgressText=QString::fromStdString(text);
     emit curlPrgressSignals();
 }
+
 bool vekGetCurl::DownloadFile(std::string URLADDR,std::string path)
-{  
-    curl_easy_setopt(curl, CURLOPT_URL, URLADDR.c_str());
-    FILE* file = fopen(path.c_str(), "wb");
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, DownloadCallback);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA,file);
-    curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 5);
-    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
-    curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0);
-    curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, ProgressCallback);
-    curl_easy_setopt(curl, CURLOPT_PROGRESSDATA,this);
-    CURLcode retcCode = curl_easy_perform(curl);
-    const char* pError = curl_easy_strerror(retcCode);
-    std::cout << "pError: " << pError << std::endl;
-    fclose(file);
-    return !retcCode;
+{        
+    CURL *curl;
+    CURLcode curl_res;
+    curl_global_init(CURL_GLOBAL_ALL);
+    curl = curl_easy_init();
+    if(curl){
+        FILE* file= fopen(path.c_str(), "ab+");
+        curl_easy_setopt(curl, CURLOPT_URL, URLADDR.c_str());
+        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
+        curl_easy_setopt(curl, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)");
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, DownloadCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA,file);
+        curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 5);
+        curl_easy_setopt(curl, CURLOPT_NOPROGRESS, false);
+        curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, ProgressCallback);
+        curl_easy_setopt(curl, CURLOPT_PROGRESSDATA,this);
+        curl_res = curl_easy_perform(curl);
+        /* Check for errors */
+        if(curl_res != CURLE_OK){
+            fprintf(stderr, "curl_easy_perform() failed: %s\n",curl_easy_strerror(curl_res));
+        }
+        if(CURLE_OK == curl_res)
+        {
+            char *url;
+            curl_res = curl_easy_getinfo(curl, CURLINFO_EFFECTIVE_URL, &url);
+
+            if((CURLE_OK == curl_res) && url)
+                printf("重定向后的url: %s\n", url);
+        }
+        /* always cleanup */
+        fclose(file);
+        curl_easy_cleanup(curl);
+        /* we're done with libcurl, so clean it up */
+        curl_global_cleanup();
+    }
+    return !curl_res;
 }
 void vekGetCurl::DoewloadPlugs(BaseWineData _wd){
-    curl= curl_easy_init();
     if(!QDir(_wd.IwinePath+"/plugs").exists()){
         QDir().mkdir(_wd.IwinePath+"/plugs");
     }
     if(_wd.IwineMono!=NULL){
+        olnow=0;
         fileName="Mono组件";
         DownloadFile(_wd.IwineMono.toStdString(),(_wd.IwinePath+"/plugs/Mono.msi").toStdString());
     }
     if(_wd.IwineGeckoX86!=NULL){
+        olnow=0;
         fileName="GeckoX86组件";
         DownloadFile(_wd.IwineGeckoX86.toStdString(),(_wd.IwinePath+"/plugs/GeckoX86.msi").toStdString());
     }
     if(_wd.IwineGeckoX86_64!=NULL){
+        olnow=0;
         fileName="GeckoX86_64组件";
         DownloadFile(_wd.IwineGeckoX86_64.toStdString(),(_wd.IwinePath+"/plugs/GeckoX86_64.msi").toStdString());
     }
     outLogText("组件下载完毕!");
-    curl_easy_cleanup(curl);
 }

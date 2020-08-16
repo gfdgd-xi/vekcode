@@ -24,6 +24,7 @@ public slots:
      void outLogText(string text);
 signals:
      void curlPrgressSignals();
+
 };
 
 #endif // VEKGETINFOCURLTHREAD_H

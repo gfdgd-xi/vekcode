@@ -111,6 +111,7 @@ void vekGitWine::vek_Clone(BaseWineData _wd){
 
 void vekGitWine::run()
 {
+    /*
    if(_wd.IwinePath==NULL){
        return;
    }
@@ -118,6 +119,7 @@ void vekGitWine::run()
    if(dir.removeRecursively()){
        vek_Clone(_wd);
    }
+   */
    outputPrgressSlots("开始下载组件请稍等!");
    connect(&_vekgetcurl,&vekGetCurl::curlPrgressSignals,this,&vekGitWine::curlPrgressSlots);
    _vekgetcurl.DoewloadPlugs(_wd);
