@@ -34,7 +34,7 @@ public slots:
 private:
        vekGetCurl _vekgetcurl;
        void vek_Clone(BaseWineData _wd);
-static void output_progress(progress_data *pd);
+       void output_progress(progress_data *pd);
 static void checkout_progress(const char *path, size_t cur, size_t tot, void *payload);
 static int sideband_progress(const char *str, int len, void *payload);
 static int fetch_progress(const git_indexer_progress *stats, void *payload);

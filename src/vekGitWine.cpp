@@ -1,13 +1,13 @@
 ﻿#include "vekGitWine.h"
 
-//vekGitWine *pThis=nullptr;
+vekGitWine *pThis=nullptr;
 
 vekGitWine::vekGitWine(QObject *parent) : QThread(parent)
 {
-   //pThis=this;
+    pThis=this;
 }
 vekGitWine::~vekGitWine(){
-   //pThis=nullptr;
+   pThis=nullptr;
 }
 //输出进度信息
 void vekGitWine::output_progress(progress_data *pd)
@@ -29,16 +29,15 @@ void vekGitWine::output_progress(progress_data *pd)
         "   idx:   "+std::to_string(index_percent)+"%"+"("+std::to_string(pd->fetch_progress.indexed_objects)+"/"+std::to_string(pd->fetch_progress.total_objects)+")"+
         "   chk:   "+std::to_string(checkout_percent)+"%"+"("+std::to_string(pd->completed_steps)+"/"+std::to_string(pd->total_steps)+")"+
         "   Resolving deltas:   "+"("+std::to_string(pd->fetch_progress.indexed_deltas)+"/"+std::to_string(pd->fetch_progress.total_deltas)+")";
-        //pThis->outputPrgressSlots(prlog);
-        qDebug()<<QString::fromStdString(prlog);
+        outputPrgressSlots(prlog);
+        //qDebug()<<QString::fromStdString(prlog);
 }
 //网络进度
 int vekGitWine::sideband_progress(const char *str, int len, void *payload)
 {
     (void)payload; /* unused */
     string prlog="remote:"+std::to_string(len)+str;
-    //pThis->outputPrgressSlots(prlog);
-    //printf("remote: %.*s", len, str);
+    pThis->outputPrgressSlots(prlog);
     fflush(stdout);
     return 0;
 }
@@ -47,7 +46,7 @@ int vekGitWine::fetch_progress(const git_indexer_progress *stats, void *payload)
 {
     progress_data *pd = (progress_data*)payload;
     pd->fetch_progress = *stats;
-    output_progress(pd);
+    pThis->output_progress(pd);
     return 0;
 }
 //检查输出进度
@@ -57,7 +56,7 @@ void vekGitWine::checkout_progress(const char *path, size_t cur, size_t tot, voi
     pd->completed_steps = cur;
     pd->total_steps = tot;
     pd->path = path;
-    output_progress(pd);
+    pThis->output_progress(pd);
 }
 //sslcert
 int vekGitWine::ssl_cert(git_cert *cert, int valid, const char *host, void *payload)
@@ -79,7 +78,7 @@ void vekGitWine::curlPrgressSlots(){
 }
 
 void vekGitWine::vek_Clone(BaseWineData _wd){
-    //pThis->outputPrgressSlots("Init Repo");
+    pThis->outputPrgressSlots("Init Repo");
     if(!git_libgit2_init())
         return;
     progress_data pd = {{0}};
@@ -101,13 +100,13 @@ void vekGitWine::vek_Clone(BaseWineData _wd){
     const char *path = b2.data();
     b3.append(_wd.IwineUrl);
     const char *url = b3.data();
-    //pThis->outputPrgressSlots("clone:"+_wd.IwineName.toStdString());
+    pThis->outputPrgressSlots("clone:"+_wd.IwineName.toStdString());
     git_clone(&cloned_repo, url, path, &clone_opts);
     git_repository_free(cloned_repo);
     git_libgit2_shutdown();
     objectJson* _objectJson=new objectJson() ;
     _objectJson->updateWineNodeData(_wd);
-    //pThis->outputPrgressSlots("Done clone!");
+    pThis->outputPrgressSlots("Done clone!");
 }
 
 void vekGitWine::run()
@@ -119,8 +118,8 @@ void vekGitWine::run()
    if(dir.removeRecursively()){
        vek_Clone(_wd);
    }
-   //outputPrgressSlots("开始下载组件请稍等!");
-   //connect(&_vekgetcurl,&vekGetCurl::curlPrgressSignals,this,&vekGitWine::curlPrgressSlots);
-   //_vekgetcurl.DoewloadPlugs(_wd);
+   outputPrgressSlots("开始下载组件请稍等!");
+   connect(&_vekgetcurl,&vekGetCurl::curlPrgressSignals,this,&vekGitWine::curlPrgressSlots);
+   _vekgetcurl.DoewloadPlugs(_wd);
    emit overThreadSignals();
 }

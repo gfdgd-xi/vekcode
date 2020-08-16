@@ -1,12 +1,9 @@
 ﻿#include "vekGetCurl.h"
-vekGetCurl *dThis=nullptr;
 vekGetCurl::vekGetCurl(QObject *parent) : QThread(parent)
 {
-    dThis=this;
 }
 vekGetCurl::~vekGetCurl()
 {
-    dThis=nullptr;
 }
 static size_t getData(void *buffer, size_t sz, size_t nmemb, void *writer)
 {
@@ -67,11 +64,10 @@ int vekGetCurl::ProgressCallback(void *clientp, double dltotal, double dlnow, do
     int nPos = (int) ( (dlnow/dltotal)*100 );
     QThread::msleep(5);
     string logText="文件名:"+dd->fileName.toStdString()+"   总大小/当前下载进度:"+std::to_string((long)dltotal)+"/"+std::to_string((long)dlnow);
-    dThis->outLogText(logText);
+    dd->outLogText(logText);
     return 0;
 }
 void vekGetCurl::outLogText(string text){
-    //qDebug()<<QString::fromStdString(text);
     outputPrgressText=QString::fromStdString(text);
     emit curlPrgressSignals();
 }
