@@ -157,7 +157,7 @@ void vekAppListView::setItemSlot(){
             emit(toObjectArgs_ptr(bGameData,object_setApp));
             _vek_App_Add->show();
             connect(_vek_App_Add,&vekAppAddMT::_unDiyAppAdd,this,&vekAppListView::unAppAdd);
-            connect(_vek_App_Add,SIGNAL(_upData(BaseAppData*,objectTypeView)),this,SLOT(setUpDelData(BaseAppData*,objectTypeView)));
+            connect(_vek_App_Add,SIGNAL(_upData(BaseDockData,BaseAppData*,objectTypeView)),this,SLOT(setUpDelData(BaseDockData,BaseAppData*,objectTypeView)));
         }
     }
 }

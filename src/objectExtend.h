@@ -13,10 +13,11 @@ public:
     explicit objectExtend(QObject *parent = nullptr);
     ~objectExtend();
     QProcess *m_cmd=nullptr;
+    void setDockOptionObjectData(BaseDockData,QString,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
 protected:
     void run();
 private:
-    BaseAppData data;
+    BaseAppData appData;
     BaseDockData dockData;
     std::vector<QStringList> argsList;
     objectType objType;
@@ -39,8 +40,6 @@ private:
     void monitorProc();
     void forcekill();
     void dyncDxvkRegs(std::map<QString,std::map<QString,QString>>);
-private slots:
-    void setDockOptionObjectData(BaseDockData,QString,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
 signals:
     void objexitTray(bool);
 };

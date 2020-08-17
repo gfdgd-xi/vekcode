@@ -22,7 +22,7 @@ public:
     Ui::vekAppAddMT *ui;
 private:
     BaseAppData* tempAppData=nullptr;
-    BaseDockData* temDockData=nullptr;
+    BaseDockData* tempDockData=nullptr;
     objectTypeView objType;
     vector<QString> _dockSystemVersion={"win10","win7","win81","win8","winxp64"};
     vector<QString> _dockVer={"win32","win64"};
@@ -35,14 +35,19 @@ private:
     void objectAdd(QTableView*);
     void objectDelete(QTableView*);
     void dxvkOptionLinkState(bool cState);
+    void dxvkOptionLoad();
+    bool checkDocerOption();
+    bool checkAppOption();
+    bool checkDxvkOption();
+    bool checkAllOption();
 signals:
-    void doneAddApp(BaseAppData*);
+    void doneAddApp(BaseDockData*,BaseAppData*);
     void toObjectArgs(BaseAppData);
     void _unDiyAppAdd();
     void _upData(BaseAppData*,objectTypeView);
 private slots:
     void objectButton();
-    void dxvkOptionLink();
+    void plugsLoad();
     void clicked_rightMenu(const QPoint &pos);  //右键信号槽函数
     void onTaskBoxContextMenuEvent();
 };

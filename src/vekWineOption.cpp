@@ -89,7 +89,7 @@ void vekWineOption::onButton_Install()
         }
     }
     githread->_wd=iWD;
-    githread->start();   
+    githread->start();
     controlState(false);
 }
 void vekWineOption::deleteWine(){

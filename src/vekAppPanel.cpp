@@ -96,10 +96,10 @@ void vekAppPanel::addAppDiy(){
         vek_app_add->setGeometry(pObjectVek->geometry());
         vek_app_add->setWindowFlags(Qt::WindowStaysOnTopHint);
         vek_app_add->setWindowTitle("VekAppAdd");
-        vek_app_add->show();
         vek_app_add->vekAppAddConnectObject(nullptr,nullptr,object_addApp);
+        vek_app_add->show();  
         connect(vek_app_add,&vekAppAddMT::_unDiyAppAdd,this,&vekAppPanel::unDiyAppAdd);
-        connect(vek_app_add,SIGNAL(doneAddApp(BaseAppData*)), this, SLOT(addAppObject(BaseAppData*)));
+        connect(vek_app_add,SIGNAL(doneAddApp(BaseDockData*,BaseAppData*)), this, SLOT(addAppObject(BaseDockData*,BaseAppData*)));
     }
 }
 void vekAppPanel::addAppAuto(){
@@ -110,10 +110,10 @@ void vekAppPanel::addAppAuto(){
         vek_app_add_auto->setGeometry(pObjectVek->geometry());
         vek_app_add_auto->setWindowFlags(Qt::WindowStaysOnTopHint);
         vek_app_add_auto->setWindowTitle("自动配置容器");
-        vek_app_add_auto->show();
         vek_app_add_auto->connectDockObject();
+        vek_app_add_auto->show();
         connect(vek_app_add_auto,&vekAppAddAT::_unAutoDock,this,&vekAppPanel::unAutoDock);
-        connect(vek_app_add_auto,SIGNAL(autoObjDock(BaseAppData*)),this,SLOT(addAppObject(BaseAppData*)));
+        connect(vek_app_add_auto,SIGNAL(autoObjDock(BaseDockData*,BaseAppData*)),this,SLOT(addAppObject(BaseDockData*,BaseAppData*)));
     }
 }
 void vekAppPanel::objAppInstall(){

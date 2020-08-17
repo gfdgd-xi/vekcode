@@ -12,7 +12,7 @@ void objectExtend::setDockOptionObjectData(BaseDockData _dockData,QString _appCI
     if(_appCID!=nullptr){
         for(auto a:_dockData.dData){
             if(a.first==_appCID){
-                data=a.second;
+                appData=a.second;
                 break;
             }
         }
@@ -31,13 +31,13 @@ void objectExtend::executeArgsEnv(){
     qputenv("WINEPREFIX", (dockData.DockerPath+"/"+dockData.DockerName).toStdString().c_str());
     qputenv("WINEARCH", dockData.DockerVer.toStdString().c_str());
     //设置工作目录
-    qputenv("PWD", data.WorkPath.toStdString().c_str());
+    qputenv("PWD", appData.WorkPath.toStdString().c_str());
     qputenv("WINETRICKS_DOWNLOADER", "aria2c");
-    if(data.TaskLog){
+    if(appData.TaskLog){
         qputenv("WINEDEBUG", "-all");
     }
-    if(!data.DockerEnv.empty()){
-        for(auto& [a,u]:data.DockerEnv){
+    if(!appData.DockerEnv.empty()){
+        for(auto& [a,u]:appData.DockerEnv){
             qputenv(a.toStdString().c_str(),u.toStdString().c_str());
         }
     }
@@ -138,11 +138,11 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
     dockEditSystemVersion();  
     m_cmd->closeReadChannel(QProcess::StandardOutput);
     m_cmd->closeReadChannel(QProcess::StandardError);
-    m_cmd->setWorkingDirectory(data.WorkPath);
+    m_cmd->setWorkingDirectory(appData.WorkPath);
     m_cmd->execute(wcode,codeArgs);
     qDebug()<<"|++++++++++++++++++++++++++++|";
     qDebug()<<"writeCode:"+wcode;
-    qDebug()<<"workPath:"+data.WorkPath;
+    qDebug()<<"workPath:"+appData.WorkPath;
     qDebug()<<"WineArgs:"+codeArgs.join(" ");
     qDebug()<<"|++++++++++++++++++++++++++++|";
     monitorProc();
@@ -150,7 +150,7 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
     vector<QString>::iterator it;
     for(it=taskList.begin();it!=taskList.end();)
     {
-        if(it->toStdString()==data.MainPrcoName.toStdString())
+        if(it->toStdString()==appData.MainPrcoName.toStdString())
         {
            taskList.erase(it);
            break;
@@ -160,7 +160,7 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
 void objectExtend::baseExecuteWineCode(QString code,QStringList codeArgs){
     QString mdCode;
     m_cmd->setReadChannel(QProcess::StandardOutput);
-    m_cmd->setWorkingDirectory(data.WorkPath);
+    m_cmd->setWorkingDirectory(appData.WorkPath);
     m_cmd->start(code,codeArgs,QIODevice::ReadWrite);
     m_cmd->waitForFinished(-1);
     waitObjectDone(true);
@@ -209,24 +209,24 @@ void objectExtend::optionExtend(){
 }
 void objectExtend::extendApp(){
     QStringList codeArgs;
-    QString gameExe=data.AppExe;
+    QString gameExe=appData.AppExe;
     /*
     if(gameExe.contains(" ",Qt::CaseSensitive)){
         gameExe="\""+gameExe+"\"";
     }
     */
     codeArgs.append(gameExe);
-    if(data.TaskMemorySharing){
+    if(appData.TaskMemorySharing){
         codeArgs.append("STAGING_SHARED_MEMORY=1");
     }
-    if(data.TaskRealTimePriority){
+    if(appData.TaskRealTimePriority){
         codeArgs.append("STAGING_RT_PRIORITY_SERVER=60");
     }
-    if(data.TaskMemoryOptimization){
+    if(appData.TaskMemoryOptimization){
         codeArgs.append("STAGING_WRITECOPY=1");
     }
-    if(data.AppOtherAgrs!=nullptr){
-        codeArgs.append(data.AppOtherAgrs);
+    if(appData.AppOtherAgrs!=nullptr){
+        codeArgs.append(appData.AppOtherAgrs);
     }
     dyncDxvkRegs(dxvkResCache);
     dyncDxvkRegs(dxvkResLog);
@@ -238,7 +238,7 @@ void objectExtend::dyncDxvkRegs(std::map<QString,std::map<QString,QString>> dxvk
     for(auto a:dxvkResStr){
         for(auto b:a.second){
          argsList.clear();
-         argsList.push_back(DockRegeditStr("add",a.first,b.first,"REG_SZ",data.WorkPath));
+         argsList.push_back(DockRegeditStr("add",a.first,b.first,"REG_SZ",appData.WorkPath));
         }
     }
     extendWineRegeditCode(startArgs);
@@ -257,13 +257,13 @@ void objectExtend::extendPlugs(){
 }
 void objectExtend::monitorProc(){
     procInfo pi;
-    if(!data.AttachProc.empty()){
+    if(!appData.AttachProc.empty()){
         objectProcManage* objProcMangs=new objectProcManage();
         pi.pDockName=dockData.DockerName;
         pi.pDockPath=dockData.DockerPath;
         pi.pWinePath=dockData.WinePath;
-        pi.pAttachProc=data.AttachProc;
-        pi.pAttachProc.push_back(data.MainPrcoName);
+        pi.pAttachProc=appData.AttachProc;
+        pi.pAttachProc.push_back(appData.MainPrcoName);
         objProcMangs->iprocInfo=pi;
         objProcMangs->start();
         objProcMangs->wait();
@@ -278,9 +278,9 @@ void objectExtend::forcekill(){
     pi.pDockName=dockData.DockerName;
     pi.pDockPath=dockData.DockerPath;
     pi.pWinePath=dockData.WinePath;
-    pi.pAttachProc=data.AttachProc;
+    pi.pAttachProc=appData.AttachProc;
     if(objType==object_forcekill){;
-        pi.pAttachProc.push_back(data.MainPrcoName);
+        pi.pAttachProc.push_back(appData.MainPrcoName);
     }
     objProcMangs->iprocInfo=pi;
     objProcMangs->start();

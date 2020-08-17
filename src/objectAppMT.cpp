@@ -327,7 +327,6 @@ void objectAppMT::WaitObjectDone(objectExtend* _waitObject){
 void objectAppMT::ExecuteObj(objectType _objType,objectWineBoot _objWineBootType,objectWineServer _objWineServer){
     objectExtend* objExtend = new objectExtend();
     if(dockData->DockerPath==NULL||dockData->DockerName==NULL){return;}
-    connect(this, SIGNAL(ExecutetoObjectArgs(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)), objExtend, SLOT(setDockOptionObjectData(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)));
-    emit(ExecutetoObjectArgs(*appData,argsList,_objType,_objWineBootType,_objWineServer));
+    objExtend->setDockOptionObjectData(*dockData,appData->AppCID,argsList,_objType,_objWineBootType,_objWineServer);
     WaitObjectDone(objExtend);
 }

@@ -36,9 +36,6 @@ private:
     void addJsonAuto(QString);
     void installMonoPlugs();
     void installGeckoPlugs();
-signals:
-    void ExecutetoObjectArgs(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
-
 };
 
 #endif // VEKGAMEADDOBJECT_H

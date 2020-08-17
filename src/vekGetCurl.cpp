@@ -61,7 +61,7 @@ int vekGetCurl::ProgressCallback(void *clientp, double dltotal, double dlnow, do
         return 0;
     }
     //int nPos = (int) ( (dlnow/dltotal)*100 );
-    //QThread::msleep(5);
+    QThread::msleep(5);
     if(olnow!=dlnow){
         string logText="文件名:"+dThis->fileName.toStdString()+"   总大小/当前下载进度:"+std::to_string((long)dltotal)+"/"+std::to_string((long)dlnow);
         dThis->outLogText(logText);
