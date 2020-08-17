@@ -79,7 +79,7 @@ void vekExtendDebug::startDebug(){
 }
 //运行环境变量设置
 void vekExtendDebug::executeArgsEnv(){
-    qputenv("WINE", (dockData.WinePath+"wine/bin/"+dockData.WineVersion).toStdString().c_str());
+    qputenv("WINE", (dockData.WinePath+"/wine/bin/"+dockData.WineVersion).toStdString().c_str());
     //设置容器目录
     qputenv("WINEPREFIX", (dockData.DockerPath+"/"+dockData.DockerName).toStdString().c_str());
     qputenv("WINEARCH", dockData.DockerVer.toStdString().c_str());
@@ -113,13 +113,13 @@ void vekExtendDebug::ExtendApp(){
         gameExe="\""+gameExe+"\"";
     }
     codeArgs.append(gameExe);
-    if(appData.TaskMemorySharing){
+    if(appData.SharedMemory){
         codeArgs.append("STAGING_SHARED_MEMORY=1");
     }
-    if(appData.TaskRealTimePriority){
+    if(appData.RtServer){
         codeArgs.append("STAGING_RT_PRIORITY_SERVER=60");
     }
-    if(appData.TaskMemoryOptimization){
+    if(appData.WriteCopy){
         codeArgs.append("STAGING_WRITECOPY=1");
     }
     if(appData.AppOtherAgrs!=nullptr){
@@ -130,7 +130,7 @@ void vekExtendDebug::ExtendApp(){
     m_cmd->setWorkingDirectory(appData.WorkPath);
     m_cmd->start("bash");
     connect(m_cmd,SIGNAL(readyReadStandardOutput()),this,SLOT(onReadyRead()));
-    QString codes=codeDebug+" "+dockData.WinePath+"wine/bin/"+dockData.DockerWineVersion+" "+codeArgs.join(" ");
+    QString codes=codeDebug+" "+dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion+" "+codeArgs.join(" ");
     m_cmd->write(codes.toLocal8Bit()+'\n');
     qDebug()<<"|++++++++++++++++++++++++++++|";
     qDebug()<<"writeCode:"+codes;

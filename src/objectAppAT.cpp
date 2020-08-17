@@ -101,30 +101,30 @@ bool objectAppAT::objDockerData(QString dockName){
 }
 void objectAppAT::objAppData(){
     if(!_baseAutoSetJson->Option.empty()){
-        for(auto a:_baseAutoSetJson->Option){
-            if(a.first=="AppName"){
-                baseAppData.AppName=a.second;
+        for(auto [a,b]:_baseAutoSetJson->Option){
+            if(a=="AppName"){
+                baseAppData.AppName=b;
             }
 
-            if(a.first=="DefaultFont"){
-                QVariant defaultFontValue=a.second;
+            if(a=="DefaultFont"){
+                QVariant defaultFontValue=b;
                 baseAppData.DefaultFonts=(defaultFontValue).toBool();
             }
-            if(a.first=="SharedMemory"){
-                QVariant sharedMemoryValue=a.second;
-                baseAppData.TaskMemorySharing=(sharedMemoryValue).toBool();
+            if(a=="SharedMemory"){
+                QVariant sharedMemoryValue=b;
+                baseAppData.SharedMemory=(sharedMemoryValue).toBool();
             }
-            if(a.first=="WriteCopy"){
-                QVariant writeCopyValue=a.second;
-                baseAppData.TaskMemoryOptimization=(writeCopyValue).toBool();
+            if(a=="WriteCopy"){
+                QVariant writeCopyValue=b;
+                baseAppData.WriteCopy=(writeCopyValue).toBool();
             }
-            if(a.first=="RtServer"){
-                QVariant rtServerValue=a.second;
-                baseAppData.TaskRealTimePriority=(rtServerValue).toBool();
+            if(a=="RtServer"){
+                QVariant rtServerValue=b;
+                baseAppData.RtServer=(rtServerValue).toBool();
             }
 
-            if(a.first=="MainPrcoName"){
-                baseAppData.MainPrcoName=a.second;
+            if(a=="MainPrcoName"){
+                baseAppData.MainPrcoName=b;
             }
         }
     }
@@ -178,7 +178,7 @@ void objectAppAT::objectAutoObj(){
     objDiyAddApp->InitDockObj(false);
     objDiyAddApp->optionRegs();
     objDiyAddApp->DockLibsInstall();
-    objDiyAddApp->SaveDataToJson(baseDockData.DockerName,baseAppData);
+    //objDiyAddApp->SaveDataToJson(baseDockData.DockerName,baseAppData);
     delete objDiyAddApp;
     objDiyAddApp=nullptr;
 }

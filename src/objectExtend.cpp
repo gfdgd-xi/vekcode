@@ -22,11 +22,15 @@ void objectExtend::setDockOptionObjectData(BaseDockData _dockData,QString _appCI
     objType=_objType;
     objWineBootType=_objWineBootType;
     objWineServer=_objWineServer;
-    startArgs=_dockData.WinePath+"wine/bin/"+_dockData.DockerVer;
+    startArgs=dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion;
 }
 //运行环境变量设置
 void objectExtend::executeArgsEnv(){
-    qputenv("WINE", (dockData.WinePath+"wine/bin/"+dockData.WineVersion).toStdString().c_str());
+    qputenv("WINE", (dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion).toStdString().c_str());
+    qDebug()<<"wine执行版本:"<<dockData.DockerWineVersion;
+    qDebug()<<"容器版本系统版本:"<<dockData.DockerSystemVersion;
+    qDebug()<<"Wine版本号:"<<dockData.WineVersion;
+    qDebug()<<"容器系统位数版本:"<<dockData.DockerVer;
     //设置容器目录
     qputenv("WINEPREFIX", (dockData.DockerPath+"/"+dockData.DockerName).toStdString().c_str());
     qputenv("WINEARCH", dockData.DockerVer.toStdString().c_str());
@@ -47,7 +51,7 @@ void objectExtend::executeArgsEnv(){
 }
 void objectExtend::executeWineBoot(objectWineBoot objWineBootType){
     QStringList wineboot;
-    wineboot.append(dockData.WinePath+"wine/bin/");
+    wineboot.append(dockData.WinePath+"/wine/bin/");
     switch (objWineBootType) {
     case object_wineboot_e:
         //结束会话
@@ -87,7 +91,7 @@ void objectExtend::executeWineBoot(objectWineBoot objWineBootType){
 }
 void objectExtend::executeWineServer(objectWineServer objWineServer){
     QStringList wineserver;
-    wineserver.append(dockData.WinePath+"wine/bin/");
+    wineserver.append(dockData.WinePath+"/wine/bin/");
     switch (objWineServer) {
     case object_wineserver_k:
         //结束会话
@@ -115,7 +119,8 @@ void objectExtend::executeWinetricks(){
     //executeWineServer(object_wineserver_k);
     //executeWineBoot(object_wineboot_k);
     QStringList codeArgs;
-    codeArgs.append(dockData.WinePath+"wine/bin/winetricks");
+    qputenv("WINE", (dockData.WinePath+"/wine/bin/wine").toStdString().c_str());
+    codeArgs.append(dockData.WinePath+"/wine/bin/winetricks");
     if(objType==object_winetricks_gui){
         codeArgs.append("--gui");
     }else if(objType==object_winetricks_libs){
@@ -216,13 +221,13 @@ void objectExtend::extendApp(){
     }
     */
     codeArgs.append(gameExe);
-    if(appData.TaskMemorySharing){
+    if(appData.SharedMemory){
         codeArgs.append("STAGING_SHARED_MEMORY=1");
     }
-    if(appData.TaskRealTimePriority){
+    if(appData.RtServer){
         codeArgs.append("STAGING_RT_PRIORITY_SERVER=60");
     }
-    if(appData.TaskMemoryOptimization){
+    if(appData.WriteCopy){
         codeArgs.append("STAGING_WRITECOPY=1");
     }
     if(appData.AppOtherAgrs!=nullptr){

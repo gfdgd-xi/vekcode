@@ -14,7 +14,7 @@ public:
     bool InitDockObj(bool);
     std::vector<QStringList> argsList;
     //写入数据
-    void SaveDataToJson(QString dockName,BaseAppData writeData);
+    void SaveDockerDataToJson(BaseDockData dockData,QString dockName);
     void DockLibsInstall();
     void ExecuteObj(objectType,objectWineBoot,objectWineServer);
     void newDock();

@@ -26,9 +26,9 @@ typedef struct {
     bool DxvkHUD=false;
     bool DxvkConfigFileState=false;
     bool TaskLog=false;
-    bool TaskMemoryOptimization=false;
-    bool TaskMemorySharing=false;
-    bool TaskRealTimePriority=false;
+    bool WriteCopy=false;
+    bool SharedMemory=false;
+    bool RtServer=false;
     bool DefaultFonts=false;
     std::vector<QString> AttachProc={};
     std::map<QString,QString> DockerEnv={};

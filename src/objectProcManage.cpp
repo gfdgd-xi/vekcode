@@ -29,7 +29,7 @@ void objectProcManage::objDelProc(QProcess* prc,QString prPid,procInfo _pInfo){
     prc->setReadChannel(QProcess::StandardOutput);
     prc->start("bash");
     //设置工作目录
-    QString aCodes="WINEPREFIX="+_pInfo.pDockPath+"/"+_pInfo.pDockName+" "+_pInfo.pWinePath+"wine/bin/winedbg";
+    QString aCodes="WINEPREFIX="+_pInfo.pDockPath+"/"+_pInfo.pDockName+" "+_pInfo.pWinePath+"/wine/bin/winedbg";
     QString bCodes="attach "+prPid;
     QString cCodes="kill";
     QString dCodes="quit";

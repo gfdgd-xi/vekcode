@@ -32,7 +32,6 @@ private slots:
 public slots:
         void ObjectRun();
 signals:
-        void toObjectArgs(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
         void toObjectArgs_ptr(BaseAppData*,objectTypeView);
         void toObjectArgs_cl(BaseAppData);
         void _startTray();
@@ -48,7 +47,6 @@ private:
         std::map<QString,vekAppListView*> *m_pListMap;
         //记录每个菜单项对应的列表，才能知道要转移到那个分组
         std::map<QAction*,vekAppListView*> m_ActionMap;
-        void vekLoadJsonData();
         void vekWriteJsonData();
         void vekReadJsonData(QString jsonPath);
         void vekInitJsonData();

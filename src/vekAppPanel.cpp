@@ -3,7 +3,6 @@
 vekAppPanel::vekAppPanel(QWidget *parent)
     : QWidget(parent)
 {   
-
     vek_InitTabWidgetListApp();
     vekLoadJsonData();
 }
@@ -32,12 +31,10 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
             QIcon icon(":/res/img/32.png");
             m_pBox->setTabIcon(cTab,icon);
             cTab+=1;
-            break;
         }else{
             QIcon icon(":/res/img/64.png");
             m_pBox->setTabIcon(cTab,icon);
             cTab+=1;
-            break;
         }
         m_pListMap->insert(std::pair<QString,vekAppListView*>(twn.first,pListView));
         pListView->setListMap(m_pListMap,m_pBox);
@@ -50,26 +47,22 @@ void vekAppPanel::vekLoadJsonData(){
         return;
     }else{
         for(auto& y:g_vekLocalData.dockerVec){
-            if(y.first==y.second.DockerName){
-                for(auto z:y.second.dData){
-                    vekAppListView* pList= new vekAppListView();
-                    QString nowTabName=y.first;
-                    BaseAppData *LID=new BaseAppData;
-                    *LID=z.second;
-                    for(std::map<QString,vekAppListView*>::iterator it = m_pListMap->begin();it!=m_pListMap->end();it++)
-                    {
-                        if(it->first==nowTabName){
-                            pList=it->second;
-                            break;
-                        }
+            for(auto z:y.second.dData){
+                vekAppListView* pList= new vekAppListView();
+                QString nowTabName=y.first;
+                BaseAppData *LID=new BaseAppData();
+                *LID=z.second;
+                for(std::map<QString,vekAppListView*>::iterator it = m_pListMap->begin();it!=m_pListMap->end();it++)
+                {
+                    if(it->first==nowTabName){
+                        pList=it->second;
+                        break;
                     }
-                    pList->setViewMode(QListView::IconMode);
-                    pList->setFlow(QListView::LeftToRight);
-                    qDebug()<<this->parentWidget()->parentWidget();
-                    connect(pList, SIGNAL(_startTray()), this->parentWidget()->parentWidget(), SLOT(startTray()));
-                    pList->addItem(LID);
                 }
-
+                pList->setViewMode(QListView::IconMode);
+                pList->setFlow(QListView::LeftToRight);
+                connect(pList, SIGNAL(_startTray()), this->parentWidget()->parentWidget(), SLOT(startTray()));
+                pList->addItem(LID);
             }
         }
     }
@@ -97,7 +90,7 @@ void vekAppPanel::addAppDiy(){
         vek_app_add->setWindowFlags(Qt::WindowStaysOnTopHint);
         vek_app_add->setWindowTitle("VekAppAdd");
         vek_app_add->vekAppAddConnectObject(nullptr,nullptr,object_addApp);
-        vek_app_add->show();  
+        vek_app_add->show();
         connect(vek_app_add,&vekAppAddMT::_unDiyAppAdd,this,&vekAppPanel::unDiyAppAdd);
         connect(vek_app_add,SIGNAL(doneAddApp(BaseDockData*,BaseAppData*)), this, SLOT(addAppObject(BaseDockData*,BaseAppData*)));
     }

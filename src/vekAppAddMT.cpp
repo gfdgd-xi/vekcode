@@ -96,9 +96,9 @@ void vekAppAddMT::vekAppAddConnectObject(BaseDockData* _data,QString _appCID,obj
         ui->checkBox_winerunlog->setChecked(tempAppData->TaskLog);
         ui->lineEdit_otherAgrs->setText(tempAppData->AppOtherAgrs);
         ui->lineEdit_dxvkConfigFIle->setText(tempAppData->DxvkConfigFile);
-        ui->checkBox_wineMemorySharing->setChecked(tempAppData->TaskMemorySharing);
-        ui->checkBox_wineMemoryOptimization->setChecked(tempAppData->TaskMemoryOptimization);
-        ui->checkBox_wineRealTimePriority->setChecked(tempAppData->TaskRealTimePriority);
+        ui->checkBox_wineMemorySharing->setChecked(tempAppData->SharedMemory);
+        ui->checkBox_wineMemoryOptimization->setChecked(tempAppData->WriteCopy);
+        ui->checkBox_wineRealTimePriority->setChecked(tempAppData->RtServer);
         ui->checkBox_stateDxvk->setChecked(tempAppData->DxvkState);
         ui->comboBox_dxvkversion->setCurrentText(tempAppData->DxvkVerson);
         ui->checkBox_statedxvkhud->setChecked(tempAppData->DxvkHUD);
@@ -306,7 +306,7 @@ void vekAppAddMT::objectDelete(QTableView* qTableView){
 }
 //控件数据to Class
 bool vekAppAddMT::vekAppConfigObj(){
-    if(tempAppData==nullptr){
+    if(tempAppData->AppCID==nullptr){
         objectJson _objectJson;
         tempAppData->AppCID=_objectJson.GetRandomCID();
     }
@@ -354,9 +354,9 @@ bool vekAppAddMT::vekAppConfigObj(){
     tempAppData->DxvkConfigFile=ui->lineEdit_dxvkConfigFIle->text();
     //优化参数
     tempAppData->TaskLog=ui->checkBox_winerunlog->checkState();
-    tempAppData->TaskMemorySharing=ui->checkBox_wineMemorySharing->checkState();
-    tempAppData->TaskMemoryOptimization=ui->checkBox_wineMemoryOptimization->checkState();
-    tempAppData->TaskRealTimePriority=ui->checkBox_wineRealTimePriority->checkState();
+    tempAppData->SharedMemory=ui->checkBox_wineMemorySharing->checkState();
+    tempAppData->WriteCopy=ui->checkBox_wineMemoryOptimization->checkState();
+    tempAppData->RtServer=ui->checkBox_wineRealTimePriority->checkState();
     tempAppData->DefaultFonts=ui->checkBox_DefaultFonts->checkState();
     int envCurRow=ui->tableView_EnvList->model()->rowCount();
     int procCurRow=ui->tableView_ProcList->model()->rowCount();
@@ -561,14 +561,16 @@ void vekAppAddMT::objectButton(){
 }
 
 bool vekAppAddMT::vekAppAddObj(bool _forceState){
-    if(!vekAppConfigObj()){
-        return false;
+    if(vekAppConfigObj()){
+      tempDockData->dData.insert(pair<QString,BaseAppData>(tempAppData->AppCID,*tempAppData));
+    }else{
+      return false;
     }
     objectAppMT* vappAddObj=new objectAppMT(tempAppData,tempDockData);
     if(!vappAddObj->InitDockObj(_forceState)){
         vekError("初始化失败!");
     }else{
-        vappAddObj->SaveDataToJson(tempDockData->DockerName,*tempAppData);
+        vappAddObj->SaveDockerDataToJson(*tempDockData,tempDockData->DockerName);
     }
     emit _upData(tempAppData,objType);
     delete vappAddObj;

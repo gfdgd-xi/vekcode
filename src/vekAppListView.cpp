@@ -7,7 +7,8 @@ vekAppListView::vekAppListView( QWidget *parent):QListView(parent)
     m_hitIndex = -1;
     m_pModel = new vekAppData;
     this->setModel(m_pModel);
-    m_pListMap = NULL;}
+    m_pListMap = NULL;
+}
 
 vekAppListView::~vekAppListView()
 {
@@ -110,8 +111,7 @@ void vekAppListView::ObjectRun(){
             delete oAMT;
             oAMT=nullptr;
         }
-        connect(this, SIGNAL(toObjectArgs(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)), _objectExtend, SLOT(setDockOptionObjectData(BaseAppData,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)));
-        emit(toObjectArgs(*m_pModel->getItem(index),_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default));
+        _objectExtend->setDockOptionObjectData(GetDockerData(mBox->tabText(mBox->currentIndex())),m_pModel->getItem(index)->AppCID,_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default);
         _objectExtend->start();
     }
 }
@@ -177,7 +177,7 @@ void vekAppListView::setUpDelData(BaseDockData dockData,BaseAppData* appData,obj
             }
             m_pModel->deleteItem(index);
             objectJson _objectJson;
-            _objectJson.deleteAppNodeData(deleteCID);
+            //_objectJson.deleteAppNodeData(deleteCID);
         }
         if(objTypeView==object_setApp){
             m_pModel->deleteItem(index);
@@ -249,8 +249,8 @@ void vekAppListView::moveSlot()
             m_pModel->deleteItem(index);
             QString dockName=m_ActionMap.find(pSender)->first->text();
             objectJson _objectJson;
-            _objectJson.deleteAppNodeData(pItem->AppCID);
-            _objectJson.updateAppNodeData(dockName,*pItem);
+            //_objectJson.deleteAppNodeData(pItem->AppCID);
+            //_objectJson.updateAppNodeData(dockName,*pItem);
         }
     }
     //操作完了要把这个临时的映射清空

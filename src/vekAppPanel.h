@@ -31,9 +31,9 @@ private:
     void addAppDiy();
     void addAppAuto();
     void startLoadData();
-    void vek_InitTabWidgetListApp();   
     std::map<QString,vekAppListView*> *m_pListMap;    //记录分组和分组名字的映射关系，好在转移图标时知道转移到那个分组
     void vekLoadJsonData();
+    void vek_InitTabWidgetListApp();
     string GetReData(QString);
 signals:
     void toObjAutoArgs_ptr();

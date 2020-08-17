@@ -8,9 +8,9 @@ objectAppMT::objectAppMT(BaseAppData* _appData,BaseDockData* _dockData)
 objectAppMT::~objectAppMT(){
 }
 //写入json
-void objectAppMT::SaveDataToJson(QString dName,BaseAppData writeData){
+void objectAppMT::SaveDockerDataToJson(BaseDockData dockData,QString dockName){
     objectJson _objectJson;
-    _objectJson.updateAppNodeData(dName,writeData);
+    _objectJson.updateDockerNodeData(dockData,dockName);
 }
 //返回dxvk文件列表
 QStringList objectAppMT::GetDxvkFileList(QString basedxvkDir){
@@ -32,7 +32,7 @@ QStringList objectAppMT::GetDxvkFileList(QString basedxvkDir){
 //安装dxvk
 void objectAppMT::DxvkFileInstall(){
     //wine下的dxvk目录
-    QString baseDxvkDir=dockData->WinePath+"dxvk";
+    QString baseDxvkDir=dockData->WinePath+"/dxvk";
     qDebug()<<baseDxvkDir;
     //获取dxvk目录下的文件列表
     QStringList dxvkFileList=GetDxvkFileList(baseDxvkDir);
@@ -147,7 +147,7 @@ void objectAppMT::DxvkConfigFile(){
 
 //default fonts
 void objectAppMT::DefaultFontsFileInstall(){
-    QString fontsDirStr=dockData->WinePath+"fonts";
+    QString fontsDirStr=dockData->WinePath+"/fonts";
     QStringList fontsList;
     fontsList.clear();
     QDir _fontsDir(fontsDirStr);
@@ -194,6 +194,7 @@ void objectAppMT::InitDockDir(bool foceState,QDir _dockPath,QDir _dockDir){
             ExecuteObj(object_wineboot,object_wineboot_i,object_wineserver_default);
         }
     }else{
+        qDebug()<<"初始化";
         ExecuteObj(object_wineboot,object_wineboot_i,object_wineserver_default);
     }
     QFile systemFile=_dockDir.path()+"/system.reg";
@@ -223,7 +224,7 @@ void objectAppMT::DockLibsInstall(){
 void objectAppMT::installMonoPlugs(){
     argsList.clear();
     QStringList _tempPlugsList;
-    QString fileMono=dockData->WinePath+"plugs/Mono.msi";
+    QString fileMono=dockData->WinePath+"/plugs/Mono.msi";
     if(QFile(fileMono).exists()){
         _tempPlugsList.append(fileMono);
         argsList.push_back(_tempPlugsList);
@@ -233,8 +234,8 @@ void objectAppMT::installMonoPlugs(){
 void objectAppMT::installGeckoPlugs(){
     argsList.clear();
     QStringList _tempPlugsList;
-    QString fileGeckoX86_64=dockData->WinePath+"plugs/GeckoX86_64.msi";
-    QString fileGeckoX86=dockData->WinePath+"plugs/GeckoX86.msi";
+    QString fileGeckoX86_64=dockData->WinePath+"/plugs/GeckoX86_64.msi";
+    QString fileGeckoX86=dockData->WinePath+"/plugs/GeckoX86.msi";
     if(QFile(fileGeckoX86_64).exists()&QFile(fileGeckoX86).exists()){
         _tempPlugsList.append(fileGeckoX86_64);
         _tempPlugsList.append(fileGeckoX86);

@@ -46,7 +46,6 @@ void objectSource::loadAllData(){
         if(_objectJson.unDataSerializeLocalData()){
             g_vekLocalData.appJsonList.clear();
             g_vekLocalData.wineJsonList.clear();
-            qDebug()<<"3456";
             updateSrcDataObject();  
         }
     }

@@ -15,8 +15,9 @@ public:
     objectJson();
     ~objectJson();
     void updateWineNodeData(BaseWineData);
-    void updateAppNodeData(QString dockName,BaseAppData base_wine_data);
-    void deleteAppNodeData(QString nodeName);
+    void updateDockerNodeData(BaseDockData dockData,QString dockName);
+    void deleteDockerNodeData(QString dockName);
+    void deleteAppNodeData(QString dockName,QString appCID);
     void deleteWineNodeData(QString nwineName);
     bool unDataSerializeLocalData();
     bool unSerializeLocalWineApp(QString,QString urlData,UNJSONTYPE jsonType);
