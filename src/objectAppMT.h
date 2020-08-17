@@ -13,8 +13,6 @@ public:
     QString GetRandomCID();
     bool InitDockObj(bool);
     std::vector<QStringList> argsList;
-    //写入数据
-    void SaveDockerDataToJson(BaseDockData dockData,QString dockName);
     void DockLibsInstall();
     void ExecuteObj(objectType,objectWineBoot,objectWineServer);
     void newDock();

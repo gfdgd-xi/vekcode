@@ -13,4 +13,6 @@ void saveStrToFile(QString strFile,QString filePath);
 void qwidgetGeometry(QWidget*);
 BaseDockData GetDockerData(QString dockName);
 BaseAppData GetDockerData(BaseDockData dockData,QString appCID);
+void SaveDockerDataToJson(BaseDockData dockData,QString dockName);
+void SaveAppDataToJson(BaseDockData dockData,BaseAppData appData);
 #endif // LOADSTYLE_H

@@ -7,11 +7,7 @@ objectAppMT::objectAppMT(BaseAppData* _appData,BaseDockData* _dockData)
 }
 objectAppMT::~objectAppMT(){
 }
-//写入json
-void objectAppMT::SaveDockerDataToJson(BaseDockData dockData,QString dockName){
-    objectJson _objectJson;
-    _objectJson.updateDockerNodeData(dockData,dockName);
-}
+
 //返回dxvk文件列表
 QStringList objectAppMT::GetDxvkFileList(QString basedxvkDir){
     QStringList dxvkFileList;
@@ -157,6 +153,8 @@ void objectAppMT::DefaultFontsFileInstall(){
     if(appData->DefaultFonts){
         if(QFile(fontsDirStr).exists()){
             for(auto f:fontsList){
+                qDebug()<<fontsDirStr+"/"+f;
+                qDebug()<<dockData->DockerPath+"/"+dockData->DockerName+"/drive_c/windows/Fonts/"+f;
                 QFile::copy(fontsDirStr+"/"+f, dockData->DockerPath+"/"+dockData->DockerName+"/drive_c/windows/Fonts/"+f);
             }
         }
@@ -245,13 +243,11 @@ void objectAppMT::installGeckoPlugs(){
 }
 void objectAppMT::optionRegs(){
     argsList.clear();
-    if(!appData->DockerRegs.empty()){
-        for(auto d:appData->DockerRegs)
-        {
-            argsList.push_back(DockRegeditStr("add",d.rPath,d.rKey,d.rTValue,d.rValue));
-        }
-        ExecuteObj(object_regobject,object_wineboot_default,object_wineserver_default);
+    for(auto d:appData->DockerRegs)
+    {
+        argsList.push_back(DockRegeditStr("add",d.rPath,d.rKey,d.rTValue,d.rValue));
     }
+    ExecuteObj(object_regobject,object_wineboot_default,object_wineserver_default);
 }
 void objectAppMT::newDock(){
     QDir dockPath(dockData->DockerPath);
@@ -285,32 +281,27 @@ bool objectAppMT::InitDockObj(bool _forceState){
     }
     try {
         InitDockDir(_forceState,dockPath,dockDir);
-        if(appData==nullptr||_forceState){
-            if(appData->DxvkState){
-                DxvkFileInstall();
-                if(appData->DxvkHUD){
-                    DxvkHUDRegs();
-                }
-                if(appData->DxvkConfigFileState){
-                    DxvkConfigFile();
-                }
+        if(appData->DxvkState){
+            DxvkFileInstall();
+            if(appData->DxvkHUD){
+                DxvkHUDRegs();
             }
-            if(appData->DefaultFonts){
-                DefaultFontsFileInstall();
+            if(appData->DxvkConfigFileState){
+                DxvkConfigFile();
             }
-            if(dockData->MonoState){
-                installMonoPlugs();
-            }
-            if(dockData->GeckoState){
-                installGeckoPlugs();
-            }
-        }else{
-           sObjectInstall();
-           DefaultFontsFileInstall();
-           installMonoPlugs();
-           installGeckoPlugs();
         }
-        optionRegs();
+        if(appData->DefaultFonts){
+            DefaultFontsFileInstall();
+        }
+        if(dockData->MonoState){
+            installMonoPlugs();
+        }
+        if(dockData->GeckoState){
+            installGeckoPlugs();
+        }
+        if(!appData->DockerRegs.empty()){
+            optionRegs();
+        }
         ExecuteObj(object_dockSysver,object_wineboot_default,object_wineserver_default);
         return true;
     } catch (nullopt_t) {

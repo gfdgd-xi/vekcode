@@ -106,7 +106,8 @@ void vekAppListView::ObjectRun(){
             auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
             connect(_objectExtend, SIGNAL(objexitTray(bool)), pObjectVek, SLOT(exitTray(bool)));
             emit _startTray();
-            objectAppMT* oAMT=new objectAppMT(m_pModel->getItem(index),nullptr);
+            BaseDockData bdd=GetDockerData(mBox->tabText(mBox->currentIndex()));
+            objectAppMT* oAMT=new objectAppMT(m_pModel->getItem(index),&bdd);
             oAMT->sObjectInstall();
             delete oAMT;
             oAMT=nullptr;
@@ -174,16 +175,17 @@ void vekAppListView::setUpDelData(BaseDockData dockData,BaseAppData* appData,obj
         QString dockPathStr=dockData.DockerPath+"/";
         QString dockNameStr=dockData.DockerName;
         if(objTypeView==object_delApp){
+            objectJson _objectJson;
             if(m_pModel->rowCount()<=1){
                 if(vekMesg("提示:这是"+dockNameStr+"最后一个程序,若是执意删除则Vek将删除"+dockNameStr+"容器")){
                   deleteDockerTab(dockPathStr,dockNameStr);
+                  _objectJson.deleteDockerNodeData(dockData.DockerName);
                 }else{
                     return;
                 }
             }
             m_pModel->deleteItem(index);
-            objectJson _objectJson;
-            //_objectJson.deleteAppNodeData(deleteCID);
+            _objectJson.deleteAppNodeData(dockData,appData->AppCID);
         }
         if(objTypeView==object_setApp){
             m_pModel->deleteItem(index);
@@ -255,8 +257,8 @@ void vekAppListView::moveSlot()
             m_pModel->deleteItem(index);
             QString dockName=m_ActionMap.find(pSender)->first->text();
             objectJson _objectJson;
-            //_objectJson.deleteAppNodeData(pItem->AppCID);
-            //_objectJson.updateAppNodeData(dockName,*pItem);
+            _objectJson.deleteAppNodeData(GetDockerData(mBox->tabText(mBox->currentIndex())),pItem->AppCID);
+            _objectJson.updateAppNodeData(GetDockerData(dockName),*pItem);
         }
     }
     //操作完了要把这个临时的映射清空

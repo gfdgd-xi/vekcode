@@ -27,6 +27,7 @@ private:
     vector<QString> _dockSystemVersion={"win10","win7","win81","win8","winxp64"};
     vector<QString> _dockVer={"win32","win64"};
     vector<QString> _dockWineVer={"wine","wine64"};
+    void initAppAndDockData(BaseDockData* _data,QString _appCID);
     bool vekAppAddObj(bool _forceState);
     bool vekAppConfigObj();
     void loadTableView(QTableView* qtv,BaseAppData*);

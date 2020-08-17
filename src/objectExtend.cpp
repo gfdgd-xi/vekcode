@@ -51,6 +51,7 @@ void objectExtend::executeArgsEnv(){
 }
 void objectExtend::executeWineBoot(objectWineBoot objWineBootType){
     QStringList wineboot;
+    wineboot.clear();
     wineboot.append(dockData.WinePath+"/wine/bin/");
     switch (objWineBootType) {
     case object_wineboot_e:
@@ -85,9 +86,11 @@ void objectExtend::executeWineBoot(objectWineBoot objWineBootType){
         return;
         break;
     }
+    qDebug()<<"wineboot start";
     m_cmd->start(wineboot.join(""),QIODevice::ReadWrite);
     m_cmd->waitForFinished(-1);
     waitObjectDone(true);
+    qDebug()<<"wineboot end";
 }
 void objectExtend::executeWineServer(objectWineServer objWineServer){
     QStringList wineserver;
@@ -167,8 +170,11 @@ void objectExtend::baseExecuteWineCode(QString code,QStringList codeArgs){
     m_cmd->setReadChannel(QProcess::StandardOutput);
     m_cmd->setWorkingDirectory(appData.WorkPath);
     m_cmd->start(code,codeArgs,QIODevice::ReadWrite);
+    qDebug()<<code;
+    qDebug()<<codeArgs;
     m_cmd->waitForFinished(-1);
     waitObjectDone(true);
+    qDebug()<<"自体注册表";
 }
 //wineRegedit
 void objectExtend::extendWineRegeditCode(QString code){

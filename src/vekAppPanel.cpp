@@ -20,6 +20,7 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
     gridLayout->setContentsMargins(0,0,0,0);
     m_pBox->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
     m_pListMap = new std::map<QString,vekAppListView*>();
+    cTab=0;
     for(auto twn :g_vekLocalData.dockerVec){
         vekAppListView *pListView = new vekAppListView();
         pListView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
@@ -39,7 +40,7 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
         m_pListMap->insert(std::pair<QString,vekAppListView*>(twn.first,pListView));
         pListView->setListMap(m_pListMap,m_pBox);
     }
-    cTab=0;
+
 }
 //读取数据to容器列表
 void vekAppPanel::vekLoadJsonData(){
@@ -153,8 +154,7 @@ void vekAppPanel::objAppInstall(){
     objectExtend* _objectExtend=new objectExtend();
     objectType _objType=object_uninstall;
     std::vector<QStringList> _codeAgrs;
-    connect(this, SIGNAL(toObjectArgs(BaseDockData,QString,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)), _objectExtend, SLOT(setDockOptionObjectData(BaseDockData,QString,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer)));
-    emit(toObjectArgs(baseDockerData,nullptr,_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default));
+    _objectExtend->setDockOptionObjectData(baseDockerData,nullptr,_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default);
     _objectExtend->start();
     delete objNewDock;
     objNewDock=nullptr;
@@ -202,8 +202,22 @@ void vekAppPanel::addAppObject(BaseDockData* dcokData,BaseAppData* appData){
     connect(pList, SIGNAL(_startTray()), this->parentWidget()->parentWidget(), SLOT(startTray()));
     pList->addItem(_tempBaseData);
 }
+void vekAppPanel::upTabIco(){
+    for(auto a:g_vekLocalData.dockerVec){
+        if(a.second.DockerVer=="win32"){
+            QIcon icon(":/res/img/32.png");
+            m_pBox->setTabIcon(cTab,icon);
+            cTab+=1;
+        }else{
+            QIcon icon(":/res/img/64.png");
+            m_pBox->setTabIcon(cTab,icon);
+            cTab+=1;
+        }
+    }
+}
 void vekAppPanel::addGroupSlot(BaseDockData* dcokData)
 {
+    cTab=0;
     if (!dcokData->DockerName.isEmpty())
     {
         vekAppListView *pListView1 = new vekAppListView(this);
@@ -211,14 +225,9 @@ void vekAppPanel::addGroupSlot(BaseDockData* dcokData)
         pListView1->setFlow(QListView::LeftToRight);
         m_pBox->addTab(pListView1,dcokData->DockerName);
         m_pListMap->insert(std::pair<QString,vekAppListView*>(dcokData->DockerName,pListView1));
-        if(dcokData->DockerVer=="win32"){
-            QIcon icon(":/res/img/32.png");
-            m_pBox->setTabIcon(m_pBox->currentIndex(),icon);
-        }else{
-            QIcon icon(":/res/img/64.png");
-            m_pBox->setTabIcon(m_pBox->currentIndex(),icon);
-        }
     }
+    cTab=0;
+    upTabIco();
     //要确保每个MyListView钟的m_pListMap都是一致的，不然就会有错了。
     //因为弹出的菜单进行转移的时候需要用到
     std::map<QString,vekAppListView*>::iterator it = m_pListMap->begin();

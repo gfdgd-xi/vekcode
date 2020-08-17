@@ -17,7 +17,8 @@ public:
     void updateWineNodeData(BaseWineData);
     void updateDockerNodeData(BaseDockData dockData,QString dockName);
     void deleteDockerNodeData(QString dockName);
-    void deleteAppNodeData(QString dockName,QString appCID);
+    void deleteAppNodeData(BaseDockData,QString);
+    void updateAppNodeData(BaseDockData,BaseAppData);
     void deleteWineNodeData(QString nwineName);
     bool unDataSerializeLocalData();
     bool unSerializeLocalWineApp(QString,QString urlData,UNJSONTYPE jsonType);

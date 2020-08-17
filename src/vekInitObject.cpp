@@ -1,5 +1,5 @@
 #include "vekInitObject.h"
-
+#include "objectJson.h"
 void vekTip(QString tipInfo){
     QMessageBox::warning(nullptr,"TIP",tipInfo);
 }
@@ -16,7 +16,16 @@ bool vekMesg(QString tipText){
     }
     return false;
 }
-
+//保存Docker数据
+void SaveDockerDataToJson(BaseDockData dockData,QString dockName){
+    objectJson _objectJson;
+    _objectJson.updateDockerNodeData(dockData,dockName);
+}
+//保存App数据
+void SaveAppDataToJson(BaseDockData dockData,BaseAppData appData){
+    objectJson _objectJson;
+    _objectJson.updateAppNodeData(dockData,appData);
+}
 BaseDockData GetDockerData(QString dockName){
     BaseDockData tempDockData={};
     if(!g_vekLocalData.dockerVec.empty()){
