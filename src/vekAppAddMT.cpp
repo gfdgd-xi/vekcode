@@ -77,6 +77,7 @@ void vekAppAddMT::vekAppAddConnectObject(BaseDockData* _data,QString _appCID,obj
     if(tempDockData==nullptr){
         tempDockData=new BaseDockData();
     }else{
+        tempDockData=_data;
         ui->comboBox_RunWine->setCurrentIndex(ui->comboBox_RunWine->findText(tempDockData->WineVersion));
         ui->comboBox_dockSystemVersion->setCurrentIndex(ui->comboBox_dockSystemVersion->findText(tempDockData->DockerSystemVersion));
         ui->lineEdit_RunDockPath->setText(tempDockData->DockerPath);
@@ -90,6 +91,12 @@ void vekAppAddMT::vekAppAddConnectObject(BaseDockData* _data,QString _appCID,obj
     if(_appCID==nullptr){
         tempAppData=new BaseAppData();
     }else{
+        for(auto di:tempDockData->dData){
+            if(di.first==_appCID){
+                *tempAppData=di.second;
+                break;
+            }
+        }
         ui->lineEdit_AppName->setText(tempAppData->AppName);
         ui->lineEdit_AppInstallExe->setText(tempAppData->AppExe);
         ui->lineEdit_workPath->setText(tempAppData->WorkPath);
@@ -106,6 +113,7 @@ void vekAppAddMT::vekAppAddConnectObject(BaseDockData* _data,QString _appCID,obj
         ui->lineEdit_MainProcName->setText(tempAppData->MainPrcoName);
         ui->checkBox_dxvkConfigState->setChecked(tempAppData->DxvkConfigFileState);
     }
+
     dxvkOptionLoad();
     loadTableView(ui->tableView_EnvList,tempAppData);
     loadTableView(ui->tableView_ProcList,tempAppData);
@@ -572,7 +580,7 @@ bool vekAppAddMT::vekAppAddObj(bool _forceState){
     }else{
         vappAddObj->SaveDockerDataToJson(*tempDockData,tempDockData->DockerName);
     }
-    emit _upData(tempAppData,objType);
+    emit _upData(*tempDockData,tempAppData,objType);
     delete vappAddObj;
     vappAddObj=nullptr;
     return true;

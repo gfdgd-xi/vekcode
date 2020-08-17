@@ -145,16 +145,22 @@ void vekAppListView::setItemSlot(){
     int index = this->currentIndex().row();
     if (index > -1)
     {
-        BaseAppData* bGameData=m_pModel->getItem(index);
+        BaseDockData* bDockerData=new BaseDockData;
+        for(auto a:g_vekLocalData.dockerVec){
+            if(a.first==mBox->tabText(mBox->currentIndex())){
+                *bDockerData=a.second;
+                break;
+            }
+        }
         if(_vek_App_Add==nullptr){
             //绑定传参槽
             _vek_App_Add=new vekAppAddMT();
-            connect(this, SIGNAL(toObjectArgs_ptr(BaseAppData*,objectTypeView)), _vek_App_Add, SLOT(vekAppAddConnectObject(BaseAppData*,objectTypeView)));
             _vek_App_Add->setAttribute(Qt::WA_DeleteOnClose,true);
             auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
             _vek_App_Add->setGeometry(pObjectVek->geometry());
             _vek_App_Add->setWindowTitle("VekAppSet");
-            emit(toObjectArgs_ptr(bGameData,object_setApp));
+            QString currentAppCID=m_pModel->getItem(this->currentIndex().row())->AppCID;
+            _vek_App_Add->vekAppAddConnectObject(bDockerData,currentAppCID,object_setApp);
             _vek_App_Add->show();
             connect(_vek_App_Add,&vekAppAddMT::_unDiyAppAdd,this,&vekAppListView::unAppAdd);
             connect(_vek_App_Add,SIGNAL(_upData(BaseDockData,BaseAppData*,objectTypeView)),this,SLOT(setUpDelData(BaseDockData,BaseAppData*,objectTypeView)));

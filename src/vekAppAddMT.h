@@ -21,8 +21,8 @@ public:
 public:
     Ui::vekAppAddMT *ui;
 private:
-    BaseAppData* tempAppData=nullptr;
-    BaseDockData* tempDockData=nullptr;
+    BaseAppData* tempAppData=new BaseAppData();
+    BaseDockData* tempDockData=new BaseDockData();
     objectTypeView objType;
     vector<QString> _dockSystemVersion={"win10","win7","win81","win8","winxp64"};
     vector<QString> _dockVer={"win32","win64"};
@@ -44,7 +44,7 @@ signals:
     void doneAddApp(BaseDockData*,BaseAppData*);
     void toObjectArgs(BaseAppData);
     void _unDiyAppAdd();
-    void _upData(BaseAppData*,objectTypeView);
+    void _upData(BaseDockData,BaseAppData*,objectTypeView);
 private slots:
     void objectButton();
     void plugsLoad();
