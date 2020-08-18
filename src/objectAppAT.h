@@ -6,23 +6,12 @@
 #include "vekInitObject.h"
 #include "vekGetCurl.h"
 
-typedef struct{
-    QString pJsonPath=nullptr;
-    QString pAppExePath=nullptr;
-    QString pWinePath=nullptr;
-    QString pWineVersion=nullptr;
-    QString pDockPath=nullptr;
-    QString pDockName=nullptr;
-    QString pDockSysVer=nullptr;
-    QString pDockVer=nullptr;
-    bool pMonoState=false;
-    bool pGeckoState=false;
-}ObjectDockAT;
 class objectAppAT : public QThread
 {
     Q_OBJECT
 public:
     objectAppAT();
+    void connectDockAutoData(BaseDockData,BaseAppData,QString);
     ~objectAppAT();
 protected:
     void run();
@@ -31,12 +20,12 @@ private:
     BaseAutoSetJson* _baseAutoSetJson=nullptr;
     //app数据
     BaseAppData baseAppData={};
-    //传入Dock数据
-    ObjectDockAT _objAddDataAT;
     //docker数据
     BaseDockData baseDockData={};
+    QString jsonCfg=nullptr;
     objectAppMT* objDiyAddApp=nullptr;
     QString jsonPathTypeToStr(QString);
+    bool JsonType(QString);
     bool jsonUnserialize(QString);
     void objectAutoObj();
     void objInstallRes();

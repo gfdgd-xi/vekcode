@@ -72,8 +72,8 @@ void vekAppPanel::addAppSlot(){
     if(vek_app_multi_add==nullptr){
         vek_app_multi_add=new vekAppAddMulti();
         vek_app_multi_add->setAttribute(Qt::WA_DeleteOnClose,true);
-        auto pObjectVek=this->parentWidget()->parentWidget();
-        vek_app_multi_add->setGeometry(pObjectVek->geometry());
+        //auto pObjectVek=this->parentWidget()->parentWidget();
+        //vek_app_multi_add->setGeometry(pObjectVek->geometry());
         vek_app_multi_add->setWindowFlags(Qt::WindowStaysOnTopHint);
         vek_app_multi_add->setWindowTitle("Vek游戏增加方式选择");
         connect(vek_app_multi_add,&vekAppAddMulti::_unMultAppAdd,this,&vekAppPanel::unMultAppAdd);
@@ -86,8 +86,8 @@ void vekAppPanel::addAppDiy(){
     if(vek_app_add==nullptr){
         vek_app_add=new vekAppAddMT();
         vek_app_add->setAttribute(Qt::WA_DeleteOnClose,true);
-        auto pObjectVek=this->parentWidget()->parentWidget();
-        vek_app_add->setGeometry(pObjectVek->geometry());
+        //auto pObjectVek=this->parentWidget()->parentWidget();
+        //vek_app_add->setGeometry(pObjectVek->geometry());
         vek_app_add->setWindowFlags(Qt::WindowStaysOnTopHint);
         vek_app_add->setWindowTitle("VekAppAdd");
         vek_app_add->vekAppAddConnectObject(nullptr,nullptr,object_addApp);
@@ -100,8 +100,8 @@ void vekAppPanel::addAppAuto(){
     if(vek_app_add_auto==nullptr){
         vek_app_add_auto=new vekAppAddAT();
         vek_app_add_auto->setAttribute(Qt::WA_DeleteOnClose,true);
-        auto pObjectVek=this->parentWidget()->parentWidget();
-        vek_app_add_auto->setGeometry(pObjectVek->geometry());
+        //auto pObjectVek=this->parentWidget()->parentWidget();
+        //vek_app_add_auto->setGeometry(pObjectVek->geometry());
         vek_app_add_auto->setWindowFlags(Qt::WindowStaysOnTopHint);
         vek_app_add_auto->setWindowTitle("自动配置容器");
         vek_app_add_auto->connectDockObject();
@@ -143,12 +143,7 @@ void vekAppPanel::objAppInstall(){
         if(g_vekLocalData.dockerVec.empty()){
             return;
         }else{
-            for(auto a:g_vekLocalData.dockerVec){
-                if(dockName==a.first){
-                    baseDockerData=a.second;
-                    break;
-                }
-            }
+            baseDockerData=g_vekLocalData.dockerVec.at(dockName);
         }
     }
     objectExtend* _objectExtend=new objectExtend();

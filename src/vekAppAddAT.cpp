@@ -83,28 +83,6 @@ void vekAppAddAT::SetObject(){
     }
 
 }
-QString vekAppAddAT::JsonType(QString str){
-    //查看jsonPaht头是否为http或者https
-    if(str.startsWith("http",Qt::CaseSensitive)){
-        return str;
-    }
-    if(str.startsWith("https",Qt::CaseSensitive)){
-        return str;
-    }
-    if(str.endsWith("json",Qt::CaseSensitive)){
-        return str;
-    }
-    for(auto & v:g_vekLocalData.appJsonList){
-        if(v.first==ui->comboBox_SrcApp->currentText()){
-            for(auto & y:v.second){
-                if(y.first==str){
-                    str=y.second;
-                }
-            }
-        }
-    }
-    return str;
-}
 void vekAppAddAT::addAutoApp(){
     if(ui->comboBox_JsonUrl->currentText()==nullptr){
         vekTip("请设置Json文件");
@@ -120,24 +98,30 @@ void vekAppAddAT::addAutoApp(){
     }
     if(ui->comboBox_WinVersion->currentText()==nullptr){
         vekTip("请安装wine!");
-        return;
         this->close();
+        return;
     }
     if(ui->lineEdit_AppExePath->text()==nullptr){
         vekTip("请设置游戏运行exe文件路径");
         return;
     }
-    ObjectDockAT objAddDataAT;
-    objAddDataAT.pJsonPath=JsonType(ui->comboBox_JsonUrl->currentText());
-    objAddDataAT.pDockName=ui->comboBox_DockName->currentText();
-    objAddDataAT.pDockPath=ui->lineEdit_DockPath->text();
-    objAddDataAT.pWineVersion=ui->comboBox_WinVersion->currentText();
-    objAddDataAT.pAppExePath=ui->lineEdit_AppExePath->text();
-    if(objAutoAddApp!=nullptr){
-        delete objAutoAddApp;
-        objAutoAddApp=nullptr;
+    bool dataState=false;
+    for(auto a:g_vekLocalData.dockerVec){
+        if(a.first==ui->comboBox_WinVersion->currentText()){
+            dataState=true;
+            *autoDockData=a.second;
+            break;
+        }
     }
-    objAutoAddApp=new objectAppAT();
+    if(!dataState){
+        autoDockData->DockerName=ui->comboBox_DockName->currentText();
+        autoDockData->DockerPath=ui->lineEdit_DockPath->text();
+        autoDockData->WineVersion=ui->comboBox_WinVersion->currentText();
+    }
+    QString pJsonPath=ui->comboBox_JsonUrl->currentText();
+    autoAppData->AppExe=ui->lineEdit_AppExePath->text();
+    objectAppAT* objAutoAddApp=new objectAppAT();
+    objAutoAddApp->connectDockAutoData(*autoDockData,*autoAppData,pJsonPath);
     connect(objAutoAddApp,SIGNAL(Tips(QString)),this,SLOT(TipText(QString)));
     connect(objAutoAddApp,SIGNAL(Error(QString,bool)),this,SLOT(ErrorText(QString,bool)));
     connect(objAutoAddApp,SIGNAL(Done()),this,SLOT(ObjDone()));
@@ -165,6 +149,6 @@ void vekAppAddAT::ErrorText(QString ErrorInfo,bool cState){
     controlState(cState);
 }
 void vekAppAddAT::ObjDone(){
-    emit autoObjDock(autoAppData);
+    emit autoObjDock(autoDockData,autoAppData);
     this->close();
 }

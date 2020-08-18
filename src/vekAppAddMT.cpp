@@ -569,6 +569,7 @@ void vekAppAddMT::objectButton(){
 
 bool vekAppAddMT::vekAppAddObj(bool _forceState){
     if(vekAppConfigObj()){
+        tempDockData->dData.erase(tempAppData->AppCID);
         tempDockData->dData.insert(pair<QString,BaseAppData>(tempAppData->AppCID,*tempAppData));
     }else{
         return false;
@@ -578,7 +579,6 @@ bool vekAppAddMT::vekAppAddObj(bool _forceState){
         vekError("初始化失败!");
     }else{
         SaveDockerDataToJson(*tempDockData,tempDockData->DockerName);
-        SaveAppDataToJson(*tempDockData,*tempAppData);
     }
     emit _upData(*tempDockData,tempAppData,objType);
     delete vappAddObj;

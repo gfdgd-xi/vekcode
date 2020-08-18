@@ -416,15 +416,17 @@ json objectJson::exportJson(BaseDockData xData,QString AppCID){
             eJson[toStr(Option)][toStr(SharedMemory)]=b.second.SharedMemory;
             eJson[toStr(Option)][toStr(WriteCopy)]=b.second.WriteCopy;
             eJson[toStr(Option)][toStr(RtServer)]=b.second.RtServer;
-            eJson[toStr(Option)][toStr(MonoState)]=xData.MonoState;
-            eJson[toStr(Option)][toStr(GeckoState)]=xData.GeckoState;
+            eJson[toStr(Option)][toStr(AppName)]=b.second.AppName.toStdString();
+            eJson[toStr(Option)][toStr(MainPrcoName)]=b.second.MainPrcoName.toStdString();
             eJson[toStr(Dxvk)][toStr(DxvkState)]=b.second.DxvkState;
             eJson[toStr(Dxvk)][toStr(DxvkHUD)]=b.second.DxvkHUD;
-            eJson[toStr(Option)][toStr(AppName)]=b.second.AppName.toStdString();
-            eJson[toStr(Option)][toStr(DockSystemVersion)]=xData.DockerSystemVersion.toStdString();
-            eJson[toStr(Option)][toStr(DockVer)]=xData.DockerVer.toStdString();
-            eJson[toStr(Option)][toStr(WineVersion)]=xData.WineVersion.toStdString();
-            eJson[toStr(Option)][toStr(MainPrcoName)]=b.second.MainPrcoName.toStdString();
+
+            eJson[toStr(Docker)][toStr(MonoState)]=xData.MonoState;
+            eJson[toStr(Docker)][toStr(GeckoState)]=xData.GeckoState;
+            eJson[toStr(Docker)][toStr(DockerSystemVersion)]=xData.DockerSystemVersion.toStdString();
+            eJson[toStr(Docker)][toStr(DockerVersion)]=xData.DockerVer.toStdString();
+            eJson[toStr(Docker)][toStr(DockerWineVersion)]=xData.DockerWineVersion.toStdString();
+
             if(!b.second.AttachProc.empty()){
                 for(auto rs:b.second.AttachProc){
                     eJson[toStr(AttachProc)].push_back(rs.toStdString());
@@ -506,7 +508,6 @@ void objectJson::updateAppNodeData(BaseDockData dockData,BaseAppData appData){
     if(appData.AppCID!=nullptr){
         deleteAppNodeData(dockData,appData.AppCID);
     }
-
     //有问题需要修改
     g_vekLocalData.dockerVec[dockData.DockerName].dData.insert(pair<QString,BaseAppData>(appData.AppCID,appData));
     WriteLocalData();

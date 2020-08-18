@@ -120,20 +120,19 @@ void vekAppListView::ExportJson(){
     int index = this->currentIndex().row();
     if(_vExportJson==nullptr){
         BaseAppData bGameData=*m_pModel->getItem(index);
-        BaseDockData bDockData=GetDockerData(mBox->tabText(mBox->currentIndex()));
         _vExportJson=new vekExportJson();
         _vExportJson->setAttribute(Qt::WA_DeleteOnClose,true);
         _vExportJson->show();
         connect(_vExportJson,&vekExportJson::_unExportJson,this,&vekAppListView::unExportJson);
-        _vExportJson->ExportJson(bDockData,bGameData.AppCID);
+        _vExportJson->ExportJson(GetDockerData(mBox->tabText(mBox->currentIndex())),bGameData.AppCID);
     }
 }
 void vekAppListView::objectExtendApp(){
     if(_vExtendDebug==nullptr){
         _vExtendDebug=new vekExtendDebug();
         _vExtendDebug->setAttribute(Qt::WA_DeleteOnClose,true);
-        auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
-        _vExtendDebug->setGeometry(pObjectVek->geometry());
+        //auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
+        //_vExtendDebug->setGeometry(pObjectVek->geometry());
         QString currentTabText =mBox->tabText(mBox->currentIndex());
         QString currentAppCID=m_pModel->getItem(this->currentIndex().row())->AppCID;
         _vExtendDebug->ConnectDebugObject(currentTabText,currentAppCID);
@@ -146,22 +145,16 @@ void vekAppListView::setItemSlot(){
     int index = this->currentIndex().row();
     if (index > -1)
     {
-        BaseDockData* bDockerData=new BaseDockData;
-        for(auto a:g_vekLocalData.dockerVec){
-            if(a.first==mBox->tabText(mBox->currentIndex())){
-                *bDockerData=a.second;
-                break;
-            }
-        }
         if(_vek_App_Add==nullptr){
             //绑定传参槽
             _vek_App_Add=new vekAppAddMT();
             _vek_App_Add->setAttribute(Qt::WA_DeleteOnClose,true);
-            auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
-            _vek_App_Add->setGeometry(pObjectVek->geometry());
+            //auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
+            //_vek_App_Add->setGeometry(pObjectVek->geometry());
             _vek_App_Add->setWindowTitle("VekAppSet");
             QString currentAppCID=m_pModel->getItem(this->currentIndex().row())->AppCID;
-            _vek_App_Add->vekAppAddConnectObject(bDockerData,currentAppCID,object_setApp);
+            _vek_App_Add->vekAppAddConnectObject(&g_vekLocalData.dockerVec.at(mBox->tabText(mBox->currentIndex())),currentAppCID,object_setApp);
+            _vek_App_Add->setWindowFlags(Qt::WindowStaysOnTopHint);
             _vek_App_Add->show();
             connect(_vek_App_Add,&vekAppAddMT::_unDiyAppAdd,this,&vekAppListView::unAppAdd);
             connect(_vek_App_Add,SIGNAL(_upData(BaseDockData,BaseAppData*,objectTypeView)),this,SLOT(setUpDelData(BaseDockData,BaseAppData*,objectTypeView)));

@@ -457,7 +457,7 @@
            </rect>
           </property>
           <property name="title">
-           <string>容器高级参数-&gt;无特殊需求请勿修改</string>
+           <string>容器高级参数-&gt;警告:无特殊需求请勿修改,在未完全理解该选项时请勿修改</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_9">
            <property name="spacing">

@@ -19,15 +19,14 @@ public:
     void connectDockObject();
 private:
     Ui::vekAppAddAT *ui;
-    BaseAppData* autoAppData=nullptr;
-    objectAppAT* objAutoAddApp=nullptr;
+    BaseAppData* autoAppData=new BaseAppData();
+    BaseDockData* autoDockData=new BaseDockData();
     void SetObject();
     void addAutoApp();
-    QString JsonType(QString);
     void controlState(bool pState);
 signals:
     void _unAutoDock();
-    void autoObjDock(BaseAppData*);
+    void autoObjDock(BaseDockData*,BaseAppData*);
 private slots:
     void TipText(QString TipInfo);
     void ErrorText(QString ErrorInfo,bool cState);

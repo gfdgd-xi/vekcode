@@ -8,6 +8,37 @@ objectAppAT::~objectAppAT(){
     delete _baseAutoSetJson;
     _baseAutoSetJson=nullptr;
 }
+void objectAppAT::connectDockAutoData(BaseDockData _dockData,BaseAppData _appData,QString _jsonCfg){
+      baseAppData=_appData;
+      baseDockData=_dockData;
+      jsonCfg=_jsonCfg;
+}
+bool objectAppAT::JsonType(QString str){
+    //查看jsonPaht头是否为http或者https
+    if(jsonCfg.startsWith("http",Qt::CaseSensitive)){
+        return true;;
+    }
+    if(str.startsWith("https",Qt::CaseSensitive)){
+        return true;
+    }
+    //本地json
+    if(str.endsWith("json",Qt::CaseSensitive)){
+        return true;
+    }
+    //源名字json
+    for(auto & v:g_vekLocalData.appJsonList){
+        if(v.first==str){
+            for(auto & y:v.second){
+                if(y.first==str){
+                    jsonCfg=y.second;
+                    return true;
+                    break;
+                }
+            }
+        }
+    }
+    return false;
+}
 QString objectAppAT::jsonPathTypeToStr(QString jsonPathFile){
     try {
         QString jsonDataStr=nullptr;
@@ -64,19 +95,14 @@ bool objectAppAT::objDockerData(QString dockName){
             vekError("当前容器系统版本为:"+baseDockData.DockerSystemVersion+"配置文件容器系统版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerSystemVersion)));
             return false;
         }
-        if(baseDockData.WineVersion!=_baseAutoSetJson->Docker.at(toStr(WineVersion))){
-            vekError("当前容器Wine版本为:"+baseDockData.WineVersion+"配置文件容器Wine版本为:"+_baseAutoSetJson->Docker.at(toStr(WineVersion)));
+        if(baseDockData.DockerWineVersion!=_baseAutoSetJson->Docker.at(toStr(DockerWineVersion))){
+            vekError("当前容器Wine版本为:"+baseDockData.DockerWineVersion+"配置文件容器Wine版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerWineVersion)));
             return false;
         }
     }else{
         //设置wine版本和路径
-        for(auto &x : g_vekLocalData.wineVec){
-            if(x.first==_objAddDataAT.pWineVersion){
-                baseDockData.WineVersion=x.second.IwineVer;
-                baseDockData.WinePath=x.second.IwinePath;
-                break;
-            }
-        }
+        baseDockData.WineVersion=g_vekLocalData.wineVec.at(baseDockData.WineVersion).IwineVer;
+        baseDockData.WinePath=g_vekLocalData.wineVec.at(baseDockData.WineVersion).IwinePath;
         if(_baseAutoSetJson->Docker.at(toStr(DockerVersion))!=NULL){
             baseDockData.DockerVer=_baseAutoSetJson->Docker.at(toStr(DockerVersion));
         }
@@ -94,8 +120,6 @@ bool objectAppAT::objDockerData(QString dockName){
             QVariant geckoState=_baseAutoSetJson->Docker.at(toStr(GeckoState));
             baseDockData.GeckoState=(geckoState).toBool();;
         }
-        baseDockData.DockerPath=_objAddDataAT.pDockPath;
-        baseDockData.DockerName=_objAddDataAT.pDockName;
     }
     return true;
 }
@@ -105,7 +129,6 @@ void objectAppAT::objAppData(){
             if(a=="AppName"){
                 baseAppData.AppName=b;
             }
-
             if(a=="DefaultFont"){
                 QVariant defaultFontValue=b;
                 baseAppData.DefaultFonts=(defaultFontValue).toBool();
@@ -143,24 +166,13 @@ void objectAppAT::objAppData(){
             }
         }
     }
-    if(!_baseAutoSetJson->Regs.empty()){
-        baseAppData.DockerRegs=_baseAutoSetJson->Regs;
-    }
-    if(!_baseAutoSetJson->Libs.empty()){
-        baseAppData.DockerLibs=_baseAutoSetJson->Libs;
-    }
-    if(!_baseAutoSetJson->Env.empty()){
-        baseAppData.DockerEnv=_baseAutoSetJson->Env;
-    }
-    if(_baseAutoSetJson->Args!=nullptr){
-        baseAppData.AppOtherAgrs=_baseAutoSetJson->Args;
-    }
-    if(!_baseAutoSetJson->AttachProc.empty()){
-        baseAppData.AttachProc=_baseAutoSetJson->AttachProc;
-    }
+    baseAppData.DockerRegs=_baseAutoSetJson->Regs;
+    baseAppData.DockerLibs=_baseAutoSetJson->Libs;
+    baseAppData.DockerEnv=_baseAutoSetJson->Env;
+    baseAppData.AppOtherAgrs=_baseAutoSetJson->Args;
+    baseAppData.AttachProc=_baseAutoSetJson->AttachProc;
 
-    baseAppData.AppExe=_objAddDataAT.pAppExePath;
-    QFileInfo fi = QFileInfo(_objAddDataAT.pAppExePath);
+    QFileInfo fi = QFileInfo(baseAppData.AppExe);
     baseAppData.WorkPath=fi.path();
     objectJson* _objectJson=new objectJson();
     baseAppData.AppCID=_objectJson->GetRandomCID();
@@ -174,23 +186,27 @@ void objectAppAT::objectAutoObj(){
         objDiyAddApp=nullptr;
     }
     emit Tips("配置容器中请稍候!");
-    objDiyAddApp=new objectAppMT(&baseAppData,nullptr);
+    objDiyAddApp=new objectAppMT(&baseAppData,&baseDockData);
     objDiyAddApp->InitDockObj(false);
     objDiyAddApp->optionRegs();
     objDiyAddApp->DockLibsInstall();
-    //objDiyAddApp->SaveDataToJson(baseDockData.DockerName,baseAppData);
+    SaveAppDataToJson(baseDockData,baseAppData);
     delete objDiyAddApp;
     objDiyAddApp=nullptr;
 }
 void objectAppAT::run(){
     _baseAutoSetJson=new BaseAutoSetJson();
-    if(!jsonUnserialize(_objAddDataAT.pJsonPath)){
+    if(JsonType(jsonCfg)){
+        emit Error("配置文件出错!",true);
+        return;
+    }
+    if(!jsonUnserialize(jsonCfg)){
         emit Error("配置容器出错!",true);
         return;
     }
     else
     {
-        if(objDockerData(_objAddDataAT.pDockName)){
+        if(objDockerData(baseDockData.DockerName)){
             objAppData();
         }else
         {
