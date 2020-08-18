@@ -21,6 +21,11 @@ void SaveDockerDataToJson(BaseDockData dockData,QString dockName){
     objectJson _objectJson;
     _objectJson.updateDockerNodeData(dockData,dockName);
 }
+//保存Docker数据
+void AddAppDataToJson(BaseDockData dockData,BaseAppData appData){
+    objectJson _objectJson;
+    _objectJson.addAppNodeData(dockData,appData);
+}
 //保存App数据
 void SaveAppDataToJson(BaseDockData dockData,BaseAppData appData){
     objectJson _objectJson;
@@ -38,7 +43,7 @@ BaseDockData GetDockerData(QString dockName){
     }
     return tempDockData;
 }
-BaseAppData GetDockerData(BaseDockData dockData,QString appCID){
+BaseAppData GetAppData(BaseDockData dockData,QString appCID){
     BaseAppData tempAppData={};
     for(auto a:dockData.dData){
         if(a.first==appCID){

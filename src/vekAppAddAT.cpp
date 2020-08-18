@@ -104,6 +104,7 @@ void vekAppAddAT::addAutoApp(){
         vekTip("请设置游戏运行exe文件路径");
         return;
     }
+
     autoDockData->DockerName=ui->comboBox_DockName->currentText();
     autoDockData->DockerPath=ui->lineEdit_DockPath->text();
     autoDockData->WineVersion=ui->comboBox_WinVersion->currentText();
@@ -139,6 +140,7 @@ void vekAppAddAT::ErrorText(QString ErrorInfo,bool cState){
     controlState(cState);
 }
 void vekAppAddAT::ObjDone(BaseDockData* _aDockData,BaseAppData* aAppData){
+    AddAppDataToJson(*_aDockData,*aAppData);
     emit autoObjDock(_aDockData,aAppData);
     this->close();
 }

@@ -17,6 +17,7 @@ public:
     void updateWineNodeData(BaseWineData);
     void updateDockerNodeData(BaseDockData dockData,QString dockName);
     void deleteDockerNodeData(QString dockName);
+    void addAppNodeData(BaseDockData,BaseAppData);
     void deleteAppNodeData(BaseDockData,QString);
     void updateAppNodeData(BaseDockData,BaseAppData);
     void deleteWineNodeData(QString nwineName);

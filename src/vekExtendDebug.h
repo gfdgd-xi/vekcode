@@ -78,7 +78,6 @@ private slots:
     void startDebug();
     void exitDebug();
 signals:
-    void toObjectArgs(BaseDockData,QString,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
     void _unVekDebug();
 };
 

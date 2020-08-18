@@ -179,7 +179,6 @@ void objectAppAT::objectAutoObj(){
     objDiyAddApp->InitDockObj(false);
     objDiyAddApp->optionRegs();
     objDiyAddApp->DockLibsInstall();
-    SaveAppDataToJson(baseDockData,baseAppData);
     delete objDiyAddApp;
     objDiyAddApp=nullptr;
 }

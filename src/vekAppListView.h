@@ -22,6 +22,7 @@ public:
         void objectExtendApp();
 protected:
         void contextMenuEvent ( QContextMenuEvent * event );
+        void mouseDoubleClickEvent ( QMouseEvent * event );
 private slots:
         void moveSlot();
         void setItemSlot();
@@ -35,7 +36,7 @@ signals:
         void toObjectArgs_ptr(BaseAppData*,objectTypeView);
         void toObjectArgs_cl(BaseAppData);
         void _startTray();
-        void setUpDelDataSignal(BaseAppData* cGameData);
+        void setUpDelDataSignal(BaseDockData*,BaseAppData*);
 private:
         vekAppAddMT *_vek_App_Add=nullptr;
         vekExtendDebug* _vExtendDebug=nullptr;
@@ -51,6 +52,7 @@ private:
         void vekReadJsonData(QString jsonPath);
         void vekInitJsonData();
         void ExportJson();
+        void startApp(objectType);
         void deleteDockerTab(QString,QString);
         std::vector<QString> objectTypeStr={"容器设置","容器注册表","容器控制面板","容器软件删除|增加","winetricks","运行程序","调试运行(测试功能)","修改程序设置","导出自动配置文件","强行关闭本程序","删除本程序"};
         QMenu *pMenu=nullptr;

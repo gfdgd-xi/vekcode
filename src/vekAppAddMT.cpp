@@ -105,18 +105,22 @@ void vekAppAddMT::vekAppAddConnectObject(BaseDockData* _data,QString _appCID,obj
     plugsLoad();
 }
 void vekAppAddMT::initAppAndDockData(BaseDockData* _data,QString _appCID){
-    if(_data!=nullptr&&_appCID!=nullptr){
-        for(auto a:_data->dData){
-            if(a.first==_appCID){
-                *tempAppData=a.second;
-                break;
-            }
-        }
-        tempDockData=_data;
-    }else{
+    //_data nullptr =add
+    if(_data==nullptr){
+        tempDockData=new BaseDockData;
         tempDockData->DockerPath=QDir::currentPath()+"/vekDock";
         tempDockData->DockerName="vekON1";
         tempAppData->AppIco=":/res/img/vek.ico";
+    }else{
+        *tempDockData=GetDockerData(_data->DockerName);
+        if(_appCID!=nullptr){
+            for(auto a:tempDockData->dData){
+                if(a.first==_appCID){
+                    *tempAppData=a.second;
+                    break;
+                }
+            }
+        }
     }
 }
 void vekAppAddMT::plugsLoad(){
@@ -312,7 +316,7 @@ void vekAppAddMT::objectDelete(QTableView* qTableView){
     }
 }
 //控件数据to Class
-bool vekAppAddMT::vekAppConfigObj(){
+bool vekAppAddMT::vekAppConfigObj(){  
     if(tempAppData->AppCID==nullptr){
         objectJson _objectJson;
         tempAppData->AppCID=_objectJson.GetRandomCID();
@@ -369,7 +373,7 @@ bool vekAppAddMT::vekAppConfigObj(){
     int procCurRow=ui->tableView_ProcList->model()->rowCount();
     int regsCurRow=ui->tableView_RegsList->model()->rowCount();
     if(envCurRow>0){
-        tempAppData->DockerEnv.clear();
+        tempAppData->DockerEnv.empty();
         QAbstractItemModel *modelEnv = ui->tableView_EnvList->model();
         for(int i=0;i<=envCurRow-1;i++){
             QString dataTempA = modelEnv->data(modelEnv->index(i,0)).value<QString>();
@@ -380,7 +384,7 @@ bool vekAppAddMT::vekAppConfigObj(){
         }
     }
     if(procCurRow>0){
-        tempAppData->AttachProc.clear();
+        tempAppData->AttachProc.empty();
         QAbstractItemModel *modelProc = ui->tableView_ProcList->model();
         for(int i=0;i<=procCurRow-1;i++){
             QString dataTempC = modelProc->data(modelProc->index(i,0)).value<QString>();
@@ -391,7 +395,7 @@ bool vekAppAddMT::vekAppConfigObj(){
         }
     }
     if(regsCurRow>0){
-        tempAppData->DockerRegs.clear();
+        tempAppData->DockerRegs.empty();
         BaseDockRegs _tRegs;
         QAbstractItemModel *modelRegs = ui->tableView_RegsList->model();
         for(int i=0;i<=regsCurRow-1;i++){
@@ -568,17 +572,14 @@ void vekAppAddMT::objectButton(){
 }
 
 bool vekAppAddMT::vekAppAddObj(bool _forceState){
-    if(vekAppConfigObj()){
-        tempDockData->dData.erase(tempAppData->AppCID);
-        tempDockData->dData.insert(pair<QString,BaseAppData>(tempAppData->AppCID,*tempAppData));
-    }else{
+    if(!vekAppConfigObj()){
         return false;
     }
     objectAppMT* vappAddObj=new objectAppMT(tempAppData,tempDockData);
     if(!vappAddObj->InitDockObj(_forceState)){
         vekError("初始化失败!");
     }else{
-        SaveDockerDataToJson(*tempDockData,tempDockData->DockerName);
+        AddAppDataToJson(*tempDockData,*tempAppData);
     }
     emit _upData(*tempDockData,tempAppData,objType);
     delete vappAddObj;

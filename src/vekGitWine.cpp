@@ -104,6 +104,8 @@ void vekGitWine::vek_Clone(BaseWineData _wd){
     objectJson* _objectJson=new objectJson() ;
     _objectJson->updateWineNodeData(_wd);
     pThis->outputPrgressSlots("Done clone!");
+    delete _objectJson;
+    _objectJson=nullptr;
 }
 int i=0;
 void vekGitWine::run()
