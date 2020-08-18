@@ -120,7 +120,7 @@ void objectExtend::executeWineServer(objectWineServer objWineServer){
 void objectExtend::executeWinetricks(){
     //遗留问题->在运行WineTricks之前需要强制结束当前所有运行的wineserver
     //executeWineServer(object_wineserver_k);
-    //executeWineBoot(object_wineboot_k);
+    executeWineBoot(object_wineboot_r);
     QStringList codeArgs;
     qputenv("WINE", (dockData.WinePath+"/wine/bin/wine").toStdString().c_str());
     codeArgs.append(dockData.WinePath+"/wine/bin/winetricks");
@@ -170,11 +170,8 @@ void objectExtend::baseExecuteWineCode(QString code,QStringList codeArgs){
     m_cmd->setReadChannel(QProcess::StandardOutput);
     m_cmd->setWorkingDirectory(appData.WorkPath);
     m_cmd->start(code,codeArgs,QIODevice::ReadWrite);
-    qDebug()<<code;
-    qDebug()<<codeArgs;
     m_cmd->waitForFinished(-1);
     waitObjectDone(true);
-    qDebug()<<"自体注册表";
 }
 //wineRegedit
 void objectExtend::extendWineRegeditCode(QString code){
@@ -182,7 +179,6 @@ void objectExtend::extendWineRegeditCode(QString code){
         QString mdCode=code+" "+regStr.join(" ");
         m_cmd->start(mdCode,QIODevice::ReadWrite);
         m_cmd->waitForFinished(-1);
-        qDebug()<<mdCode;
     }
     waitObjectDone(true);
 }

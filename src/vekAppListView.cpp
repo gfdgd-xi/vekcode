@@ -131,8 +131,6 @@ void vekAppListView::objectExtendApp(){
     if(_vExtendDebug==nullptr){
         _vExtendDebug=new vekExtendDebug();
         _vExtendDebug->setAttribute(Qt::WA_DeleteOnClose,true);
-        //auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
-        //_vExtendDebug->setGeometry(pObjectVek->geometry());
         QString currentTabText =mBox->tabText(mBox->currentIndex());
         QString currentAppCID=m_pModel->getItem(this->currentIndex().row())->AppCID;
         _vExtendDebug->ConnectDebugObject(currentTabText,currentAppCID);
@@ -149,8 +147,6 @@ void vekAppListView::setItemSlot(){
             //绑定传参槽
             _vek_App_Add=new vekAppAddMT();
             _vek_App_Add->setAttribute(Qt::WA_DeleteOnClose,true);
-            //auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
-            //_vek_App_Add->setGeometry(pObjectVek->geometry());
             _vek_App_Add->setWindowTitle("VekAppSet");
             QString currentAppCID=m_pModel->getItem(this->currentIndex().row())->AppCID;
             _vek_App_Add->vekAppAddConnectObject(&g_vekLocalData.dockerVec.at(mBox->tabText(mBox->currentIndex())),currentAppCID,object_setApp);
@@ -178,7 +174,7 @@ void vekAppListView::setUpDelData(BaseDockData dockData,BaseAppData* appData,obj
                 }
             }
             m_pModel->deleteItem(index);
-            _objectJson.deleteAppNodeData(dockData,appData->AppCID);
+            _objectJson.deleteAppNodeData(dockData,deleteCID);
         }
         if(objTypeView==object_setApp){
             m_pModel->deleteItem(index);

@@ -486,7 +486,9 @@ void objectJson::WriteJsonToFile(QString filePath,json jsonData){
 //*********容器数据操作************//
 //删除容器节点
 void objectJson::deleteDockerNodeData(QString dockName){
-    g_vekLocalData.dockerVec.erase(dockName);
+    if(!g_vekLocalData.dockerVec.empty()){
+        g_vekLocalData.dockerVec.erase(dockName);
+    }
     WriteLocalData();
 }
 //更新容器节点信息
@@ -500,7 +502,9 @@ void objectJson::updateDockerNodeData(BaseDockData dockData,QString dockName){
 //××××××××××××APP信息操作×××××××××××//
 //删除APP节点
 void objectJson::deleteAppNodeData(BaseDockData dockData, QString appCID){
-    dockData.dData.erase(appCID);
+    if(!g_vekLocalData.dockerVec.empty()){
+        g_vekLocalData.dockerVec.at(dockData.DockerName).dData.erase(appCID);
+    }
     WriteLocalData();
 }
 //更新APP节点信息
@@ -509,7 +513,8 @@ void objectJson::updateAppNodeData(BaseDockData dockData,BaseAppData appData){
         deleteAppNodeData(dockData,appData.AppCID);
     }
     //有问题需要修改
-    g_vekLocalData.dockerVec[dockData.DockerName].dData.insert(pair<QString,BaseAppData>(appData.AppCID,appData));
+    dockData.dData.insert(pair<QString,BaseAppData>(appData.AppCID,appData));
+    g_vekLocalData.dockerVec.insert(pair<QString,BaseDockData>(dockData.DockerName,dockData));
     WriteLocalData();
 }
 //××××××××××××××××Wine信息操作×××××××××××××××××//

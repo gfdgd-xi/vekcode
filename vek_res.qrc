@@ -10,5 +10,6 @@
         <file>res/vup/vUpdate</file>
         <file>res/img/64.png</file>
         <file>res/img/32.png</file>
+        <file>res/img/aliPay.png</file>
     </qresource>
 </RCC>

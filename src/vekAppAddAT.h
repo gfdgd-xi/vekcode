@@ -30,7 +30,7 @@ signals:
 private slots:
     void TipText(QString TipInfo);
     void ErrorText(QString ErrorInfo,bool cState);
-    void ObjDone();
+    void ObjDone(BaseDockData*,BaseAppData*);
 };
 
 #endif // VEKGAMEAUTOADD_H

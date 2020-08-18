@@ -8,36 +8,39 @@ objectAppAT::~objectAppAT(){
     delete _baseAutoSetJson;
     _baseAutoSetJson=nullptr;
 }
-void objectAppAT::connectDockAutoData(BaseDockData _dockData,BaseAppData _appData,QString _jsonCfg){
-      baseAppData=_appData;
-      baseDockData=_dockData;
-      jsonCfg=_jsonCfg;
+void objectAppAT::connectDockAutoData(BaseDockData _dockData,BaseAppData _appData,QString _jsonCfg,QString _srcName){
+    baseDockData=_dockData;
+    baseAppData=_appData;
+    jsonCfg=_jsonCfg;
+    srcName=_srcName;
 }
 bool objectAppAT::JsonType(QString str){
-    //查看jsonPaht头是否为http或者https
-    if(jsonCfg.startsWith("http",Qt::CaseSensitive)){
-        return true;;
-    }
-    if(str.startsWith("https",Qt::CaseSensitive)){
-        return true;
-    }
-    //本地json
-    if(str.endsWith("json",Qt::CaseSensitive)){
-        return true;
-    }
+    bool typeState=false;
     //源名字json
     for(auto & v:g_vekLocalData.appJsonList){
-        if(v.first==str){
+        if(v.first==srcName){
             for(auto & y:v.second){
                 if(y.first==str){
                     jsonCfg=y.second;
-                    return true;
+                    typeState=true;
                     break;
                 }
             }
         }
     }
-    return false;
+    //查看jsonPaht头是否为http或者https
+    if(jsonCfg.startsWith("http",Qt::CaseSensitive)){
+        typeState=true;
+    }
+    if(str.startsWith("https",Qt::CaseSensitive)){
+        typeState=true;
+    }
+    //本地json
+    if(str.endsWith("json",Qt::CaseSensitive)){
+        typeState=true;
+    }
+
+    return typeState;
 }
 QString objectAppAT::jsonPathTypeToStr(QString jsonPathFile){
     try {
@@ -76,17 +79,20 @@ bool objectAppAT::jsonUnserialize(QString jsonPathFile){
     }
     return true;
 }
-bool objectAppAT::objDockerData(QString dockName){
-    bool dockState=false;
-    for(auto a:g_vekLocalData.dockerVec){
-        if(a.first==dockName){
-            dockState=true;
-            baseDockData=a.second;
-            break;
-        }
-    }
-    //if docker exits
-    if(dockState){
+//三个操作，第一 容器不存在则初始化，第二容器存在则检测容器选项，
+bool objectAppAT::objDockerData(){
+    //没有容器则按照下面配置设定
+    if(baseDockData.DockerVer==nullptr|
+            baseDockData.DockerVer==nullptr|
+            baseDockData.DockerWineVersion==nullptr|
+            baseDockData.DockerSystemVersion==nullptr)
+    {
+        baseDockData.DockerVer=_baseAutoSetJson->Docker.at(toStr(DockerVersion));
+        baseDockData.DockerWineVersion=_baseAutoSetJson->Docker.at(toStr(DockerWineVersion));
+        baseDockData.DockerSystemVersion=_baseAutoSetJson->Docker.at(toStr(DockerSysVersion));
+        baseDockData.WinePath=g_vekLocalData.wineVec.at(baseDockData.WineVersion).IwinePath;
+    }else{
+        //如果容器存在
         if(baseDockData.DockerVer!=_baseAutoSetJson->Docker.at(toStr(DockerVersion))){
             vekError("当前容器版本为:"+baseDockData.DockerVer+"配置文件容器版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerVersion)));
             return false;
@@ -99,28 +105,11 @@ bool objectAppAT::objDockerData(QString dockName){
             vekError("当前容器Wine版本为:"+baseDockData.DockerWineVersion+"配置文件容器Wine版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerWineVersion)));
             return false;
         }
-    }else{
-        //设置wine版本和路径
-        baseDockData.WineVersion=g_vekLocalData.wineVec.at(baseDockData.WineVersion).IwineVer;
-        baseDockData.WinePath=g_vekLocalData.wineVec.at(baseDockData.WineVersion).IwinePath;
-        if(_baseAutoSetJson->Docker.at(toStr(DockerVersion))!=NULL){
-            baseDockData.DockerVer=_baseAutoSetJson->Docker.at(toStr(DockerVersion));
-        }
-        if(_baseAutoSetJson->Docker.at(toStr(DockerWineVersion))!=NULL){
-            baseDockData.WineVersion=_baseAutoSetJson->Docker.at(toStr(DockerWineVersion));
-        }
-        if(_baseAutoSetJson->Docker.at(toStr(DockerSysVersion))!=NULL){
-            baseDockData.DockerSystemVersion=_baseAutoSetJson->Docker.at(toStr(DockerSysVersion));
-        }
-        if(_baseAutoSetJson->Docker.at(toStr(MonoState))!=NULL){
-            QVariant monoState=_baseAutoSetJson->Docker.at(toStr(MonoState));
-            baseDockData.MonoState=(monoState).toBool();;
-        }
-        if(_baseAutoSetJson->Docker.at(toStr(GeckoState))!=NULL){
-            QVariant geckoState=_baseAutoSetJson->Docker.at(toStr(GeckoState));
-            baseDockData.GeckoState=(geckoState).toBool();;
-        }
     }
+    QVariant monoState=_baseAutoSetJson->Docker.at(toStr(MonoState));
+    baseDockData.MonoState=(monoState).toBool();;
+    QVariant geckoState=_baseAutoSetJson->Docker.at(toStr(GeckoState));
+    baseDockData.GeckoState=(geckoState).toBool();;
     return true;
 }
 void objectAppAT::objAppData(){
@@ -196,17 +185,18 @@ void objectAppAT::objectAutoObj(){
 }
 void objectAppAT::run(){
     _baseAutoSetJson=new BaseAutoSetJson();
-    if(JsonType(jsonCfg)){
+    if(!JsonType(jsonCfg)){
         emit Error("配置文件出错!",true);
         return;
     }
+    qDebug()<<"配置文件"<<jsonCfg;
     if(!jsonUnserialize(jsonCfg)){
         emit Error("配置容器出错!",true);
         return;
     }
     else
     {
-        if(objDockerData(baseDockData.DockerName)){
+        if(objDockerData()){
             objAppData();
         }else
         {
@@ -215,5 +205,5 @@ void objectAppAT::run(){
         }
     }
     objectAutoObj();
-    emit Done();
+    emit Done(&baseDockData,&baseAppData);
 }

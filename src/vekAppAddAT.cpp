@@ -12,7 +12,6 @@ vekAppAddAT::vekAppAddAT(QWidget *parent) :
 
 vekAppAddAT::~vekAppAddAT()
 {
-    delete ui;
     emit _unAutoDock();
 }
 void vekAppAddAT::connectDockObject(){
@@ -105,26 +104,17 @@ void vekAppAddAT::addAutoApp(){
         vekTip("请设置游戏运行exe文件路径");
         return;
     }
-    bool dataState=false;
-    for(auto a:g_vekLocalData.dockerVec){
-        if(a.first==ui->comboBox_WinVersion->currentText()){
-            dataState=true;
-            *autoDockData=a.second;
-            break;
-        }
-    }
-    if(!dataState){
-        autoDockData->DockerName=ui->comboBox_DockName->currentText();
-        autoDockData->DockerPath=ui->lineEdit_DockPath->text();
-        autoDockData->WineVersion=ui->comboBox_WinVersion->currentText();
-    }
+    autoDockData->DockerName=ui->comboBox_DockName->currentText();
+    autoDockData->DockerPath=ui->lineEdit_DockPath->text();
+    autoDockData->WineVersion=ui->comboBox_WinVersion->currentText();
+
     QString pJsonPath=ui->comboBox_JsonUrl->currentText();
     autoAppData->AppExe=ui->lineEdit_AppExePath->text();
     objectAppAT* objAutoAddApp=new objectAppAT();
-    objAutoAddApp->connectDockAutoData(*autoDockData,*autoAppData,pJsonPath);
+    objAutoAddApp->connectDockAutoData(*autoDockData,*autoAppData,pJsonPath,ui->comboBox_SrcApp->currentText());
     connect(objAutoAddApp,SIGNAL(Tips(QString)),this,SLOT(TipText(QString)));
     connect(objAutoAddApp,SIGNAL(Error(QString,bool)),this,SLOT(ErrorText(QString,bool)));
-    connect(objAutoAddApp,SIGNAL(Done()),this,SLOT(ObjDone()));
+    connect(objAutoAddApp,SIGNAL(Done(BaseDockData*,BaseAppData*)),this,SLOT(ObjDone(BaseDockData*,BaseAppData*)));
     objAutoAddApp->start();
     controlState(false);
 }
@@ -148,7 +138,7 @@ void vekAppAddAT::ErrorText(QString ErrorInfo,bool cState){
     ui->label_ProgText->setText(ErrorInfo);
     controlState(cState);
 }
-void vekAppAddAT::ObjDone(){
-    emit autoObjDock(autoDockData,autoAppData);
+void vekAppAddAT::ObjDone(BaseDockData* _aDockData,BaseAppData* aAppData){
+    emit autoObjDock(_aDockData,aAppData);
     this->close();
 }

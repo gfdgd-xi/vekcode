@@ -11,7 +11,7 @@ class objectAppAT : public QThread
     Q_OBJECT
 public:
     objectAppAT();
-    void connectDockAutoData(BaseDockData,BaseAppData,QString);
+    void connectDockAutoData(BaseDockData,BaseAppData,QString,QString);
     ~objectAppAT();
 protected:
     void run();
@@ -23,6 +23,7 @@ private:
     //docker数据
     BaseDockData baseDockData={};
     QString jsonCfg=nullptr;
+    QString srcName=nullptr;
     objectAppMT* objDiyAddApp=nullptr;
     QString jsonPathTypeToStr(QString);
     bool JsonType(QString);
@@ -30,11 +31,11 @@ private:
     void objectAutoObj();
     void objInstallRes();
     void objAppData();
-    bool objDockerData(QString);
+    bool objDockerData();
 signals:
     void Tips(QString TipsStr);
     void Error(QString ErrorInfo,bool cState);
-    void Done();
+    void Done(BaseDockData*,BaseAppData*);
 };
 
 #endif // VEKGAMEADDAUTOOBJECT_H
