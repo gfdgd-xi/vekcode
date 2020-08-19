@@ -16,4 +16,5 @@ BaseAppData GetAppData(BaseDockData dockData,QString appCID);
 void SaveDockerDataToJson(BaseDockData dockData,QString dockName);
 void AddAppDataToJson(BaseDockData dockData,BaseAppData appData);
 void SaveAppDataToJson(BaseDockData dockData,BaseAppData appData);
+void DeleteWineDataToJson(QString wineName);
 #endif // LOADSTYLE_H

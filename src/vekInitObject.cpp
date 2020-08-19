@@ -31,6 +31,11 @@ void SaveAppDataToJson(BaseDockData dockData,BaseAppData appData){
     objectJson _objectJson;
     _objectJson.updateAppNodeData(dockData,appData);
 }
+//删除wine
+void DeleteWineDataToJson(QString wineName){
+    objectJson _objectJson;
+    _objectJson.deleteWineNodeData(wineName);
+}
 BaseDockData GetDockerData(QString dockName){
     BaseDockData tempDockData={};
     if(!g_vekLocalData.dockerVec.empty()){

@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
                                   QFile::ExeUser|
                                   QFile::ExeGroup);
             QProcess* m_cmd=new QProcess();
+            m_cmd->setWorkingDirectory(QDir::currentPath());
             m_cmd->startDetached(QDir::currentPath()+"/vUpdate "+verData.version+" "+verData.urlLogsStr+" "+verData.urlFileStr);
             m_cmd->kill();
             a.exit();

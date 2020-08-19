@@ -93,23 +93,28 @@ void vekWineOption::onButton_Install()
     controlState(false);
 }
 void vekWineOption::deleteWine(){
-      QString wineName=ui->comboBox_wineVer->currentText();
-      QString winePath;
-      for(auto a:g_vekLocalData.wineVec){
-          if(a.first==wineName){
-              winePath=a.second.IwinePath;
-              g_vekLocalData.wineVec.erase(a.first);
-              break;
-          }
-      }
-      if(winePath!=NULL){
-          QDir wineInstallDir(winePath);
-          if(wineInstallDir.exists()){
-               wineInstallDir.removeRecursively();
-          }
-      }else{
-          return;
-      }
+    QString wineName=ui->comboBox_wineVer->currentText();
+    QString winePath=nullptr;
+    for(auto a:g_vekLocalData.wineVec){
+        if(a.first==wineName){
+            winePath=a.second.IwinePath;
+            break;
+        }
+    }
+    if(vekMesg("您确定要删除"+wineName+"路径为:"+winePath)){
+        if(winePath!=NULL){
+            QDir wineInstallDir(winePath);
+            if(wineInstallDir.exists()){
+                wineInstallDir.removeRecursively();
+                g_vekLocalData.wineVec.erase(wineName);
+                DeleteWineDataToJson(wineName);
+                vekTip("删除成功!");
+            }
+        }else{
+            vekTip("删除失败!");
+            return;
+        }
+    }
 }
 void vekWineOption::controlState(bool pState){
     ui->pushButton_Install->setEnabled(pState);
@@ -136,7 +141,7 @@ void vekWineOption::on_toolButton()
     QWidget *qwidget = new QWidget();
     QString installPath=QFileDialog::getExistingDirectory(qwidget,"选择Wine保存目录","",nullptr);
     if(installPath!=NULL){
-       ui->lineEdit_InstallPath->setText(installPath);
+        ui->lineEdit_InstallPath->setText(installPath);
     }
 
 }
