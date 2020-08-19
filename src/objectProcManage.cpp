@@ -53,7 +53,7 @@ void objectProcManage::delAttachProc(procInfo pInfo){
         for(auto c:pInfo.pAttachProc){
             if(b.second.contains(c,Qt::CaseSensitive)){
                 QStringList list;
-                list.empty();
+                list.clear();
                 list= b.second.split("\n");
                 QString kPid;
                 qDebug()<<kPid;
@@ -72,7 +72,7 @@ void objectProcManage::delAttachProc(procInfo pInfo){
     }
 }
 void objectProcManage::getAllProc(){
-    procAllInfoStr.empty();
+    procAllInfoStr.clear();
     procAllInfoStr.insert(pair<QString,QString>(iprocInfo.pDockName,objGetProcList(iprocInfo)));
     delAttachProc(iprocInfo);
 }

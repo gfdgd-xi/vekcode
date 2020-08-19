@@ -9,14 +9,7 @@ objectExtend::~objectExtend(){
     m_cmd=nullptr;
 }
 void objectExtend::setDockOptionObjectData(BaseDockData _dockData,QString _appCID,std::vector<QStringList> _agrsList,objectType _objType,objectWineBoot _objWineBootType,objectWineServer _objWineServer){
-    if(_appCID!=nullptr){
-        for(auto a:_dockData.dData){
-            if(a.first==_appCID){
-                appData=a.second;
-                break;
-            }
-        }
-    }
+    appData=GetAppData(_dockData,_appCID);
     dockData=_dockData;
     argsList=_agrsList;
     objType=_objType;
@@ -34,15 +27,18 @@ void objectExtend::executeArgsEnv(){
     //设置容器目录
     qputenv("WINEPREFIX", (dockData.DockerPath+"/"+dockData.DockerName).toStdString().c_str());
     qputenv("WINEARCH", dockData.DockerVer.toStdString().c_str());
-    //设置工作目录
-    qputenv("PWD", appData.WorkPath.toStdString().c_str());
     qputenv("WINETRICKS_DOWNLOADER", "aria2c");
-    if(appData.TaskLog){
-        qputenv("WINEDEBUG", "-all");
-    }
-    if(!appData.DockerEnv.empty()){
-        for(auto& [a,u]:appData.DockerEnv){
-            qputenv(a.toStdString().c_str(),u.toStdString().c_str());
+
+    if(appData.WorkPath!=nullptr){
+        //设置工作目录
+        qputenv("PWD", appData.WorkPath.toStdString().c_str());
+        if(appData.TaskLog){
+            qputenv("WINEDEBUG", "-all");
+        }
+        if(!appData.DockerEnv.empty()){
+            for(auto& [a,u]:appData.DockerEnv){
+                qputenv(a.toStdString().c_str(),u.toStdString().c_str());
+            }
         }
     }
     for(auto _env:m_cmd->systemEnvironment()){
@@ -51,7 +47,7 @@ void objectExtend::executeArgsEnv(){
 }
 void objectExtend::executeWineBoot(objectWineBoot objWineBootType){
     QStringList wineboot;
-    wineboot.empty();
+    wineboot.clear();
     wineboot.append(dockData.WinePath+"/wine/bin/");
     switch (objWineBootType) {
     case object_wineboot_e:
@@ -168,7 +164,6 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
 void objectExtend::baseExecuteWineCode(QString code,QStringList codeArgs){
     QString mdCode;
     m_cmd->setReadChannel(QProcess::StandardOutput);
-    m_cmd->setWorkingDirectory(appData.WorkPath);
     m_cmd->start(code,codeArgs,QIODevice::ReadWrite);
     m_cmd->waitForFinished(-1);
     waitObjectDone(true);
@@ -244,7 +239,7 @@ void objectExtend::extendApp(){
 void objectExtend::dyncDxvkRegs(std::map<QString,std::map<QString,QString>> dxvkResStr){
     for(auto a:dxvkResStr){
         for(auto b:a.second){
-         argsList.empty();
+         argsList.clear();
          argsList.push_back(DockRegeditStr("add",a.first,b.first,"REG_SZ",appData.WorkPath));
         }
     }
@@ -254,7 +249,7 @@ void objectExtend::extendPlugs(){
     QStringList codeArgs;
     for(auto a:argsList){
         for(auto b:a){
-            codeArgs.empty();
+            codeArgs.clear();
             codeArgs.append("msiexec");
             codeArgs.append("/i");
             codeArgs.append(b);
@@ -298,7 +293,7 @@ void objectExtend::forcekill(){
 }
 void objectExtend::run(){
     m_cmd=new QProcess();
-    executeArgsEnv(); 
+    executeArgsEnv();
     if(objType==object_winecfg||objType==object_regedit||objType==object_control||objType==object_uninstall)
     {
         optionExtend();

@@ -19,8 +19,8 @@ public:
     void optionRegs();
     void sObjectInstall();
 private:
-    BaseAppData* appData=nullptr;
-    BaseDockData* dockData=nullptr;
+    BaseAppData* appData=new BaseAppData;
+    BaseDockData* dockData=new BaseDockData;
     void InitDockDir(bool foceState,QDir _dockPath,QDir _dockDir);
     QStringList GetDxvkFileList(QString basedxvkDir);
     void DxvkFileInstall();

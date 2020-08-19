@@ -117,8 +117,10 @@ void vekAppPanel::objAppInstall(){
         }
     }
     BaseDockData baseDockerData;
-    objectAppMT* objNewDock=new objectAppMT(nullptr,&baseDockerData);
+    BaseAppData  baseAppData;
+    objectAppMT* objNewDock=new objectAppMT(&baseAppData,&baseDockerData);
     QString dockName="vekON1";
+    baseAppData.DefaultFonts=true;
     if(m_pBox->count()!=0){
         dockName =m_pBox->tabText(m_pBox->currentIndex());
     }else{
@@ -143,7 +145,7 @@ void vekAppPanel::objAppInstall(){
     objectExtend* _objectExtend=new objectExtend();
     objectType _objType=object_uninstall;
     std::vector<QStringList> _codeAgrs;
-    _objectExtend->setDockOptionObjectData(baseDockerData,nullptr,_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default);
+    _objectExtend->setDockOptionObjectData(baseDockerData,baseAppData.AppCID,_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default);
     _objectExtend->start();
     delete objNewDock;
     objNewDock=nullptr;

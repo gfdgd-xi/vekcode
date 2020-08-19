@@ -6,6 +6,7 @@
 #include <QTextCodec>
 #include "vekInitObject.h"
 #include "objectProcManage.h"
+#include "vekInitObject.h"
 class objectExtend :public QThread
 {
     Q_OBJECT

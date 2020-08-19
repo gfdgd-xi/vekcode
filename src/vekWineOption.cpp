@@ -94,22 +94,22 @@ void vekWineOption::onButton_Install()
 }
 void vekWineOption::deleteWine(){
       QString wineName=ui->comboBox_wineVer->currentText();
-      QString winePath=ui->lineEdit_InstallPath->text();
-      if(wineName==NULL&&winePath==NULL){
-          return;
-      }
-      BaseWineData _bWineData;
+      QString winePath;
       for(auto a:g_vekLocalData.wineVec){
           if(a.first==wineName){
+              winePath=a.second.IwinePath;
               g_vekLocalData.wineVec.erase(a.first);
               break;
           }
       }
-      QDir wineInstallDir(winePath+"/vekWine/"+wineName);
-      if(wineInstallDir.exists()){
-           wineInstallDir.removeRecursively();
+      if(winePath!=NULL){
+          QDir wineInstallDir(winePath);
+          if(wineInstallDir.exists()){
+               wineInstallDir.removeRecursively();
+          }
+      }else{
+          return;
       }
-
 }
 void vekWineOption::controlState(bool pState){
     ui->pushButton_Install->setEnabled(pState);
