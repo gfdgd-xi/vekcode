@@ -98,7 +98,7 @@ FORMS += \
 
 #UPX
 #Release:QMAKE_POST_LINK += ./upx -9 $(DESTDIR_TARGET)
-QMAKE_CXXFLAGS_RELEASE += -Ofast
+#QMAKE_CXXFLAGS_RELEASE += -Ofast
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin

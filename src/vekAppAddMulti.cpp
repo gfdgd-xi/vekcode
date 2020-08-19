@@ -13,7 +13,6 @@ vekAppAddMulti::vekAppAddMulti(QWidget *parent) :
 vekAppAddMulti::~vekAppAddMulti()
 {
     delete ui;
-    ui=nullptr;
     emit _unMultAppAdd();
 }
 void vekAppAddMulti::connectObject(){

@@ -143,11 +143,11 @@ p, li { white-space: pre-wrap; }
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <layout class="QVBoxLayout" name="verticalLayout_5" stretch="100">
           <item>
            <widget class="QLabel" name="label_2">
             <property name="styleSheet">
-             <string notr="true">image: url(:/res/img/aliPay.png);</string>
+             <string notr="true">image: url(:/res/img/wechat.png);</string>
             </property>
             <property name="text">
              <string/>

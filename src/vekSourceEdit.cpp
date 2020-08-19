@@ -164,11 +164,11 @@ void vekSourceEdit::saveAllData(){
 void vekSourceEdit::objectUpdateSrc(QTableView* qTableView){
     int curRow=qTableView->model()->rowCount();
     if(qTableView->objectName()=="tableView_WineSrcList"){
-         g_vekLocalData.wineSource.clear();
-         g_vekLocalData.wineJsonList.clear();
+         g_vekLocalData.wineSource.empty();
+         g_vekLocalData.wineJsonList.empty();
     }else{
-        g_vekLocalData.appScrSource.clear();
-        g_vekLocalData.appJsonList.clear();
+        g_vekLocalData.appScrSource.empty();
+        g_vekLocalData.appJsonList.empty();
     }
     if(curRow>-1){
         QAbstractItemModel *modessl = qTableView->model();

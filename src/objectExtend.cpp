@@ -51,7 +51,7 @@ void objectExtend::executeArgsEnv(){
 }
 void objectExtend::executeWineBoot(objectWineBoot objWineBootType){
     QStringList wineboot;
-    wineboot.clear();
+    wineboot.empty();
     wineboot.append(dockData.WinePath+"/wine/bin/");
     switch (objWineBootType) {
     case object_wineboot_e:
@@ -244,7 +244,7 @@ void objectExtend::extendApp(){
 void objectExtend::dyncDxvkRegs(std::map<QString,std::map<QString,QString>> dxvkResStr){
     for(auto a:dxvkResStr){
         for(auto b:a.second){
-         argsList.clear();
+         argsList.empty();
          argsList.push_back(DockRegeditStr("add",a.first,b.first,"REG_SZ",appData.WorkPath));
         }
     }
@@ -254,7 +254,7 @@ void objectExtend::extendPlugs(){
     QStringList codeArgs;
     for(auto a:argsList){
         for(auto b:a){
-            codeArgs.clear();
+            codeArgs.empty();
             codeArgs.append("msiexec");
             codeArgs.append("/i");
             codeArgs.append(b);

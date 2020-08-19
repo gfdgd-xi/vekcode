@@ -44,8 +44,8 @@ void objectSource::loadAllData(){
         updateSrcDataObject();
     }else{
         if(_objectJson.unDataSerializeLocalData()){
-            g_vekLocalData.appJsonList.clear();
-            g_vekLocalData.wineJsonList.clear();
+            g_vekLocalData.appJsonList.empty();
+            g_vekLocalData.wineJsonList.empty();
             updateSrcDataObject();  
         }
     }

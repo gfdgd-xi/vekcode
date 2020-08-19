@@ -264,5 +264,5 @@ void vekAppListView::moveSlot()
         }
     }
     //操作完了要把这个临时的映射清空
-    m_ActionMap.clear();
+    m_ActionMap.empty();
 }

@@ -101,11 +101,7 @@ void vekGitWine::vek_Clone(BaseWineData _wd){
     git_clone(&cloned_repo, url, path, &clone_opts);
     git_repository_free(cloned_repo);
     git_libgit2_shutdown();
-    objectJson* _objectJson=new objectJson() ;
-    _objectJson->updateWineNodeData(_wd);
     pThis->outputPrgressSlots("Done clone!");
-    delete _objectJson;
-    _objectJson=nullptr;
 }
 int i=0;
 void vekGitWine::run()
@@ -122,5 +118,9 @@ void vekGitWine::run()
    outputPrgressSlots("开始下载组件请稍等!");
    connect(&_vekgetcurl,&vekGetCurl::curlPrgressSignals,this,&vekGitWine::curlPrgressSlots);
    _vekgetcurl.DoewloadPlugs(_wd);
+   objectJson* _objectJson=new objectJson() ;
+   _objectJson->updateWineNodeData(_wd);
+   delete _objectJson;
+   _objectJson=nullptr;
    emit overThreadSignals();
 }
