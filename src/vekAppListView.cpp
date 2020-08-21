@@ -199,6 +199,7 @@ void vekAppListView::setUpDelData(BaseDockData dockData,BaseAppData* appData,obj
             //判断设置后的dockName和当前是否相同，该功能是利用设置修改容器名
             if(currentTabText==dockData.DockerName){
                m_pModel->addItem(appData);
+               _objectJson.updateAppNodeData(dockData,*appData);
             }else{
                 _objectJson.deleteAppNodeData(GetDockerData(currentTabText),appData->AppCID);
                 _objectJson.addAppNodeData(GetDockerData(dockData.DockerName),*appData);

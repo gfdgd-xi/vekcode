@@ -19,12 +19,12 @@ void objectExtend::setDockOptionObjectData(BaseDockData _dockData,QString _appCI
 }
 //运行环境变量设置
 void objectExtend::executeArgsEnv(){
-    qputenv("WINE", (dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion).toStdString().c_str());
+
     qDebug()<<"wine执行版本:"<<dockData.DockerWineVersion;
     qDebug()<<"容器版本系统版本:"<<dockData.DockerSystemVersion;
     qDebug()<<"Wine版本号:"<<dockData.WineVersion;
     qDebug()<<"容器系统位数版本:"<<dockData.DockerVer;
-    //设置容器目录
+    qputenv("WINE", (dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion).toStdString().c_str());
     qputenv("WINEPREFIX", (dockData.DockerPath+"/"+dockData.DockerName).toStdString().c_str());
     qputenv("WINEARCH", dockData.DockerVer.toStdString().c_str());
     qputenv("WINETRICKS_DOWNLOADER", "aria2c");
@@ -82,14 +82,14 @@ void objectExtend::executeWineBoot(objectWineBoot objWineBootType){
         return;
         break;
     }
-    qDebug()<<"wineboot start";
     m_cmd->start(wineboot.join(""),QIODevice::ReadWrite);
+    qDebug()<<"wineboot:"<<wineboot.join("");
     m_cmd->waitForFinished(-1);
     waitObjectDone(true);
-    qDebug()<<"wineboot end";
 }
 void objectExtend::executeWineServer(objectWineServer objWineServer){
     QStringList wineserver;
+    wineserver.clear();
     wineserver.append(dockData.WinePath+"/wine/bin/");
     switch (objWineServer) {
     case object_wineserver_k:
@@ -109,6 +109,7 @@ void objectExtend::executeWineServer(objectWineServer objWineServer){
         break;
     }
     m_cmd->start(wineserver.join(""),QIODevice::ReadWrite);
+    qDebug()<<"wineServer:"<<wineserver.join("");
     m_cmd->waitForFinished(-1);
     waitObjectDone(true);
 }
@@ -118,22 +119,26 @@ void objectExtend::executeWinetricks(){
     //executeWineServer(object_wineserver_k);
     executeWineBoot(object_wineboot_r);
     QStringList codeArgs;
+    bool wType=false;
     qputenv("WINE", (dockData.WinePath+"/wine/bin/wine").toStdString().c_str());
     codeArgs.append(dockData.WinePath+"/wine/bin/winetricks");
     if(objType==object_winetricks_gui){
         codeArgs.append("--gui");
+        wType=true;
     }else if(objType==object_winetricks_libs){
         for(auto d:argsList){
             for(auto x:d){
+
                 codeArgs.append(x);
             }
         }
     }
     QString mdCode = codeArgs.join(" ");
     m_cmd->start(mdCode,QIODevice::ReadWrite);
+    qDebug()<<"WineTricks:"<<codeArgs.join(" ");
     m_cmd->waitForFinished(-1);
     dockEditSystemVersion();
-    waitObjectDone(false);   
+    waitObjectDone(wType);
 }
 //执行游戏
 void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){

@@ -98,6 +98,7 @@ void vekAppAddMT::vekAppAddConnectObject(BaseDockData* _data,QString _appCID,obj
     ui->checkBox_DefaultFonts->setChecked(tempAppData->DefaultFonts);
     ui->lineEdit_MainProcName->setText(tempAppData->MainPrcoName);
     ui->checkBox_dxvkConfigState->setChecked(tempAppData->DxvkConfigFileState);
+
     dxvkOptionLoad();
     loadTableView(ui->tableView_EnvList,tempAppData);
     loadTableView(ui->tableView_ProcList,tempAppData);

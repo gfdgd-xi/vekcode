@@ -1,0 +1,11 @@
+QListView{
+icon-size:50px;
+font:14px;
+margin-bottom:1px;
+selection-color: #0a214c;
+selection-background-color: #C19A6B;
+}
+QListView::item{
+background:#FFFFFF;
+margin-top:20px;
+}

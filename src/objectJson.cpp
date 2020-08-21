@@ -504,7 +504,7 @@ void objectJson::deleteAppNodeData(BaseDockData dockData, QString appCID){
     {
         if(dockData.DockerName==h.first){
             for(auto &w:h.second.dData){
-                if(w.second.AppCID==appCID){
+                if(w.first==appCID){
                     h.second.dData.erase(appCID);
                     break;
                 }
@@ -518,10 +518,7 @@ void objectJson::updateAppNodeData(BaseDockData dockData,BaseAppData appData){
     if(appData.AppCID!=nullptr){
         deleteAppNodeData(dockData,appData.AppCID);
     }
-    //有问题需要修改
-    dockData.dData.insert(pair<QString,BaseAppData>(appData.AppCID,appData));
-    g_vekLocalData.dockerVec.insert(pair<QString,BaseDockData>(dockData.DockerName,dockData));
-    WriteLocalData();
+    addAppNodeData(dockData,appData);
 }
 //××××××××××××××××Wine信息操作×××××××××××××××××//
 //删除Wine节点

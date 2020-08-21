@@ -1,8 +1,6 @@
 QT = widgets
 QT += concurrent
 CONFIG += c++17
-CONFIG += static
-CONFIG += staticlib
 CONFIG += release
 QMAKE_CXXFLAGS += -Wno-unused-parameter
 QMAKE_CXXFLAGS += -Wno-unused-variable
