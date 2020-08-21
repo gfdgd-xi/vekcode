@@ -64,7 +64,7 @@ void objectProcManage::delAttachProc(procInfo pInfo){
                     }
                 }
                 if(kPid!=NULL){
-                    prc=new QProcess(this);
+                    prc=new QProcess();
                     objDelProc(prc,kPid,pInfo);
                 }
             }

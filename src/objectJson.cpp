@@ -515,9 +515,12 @@ void objectJson::deleteAppNodeData(BaseDockData dockData, QString appCID){
 }
 //更新APP节点信息
 void objectJson::updateAppNodeData(BaseDockData dockData,BaseAppData appData){
+    deleteDockerNodeData(dockData.DockerName);
+    /*
     if(appData.AppCID!=nullptr){
         deleteAppNodeData(dockData,appData.AppCID);
     }
+    */
     addAppNodeData(dockData,appData);
 }
 //××××××××××××××××Wine信息操作×××××××××××××××××//

@@ -340,8 +340,7 @@ bool vekAppAddMT::vekAppConfigObj(){
     }
     tempDockData->WineVersion=ui->comboBox_RunWine->currentText();
     for(auto &x : g_vekLocalData.wineVec){
-        if(x.first==tempDockData->WineVersion){
-            tempDockData->WineVersion=x.second.IwineName;
+        if(x.first==ui->comboBox_RunWine->currentText()){
             tempDockData->WinePath=x.second.IwinePath;
             break;
         }
@@ -374,7 +373,7 @@ bool vekAppAddMT::vekAppConfigObj(){
     int procCurRow=ui->tableView_ProcList->model()->rowCount();
     int regsCurRow=ui->tableView_RegsList->model()->rowCount();
     if(envCurRow>0){
-        tempAppData->DockerEnv.empty();
+        tempAppData->DockerEnv.clear();
         QAbstractItemModel *modelEnv = ui->tableView_EnvList->model();
         for(int i=0;i<=envCurRow-1;i++){
             QString dataTempA = modelEnv->data(modelEnv->index(i,0)).value<QString>();
@@ -385,7 +384,7 @@ bool vekAppAddMT::vekAppConfigObj(){
         }
     }
     if(procCurRow>0){
-        tempAppData->AttachProc.empty();
+        tempAppData->AttachProc.clear();
         QAbstractItemModel *modelProc = ui->tableView_ProcList->model();
         for(int i=0;i<=procCurRow-1;i++){
             QString dataTempC = modelProc->data(modelProc->index(i,0)).value<QString>();
@@ -396,7 +395,7 @@ bool vekAppAddMT::vekAppConfigObj(){
         }
     }
     if(regsCurRow>0){
-        tempAppData->DockerRegs.empty();
+        tempAppData->DockerRegs.clear();
         BaseDockRegs _tRegs;
         QAbstractItemModel *modelRegs = ui->tableView_RegsList->model();
         for(int i=0;i<=regsCurRow-1;i++){
