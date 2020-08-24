@@ -185,19 +185,19 @@ bool objectJson::unDataSerializeLocalData(){
                                 _base_app_data.RtServer=it.value().at("RtServer").get<bool>();
                                 _base_app_data.DefaultFonts=it.value().at("DefaultFonts").get<bool>();
                                 _base_app_data.DxvkConfigFileState=it.value().at("DxvkConfigFileState").get<bool>();
-                                _base_app_data.AttachProc.empty();
+                                _base_app_data.AttachProc.clear();
                                 if(it.value().at("AttachProc")!=NULL){
                                     for(auto idx:it.value().at("AttachProc")){
                                         _base_app_data.AttachProc.push_back(QString::fromStdString(idx));
                                     }
                                 }
-                                _base_app_data.DockerEnv.empty();
+                                _base_app_data.DockerEnv.clear();
                                 if(it.value().at("DockerEnv")!=NULL){
                                     for(auto&[vx,vy]:it.value().at("DockerEnv").items()){
                                         _base_app_data.DockerEnv.insert(pair<QString,QString>(QString::fromStdString(vx),QString::fromStdString(vy)));
                                     }
                                 }
-                                _base_app_data.DockerRegs.empty();
+                                _base_app_data.DockerRegs.clear();
                                 if(it.value().at("DockerRegs")!=NULL){
                                     for(auto&wy:it.value().at("DockerRegs")){
                                         BaseDockRegs _rbaseRegs;
@@ -226,7 +226,7 @@ bool objectJson::unDataSerializeLocalData(){
                     _base_wine_data.IwineMono=QString::fromStdString(y.at("IwineMono"));
                     _base_wine_data.IwineGeckoX86=QString::fromStdString(y.at("IwineGeckoX86"));
                     _base_wine_data.IwineGeckoX86_64=QString::fromStdString(y.at("IwineGeckoX86_64"));
-                    _base_wine_data.IwineDxvk.empty();
+                    _base_wine_data.IwineDxvk.clear();
                     for(auto yz:y.at("IwineDxvk")){
                         _base_wine_data.IwineDxvk.push_back(QString::fromStdString(yz));
                     }
@@ -274,7 +274,7 @@ bool objectJson::unDataSerializeLocalData(){
                                         g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].Mono=QString::fromStdString(kj.at("Mono"));
                                         g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].GeckoX86=QString::fromStdString(kj.at("GeckoX86"));
                                         g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].GeckoX86_64=QString::fromStdString(kj.at("GeckoX86_64"));
-                                        g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].WineDxvk.empty();
+                                        g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].WineDxvk.clear();
                                         for(auto ix:kj.at("WineDxvk"))
                                         {
                                             g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].WineDxvk.push_back(QString::fromStdString(ix));
@@ -312,7 +312,7 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
                 }
             }
             if(QString::fromStdString(k)=="AttachProc"){
-                _baseAutoSetJson->AttachProc.empty();
+                _baseAutoSetJson->AttachProc.clear();
                 if(!j.empty()){
                     for(auto&zu:j.items()){
                         _baseAutoSetJson->AttachProc.push_back(QString::fromStdString(zu.value()));
@@ -320,7 +320,7 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
                 }
             }
             if(QString::fromStdString(k)=="Env"){
-                _baseAutoSetJson->Env.empty();
+                _baseAutoSetJson->Env.clear();
                 if(!j.empty()){
                     for(auto&[iu,zu]:j.items()){
                         _baseAutoSetJson->Env.insert(pair<QString,QString>(QString::fromStdString(iu),QString::fromStdString(zu)));
@@ -328,7 +328,7 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
                 }
             }
             if(QString::fromStdString(k)=="Libs"){
-                _baseAutoSetJson->Libs.empty();
+                _baseAutoSetJson->Libs.clear();
                 if(!j.empty()){
                     for(auto& d:j.items()){
                         _baseAutoSetJson->Libs.push_back(QString::fromStdString(d.value()));
@@ -341,7 +341,7 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
                 }
             }
             if(QString::fromStdString(k)=="Regs"){
-                _baseAutoSetJson->Regs.empty();
+                _baseAutoSetJson->Regs.clear();
                 if(!j.empty()){
                     for(auto ad:j.items()){
                         BaseDockRegs rbaseRegs;
@@ -376,7 +376,7 @@ bool objectJson::unSerializeLocalWineApp(QString key,QString urlData,UNJSONTYPE 
                 g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].Mono=QString::fromStdString(y.at("Mono"));
                 g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].GeckoX86=QString::fromStdString(y.at("GeckoX86"));
                 g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].GeckoX86_64=QString::fromStdString(y.at("GeckoX86_64"));
-                g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].WineDxvk.empty();
+                g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].WineDxvk.clear();
                 for(auto xz:y.at("WineDxvk")){
                     g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].WineDxvk.push_back(QString::fromStdString(xz));
                 }
