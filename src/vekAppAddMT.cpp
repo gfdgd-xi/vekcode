@@ -52,6 +52,9 @@ void vekAppAddMT::vekAppAddConnectObject(BaseDockData* _data,QString _appCID,obj
     for(auto&y:_dockSystemVersion){
         ui->comboBox_dockSystemVersion->addItem(y);
     }
+    for(auto&d:_dockSystemVersion){
+        ui->comboBox_RunAppSys->addItem(d);
+    }
     for(auto n:_dockVer){
         ui->comboBox_dockbit->addItem(n);
     }
@@ -76,8 +79,7 @@ void vekAppAddMT::vekAppAddConnectObject(BaseDockData* _data,QString _appCID,obj
     ui->comboBox_DockName->setCurrentText(tempDockData->DockerName);
     ui->comboBox_RunWine->setCurrentText(tempDockData->WineVersion);
     ui->comboBox_dockSystemVersion->setCurrentText(tempDockData->DockerSystemVersion);
-    ui->lineEdit_RunDockPath->setText(tempDockData->DockerPath);
-    ui->comboBox_DockName->setCurrentText(tempDockData->DockerName);
+    ui->comboBox_RunAppSys->setCurrentText(tempAppData->DockSysVersion);
     ui->checkBox_Mono->setChecked(tempDockData->MonoState);
     ui->checkBox_Gecko->setChecked(tempDockData->GeckoState);
     ui->comboBox_dockbit->setCurrentText(tempDockData->DockerVer);
@@ -357,6 +359,7 @@ bool vekAppAddMT::vekAppConfigObj(){
         tempAppData->AppIco=":/res/img/vek.ico";
     }
     //dxvk参数
+    tempAppData->DockSysVersion=ui->comboBox_RunAppSys->currentText();
     tempAppData->MainPrcoName=ui->lineEdit_MainProcName->text();
     tempAppData->DxvkState=ui->checkBox_stateDxvk->checkState();
     tempAppData->DxvkVerson=ui->comboBox_dxvkversion->currentText();

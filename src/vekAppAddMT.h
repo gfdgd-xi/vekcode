@@ -24,7 +24,7 @@ private:
     BaseAppData* tempAppData=new BaseAppData();
     BaseDockData* tempDockData=new BaseDockData();
     objectTypeView objType;
-    vector<QString> _dockSystemVersion={"win10","win7","win81","win8","winxp64"};
+    vector<QString> _dockSystemVersion={"win10","win7","win81","win8","winxp","winxp64"};
     vector<QString> _dockVer={"win32","win64"};
     vector<QString> _dockWineVer={"wine","wine64"};
     void initAppAndDockData(BaseDockData* _data,QString _appCID);

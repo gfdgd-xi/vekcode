@@ -19,7 +19,6 @@ void objectExtend::setDockOptionObjectData(BaseDockData _dockData,QString _appCI
 }
 //运行环境变量设置
 void objectExtend::executeArgsEnv(){
-
     qDebug()<<"wine执行版本:"<<dockData.DockerWineVersion;
     qDebug()<<"容器版本系统版本:"<<dockData.DockerSystemVersion;
     qDebug()<<"Wine版本号:"<<dockData.WineVersion;
@@ -144,7 +143,7 @@ void objectExtend::executeWinetricks(){
 void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
     executeWineBoot(object_wineboot_r);
     monitorProc();
-    dockEditSystemVersion();  
+    appEditSystemVersion();
     m_cmd->closeReadChannel(QProcess::StandardOutput);
     m_cmd->closeReadChannel(QProcess::StandardError);
     m_cmd->setWorkingDirectory(appData.WorkPath);
@@ -182,6 +181,13 @@ void objectExtend::extendWineRegeditCode(QString code){
         m_cmd->waitForFinished(-1);
     }
     waitObjectDone(true);
+}
+void objectExtend::appEditSystemVersion(){
+   QStringList codeArgs;
+   codeArgs.append("winecfg");
+   codeArgs.append("/v");
+   codeArgs.append(appData.DockSysVersion);
+   baseExecuteWineCode(startArgs,codeArgs);
 }
 void objectExtend::dockEditSystemVersion(){
    QStringList codeArgs;

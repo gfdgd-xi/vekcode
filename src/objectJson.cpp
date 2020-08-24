@@ -33,6 +33,7 @@ json objectJson::DataSerialize(json jsonData,const BaseLocalData _baseLocalData)
             jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(AppOtherAgrs)]=by.AppOtherAgrs.toStdString();
             jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(WorkPath)]=by.WorkPath.toStdString();
             jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(MainPrcoName)]=by.MainPrcoName.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(DockSysVersion)]=by.DockSysVersion.toStdString();
             jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(TaskLog)]=by.TaskLog;
             jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(DxvkState)]=by.DxvkState;
             jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(WriteCopy)]=by.WriteCopy;
@@ -177,6 +178,7 @@ bool objectJson::unDataSerializeLocalData(){
                                 _base_app_data.WorkPath=QString::fromStdString(it.value().at("WorkPath"));
                                 _base_app_data.DxvkConfigFile=QString::fromStdString(it.value().at("DxvkConfigFile"));
                                 _base_app_data.MainPrcoName=QString::fromStdString(it.value().at("MainPrcoName"));
+                                _base_app_data.DockSysVersion=QString::fromStdString(it.value().at("DockSysVersion"));
                                 _base_app_data.DxvkState=it.value().at("DxvkState").get<bool>();
                                 _base_app_data.DxvkHUD=it.value().at("DxvkHUD").get<bool>();
                                 _base_app_data.TaskLog=it.value().at("TaskLog").get<bool>();
@@ -410,7 +412,7 @@ json objectJson::exportJson(BaseDockData xData,QString AppCID){
 
             eJson[toStr(Docker)][toStr(MonoState)]=xData.MonoState;
             eJson[toStr(Docker)][toStr(GeckoState)]=xData.GeckoState;
-            eJson[toStr(Docker)][toStr(DockerSystemVersion)]=xData.DockerSystemVersion.toStdString();
+            eJson[toStr(Docker)][toStr(DockerSystemVersion)]=b.second.DockSysVersion.toStdString();
             eJson[toStr(Docker)][toStr(DockerVersion)]=xData.DockerVer.toStdString();
             eJson[toStr(Docker)][toStr(DockerWineVersion)]=xData.DockerWineVersion.toStdString();
 

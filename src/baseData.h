@@ -22,6 +22,7 @@ typedef struct {
     QString DxvkVerson=nullptr;
     QString DxvkConfigFile=nullptr;
     QString MainPrcoName=nullptr;
+    QString DockSysVersion=nullptr;
     bool DxvkState=false;
     bool DxvkHUD=false;
     bool DxvkConfigFileState=false;

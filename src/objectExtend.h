@@ -37,6 +37,7 @@ private:
     void executeWinetricksLibs();
     void waitObjectDone(bool);
     void dockEditSystemVersion();
+    void appEditSystemVersion();
     void extendPlugs();
     void monitorProc();
     void forcekill();

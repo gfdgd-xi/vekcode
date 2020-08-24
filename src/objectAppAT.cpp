@@ -91,20 +91,18 @@ bool objectAppAT::objDockerData(){
         baseDockData.DockerWineVersion=_baseAutoSetJson->Docker.at(toStr(DockerWineVersion));
         baseDockData.DockerSystemVersion=_baseAutoSetJson->Docker.at(toStr(DockerSysVersion));
         baseDockData.WinePath=g_vekLocalData.wineVec.at(baseDockData.WineVersion).IwinePath;
+        qDebug()<<"如果容器不存在";
     }else{
         //如果容器存在
+        qDebug()<<"如果容器存在";
         if(baseDockData.DockerVer!=_baseAutoSetJson->Docker.at(toStr(DockerVersion))){
             vekError("当前容器版本为:"+baseDockData.DockerVer+"配置文件容器版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerVersion)));
-            return false;
-        }
-        if(baseDockData.DockerSystemVersion!=_baseAutoSetJson->Docker.at(toStr(DockerSystemVersion))){
-            vekError("当前容器系统版本为:"+baseDockData.DockerSystemVersion+"配置文件容器系统版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerSystemVersion)));
             return false;
         }
         if(baseDockData.DockerWineVersion!=_baseAutoSetJson->Docker.at(toStr(DockerWineVersion))){
             vekError("当前容器Wine版本为:"+baseDockData.DockerWineVersion+"配置文件容器Wine版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerWineVersion)));
             return false;
-        }
+        } 
     }
     QVariant monoState=_baseAutoSetJson->Docker.at(toStr(MonoState));
     baseDockData.MonoState=(monoState).toBool();;
@@ -138,6 +136,7 @@ void objectAppAT::objAppData(){
             if(a=="MainPrcoName"){
                 baseAppData.MainPrcoName=b;
             }
+            baseAppData.DockSysVersion=_baseAutoSetJson->Docker.at(toStr(DockerSysVersion));
         }
     }
     if(!_baseAutoSetJson->Dxvk.empty()){
