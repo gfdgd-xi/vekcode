@@ -122,7 +122,7 @@
             </size>
            </property>
            <property name="text">
-            <string>安装一个应用</string>
+            <string>安装应用</string>
            </property>
           </widget>
          </item>

@@ -1,12 +1,15 @@
-QT = widgets
-QT += concurrent
+QT += widgets
+#QT += concurrent
 CONFIG += c++17
+CONFIG += static
 CONFIG += release
 QMAKE_CXXFLAGS += -Wno-unused-parameter
 QMAKE_CXXFLAGS += -Wno-unused-variable
 QMAKE_CXXFLAGS += -Wno-unused-value
 QMAKE_CXXFLAGS += -Wmissing-field-initializers
 QMAKE_CXXFLAGS += -Wreturn-type
+QT -= network
+
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -111,9 +114,10 @@ DISTFILES += \
     vek_us_EN.ts \
     vek_zh_CN.ts
 
+
 ######curl##########
 DEFINES += CURL_STATICLIB
-LIBS += -L$$PWD/3rdparty/curl/lib/ -lcurl -lssl -lcrypto -lz -ldl
+LIBS += -L$$PWD/3rdparty/curl/lib/ -lcurl -lssl -lcrypto -lz
 
 INCLUDEPATH += $$PWD/3rdparty/curl/include
 DEPENDPATH += $$PWD/3rdparty/curl/include
@@ -126,7 +130,7 @@ LIBS+= $$PWD/3rdparty/curl/lib/libz.a
 INCLUDEPATH += $$PWD/3rdparty/json
 DEPENDPATH += $$PWD/3rdparty/json
 ##########libgit2#########
-unix:!macx: LIBS += -L$$PWD/3rdparty/libgit2/lib/ -lgit2 -lpcre -lssl -lcrypto
+unix:!macx: LIBS += -L$$PWD/3rdparty/libgit2/lib/ -lgit2 -lpcre -lssl -lcrypto  -lz
 INCLUDEPATH += $$PWD/3rdparty/libgit2/include
 DEPENDPATH += $$PWD/3rdparty/libgit2/include
 unix:!macx: PRE_TARGETDEPS += $$PWD/3rdparty/libgit2/lib/libgit2.a

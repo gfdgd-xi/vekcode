@@ -11,6 +11,7 @@ vekExtendDebug::vekExtendDebug(QWidget *parent) :
 
 vekExtendDebug::~vekExtendDebug()
 {
+    exitDebug();
     emit _unVekDebug();
     delete ui;
 }

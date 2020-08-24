@@ -139,7 +139,7 @@ void vekWineOption::overGitThreadSignals()
 void vekWineOption::on_toolButton()
 {
     QWidget *qwidget = new QWidget();
-    QString installPath=QFileDialog::getExistingDirectory(qwidget,"选择Wine保存目录","",nullptr);
+    QString installPath=QFileDialog::getExistingDirectory(qwidget,"选择Wine保存目录","",QFileDialog::ShowDirsOnly);
     if(installPath!=NULL){
         ui->lineEdit_InstallPath->setText(installPath);
     }

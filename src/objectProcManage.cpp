@@ -12,7 +12,7 @@ QString objectProcManage::objGetProcList(procInfo pInfo){
     //设置通道模式error和out合并
     m_cmd->setProcessChannelMode(QProcess::MergedChannels);
     m_cmd->setReadChannel(QProcess::StandardOutput);
-    m_cmd->start("bash");
+    m_cmd->start("bash",QIODevice::ReadWrite);
     QString pCodes="WINEPREFIX="+pInfo.pDockPath+"/"+pInfo.pDockName+" "+pInfo.pWinePath+"/wine/bin/wine winedbg"+" "+"--command \"info proc\"";
     m_cmd->write(pCodes.toLocal8Bit()+'\n');
     m_cmd->waitForFinished(1000);
@@ -27,7 +27,7 @@ QString objectProcManage::objGetProcList(procInfo pInfo){
 void objectProcManage::objDelProc(QProcess* prc,QString prPid,procInfo _pInfo){
     prc->setProcessChannelMode(QProcess::MergedChannels);
     prc->setReadChannel(QProcess::StandardOutput);
-    prc->start("bash");
+    prc->start("bash",QIODevice::ReadWrite);
     //设置工作目录
     QString aCodes="WINEPREFIX="+_pInfo.pDockPath+"/"+_pInfo.pDockName+" "+_pInfo.pWinePath+"/wine/bin/winedbg";
     QString bCodes="attach "+prPid;

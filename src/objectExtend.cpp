@@ -148,12 +148,13 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
     m_cmd->closeReadChannel(QProcess::StandardOutput);
     m_cmd->closeReadChannel(QProcess::StandardError);
     m_cmd->setWorkingDirectory(appData.WorkPath);
-    m_cmd->execute(wcode,codeArgs);
+    m_cmd->start(wcode,codeArgs);
     qDebug()<<"|++++++++++++++++++++++++++++|";
     qDebug()<<"writeCode:"+wcode;
     qDebug()<<"workPath:"+appData.WorkPath;
     qDebug()<<"WineArgs:"+codeArgs.join(" ");
     qDebug()<<"|++++++++++++++++++++++++++++|";
+    m_cmd->waitForFinished(-1);
     monitorProc();
     waitObjectDone(true);
     vector<QString>::iterator it;
