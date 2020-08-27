@@ -43,14 +43,9 @@ void vekAppAddAT::connectDockObject(){
         }
     }
 
-    QStringList _tempDockName;
     if(!g_vekLocalData.dockerVec.empty()){
         for(auto &a:g_vekLocalData.dockerVec){
-            _tempDockName.append(a.first);
-        }
-        _tempDockName = _tempDockName.toSet().toList();
-        for(auto a:_tempDockName){
-            ui->comboBox_DockName->addItem(a);
+            ui->comboBox_DockName->addItem(a.first);
         }
     }else{
         ui->comboBox_DockName->setCurrentText("vekON1");

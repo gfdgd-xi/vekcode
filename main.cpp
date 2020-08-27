@@ -3,6 +3,8 @@
 #include "src/objectSource.h"
 #include "src/vekGetCurl.h"
 #include "src/vekInitObject.h"
+#include <QtPlugin>
+#include <QPluginLoader>
 typedef struct{
     QString version;
     QString urlLogsStr;

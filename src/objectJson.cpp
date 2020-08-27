@@ -314,7 +314,7 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
                 }
             }
             if(QString::fromStdString(k)=="AttachProc"){
-                _baseAutoSetJson->AttachProc.clear();
+                //_baseAutoSetJson->AttachProc.clear();
                 if(!j.empty()){
                     for(auto&zu:j.items()){
                         _baseAutoSetJson->AttachProc.push_back(QString::fromStdString(zu.value()));
@@ -322,7 +322,7 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
                 }
             }
             if(QString::fromStdString(k)=="Env"){
-                _baseAutoSetJson->Env.clear();
+                //_baseAutoSetJson->Env.clear();
                 if(!j.empty()){
                     for(auto&[iu,zu]:j.items()){
                         _baseAutoSetJson->Env.insert(pair<QString,QString>(QString::fromStdString(iu),QString::fromStdString(zu)));
@@ -330,7 +330,7 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
                 }
             }
             if(QString::fromStdString(k)=="Libs"){
-                _baseAutoSetJson->Libs.clear();
+                //_baseAutoSetJson->Libs.clear();
                 if(!j.empty()){
                     for(auto& d:j.items()){
                         _baseAutoSetJson->Libs.push_back(QString::fromStdString(d.value()));
@@ -343,7 +343,7 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
                 }
             }
             if(QString::fromStdString(k)=="Regs"){
-                _baseAutoSetJson->Regs.clear();
+                //_baseAutoSetJson->Regs.clear();
                 if(!j.empty()){
                     for(auto ad:j.items()){
                         BaseDockRegs rbaseRegs;
@@ -356,7 +356,10 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
                 }
             }
             if(QString::fromStdString(k)=="Args"){
-                _baseAutoSetJson->Args=QString::fromStdString(j);
+                if(j!=nullptr){
+                    _baseAutoSetJson->Args=QString::fromStdString(j);
+                }
+
             }
         }
     } catch (nullptr_t) {
@@ -401,21 +404,44 @@ json objectJson::exportJson(BaseDockData xData,QString AppCID){
     json eJson=nullptr;
     for(auto b:xData.dData){
         if(b.second.AppCID==AppCID){
-            eJson[toStr(Option)][toStr(DefaultFont)]=b.second.DefaultFonts;
-            eJson[toStr(Option)][toStr(SharedMemory)]=b.second.SharedMemory;
-            eJson[toStr(Option)][toStr(WriteCopy)]=b.second.WriteCopy;
-            eJson[toStr(Option)][toStr(RtServer)]=b.second.RtServer;
+            eJson[toStr(Option)][toStr(DefaultFont)]=toStr(false);
+            eJson[toStr(Option)][toStr(SharedMemory)]=toStr(false);
+            eJson[toStr(Option)][toStr(WriteCopy)]=toStr(false);
+            eJson[toStr(Option)][toStr(RtServer)]=toStr(false);
+            eJson[toStr(Dxvk)][toStr(DxvkState)]=toStr(false);
+            eJson[toStr(Dxvk)][toStr(DxvkHUD)]=toStr(false);
+            eJson[toStr(Docker)][toStr(MonoState)]=toStr(false);
+            eJson[toStr(Docker)][toStr(GeckoState)]=toStr(false);
+
+            if(b.second.DefaultFonts){
+                eJson[toStr(Option)][toStr(DefaultFont)]=toStr(true);
+            }
+            if(b.second.SharedMemory){
+                eJson[toStr(Option)][toStr(SharedMemory)]=toStr(true);
+            }
+            if(b.second.WriteCopy){
+                eJson[toStr(Option)][toStr(WriteCopy)]=toStr(true);
+            }
+            if(b.second.RtServer){
+                eJson[toStr(Option)][toStr(RtServer)]=toStr(true);
+            }
+            if(xData.MonoState){
+                eJson[toStr(Docker)][toStr(MonoState)]=toStr(true);
+            }
+            if(xData.GeckoState){
+                eJson[toStr(Docker)][toStr(GeckoState)]=toStr(true);
+            }
+            if(b.second.DxvkState){
+                eJson[toStr(Dxvk)][toStr(DxvkState)]=toStr(true);
+            }
+            if(b.second.DxvkHUD){
+                eJson[toStr(Dxvk)][toStr(DxvkHUD)]=toStr(true);
+            }
             eJson[toStr(Option)][toStr(AppName)]=b.second.AppName.toStdString();
             eJson[toStr(Option)][toStr(MainPrcoName)]=b.second.MainPrcoName.toStdString();
-            eJson[toStr(Dxvk)][toStr(DxvkState)]=b.second.DxvkState;
-            eJson[toStr(Dxvk)][toStr(DxvkHUD)]=b.second.DxvkHUD;
-
-            eJson[toStr(Docker)][toStr(MonoState)]=xData.MonoState;
-            eJson[toStr(Docker)][toStr(GeckoState)]=xData.GeckoState;
-            eJson[toStr(Docker)][toStr(DockerSystemVersion)]=b.second.DockSysVersion.toStdString();
+            eJson[toStr(Docker)][toStr(DockerSysVersion)]=b.second.DockSysVersion.toStdString();
             eJson[toStr(Docker)][toStr(DockerVersion)]=xData.DockerVer.toStdString();
             eJson[toStr(Docker)][toStr(DockerWineVersion)]=xData.DockerWineVersion.toStdString();
-
             if(!b.second.AttachProc.empty()){
                 for(auto rs:b.second.AttachProc){
                     eJson[toStr(AttachProc)].push_back(rs.toStdString());
@@ -438,7 +464,7 @@ json objectJson::exportJson(BaseDockData xData,QString AppCID){
                 eJson[toStr(Libs)]=json::array();
             }
             if(!b.second.DockerRegs.empty()){
-                int i=-1;
+                int i=0;
                 for(auto a:b.second.DockerRegs){
                     i+=1;
                     eJson[toStr(Regs)][i][toStr(rPath)]=a.rPath.toStdString();

@@ -74,6 +74,7 @@ bool objectAppAT::jsonUnserialize(QString jsonPathFile){
         return false;
     }
     objectJson _objectJson;
+    _baseAutoSetJson=new BaseAutoSetJson;
     if(_objectJson.unDataSerializeScriptData(_baseAutoSetJson,jsonData)==nullptr){
         return false;
     }

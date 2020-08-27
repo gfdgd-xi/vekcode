@@ -9,7 +9,7 @@ vekATJsonModel::~vekATJsonModel(){
 }
 QVariant vekATJsonModel::data( const QModelIndex & index, int role ) const
 {
-    if (index.row() > m_ItemDataVec.size())
+    if (index.row() >m_ItemDataVec.size())
     {
         return QVariant();
     }

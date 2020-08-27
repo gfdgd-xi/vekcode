@@ -15,7 +15,7 @@ QT -= network
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
-VERSION = 1.0.1.0
+VERSION = 1.0.1.1
 DEFINES +=APP_VERSION=\\\"$$VERSION\\\"
 QMAKE_CXXFLAGS_RELEASE += -O3       # Release -O3
 # You can also make your code fail to compile if it uses deprecated APIs.
@@ -113,8 +113,6 @@ RC_ICONS = res\img\vek.ico
 DISTFILES += \
     vek_us_EN.ts \
     vek_zh_CN.ts
-
-
 ######curl##########
 DEFINES += CURL_STATICLIB
 LIBS += -L$$PWD/3rdparty/curl/lib/ -lcurl -lssl -lcrypto -lz
@@ -136,3 +134,4 @@ DEPENDPATH += $$PWD/3rdparty/libgit2/include
 unix:!macx: PRE_TARGETDEPS += $$PWD/3rdparty/libgit2/lib/libgit2.a
 unix:!macx: PRE_TARGETDEPS += $$PWD/3rdparty/libgit2/lib/libcrypto.a
 unix:!macx: PRE_TARGETDEPS += $$PWD/3rdparty/libgit2/lib/libssl.a
+
