@@ -1,6 +1,6 @@
 ﻿#include "vekWineOption.h"
 #include "ui_common.h"
-#include "vekInitObject.h"
+#include "obj/pObject.h"
 
 vekWineOption::vekWineOption(QWidget *parent) :
     QWidget(parent),
@@ -8,14 +8,14 @@ vekWineOption::vekWineOption(QWidget *parent) :
 {
     ui->setupUi(this);
     InitWineInstall();
-    githread = new vekGitWine();
+    githread = new objectGitWine();
     //下载按钮槽事件绑定
     connect(ui->pushButton_Install,&QPushButton::clicked,this,&vekWineOption::onButton_Install);
     connect(ui->pushButton_deleteWine,&QPushButton::clicked,this,&vekWineOption::deleteWine);
     connect(ui->toolButton_SetInstallDir,&QPushButton::clicked,this,&vekWineOption::on_toolButton);
     //
-    connect(githread,&vekGitWine::outputPrgressSignals,this,&vekWineOption::appendTextToLog);
-    connect(githread,&vekGitWine::overThreadSignals,this,&vekWineOption::overGitThreadSignals);
+    connect(githread,&objectGitWine::outputPrgressSignals,this,&vekWineOption::appendTextToLog);
+    connect(githread,&objectGitWine::overThreadSignals,this,&vekWineOption::overGitThreadSignals);
     connect(ui->comboBox_wineSrc,&QComboBox::currentTextChanged,this,&vekWineOption::WineVersionComoboBox);
 
     vek_Style(this,0);

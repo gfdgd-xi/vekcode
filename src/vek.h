@@ -3,13 +3,13 @@
 #include "vekWineOption.h"
 #include "vekAbout.h"
 #include "vekAppAddMT.h"
-#include "vekInitObject.h"
-#include "vekAppListView.h"
-#include "common.h"
+#include "obj/pObject.h"
+#include "view/aview/vekAppListView.h"
+#include "obj/common.h"
 #include "vekExtendDebug.h"
 #include "vekSourceEdit.h"
-#include "objectProcManage.h"
-#include "src/objectTray.h"
+#include "obj/objectProcManage.h"
+#include "obj/objectTray.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

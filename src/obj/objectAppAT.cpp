@@ -16,6 +16,9 @@ void objectAppAT::connectDockAutoData(BaseDockData _dockData,BaseAppData _appDat
 }
 bool objectAppAT::JsonType(QString str){
     bool typeState=false;
+    //需要处理缓存本地的数据。考虑是否批量下载app的ico图标，涉及到羊毛ico托管仓库每秒访问限制，是否考虑其他地方实现，
+    //特别需要注意的是因为ico缓存失败，采用默认ico代替，需要注意的是托管仓库对每秒访问限制次数，单人可解决，互联网同步并发是非被托管仓库限制，需要进行测试。
+    /*
     //源名字json
     for(auto & v:g_vekLocalData.appJsonList){
         if(v.first==srcName){
@@ -28,6 +31,10 @@ bool objectAppAT::JsonType(QString str){
             }
         }
     }
+    */
+    //从app列表内抽出用户所选app名字，然后从本地app数据中抽出对应的ico和json文件
+    //抽出对应的数据
+
     //查看jsonPaht头是否为http或者https
     if(jsonCfg.startsWith("http",Qt::CaseSensitive)){
         typeState=true;
@@ -39,14 +46,30 @@ bool objectAppAT::JsonType(QString str){
     if(str.endsWith("json",Qt::CaseSensitive)){
         typeState=true;
     }
-
+    if(!typeState){
+        for(auto v:g_vekLocalData.appJsonList){
+            for(auto b:v.second){
+                for(auto c:b.second){
+                    if(c.first==str){
+                        jsonCfg=c.second.appJson;
+                        jsonIco=c.second.appIco;
+                        if(c.second.appIco==nullptr){
+                           jsonIco=":/res/img/vek.ico";
+                        }
+                        typeState=true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
     return typeState;
 }
 QString objectAppAT::jsonPathTypeToStr(QString jsonPathFile){
     try {
         QString jsonDataStr=nullptr;
         if(jsonPathFile.contains("http",Qt::CaseSensitive)||jsonPathFile.contains("https",Qt::CaseSensitive)){
-            vekGetCurl* _vekgetcurl=new vekGetCurl();
+            objectGetCurl* _vekgetcurl=new objectGetCurl();
             jsonDataStr=QString::fromStdString(_vekgetcurl->vekGetData(jsonPathFile.toStdString()));
             delete _vekgetcurl;
             _vekgetcurl=nullptr;
@@ -167,7 +190,7 @@ void objectAppAT::objAppData(){
     baseAppData.AppCID=_objectJson->GetRandomCID();
     delete _objectJson;
     _objectJson=nullptr;
-    baseAppData.AppIco=":/res/img/vek.ico";
+    baseAppData.AppIco=jsonIco;
 }
 void objectAppAT::objectAutoObj(){
     if(objDiyAddApp!=nullptr){

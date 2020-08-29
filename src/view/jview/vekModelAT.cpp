@@ -1,13 +1,13 @@
-#include "vekATJsonModel.h"
+#include "vekModelAT.h"
 
-vekATJsonModel::vekATJsonModel(QObject *parent) : QAbstractListModel(parent)
+vekModelAT::vekModelAT(QObject *parent) : QAbstractListModel(parent)
 {
 
 }
-vekATJsonModel::~vekATJsonModel(){
+vekModelAT::~vekModelAT(){
 
 }
-QVariant vekATJsonModel::data( const QModelIndex & index, int role ) const
+QVariant vekModelAT::data( const QModelIndex & index, int role ) const
 {
     if (index.row() >m_ItemDataVec.size())
     {
@@ -39,7 +39,7 @@ QVariant vekATJsonModel::data( const QModelIndex & index, int role ) const
 
 
 
-int vekATJsonModel::rowCount( const QModelIndex & parent ) const
+int vekModelAT::rowCount( const QModelIndex & parent ) const
 {
     UNUSED(parent);
     return m_ItemDataVec.size();

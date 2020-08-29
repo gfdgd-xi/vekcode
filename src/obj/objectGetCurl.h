@@ -1,16 +1,16 @@
-#ifndef VEKGETCURL_H
-#define VEKGETCURL_H
+#ifndef OBJECTGETCURL_H
+#define OBJECTGETCURL_H
 
 #include "curl/curl.h"
 #include "curl/easy.h"
 #include "common.h"
 
-class vekGetCurl: public QThread
+class objectGetCurl: public QThread
 {
     Q_OBJECT
 public:
-    explicit vekGetCurl(QObject *parent = nullptr);
-    ~vekGetCurl();
+    explicit objectGetCurl(QObject *parent = nullptr);
+    ~objectGetCurl();
     std::string vekGetData(std::string url);
     QString outputPrgressText;
     QString fileName;

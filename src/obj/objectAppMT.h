@@ -3,7 +3,7 @@
 
 #include "objectJson.h"
 #include "objectExtend.h"
-#include "vekInitObject.h"
+#include "pObject.h"
 class objectAppMT :public QObject
 {
     Q_OBJECT

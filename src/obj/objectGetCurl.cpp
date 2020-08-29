@@ -1,8 +1,8 @@
-﻿#include "vekGetCurl.h"
-vekGetCurl::vekGetCurl(QObject *parent) : QThread(parent)
+﻿#include "objectGetCurl.h"
+objectGetCurl::objectGetCurl(QObject *parent) : QThread(parent)
 {
 }
-vekGetCurl::~vekGetCurl()
+objectGetCurl::~objectGetCurl()
 {
 }
 static size_t getData(void *buffer, size_t sz, size_t nmemb, void *writer)
@@ -12,7 +12,7 @@ static size_t getData(void *buffer, size_t sz, size_t nmemb, void *writer)
     psResponse->append(static_cast<char*>(buffer), size);
     return sz * nmemb;
 }
-std::string vekGetCurl::vekGetData(std::string url){
+std::string objectGetCurl::vekGetData(std::string url){
     CURL *curl=curl_easy_init();
     CURLcode res =CURLE_QUOTE_ERROR;
     std::string strRsp;
@@ -45,17 +45,17 @@ std::string vekGetCurl::vekGetData(std::string url){
     curl_easy_cleanup(curl);
     return strRsp;
 }
-size_t vekGetCurl::DownloadCallback(void* pBuffer, size_t nSize, size_t nMemByte, void* pParam)
+size_t objectGetCurl::DownloadCallback(void* pBuffer, size_t nSize, size_t nMemByte, void* pParam)
 {
     FILE* fp = (FILE*)pParam;
     size_t nWrite = fwrite(pBuffer, nSize, nMemByte, fp);
     return nWrite;
 }
-static vekGetCurl* dThis=nullptr;
+static objectGetCurl* dThis=nullptr;
 double olnow=0;
-int vekGetCurl::ProgressCallback(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow)
+int objectGetCurl::ProgressCallback(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow)
 {
-    dThis = (vekGetCurl*)clientp;
+    dThis = (objectGetCurl*)clientp;
     if ( dltotal > -0.1 && dltotal < 0.1 )
     {
         return 0;
@@ -69,12 +69,12 @@ int vekGetCurl::ProgressCallback(void *clientp, double dltotal, double dlnow, do
     }
     return 0;
 }
-void vekGetCurl::outLogText(string text){
+void objectGetCurl::outLogText(string text){
     outputPrgressText=QString::fromStdString(text);
     emit curlPrgressSignals();
 }
 
-bool vekGetCurl::DownloadFile(std::string URLADDR,std::string path)
+bool objectGetCurl::DownloadFile(std::string URLADDR,std::string path)
 {        
     CURL *curl;
     CURLcode curl_res;
@@ -112,7 +112,7 @@ bool vekGetCurl::DownloadFile(std::string URLADDR,std::string path)
     }
     return !curl_res;
 }
-void vekGetCurl::DoewloadPlugs(BaseWineData _wd){
+void objectGetCurl::DoewloadPlugs(BaseWineData _wd){
     if(!QDir(_wd.IwinePath+"/plugs").exists()){
         QDir().mkdir(_wd.IwinePath+"/plugs");
     }

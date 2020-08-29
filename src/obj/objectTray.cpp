@@ -14,15 +14,17 @@ void objectTray::startTray(){
 }
 void objectTray::exitTray(){
     if(m_cmd->state()!=QProcess::Starting){
-       m_cmd->start();
+        m_cmd->start();
     }
-   m_cmd->write("\x03");
-   m_cmd->close();
-   m_cmd->kill();
-   delete m_cmd;
-   m_cmd=nullptr;
+    m_cmd->write("\x03");
+    m_cmd->close();
+    m_cmd->kill();
+    delete m_cmd;
+    m_cmd=nullptr;
 }
 void objectTray::run(){
-    m_cmd=new QProcess();
+    if(m_cmd==nullptr){
+        m_cmd=new QProcess();
+    }
     startTray();
 }

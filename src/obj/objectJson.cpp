@@ -90,11 +90,27 @@ json objectJson::DataSerialize(json jsonData,const BaseLocalData _baseLocalData)
             jsonData["Wine"][k.second.IwineName.toStdString()][toStr(IwineDxvk)].push_back(dx.toStdString());
         }
     }
+    //序列化数据源数据
     for(auto &[x,y]: _baseLocalData.appScrSource){
+        //x 数据源名字
+        //y 数据源json url
+        //增加数据源
         jsonData["AppScrSource"][x.toStdString()]=y.toStdString();
+        //序列化该数据源下所有数据
         for(auto &[a,b]: _baseLocalData.appJsonList){
+            //a 数据源名字
+            //b 数据源下数据
             for(auto&[u,i]:b){
-                jsonData["AppJsonList"][x.toStdString()][u.toStdString()]=i.toStdString();
+                //u app分类名字
+                //i app分类下数据
+                for(auto [dx,dc]:i){
+                    //dx app名字
+                    //dc app数据
+                    jsonData["AppJsonList"][a.toStdString()][u.toStdString()][dx.toStdString()][toStr(appName)]=dc.appName.toStdString();
+                    jsonData["AppJsonList"][a.toStdString()][u.toStdString()][dx.toStdString()][toStr(appIco)]=dc.appIco.toStdString();
+                    jsonData["AppJsonList"][a.toStdString()][u.toStdString()][dx.toStdString()][toStr(appJson)]=dc.appJson.toStdString();
+                }
+                //jsonData["AppJsonList"][x.toStdString()][u.toStdString()]=i.toStdString();
             }
         }
     }
@@ -235,24 +251,48 @@ bool objectJson::unDataSerializeLocalData(){
                     g_vekLocalData.wineVec.insert(pair<QString,BaseWineData>(_base_wine_data.IwineName,_base_wine_data));
                 }
             }else if(k=="AppScrSource"){
-                for(auto &[b, c] :v.items())
+                //软件数据反序列化
+                for(auto [b,c] :v.items())
                 {
+                    //b源名字
                     g_vekLocalData.appScrSource.insert(pair<QString,QString>(QString::fromStdString(b),QString::fromStdString(c)));
                     for (auto& [d, j] : j3.items())
                     {
                         if(d=="AppJsonList"){
+
                             for(auto&[u,i]:j.items()){
+                                //u 源名字
+                                std::map<QString,std::map<QString,BaseAppJson>> appTypeList;
+                                for(auto [di,du]:i.items()){
+                                    //di app分类名字
+                                    //du 分类app列表
+                                    std::map<QString,BaseAppJson> appList;
+                                    for(auto [dv,dw]:du.items()){
+                                        //dv app名字
+                                        //dw app数据
+                                        BaseAppJson baseAppJson;
+                                        baseAppJson.appName=QString::fromStdString(dw.at(toStr(appName)));
+                                        baseAppJson.appIco=QString::fromStdString(dw.at(toStr(appIco)));
+                                        baseAppJson.appJson=QString::fromStdString(dw.at(toStr(appJson)));
+                                        appList.insert(pair<QString,BaseAppJson>(QString::fromStdString(dv),baseAppJson));
+                                    }
+                                  appTypeList.insert(pair<QString,std::map<QString,BaseAppJson>>(QString::fromStdString(di),appList));
+                                }
+                                g_vekLocalData.appJsonList.insert(pair<QString,std::map<QString,std::map<QString,BaseAppJson>>>(QString::fromStdString(u),appTypeList));
+                                /*
                                 if(u==b){
-                                    for(auto&[w,o]:i.items()){
+                                    for(auto&[w,o]:i.items()){  
                                         g_vekLocalData.appJsonList[QString::fromStdString(u)].insert(pair<QString,QString>(QString::fromStdString(w),QString::fromStdString(o)));
                                     }
                                 }
+                                */
                             }
                         }
-                        continue;
+                        //continue;
                     }
                 }
             }
+            //wine数据序列化
             else if(k=="WineScrSource"){
                 /* b u 源名字
                  * i 源下wine版本
@@ -367,11 +407,12 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
     }
     return _baseAutoSetJson;
 }
-//反序列化列表
+
 bool objectJson::unSerializeLocalWineApp(QString key,QString urlData,UNJSONTYPE jsonType){
     json jdata=json::parse(urlData.toStdString());
     try {
         switch (jsonType) {
+        //反序列wine列表
         case unJsonWineList:
             for(auto &[x, y] :jdata.items())
             {
@@ -387,11 +428,24 @@ bool objectJson::unSerializeLocalWineApp(QString key,QString urlData,UNJSONTYPE 
                 }
             }
             break;
+            //反序列App数据列表
         case unJsonGameList:
+            for(auto [x,y]:jdata.items()){
+                for(auto [z,i]:y.items()){
+                    //key源名字
+                    //x软件分类
+                    //z软件名字
+                    g_vekLocalData.appJsonList[key][QString::fromStdString(x)][QString::fromStdString(z)].appName=QString::fromStdString(i.at(toStr(AppName)));
+                    g_vekLocalData.appJsonList[key][QString::fromStdString(x)][QString::fromStdString(z)].appIco=QString::fromStdString(i.at(toStr(AppIco)));
+                    g_vekLocalData.appJsonList[key][QString::fromStdString(x)][QString::fromStdString(z)].appJson=QString::fromStdString(i.at(toStr(AppJson)));
+                }
+            }
+            /*
             for(auto &[x, y] :jdata.items())
             {
                 g_vekLocalData.appJsonList[key][QString::fromStdString(x)]=QString::fromStdString(y);
             }
+            */
             break;
         }
 

@@ -1,10 +1,10 @@
 ﻿#ifndef VEKAPPADDMT_H
 #define VEKAPPADDMT_H
 
-#include "common.h"
-#include "objectJson.h"
-#include "objectAppMT.h"
-#include "vekInitObject.h"
+#include "obj/common.h"
+#include "obj/objectJson.h"
+#include "obj/objectAppMT.h"
+#include "obj/pObject.h"
 #include <QTableView>
 #include <QStandardItemModel>
 namespace Ui {

@@ -82,7 +82,7 @@ typedef struct {
 
 typedef struct{
     QString appName;
-    QString appUrl;
+    QString appJson;
     QString appIco;
 }BaseAppJson;
 
@@ -103,7 +103,8 @@ typedef struct {
     std::map<QString,BaseDockData> dockerVec={};
     std::map<QString,BaseWineData> wineVec={};
     std::map<QString,QString> appScrSource={};
-    std::map<QString,std::map<QString,QString>> appJsonList={};
+    //std::map<QString,std::map<QString,QString>> appJsonList={};
+    std::map<QString,std::map<QString,std::map<QString,BaseAppJson>>> appJsonList={};
     std::map<QString,QString> wineSource={};
     std::map<QString,std::map<QString,BaseWineGit>> wineJsonList={};
 }BaseLocalData;

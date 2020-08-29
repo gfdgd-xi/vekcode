@@ -9,7 +9,7 @@ objectSource::~objectSource()
 
 }
 string objectSource::GetReData(QString url){
-    vekGetCurl* _vekgetcurl=new vekGetCurl();
+    objectGetCurl* _vekgetcurl=new objectGetCurl();
     string sdata=_vekgetcurl->vekGetData(url.toStdString());
     delete _vekgetcurl;
     _vekgetcurl=nullptr;
@@ -40,7 +40,7 @@ void objectSource::loadAllData(){
     if(!QFile(jsonPath).exists()){
         //默认源数据
         g_vekLocalData.wineSource.insert(pair<QString,QString>("DefaultWineSrc","https://gitee.com/JackLee02/vekGame/raw/master/wineJsonSource.json"));
-        g_vekLocalData.appScrSource.insert(pair<QString,QString>("DefaultGameSrc","https://gitee.com/JackLee02/vekGame/raw/master/gameJsonSource.json"));
+        g_vekLocalData.appScrSource.insert(pair<QString,QString>("DefaultGameSrc","https://gitee.com/JackLee02/vekGame/raw/master/appJsonSource.json"));
         updateSrcDataObject();
     }else{
         if(_objectJson.unDataSerializeLocalData()){

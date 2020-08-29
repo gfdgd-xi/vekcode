@@ -1,4 +1,4 @@
-#include "vekInitObject.h"
+#include "pObject.h"
 #include "objectJson.h"
 void vekTip(QString tipInfo){
     QMessageBox::warning(nullptr,"TIP",tipInfo);

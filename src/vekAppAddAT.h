@@ -1,11 +1,11 @@
 #ifndef VEKAPPADDAT_H
 #define VEKAPPADDAT_H
 
-#include "common.h"
-#include "objectJson.h"
-#include "objectAppAT.h"
-#include "vekInitObject.h"
-#include "vekATJsonView.h"
+#include "obj/common.h"
+#include "obj/objectJson.h"
+#include "obj/objectAppAT.h"
+#include "obj/pObject.h"
+#include "view/jview/vekViewAT.h"
 namespace Ui {
 class vekAppAddAT;
 }

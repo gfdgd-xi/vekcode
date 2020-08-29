@@ -20,7 +20,7 @@ private:
     std::map<QString,QString> procAllInfoStr;
     void getAllProc();
     QString objGetProcList(procInfo);
-    void objDelProc(QProcess*,QString,procInfo);
+    void objDelProc(QString,procInfo);
     void objKillProc(QString prPid);
     void delAttachProc(procInfo pInfo);
 };

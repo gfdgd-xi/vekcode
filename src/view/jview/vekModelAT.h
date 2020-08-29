@@ -1,13 +1,13 @@
-#ifndef VEKATJSONMODEL_H
-#define VEKATJSONMODEL_H
+#ifndef VEKMODELAT_H
+#define VEKMODELAT_H
 
-#include "common.h"
-class vekATJsonModel: public QAbstractListModel
+#include "../../obj/common.h"
+class vekModelAT: public QAbstractListModel
 {
     Q_OBJECT
 public:
-    explicit vekATJsonModel(QObject *parent = nullptr);
-    ~vekATJsonModel();
+    explicit vekModelAT(QObject *parent = nullptr);
+    ~vekModelAT();
     QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const ;
     int	rowCount ( const QModelIndex & parent = QModelIndex() ) const;
 private:

@@ -1,13 +1,13 @@
 #ifndef VEKSOURCEEDIT_H
 #define VEKSOURCEEDIT_H
 
-#include "common.h"
+#include "obj/common.h"
 #include <QStandardItemModel>
 #include <QTableView>
 #include <QTableWidgetItem>
-#include "objectJson.h"
-#include "objectSource.h"
-#include "vekInitObject.h"
+#include "obj/objectJson.h"
+#include "obj/objectSource.h"
+#include "obj/pObject.h"
 typedef enum{
     WINESRC,
     GAMESRC

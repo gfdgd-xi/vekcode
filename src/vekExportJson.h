@@ -1,9 +1,9 @@
 #ifndef VEKEXPORTJSON_H
 #define VEKEXPORTJSON_H
 
-#include "common.h"
-#include "objectJson.h"
-#include "vekInitObject.h"
+#include "obj/common.h"
+#include "obj/objectJson.h"
+#include "obj/pObject.h"
 namespace Ui {
 class vekExportJson;
 }

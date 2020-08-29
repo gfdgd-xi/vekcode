@@ -3,8 +3,8 @@
 #include "common.h"
 #include "objectJson.h"
 #include "objectAppMT.h"
-#include "vekInitObject.h"
-#include "vekGetCurl.h"
+#include "pObject.h"
+#include "objectGetCurl.h"
 
 class objectAppAT : public QThread
 {
@@ -23,6 +23,7 @@ private:
     //docker数据
     BaseDockData baseDockData={};
     QString jsonCfg=nullptr;
+    QString jsonIco=nullptr;
     QString srcName=nullptr;
     objectAppMT* objDiyAddApp=nullptr;
     QString jsonPathTypeToStr(QString);

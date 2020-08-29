@@ -2,11 +2,11 @@
 #define VEKAPPPANEL_H
 
 #include "vekAppListView.h"
-#include "vekAppAddMT.h"
-#include "vekAppAddMulti.h"
-#include "vekAppAddAT.h"
-#include "common.h"
-#include "objectTray.h"
+#include "../../vekAppAddMT.h"
+#include "../../vekAppAddMulti.h"
+#include "../../vekAppAddAT.h"
+#include "../../obj/common.h"
+#include "../../obj/objectTray.h"
 class vekAppPanel : public QWidget
 {
     Q_OBJECT

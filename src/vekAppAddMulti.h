@@ -1,9 +1,9 @@
 #ifndef VEKAPPADDMULTI_H
 #define VEKAPPADDMULTI_H
 
-#include "common.h"
-#include "objectAppMT.h"
-#include "vekInitObject.h"
+#include "obj/common.h"
+#include "obj/objectAppMT.h"
+#include "obj/pObject.h"
 namespace Ui {
 class vekAppAddMulti;
 }

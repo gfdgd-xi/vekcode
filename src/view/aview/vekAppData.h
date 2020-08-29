@@ -1,8 +1,8 @@
 ﻿#ifndef VEKAPPDATA_H
 #define VEKAPPDATA_H
 
-#include "common.h"
-#include "objectJson.h"
+#include "../../obj/common.h"
+#include "../../obj/objectJson.h"
 
 
 class vekAppData:public QAbstractListModel

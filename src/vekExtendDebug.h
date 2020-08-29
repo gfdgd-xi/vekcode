@@ -1,8 +1,8 @@
 ﻿#ifndef VEKEXTENDDEBUG_H
 #define VEKEXTENDDEBUG_H
 
-#include "common.h"
-#include "objectExtend.h"
+#include "obj/common.h"
+#include "obj/objectExtend.h"
 namespace Ui {
 class vekExtendDebug;
 }

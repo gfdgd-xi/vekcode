@@ -2,12 +2,12 @@
 #define VEKAPPLISTVIEW_H
 
 #include "vekAppData.h"
-#include "vekAppAddMT.h"
-#include "objectExtend.h"
-#include "vekInitObject.h"
-#include "vekExtendDebug.h"
-#include "vekExportJson.h"
-#include "common.h"
+#include "../../vekAppAddMT.h"
+#include "../../obj/objectExtend.h"
+#include "../../obj/pObject.h"
+#include "../../vekExtendDebug.h"
+#include "../../vekExportJson.h"
+#include "../../obj/common.h"
 using namespace std;
 using json = nlohmann::json;
 

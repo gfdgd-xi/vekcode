@@ -15,7 +15,7 @@ QString objectProcManage::objGetProcList(procInfo pInfo){
     m_cmd->start("bash",QIODevice::ReadWrite);
     QString pCodes="WINEPREFIX="+pInfo.pDockPath+"/"+pInfo.pDockName+" "+pInfo.pWinePath+"/wine/bin/wine winedbg"+" "+"--command \"info proc\"";
     m_cmd->write(pCodes.toLocal8Bit()+'\n');
-    m_cmd->waitForFinished(1000);
+    m_cmd->waitForFinished(100);
     QString procData=m_cmd->readAll();
     qDebug()<<procData;
     m_cmd->close();
@@ -24,7 +24,8 @@ QString objectProcManage::objGetProcList(procInfo pInfo){
     m_cmd=nullptr;
     return procData;
 }
-void objectProcManage::objDelProc(QProcess* prc,QString prPid,procInfo _pInfo){
+void objectProcManage::objDelProc(QString prPid,procInfo _pInfo){
+    prc=new QProcess();
     prc->setProcessChannelMode(QProcess::MergedChannels);
     prc->setReadChannel(QProcess::StandardOutput);
     prc->start("bash",QIODevice::ReadWrite);
@@ -42,7 +43,7 @@ void objectProcManage::objDelProc(QProcess* prc,QString prPid,procInfo _pInfo){
     //退出winedbg
     prc->write(dCodes.toLocal8Bit()+'\n');
     //关闭并kill QProcess;
-    prc->waitForFinished(1000);
+    prc->waitForFinished(100);
     prc->close();
     prc->kill();
     delete prc;
@@ -64,8 +65,7 @@ void objectProcManage::delAttachProc(procInfo pInfo){
                     }
                 }
                 if(kPid!=NULL){
-                    prc=new QProcess();
-                    objDelProc(prc,kPid,pInfo);
+                    objDelProc(kPid,pInfo);
                 }
             }
         }

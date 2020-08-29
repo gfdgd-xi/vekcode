@@ -1,7 +1,7 @@
 ﻿#ifndef VEKABOUT_H
 #define VEKABOUT_H
 
-#include "common.h"
+#include "obj/common.h"
 namespace Ui {
 class vekAbout;
 }

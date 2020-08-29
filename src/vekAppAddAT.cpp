@@ -33,7 +33,7 @@ void vekAppAddAT::connectDockObject(){
     for(auto & d:g_vekLocalData.appScrSource){
         ui->comboBox_SrcApp->addItem(d.first);
     }
-
+    /*
     for(auto & v:g_vekLocalData.appJsonList){
         if(v.first==ui->comboBox_SrcApp->currentText()){
             for(auto & y:v.second){
@@ -42,7 +42,7 @@ void vekAppAddAT::connectDockObject(){
             break;
         }
     }
-
+    */
     if(!g_vekLocalData.dockerVec.empty()){
         for(auto &a:g_vekLocalData.dockerVec){
             ui->comboBox_DockName->addItem(a.first);

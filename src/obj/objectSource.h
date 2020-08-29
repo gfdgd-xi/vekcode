@@ -2,9 +2,9 @@
 #define OBJECTSOURCE_H
 
 #include "common.h"
-#include "vekGetCurl.h"
+#include "objectGetCurl.h"
 #include "objectJson.h"
-#include "vekInitObject.h"
+#include "pObject.h"
 class objectSource
 {
 public:

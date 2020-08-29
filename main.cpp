@@ -1,8 +1,8 @@
 ﻿#include "src/vek.h"
-#include "src/baseRes.h"
-#include "src/objectSource.h"
-#include "src/vekGetCurl.h"
-#include "src/vekInitObject.h"
+#include "src/obj/baseRes.h"
+#include "src/obj/objectSource.h"
+#include "src/obj/objectGetCurl.h"
+#include "src/obj/pObject.h"
 #include <QtPlugin>
 #include <QPluginLoader>
 typedef struct{
@@ -27,7 +27,7 @@ void unVerData(string vData){
 }
 bool getVinfo(){
     bool vState=false;
-    vekGetCurl* _vekgetcurl=new vekGetCurl;
+    objectGetCurl* _vekgetcurl=new objectGetCurl;
     string verInfoStr=_vekgetcurl->vekGetData(vekUpInfo.toStdString());
     if(verInfoStr!="error"){
         unVerData(verInfoStr);

@@ -1,6 +1,6 @@
 ﻿#include "vekAbout.h"
 #include "ui_common.h"
-#include "vekInitObject.h"
+#include "obj/pObject.h"
 vekAbout::vekAbout(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::vekAbout)

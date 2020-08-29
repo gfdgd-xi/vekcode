@@ -27,60 +27,60 @@ TRANSLATIONS += vek_zh_CN.ts\
                 vek_us_EN.ts
 SOURCES += \
   main.cpp \
-  src/objectAppAT.cpp \
-  src/objectAppMT.cpp \
-  src/objectExtend.cpp \
-  src/objectJson.cpp \
-  src/objectProcManage.cpp \
-  src/objectSource.cpp \
-  src/objectTray.cpp \
+    src/obj/objectAppAT.cpp \
+    src/obj/objectAppMT.cpp \
+    src/obj/objectExtend.cpp \
+    src/obj/objectGetCurl.cpp \
+    src/obj/objectGitWine.cpp \
+    src/obj/objectJson.cpp \
+    src/obj/objectProcManage.cpp \
+    src/obj/objectSource.cpp \
+    src/obj/objectTray.cpp \
+    src/obj/pObject.cpp \
   src/vek.cpp \
-  src/vekATJsonModel.cpp \
-  src/vekATJsonView.cpp \
   src/vekAbout.cpp \
   src/vekAppAddAT.cpp \
   src/vekAppAddMT.cpp \
   src/vekAppAddMulti.cpp \
-  src/vekAppData.cpp \
-  src/vekAppListView.cpp \
-  src/vekAppPanel.cpp \
   src/vekExportJson.cpp \
-  src/vekGetCurl.cpp \
-  src/vekGitWine.cpp \
-  src/vekInitObject.cpp \
   src/vekSourceEdit.cpp \
   src/vekExtendDebug.cpp \
   src/vekWineOption.cpp \
+    src/view/aview/vekAppData.cpp \
+    src/view/aview/vekAppListView.cpp \
+    src/view/aview/vekAppPanel.cpp \
+    src/view/jview/vekModelAT.cpp \
+    src/view/jview/vekViewAT.cpp
 
 HEADERS += \
-    src/baseData.h \
-    src/baseRes.h \
-    src/common.h \
-    src/objectAppAT.h \
-    src/objectAppMT.h \
-    src/objectExtend.h \
-    src/objectJson.h \
-    src/objectProcManage.h \
-    src/objectSource.h \
-    src/objectTray.h \
+    src/obj/baseData.h \
+    src/obj/baseRes.h \
+    src/obj/common.h \
+    src/obj/objectAppAT.h \
+    src/obj/objectAppMT.h \
+    src/obj/objectExtend.h \
+    src/obj/objectGetCurl.h \
+    src/obj/objectGitWine.h \
+    src/obj/objectJson.h \
+    src/obj/objectProcManage.h \
+    src/obj/objectSource.h \
+    src/obj/objectTray.h \
+    src/obj/pObject.h \
     src/ui_common.h \
     src/vek.h \
-    src/vekATJsonModel.h \
-    src/vekATJsonView.h \
     src/vekAbout.h \
     src/vekAppAddAT.h \
     src/vekAppAddMT.h \
     src/vekAppAddMulti.h \
-    src/vekAppData.h \
-    src/vekAppListView.h \
-    src/vekAppPanel.h \
     src/vekExportJson.h \
     src/vekExtendDebug.h \
-    src/vekGetCurl.h \
-    src/vekGitWine.h \
-    src/vekInitObject.h \
     src/vekSourceEdit.h \
-    src/vekWineOption.h
+    src/vekWineOption.h \
+    src/view/aview/vekAppData.h \
+    src/view/aview/vekAppListView.h \
+    src/view/aview/vekAppPanel.h \
+    src/view/jview/vekModelAT.h \
+    src/view/jview/vekViewAT.h
 
 FORMS += \
     ui/vekAppAddAT.ui \

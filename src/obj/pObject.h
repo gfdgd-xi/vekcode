@@ -1,7 +1,8 @@
-#ifndef VEKSTYLE_H
-#define VEKSTYLE_H
+#ifndef POBJECT_H
+#define POBJECT_H
 
 #include "common.h"
+#include "baseData.h"
 static std::vector<QString> styleNames= {"Default","Dark","Light"};
 QStringList DockRegeditStr(QString rObj,QString rPath,QString rKey,QString rTValue,QString rValue);
 void vek_Style(QWidget *parent,int styleType);

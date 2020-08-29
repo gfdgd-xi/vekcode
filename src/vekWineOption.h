@@ -1,9 +1,9 @@
 ﻿#ifndef VEKWINEOPTION_H
 #define VEKWINEOPTION_H
 
-#include "vekGitWine.h"
-#include "common.h"
-#include "vekInitObject.h"
+#include "obj/objectGitWine.h"
+#include "obj/common.h"
+#include "obj/pObject.h"
 namespace Ui {
 class vekWineOption;
 }
@@ -24,7 +24,7 @@ private slots:
     void deleteWine();
 private:
     Ui::vekWineOption *ui;
-    vekGitWine *githread;
+    objectGitWine *githread;
     void InitWineInstall();
     void GetWineGitInfo();   
     void WineVersionComoboBox();
