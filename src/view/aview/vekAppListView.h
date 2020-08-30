@@ -8,9 +8,6 @@
 #include "../../vekExtendDebug.h"
 #include "../../vekExportJson.h"
 #include "../../obj/common.h"
-using namespace std;
-using json = nlohmann::json;
-
 class vekAppListView:public QListView
 {
         Q_OBJECT

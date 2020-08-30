@@ -110,14 +110,17 @@ void objectGitWine::run()
        return;
    }
    QDir dir(_wd.IwinePath);
-   if(dir.removeRecursively()){
-       vek_Clone(_wd);
+   if(dir.exists()){
+       dir.removeRecursively();
    }
-   i+=1;
-   qDebug()<<i;
+   vek_Clone(_wd);
+   dir.mkdir(_wd.IwinePath+"/plugs");
    outputPrgressSlots("开始下载组件请稍等!");
    connect(&_vekgetcurl,&objectGetCurl::curlPrgressSignals,this,&objectGitWine::curlPrgressSlots);
-   _vekgetcurl.DoewloadPlugs(_wd);
+   _vekgetcurl.DoewloadPlugs(_wd.IwineMono,_wd.IwinePath+"/plugs/Mono.msi");
+   _vekgetcurl.DoewloadPlugs(_wd.IwineGeckoX86,_wd.IwinePath+"/plugs/GeckoX86.msi");
+   _vekgetcurl.DoewloadPlugs(_wd.IwineGeckoX86_64,_wd.IwinePath+"/plugs/GeckoX86_64.msi");
+   outputPrgressSlots("组件下载完毕!");
    objectJson* _objectJson=new objectJson() ;
    _objectJson->updateWineNodeData(_wd);
    delete _objectJson;

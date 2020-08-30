@@ -55,6 +55,8 @@ static objectGetCurl* dThis=nullptr;
 double olnow=0;
 int objectGetCurl::ProgressCallback(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow)
 {
+    UNUSED(ultotal);
+    UNUSED(ulnow);
     dThis = (objectGetCurl*)clientp;
     if ( dltotal > -0.1 && dltotal < 0.1 )
     {
@@ -62,6 +64,11 @@ int objectGetCurl::ProgressCallback(void *clientp, double dltotal, double dlnow,
     }
     //int nPos = (int) ( (dlnow/dltotal)*100 );
     QThread::msleep(5);
+    if(dThis->fileName==nullptr){
+        if(QFile(dThis->filePath).exists()){
+            dThis->fileName=QFileInfo(dThis->filePath).baseName();
+        }
+    }
     if(olnow!=dlnow){
         string logText="文件名:"+dThis->fileName.toStdString()+"   总大小/当前下载进度:"+std::to_string((long)dltotal)+"/"+std::to_string((long)dlnow);
         dThis->outLogText(logText);
@@ -112,24 +119,9 @@ bool objectGetCurl::DownloadFile(std::string URLADDR,std::string path)
     }
     return !curl_res;
 }
-void objectGetCurl::DoewloadPlugs(BaseWineData _wd){
-    if(!QDir(_wd.IwinePath+"/plugs").exists()){
-        QDir().mkdir(_wd.IwinePath+"/plugs");
-    }
-    if(_wd.IwineMono!=NULL){
-        olnow=0;
-        fileName="Mono组件";
-        DownloadFile(_wd.IwineMono.toStdString(),(_wd.IwinePath+"/plugs/Mono.msi").toStdString());
-    }
-    if(_wd.IwineGeckoX86!=NULL){
-        olnow=0;
-        fileName="GeckoX86组件";
-        DownloadFile(_wd.IwineGeckoX86.toStdString(),(_wd.IwinePath+"/plugs/GeckoX86.msi").toStdString());
-    }
-    if(_wd.IwineGeckoX86_64!=NULL){
-        olnow=0;
-        fileName="GeckoX86_64组件";
-        DownloadFile(_wd.IwineGeckoX86_64.toStdString(),(_wd.IwinePath+"/plugs/GeckoX86_64.msi").toStdString());
-    }
-    outLogText("组件下载完毕!");
+void objectGetCurl::DoewloadPlugs(QString pUrl,QString pFile){
+    olnow=0;
+    filePath=pFile;
+    DownloadFile(pUrl.toStdString(),pFile.toStdString());
+    fileName=nullptr;
 }

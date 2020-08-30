@@ -21,8 +21,8 @@ void vekAppListView::contextMenuEvent( QContextMenuEvent * event )
         //增加容器转移功能
         QMenu *pSubMenu = NULL;
         pMenu = new QMenu(this);
-        std::map<QString,vekAppListView*>::iterator it = m_pListMap->begin();
-        for (it;it != m_pListMap->end();++it)
+        std::map<QString,vekAppListView*>::iterator it;
+        for (it=m_pListMap->begin();it != m_pListMap->end();++it)
         {
             if (!pSubMenu)
             {

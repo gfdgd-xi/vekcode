@@ -30,14 +30,14 @@ std::map<QString,std::map<QString,QString>> dxvkResLog={
 std::map<QString,std::map<QString,QString>> fontRes={
    {"HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\FontSubstitutes",
     {
-        //{"FixedSys","msyh"},
-        //{"System","msyh"},
-        //{"Tahoma","msyh"},
-        //{"MS Shell Dlg","msyh"}
-        {"FixedSys","simsun"},
-        {"System","simsun"},
-        {"Tahoma","simsun"},
-        {"MS Shell Dlg","simsun"}
+        {"FixedSys","msyh"},
+        {"System","msyh"},
+        {"Tahoma","msyh"},
+        {"MS Shell Dlg","msyh"}
+        //{"FixedSys","simsun"},
+        //{"System","simsun"},
+        //{"Tahoma","simsun"},
+        //{"MS Shell Dlg","simsun"}
     }
    }
 };

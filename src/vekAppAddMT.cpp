@@ -107,8 +107,6 @@ void vekAppAddMT::initAppAndDockData(BaseDockData* _data,QString _appCID){
     if(_data==nullptr){
         tempDockData=new BaseDockData;
         tempDockData->DockerPath=QDir::currentPath()+"/vekDock";
-        tempDockData->DockerName="vekON1";
-        tempAppData->AppIco=":/res/img/vek.ico";
     }else{
         *tempDockData=GetDockerData(_data->DockerName);
         if(_appCID!=nullptr){

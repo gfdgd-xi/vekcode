@@ -15,7 +15,7 @@ typedef struct{
 typedef struct {
     QString AppCID=nullptr;
     QString AppName=nullptr;
-    QString AppIco=nullptr;
+    QString AppIco=":/res/img/vek.ico";
     QString AppExe=nullptr;
     QString AppOtherAgrs=nullptr;
     QString WorkPath=nullptr;
@@ -81,9 +81,9 @@ typedef struct {
 }BaseAutoSetJson;
 
 typedef struct{
-    QString appName;
-    QString appJson;
-    QString appIco;
+    QString appName=nullptr;
+    QString appJson=nullptr;
+    QString appIco=":/res/img/vek.ico";
 }BaseAppJson;
 
 typedef struct{
@@ -91,10 +91,10 @@ typedef struct{
     QString WinePath=nullptr;
     QString WineVersion=nullptr;
     QString DockerPath=nullptr;
-    QString DockerName=nullptr;
-    QString DockerSystemVersion=nullptr;
-    QString DockerWineVersion=nullptr;
-    QString DockerVer=nullptr;
+    QString DockerName="vekON1";
+    QString DockerSystemVersion="win7";
+    QString DockerWineVersion="wine";
+    QString DockerVer="win32";
     bool MonoState=false;
     bool GeckoState=false;
 }BaseDockData;

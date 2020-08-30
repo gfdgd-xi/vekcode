@@ -44,6 +44,7 @@ QVariant vekAppData::data( const QModelIndex & index, int role ) const
 
 int vekAppData::rowCount( const QModelIndex & parent /*= QModelIndex() */ ) const
 {
+    UNUSED(parent);
     return m_ItemDataVec.size();
 }
 

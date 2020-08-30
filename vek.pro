@@ -50,6 +50,7 @@ SOURCES += \
     src/view/aview/vekAppListView.cpp \
     src/view/aview/vekAppPanel.cpp \
     src/view/jview/vekModelAT.cpp \
+    src/view/jview/vekPanelAT.cpp \
     src/view/jview/vekViewAT.cpp
 
 HEADERS += \
@@ -80,6 +81,7 @@ HEADERS += \
     src/view/aview/vekAppListView.h \
     src/view/aview/vekAppPanel.h \
     src/view/jview/vekModelAT.h \
+    src/view/jview/vekPanelAT.h \
     src/view/jview/vekViewAT.h
 
 FORMS += \

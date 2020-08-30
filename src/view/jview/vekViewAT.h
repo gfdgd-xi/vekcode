@@ -1,22 +1,18 @@
 #ifndef VEKVIEWAT_H
 #define VEKVIEWAT_H
 
+#include "vekModelAT.h"
 #include "../../obj/common.h"
-#include <QListWidget>
-#include <QComboBox>
-class vekViewAT: public QComboBox
+class vekViewAT:public QListView
 {
     Q_OBJECT
 public:
-   explicit vekViewAT(QWidget *parent = 0);
+    vekViewAT(QWidget *parent = NULL);
    ~vekViewAT();
+    void addItem(BaseAppJson *pItem );
 private:
-    void initQComboBox();
-    QTabWidget *qTab=nullptr;
-
-    bool LoadAppListData();
-    QString GetCurrentIndex();
-
+    int  m_hitIndex;
+    vekModelAT* m_pModel;
 };
 
 #endif // VEKATJSONVIEW_H

@@ -339,7 +339,7 @@ bool objectJson::unDataSerializeLocalData(){
 }
 
 //脚本反序列化
-BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAutoSetJson,QString autoJsonData){
+BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAutoSetJson,const QString autoJsonData){
     try {
         json js3=json::parse(autoJsonData.toStdString());
         for(auto&[k,j]:js3.items()){
@@ -408,7 +408,7 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
     return _baseAutoSetJson;
 }
 
-bool objectJson::unSerializeLocalWineApp(QString key,QString urlData,UNJSONTYPE jsonType){
+bool objectJson::unSerializeLocalWineApp(QString key,const QString urlData,UNJSONTYPE jsonType){
     json jdata=json::parse(urlData.toStdString());
     try {
         switch (jsonType) {

@@ -14,7 +14,8 @@ public:
     std::string vekGetData(std::string url);
     QString outputPrgressText;
     QString fileName;
-    void DoewloadPlugs(BaseWineData _wd);
+    QString filePath;
+    void DoewloadPlugs(QString,QString);
 private:
        CURL *curl=nullptr;
        bool DownloadFile(std::string url,std::string path);
