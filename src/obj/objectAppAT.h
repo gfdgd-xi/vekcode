@@ -6,12 +6,18 @@
 #include "pObject.h"
 #include "objectGetCurl.h"
 
+typedef enum{
+    jNet,
+    jFile,
+    jDefault
+}JSONTYPE;
+
 class objectAppAT : public QThread
 {
     Q_OBJECT
 public:
     objectAppAT();
-    void connectDockAutoData(BaseDockData,BaseAppData,QString,QString);
+    void connectDockAutoData(BaseDockData,BaseAppData,BaseAppJson);
     ~objectAppAT();
 protected:
     void run();
@@ -22,13 +28,12 @@ private:
     BaseAppData baseAppData={};
     //docker数据
     BaseDockData baseDockData={};
-    QString jsonCfg=nullptr;
-    QString jsonIco=nullptr;
-    QString srcName=nullptr;
+    BaseAppJson appJsonData;
     objectAppMT* objDiyAddApp=nullptr;
-    QString jsonPathTypeToStr(QString);
-    bool JsonType(QString);
-    bool jsonUnserialize(QString);
+    QString jsonNetToStr(QString);
+    QString jsonFileToStr(QString);
+    JSONTYPE JsonType();
+    bool jsonUnserialize(BaseAppJson,JSONTYPE);
     void objectAutoObj();
     void objInstallRes();
     void objAppData();

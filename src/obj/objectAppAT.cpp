@@ -8,114 +8,75 @@ objectAppAT::~objectAppAT(){
     delete _baseAutoSetJson;
     _baseAutoSetJson=nullptr;
 }
-void objectAppAT::connectDockAutoData(BaseDockData _dockData,BaseAppData _appData,QString _jsonCfg,QString _srcName){
+/*
+ * _dockData 容器参数
+ * _appData app参数
+ * _appJsonData 自动刷配置参数
+ */
+void objectAppAT::connectDockAutoData(BaseDockData _dockData,BaseAppData _appData,BaseAppJson _appJsonData){
     baseDockData=_dockData;
     baseAppData=_appData;
-    jsonCfg=_jsonCfg;
-    srcName=_srcName;
+    appJsonData=_appJsonData;
 }
-bool objectAppAT::JsonType(QString str){
-    bool typeState=false;
-    //需要处理缓存本地的数据。考虑是否批量下载app的ico图标，涉及到羊毛ico托管仓库每秒访问限制，是否考虑其他地方实现，
-    //特别需要注意的是因为ico缓存失败，采用默认ico代替，需要注意的是托管仓库对每秒访问限制次数，单人可解决，互联网同步并发是非被托管仓库限制，需要进行测试。
-    /*
-    //源名字json
-    for(auto & v:g_vekLocalData.appJsonList){
-        if(v.first==srcName){
-            for(auto & y:v.second){
-                if(y.first==str){
-                    jsonCfg=y.second;
-                    typeState=true;
-                    break;
-                }
-            }
-        }
+//分析json类型，一共两种：网络 本地
+JSONTYPE objectAppAT::JsonType(){
+    if(appJsonData.appJson.startsWith("http",Qt::CaseSensitive)||appJsonData.appJson.startsWith("https",Qt::CaseSensitive)){
+        return jNet;
     }
-    */
-    //从app列表内抽出用户所选app名字，然后从本地app数据中抽出对应的ico和json文件
-    //抽出对应的数据
-
-    //查看jsonPaht头是否为http或者https
-    if(jsonCfg.startsWith("http",Qt::CaseSensitive)){
-        typeState=true;
+    if(appJsonData.appJson.endsWith("json",Qt::CaseSensitive)){
+        return jFile;
     }
-    if(str.startsWith("https",Qt::CaseSensitive)){
-        typeState=true;
-    }
-    //本地json
-    if(str.endsWith("json",Qt::CaseSensitive)){
-        typeState=true;
-    }
-    if(!typeState){
-        for(auto v:g_vekLocalData.appJsonList){
-            for(auto b:v.second){
-                for(auto c:b.second){
-                    if(c.first==str){
-                        jsonCfg=c.second.appJson;
-                        jsonIco=c.second.appIco;
-                        if(c.second.appIco==nullptr){
-                           jsonIco=":/res/img/vek.ico";
-                        }
-                        typeState=true;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    return typeState;
+    return jDefault;
 }
-QString objectAppAT::jsonPathTypeToStr(QString jsonPathFile){
+QString objectAppAT::jsonNetToStr(QString jsonNetUrl){
     try {
-        QString jsonDataStr=nullptr;
-        if(jsonPathFile.contains("http",Qt::CaseSensitive)||jsonPathFile.contains("https",Qt::CaseSensitive)){
-            objectGetCurl* _vekgetcurl=new objectGetCurl();
-            jsonDataStr=QString::fromStdString(_vekgetcurl->vekGetData(jsonPathFile.toStdString()));
-            delete _vekgetcurl;
-            _vekgetcurl=nullptr;
-        }else{
-            QFile file(jsonPathFile);
-            if(!file.exists())
-            {
-                return nullptr;
-            }
-            file.open(QIODevice::ReadOnly | QIODevice::Text);
-            jsonDataStr = file.readAll();
-            file.close();
-        }
-        if(jsonDataStr=="error"||jsonDataStr==nullptr){
-            return nullptr;
-        }
-        return jsonDataStr;
+        QString jNetData=nullptr;
+        objectGetCurl* _vekgetcurl=new objectGetCurl();
+        jNetData=QString::fromStdString(_vekgetcurl->vekGetData(jsonNetUrl.toStdString()));
+        delete _vekgetcurl;
+        _vekgetcurl=nullptr;
+        return jNetData;
     } catch (nullopt_t) {
         return nullptr;
     }
 }
-bool objectAppAT::jsonUnserialize(QString jsonPathFile){
-    QString jsonData=jsonPathTypeToStr(jsonPathFile);
-    if(jsonData==nullptr){
-        return false;
+QString objectAppAT::jsonFileToStr(QString jsonFilePath){
+    QString jFileStr=nullptr;
+    QFile file(jsonFilePath);
+    if(!file.exists())
+    {
+        return nullptr;
     }
-    objectJson _objectJson;
-    _baseAutoSetJson=new BaseAutoSetJson;
-    if(_objectJson.unDataSerializeScriptData(_baseAutoSetJson,jsonData)==nullptr){
-        return false;
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    jFileStr = file.readAll();
+    file.close();
+    return jFileStr;
+}
+bool objectAppAT::jsonUnserialize(BaseAppJson jAppData,JSONTYPE jType){
+    QString jsonData=nullptr;
+    if(jType==jNet){
+        jsonData=jsonNetToStr(jAppData.appJson);
+    }else if(jType==jFile){
+        jsonData=jsonFileToStr(jAppData.appJson);
+    }
+    if(jsonData!=nullptr){
+        objectJson _objectJson;
+        _baseAutoSetJson=new BaseAutoSetJson;
+        if(_objectJson.unDataSerializeScriptData(_baseAutoSetJson,jsonData)==nullptr){
+            return false;
+        }
     }
     return true;
 }
 //三个操作，第一 容器不存在则初始化，第二容器存在则检测容器选项，
 bool objectAppAT::objDockerData(){
     //没有容器则按照下面配置设定
-    if(baseDockData.DockerVer==nullptr|
-            baseDockData.DockerVer==nullptr|
-            baseDockData.DockerWineVersion==nullptr|
-            baseDockData.DockerSystemVersion==nullptr)
+    if(!QDir(baseDockData.DockerPath+"/"+baseDockData.DockerName).exists())
     {
         baseDockData.DockerVer=_baseAutoSetJson->Docker.at(toStr(DockerVersion));
         baseDockData.DockerWineVersion=_baseAutoSetJson->Docker.at(toStr(DockerWineVersion));
         baseDockData.DockerSystemVersion=_baseAutoSetJson->Docker.at(toStr(DockerSysVersion));
-        baseDockData.WinePath=g_vekLocalData.wineVec.at(baseDockData.WineVersion).IwinePath;
-        qDebug()<<"如果容器不存在";
+        qDebug()<<"如果容器不存在"<<baseDockData.WinePath;
     }else{
         //如果容器存在
         qDebug()<<"如果容器存在";
@@ -126,8 +87,9 @@ bool objectAppAT::objDockerData(){
         if(baseDockData.DockerWineVersion!=_baseAutoSetJson->Docker.at(toStr(DockerWineVersion))){
             vekError("当前容器Wine版本为:"+baseDockData.DockerWineVersion+"配置文件容器Wine版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerWineVersion)));
             return false;
-        } 
+        }
     }
+    baseDockData.WinePath=g_vekLocalData.wineVec.at(baseDockData.WineVersion).IwinePath;
     QVariant monoState=_baseAutoSetJson->Docker.at(toStr(MonoState));
     baseDockData.MonoState=(monoState).toBool();;
     QVariant geckoState=_baseAutoSetJson->Docker.at(toStr(GeckoState));
@@ -190,7 +152,7 @@ void objectAppAT::objAppData(){
     baseAppData.AppCID=_objectJson->GetRandomCID();
     delete _objectJson;
     _objectJson=nullptr;
-    baseAppData.AppIco=jsonIco;
+    //baseAppData.AppIco=jsonIco;
 }
 void objectAppAT::objectAutoObj(){
     if(objDiyAddApp!=nullptr){
@@ -200,32 +162,33 @@ void objectAppAT::objectAutoObj(){
     emit Tips("配置容器中请稍候!");
     objDiyAddApp=new objectAppMT(&baseAppData,&baseDockData);
     objDiyAddApp->InitDockObj(false);
-    objDiyAddApp->optionRegs();
     objDiyAddApp->DockLibsInstall();
     delete objDiyAddApp;
     objDiyAddApp=nullptr;
 }
 void objectAppAT::run(){
     _baseAutoSetJson=new BaseAutoSetJson();
-    if(!JsonType(jsonCfg)){
+    JSONTYPE jtype=JsonType();
+    if(jtype==jDefault){
         emit Error("配置文件出错!",true);
         return;
     }
-    qDebug()<<"配置文件"<<jsonCfg;
-    if(!jsonUnserialize(jsonCfg)){
+    qDebug()<<"配置文件"<<appJsonData.appJson;
+    if(!jsonUnserialize(appJsonData,jtype)){
         emit Error("配置容器出错!",true);
         return;
     }
     else
     {
-        if(objDockerData()){
-            objAppData();
-        }else
-        {
+        if(!objDockerData()){
             emit Error("配置容器出错!",true);
             return;
+
+        }else
+        {
+            objAppData();
+            objectAutoObj();
         }
     }
-    objectAutoObj();
     emit Done(&baseDockData,&baseAppData);
 }

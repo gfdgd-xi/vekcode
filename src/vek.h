@@ -30,6 +30,7 @@ private:
     vekAbout* _vek_About=nullptr;
     vekSourceEdit* _vek_source_esit=nullptr;
     objectTray* objTray=nullptr;
+    void setProcRow();
 public slots:
     void startTray();
     void exitTray(bool);
@@ -45,5 +46,6 @@ private slots:
     void unVekAbout();
     void installApp();
     void unSourceEdit();
+    void setAppSize();
 };
 #endif // VEK_H

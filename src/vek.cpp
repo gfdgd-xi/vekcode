@@ -21,6 +21,24 @@ void vek::connectObject(){
     connect(ui->pushButton_vekAddApp,&QPushButton::clicked,this,&vek::vekAddApp);
     connect(ui->pushButton_vekRunApp,&QPushButton::clicked,this,&vek::vekRunApp);
     connect(ui->pushButton_InstallApp,&QPushButton::clicked,this,&vek::installApp);
+    setAppSize();
+}
+void vek::setAppSize(){
+    int approw=0;
+    //a 源
+    //b 源下分类
+    //c 分类下app
+    for(auto a:g_vekLocalData.appJsonList){
+        for(auto b:a.second){
+            for(auto c:b.second){
+                approw+=1;
+            }
+        }
+    }
+    ui->label_appSizeText->setText(QString::number(approw));
+}
+void vek::setProcRow(){
+    ui->label_procRow->setText(QString::number(taskList.size()));
 }
 void vek::startTray(){
     if(!g_vekLocalData.wineVec.empty()){
@@ -28,11 +46,12 @@ void vek::startTray(){
             if(objTray==nullptr){
                 objTray=new objectTray();
                 objTray->_baseWineData=a.second;
-                objTray->start();
+                objTray->start(); 
             }
             break;
         }
     }
+    setProcRow();
 }
 void vek::exitTray(bool trayState){
     if(trayState){
@@ -47,6 +66,7 @@ void vek::exitTray(bool trayState){
     if(objTray==nullptr){
         return;
     }
+    setProcRow();
     delete objTray;
     objTray=nullptr;
 }

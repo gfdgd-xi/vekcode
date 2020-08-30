@@ -33,16 +33,6 @@ void vekAppAddAT::connectDockObject(){
     for(auto & d:g_vekLocalData.appScrSource){
         ui->comboBox_SrcApp->addItem(d.first);
     }
-    /*
-    for(auto & v:g_vekLocalData.appJsonList){
-        if(v.first==ui->comboBox_SrcApp->currentText()){
-            for(auto & y:v.second){
-                ui->comboBox_JsonUrl->addItem(y.first);
-            }
-            break;
-        }
-    }
-    */
     if(!g_vekLocalData.dockerVec.empty()){
         for(auto &a:g_vekLocalData.dockerVec){
             ui->comboBox_DockName->addItem(a.first);
@@ -99,15 +89,19 @@ void vekAppAddAT::addAutoApp(){
         vekTip("请设置游戏运行exe文件路径");
         return;
     }
-
+    BaseAppData* autoAppData=new BaseAppData;
+    BaseDockData* autoDockData=new BaseDockData;
     autoDockData->DockerName=ui->comboBox_DockName->currentText();
     autoDockData->DockerPath=ui->lineEdit_DockPath->text();
     autoDockData->WineVersion=ui->comboBox_WinVersion->currentText();
 
-    QString pJsonPath=ui->comboBox_JsonUrl->currentText();
+    BaseAppJson pAppJsonData=ui->comboBox_JsonUrl->oData;
+    if(pAppJsonData.appName==nullptr){
+        pAppJsonData.appJson=ui->comboBox_JsonUrl->currentText();
+    }
     autoAppData->AppExe=ui->lineEdit_AppExePath->text();
     objectAppAT* objAutoAddApp=new objectAppAT();
-    objAutoAddApp->connectDockAutoData(*autoDockData,*autoAppData,pJsonPath,ui->comboBox_SrcApp->currentText());
+    objAutoAddApp->connectDockAutoData(*autoDockData,*autoAppData,pAppJsonData);
     connect(objAutoAddApp,SIGNAL(Tips(QString)),this,SLOT(TipText(QString)));
     connect(objAutoAddApp,SIGNAL(Error(QString,bool)),this,SLOT(ErrorText(QString,bool)));
     connect(objAutoAddApp,SIGNAL(Done(BaseDockData*,BaseAppData*)),this,SLOT(ObjDone(BaseDockData*,BaseAppData*)));

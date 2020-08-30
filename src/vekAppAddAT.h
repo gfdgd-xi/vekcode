@@ -19,8 +19,8 @@ public:
     void connectDockObject();
 private:
     Ui::vekAppAddAT *ui;
-    BaseAppData* autoAppData=new BaseAppData();
-    BaseDockData* autoDockData=new BaseDockData();
+    BaseAppData* autoAppData=nullptr;
+    BaseDockData* autoDockData=nullptr;
     void SetObject();
     void addAutoApp();
     void controlState(bool pState);
@@ -31,6 +31,7 @@ private slots:
     void TipText(QString TipInfo);
     void ErrorText(QString ErrorInfo,bool cState);
     void ObjDone(BaseDockData*,BaseAppData*);
+
 };
 
 #endif // VEKGAMEAUTOADD_H
