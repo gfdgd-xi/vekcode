@@ -16,6 +16,9 @@ void vekPanelAT::showPopup()
     emit sigPopup();
     QComboBox::showPopup();
     this->clear();
+    if(qTab!=nullptr){
+        delete qTab;
+    }
     qTab=new QTabWidget();
     QVBoxLayout *layout = new QVBoxLayout();
     layout->addWidget(qTab);
@@ -24,7 +27,6 @@ void vekPanelAT::showPopup()
     delete popup->layout();
     popup->setMinimumWidth(600);
     popup->setMinimumHeight(500);
-    popup->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
     popup->setLayout(layout);
     popup->show();
     std::map<QString,std::map<QString,BaseAppJson>>::reverse_iterator it;
@@ -42,8 +44,15 @@ void vekPanelAT::showPopup()
                 pListView->addItem(baj);
             }
             qTab->addTab(pListView,it->first);
+            connect(pListView,SIGNAL(outAppData(BaseAppJson)),this,SLOT(qComboBoxJsonSet(BaseAppJson)));
         }
         break;
     }
     popup->move(popup->x(), popup->y() + 1);
+}
+void vekPanelAT::qComboBoxJsonSet(BaseAppJson data){
+    this->clear();
+    this->addItem(data.appName);
+    oData=data;
+    this->hidePopup();
 }

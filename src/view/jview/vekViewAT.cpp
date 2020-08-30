@@ -10,7 +10,14 @@ vekViewAT::vekViewAT(QWidget *parent):QListView(parent)
 vekViewAT::~vekViewAT(){
 
 }
-
+void vekViewAT::mouseDoubleClickEvent(QMouseEvent *event){
+    UNUSED(event);
+    int rindex = this->currentIndex().row();
+    if(rindex>-1){
+        BaseAppJson bAppJson=*m_pModel->getItem(rindex);
+        emit outAppData(bAppJson);
+    }
+}
 void vekViewAT::addItem(BaseAppJson *pItem )
 {
     m_pModel->addItem(pItem);

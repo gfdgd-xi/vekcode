@@ -10,14 +10,17 @@ class vekPanelAT: public QComboBox
     Q_OBJECT
 public:
      vekPanelAT(QWidget *parent = 0);
-    ~vekPanelAT();
+    ~vekPanelAT();   
+     BaseAppJson oData;
 private:
     QTabWidget *qTab=nullptr;
     bool LoadAppListData();
-    QString GetCurrentIndex();
+    void GetCurrentIndex();
     std::map<QString,vekViewAT*> *m_pListMap;
 protected:
     void showPopup();
+public slots:
+    void qComboBoxJsonSet(BaseAppJson data);
 signals:
     void sigPopup();
 };

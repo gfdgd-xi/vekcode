@@ -54,3 +54,10 @@ int vekModelAT::rowCount( const QModelIndex & parent ) const
     return m_ItemDataVec.size();
 }
 
+BaseAppJson* vekModelAT::getItem( int index )
+{
+    if (index > -1 && index < m_ItemDataVec.size())
+    {
+        return m_ItemDataVec[index];
+    }
+}
