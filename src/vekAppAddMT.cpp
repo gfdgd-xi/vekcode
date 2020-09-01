@@ -6,7 +6,6 @@ vekAppAddMT::vekAppAddMT(QWidget *parent) :
     ui(new Ui::vekAppAddMT)
 {
     ui->setupUi(this);
-    vek_Style(this,0);
     qwidgetGeometry(this);
 }
 
@@ -79,6 +78,7 @@ void vekAppAddMT::vekAppAddConnectObject(BaseDockData* _data,QString _appCID,obj
     ui->checkBox_Gecko->setChecked(tempDockData->GeckoState);
     ui->comboBox_dockbit->setCurrentText(tempDockData->DockerVer);
     ui->comboBox_winebit->setCurrentText(tempDockData->DockerWineVersion);
+    ui->checkBox_Ass->setChecked(tempAppData->DisableAss);
     ui->comboBox_dockbit->setEnabled(false);
     ui->lineEdit_AppName->setText(tempAppData->AppName);
     ui->lineEdit_AppInstallExe->setText(tempAppData->AppExe);
@@ -345,6 +345,7 @@ bool vekAppAddMT::vekAppConfigObj(){
     tempDockData->DockerWineVersion=ui->comboBox_winebit->currentText();
     tempDockData->MonoState=ui->checkBox_Mono->checkState();
     tempDockData->GeckoState=ui->checkBox_Gecko->checkState();
+    tempAppData->DisableAss=ui->checkBox_Ass->checkState();
     if(ui->lineEdit_dxvkConfigFIle->text()!=nullptr){
         tempAppData->DxvkConfigFile=ui->lineEdit_dxvkConfigFIle->text();
     }

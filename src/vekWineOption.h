@@ -3,7 +3,6 @@
 
 #include "obj/objectGitWine.h"
 #include "obj/common.h"
-#include "obj/pObject.h"
 namespace Ui {
 class vekWineOption;
 }

@@ -37,6 +37,8 @@ void objectSource::updateSrcDataObject(){
 void objectSource::loadAllData(){
     QString jsonPath=QDir::currentPath()+"/data.json";
     objectJson _objectJson;
+    g_vekLocalData.appJsonList.clear();
+    g_vekLocalData.wineJsonList.clear();
     if(!QFile(jsonPath).exists()){
         //默认源数据
         g_vekLocalData.wineSource.insert(pair<QString,QString>("DefaultWineSrc","https://gitee.com/JackLee02/vekGame/raw/master/wineJsonSource.json"));
@@ -44,8 +46,6 @@ void objectSource::loadAllData(){
         updateSrcDataObject();
     }else{
         if(_objectJson.unDataSerializeLocalData()){
-            g_vekLocalData.appJsonList.clear();
-            g_vekLocalData.wineJsonList.clear();
             updateSrcDataObject();  
         }
     }

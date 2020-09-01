@@ -4,7 +4,6 @@
 #include "obj/common.h"
 #include "obj/objectJson.h"
 #include "obj/objectAppMT.h"
-#include "obj/pObject.h"
 #include <QTableView>
 #include <QStandardItemModel>
 namespace Ui {

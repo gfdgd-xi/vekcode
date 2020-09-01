@@ -76,6 +76,12 @@ void saveStrToFile(QString strFile,QString filePath){
     out << strFile;
     file.close();
 }
+QString StrPathNullToStr(QString str){
+    if(str.contains(" ",Qt::CaseSensitive)){
+        str="\""+str+"\"";
+    }
+    return str;
+}
 //综合注册表操作
 QStringList DockRegeditStr(QString rObj,QString rPath,QString rKey,QString rTValue,QString rValue){
     QStringList argsList;
@@ -113,30 +119,7 @@ QStringList DockRegeditStr(QString rObj,QString rPath,QString rKey,QString rTVal
     }
     return argsList;
 }
-//加载Default Style
-void vek_Style(QWidget *parent,int styleType)
-{
-    QString strStyle;
-    parent->setWindowIcon(QIcon(":/res/img/vek.ico"));
-    switch(styleType){
-    case 0:
-        strStyle="Default.qss";
-        break;
-    case 1:
-        strStyle="Dark.qss";
-    case 2:
-        break;
-        strStyle="Light.qss";
-    }
-    QFile file(":/res/css/"+strStyle);
-    file.open(QFile::ReadOnly|QFile::Text);
-    if (file.isOpen())
-    {
-        QString styleSheet = QString::fromUtf8(file.readAll());
-        parent->setStyleSheet(styleSheet);
-        file.close();
-    }
-}
+
 void qwidgetGeometry(QWidget* qwidget){
     QDesktopWidget *deskdop = QApplication::desktop();
     qwidget->move((deskdop->width() - qwidget->width())/2, (deskdop->height() - qwidget->height())/2);

@@ -314,9 +314,32 @@
     </property>
     <addaction name="action_EditSource"/>
    </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="title">
+     <string>界面管理</string>
+    </property>
+    <widget class="QMenu" name="menu_5">
+     <property name="title">
+      <string>主题样式</string>
+     </property>
+     <addaction name="styleDefault"/>
+     <addaction name="styleDark "/>
+     <addaction name="styleLight"/>
+    </widget>
+    <widget class="QMenu" name="menu_6">
+     <property name="title">
+      <string>语言切换</string>
+     </property>
+     <addaction name="langChinese"/>
+     <addaction name="langEnglish"/>
+    </widget>
+    <addaction name="menu_5"/>
+    <addaction name="menu_6"/>
+   </widget>
    <addaction name="menu"/>
    <addaction name="menuWine"/>
    <addaction name="menu_3"/>
+   <addaction name="menu_4"/>
    <addaction name="menu_2"/>
   </widget>
   <action name="action_AddApp">
@@ -342,6 +365,40 @@
   <action name="action_EditSource">
    <property name="text">
     <string>修改源</string>
+   </property>
+  </action>
+  <action name="styleDefault">
+   <property name="text">
+    <string>Default</string>
+   </property>
+   <property name="toolTip">
+    <string>Default</string>
+   </property>
+  </action>
+  <action name="styleDark ">
+   <property name="text">
+    <string>Dark </string>
+   </property>
+   <property name="toolTip">
+    <string>Dark </string>
+   </property>
+  </action>
+  <action name="styleLight">
+   <property name="text">
+    <string>Light</string>
+   </property>
+   <property name="toolTip">
+    <string>Light</string>
+   </property>
+  </action>
+  <action name="langChinese">
+   <property name="text">
+    <string>Chinese</string>
+   </property>
+  </action>
+  <action name="langEnglish">
+   <property name="text">
+    <string>English</string>
    </property>
   </action>
  </widget>

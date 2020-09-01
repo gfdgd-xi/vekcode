@@ -6,11 +6,6 @@ vek::vek(QWidget *parent)
 
 {
     ui->setupUi(this);
-    vek_Style(this,0);  
-    qwidgetGeometry(this);
-    QString vStr="Vek-";
-    vStr.append(APP_VERSION);
-    this->setWindowTitle(vStr);
 }
 vek::~vek()
 {
@@ -21,7 +16,20 @@ void vek::connectObject(){
     connect(ui->pushButton_vekAddApp,&QPushButton::clicked,this,&vek::vekAddApp);
     connect(ui->pushButton_vekRunApp,&QPushButton::clicked,this,&vek::vekRunApp);
     connect(ui->pushButton_InstallApp,&QPushButton::clicked,this,&vek::installApp);
+    //默认样式
+    connect(ui->styleDefault,&QAction::triggered,this,&vek::vekStyle);
+    connect(ui->styleDark_,&QAction::triggered,this,&vek::vekStyle);
+    connect(ui->styleLight,&QAction::triggered,this,&vek::vekStyle);
+    //语言切换
+    connect(ui->langChinese,&QAction::triggered,this,&vek::vekLanguage);
+    connect(ui->langEnglish,&QAction::triggered,this,&vek::vekLanguage);
+    qwidgetGeometry(this);
+    QString vStr="Vek-";
+    vStr.append(APP_VERSION);
+    this->setWindowTitle(vStr);
     setAppSize();
+    strStyle="styleDefault";
+    vekStyle();
 }
 void vek::setAppSize(){
     int approw=0;
@@ -131,4 +139,58 @@ void vek::unVekAbout(){
 };
 void vek::unSourceEdit(){
     _vek_source_esit=nullptr;
+}
+//切换Language
+void vek::vekLanguage(){
+    QObject *object = QObject::sender();
+    QString objName;
+    if(object){
+        QAction *action_obnject = qobject_cast<QAction *>(object);
+        objName=action_obnject->objectName();
+    }else{
+        objName=strStyle;
+    }
+    if(objName=="langChinese"){
+        strStyle="vek_zh_CN.qm";
+    }
+    if(objName=="langEnglish"){
+        strStyle="vek_us_EN.qm";
+    }
+    QString langFilePath=":/res/lang/"+strStyle;
+    if (QFile(langFilePath).exists())
+    {
+        QTranslator* m_translator = new QTranslator;
+        m_translator->load(langFilePath);
+        vekThis->installTranslator(m_translator);
+    }
+}
+//切换Style
+void vek::vekStyle()
+{
+    QObject *object = QObject::sender();
+    QString objName;
+    if(object){
+        QAction *action_obnject = qobject_cast<QAction *>(object);
+        objName=action_obnject->objectName();
+    }else{
+       objName=strStyle;
+    }
+    setWindowIcon(QIcon(":/res/img/vek.ico"));
+    if(objName=="styleDefault"){
+        strStyle="Default.qss";
+    }
+    if(objName=="styleDark_"){
+        strStyle="Dark.qss";
+    }
+    if(objName=="styleLight"){
+        strStyle="Light.qss";
+    }
+    QFile file(":/res/css/"+strStyle);
+    file.open(QFile::ReadOnly|QFile::Text);
+    if (file.isOpen())
+    {
+        QString styleSheet = QString::fromUtf8(file.readAll());
+        vekThis->setStyleSheet(styleSheet);
+        file.close();
+    }
 }

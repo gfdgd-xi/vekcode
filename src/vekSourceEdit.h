@@ -7,7 +7,6 @@
 #include <QTableWidgetItem>
 #include "obj/objectJson.h"
 #include "obj/objectSource.h"
-#include "obj/pObject.h"
 typedef enum{
     WINESRC,
     GAMESRC

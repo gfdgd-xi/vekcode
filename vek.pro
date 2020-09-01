@@ -23,8 +23,6 @@ QMAKE_CXXFLAGS_RELEASE += -O3       # Release -O3
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-TRANSLATIONS += vek_zh_CN.ts\
-                vek_us_EN.ts
 SOURCES += \
   main.cpp \
     src/obj/objectAppAT.cpp \
@@ -113,8 +111,7 @@ RESOURCES += \
 RC_ICONS = res\img\vek.ico
 
 DISTFILES += \
-    vek_us_EN.ts \
-    vek_zh_CN.ts
+    vek_us_EN.ts
 ######curl##########
 DEFINES += CURL_STATICLIB
 LIBS += -L$$PWD/3rdparty/curl/lib/ -lcurl -lssl -lcrypto -lz

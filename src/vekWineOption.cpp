@@ -18,7 +18,6 @@ vekWineOption::vekWineOption(QWidget *parent) :
     connect(githread,&objectGitWine::overThreadSignals,this,&vekWineOption::overGitThreadSignals);
     connect(ui->comboBox_wineSrc,&QComboBox::currentTextChanged,this,&vekWineOption::WineVersionComoboBox);
 
-    vek_Style(this,0);
     GetWineGitInfo();
 }
 
@@ -126,6 +125,7 @@ void vekWineOption::controlState(bool pState){
 }
 void vekWineOption::appendTextToLog()
 {
+    ui->textEdit->document()->setMaximumBlockCount(200);
     ui->textEdit->append(githread->outputPrgressText);
     QTextCursor cursor=ui->textEdit->textCursor();
     cursor.movePosition(QTextCursor::End);

@@ -5,7 +5,6 @@ vekSourceEdit::vekSourceEdit(QWidget *parent) :
     ui(new Ui::vekSourceEdit)
 {
     ui->setupUi(this);
-    vek_Style(this,0);
     loadData();
 }
 

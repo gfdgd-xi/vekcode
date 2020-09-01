@@ -267,11 +267,47 @@ void objectAppMT::newDock(){
     if(dockData->GeckoState){
         installGeckoPlugs();
     }
+    DisableAss(winebuilder);
+    DisableAss(winemine);
 }
 void objectAppMT::sObjectInstall(){
     DxvkFileInstall();
     DxvkHUDRegs();
     DxvkConfigFile();
+}
+void objectAppMT::DisableAss(std::map<QString,std::map<QString,QString>> regStr){
+    argsList.clear();
+    QString _rPath;
+    QString _rKey;
+    QString _rValue;
+    for(auto a:regStr){
+        _rPath=a.first;
+        for(auto b:a.second){
+            _rKey=b.first;
+            _rValue=b.second;
+        }
+    }
+    QString _rObj;
+    if(appData->DisableAss){
+        _rObj="add";
+    }else{
+        _rObj="delete";
+    }
+    argsList.push_back(DockRegeditStr(_rObj,_rPath,_rKey,"REG_SZ",_rValue));
+    ExecuteObj(object_regobject,object_wineboot_default,object_wineserver_default);
+}
+void objectAppMT::outAppIco(){
+    QString icoCacheDir=QDir::currentPath()+"/vekCache/";
+    if(!QDir(icoCacheDir).exists()){
+        QDir(QDir::currentPath()).mkdir("vekCache");
+    }
+    QString exeName=QFileInfo(appData->AppExe).baseName();
+    QString exePath=StrPathNullToStr(appData->AppExe);
+    char* outCode=("wrestool -x -t 14 "+exePath+ ">"+ icoCacheDir+exeName).toLocal8Bit().data();
+    system(outCode);
+    if(QFileInfo(icoCacheDir+exeName).size()>0){
+        appData->AppIco=icoCacheDir+exeName;
+    }
 }
 bool objectAppMT::InitDockObj(bool _forceState){
     QDir dockPath(dockData->DockerPath);
@@ -281,15 +317,9 @@ bool objectAppMT::InitDockObj(bool _forceState){
     }
     try {
         InitDockDir(_forceState,dockPath,dockDir);
-        if(appData->DxvkState){
-            DxvkFileInstall();
-            if(appData->DxvkHUD){
-                DxvkHUDRegs();
-            }
-            if(appData->DxvkConfigFileState){
-                DxvkConfigFile();
-            }
-        }
+        sObjectInstall();
+        DisableAss(winebuilder);
+        DisableAss(winemine);
         if(appData->DefaultFonts){
             DefaultFontsFileInstall();
         }
@@ -302,6 +332,7 @@ bool objectAppMT::InitDockObj(bool _forceState){
         if(!appData->DockerRegs.empty()){
             optionRegs();
         }
+        outAppIco();
         ExecuteObj(object_dockSysver,object_wineboot_default,object_wineserver_default);
         return true;
     } catch (nullopt_t) {

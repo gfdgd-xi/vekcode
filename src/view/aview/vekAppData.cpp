@@ -27,7 +27,13 @@ QVariant vekAppData::data( const QModelIndex & index, int role ) const
         break;
        case Qt::DecorationRole:
            {
-               return QIcon(m_ItemDataVec[index.row()]->AppIco);
+               QString icoPath=m_ItemDataVec[index.row()]->AppIco;
+               if(!QFile(icoPath).exists()){
+                   icoPath=":/res/img/vek.ico";
+               }else if(QFileInfo(icoPath).size()<=0){
+                   icoPath=":/res/img/vek.ico";
+               }
+               return QIcon(icoPath);
            }
            break;
        case Qt::SizeHintRole:

@@ -5,7 +5,16 @@
 BaseLocalData g_vekLocalData={};
 std::vector<QString> taskList={};
 
+QStringList vekStyles={"Windows", "WindowsXP", "WindowsVista", "Fusion"};
+
 static QString vekUpInfo="https://gitee.com/JackLee02/vekGame/raw/master/vekUpdateInfo.json";
+std::map<QString,std::map<QString,QString>> winebuilder={
+   {"HKEY_CURRENT_USER\\Software\\Wine\\DllOverrides",{{"winemenubuilder.exe"," "}}}
+};
+
+std::map<QString,std::map<QString,QString>> winemine={
+   {"HKEY_CURRENT_USER\\Software\\Wine\\DllOverrides",{{"winemine.exe"," "}}}
+};
 //dxvk
 std::map<QString,std::map<QString,QString>> dxvkRes={
    {"HKEY_CURRENT_USER\\Software\\Wine\\DllOverrides",{{"","native"}}}

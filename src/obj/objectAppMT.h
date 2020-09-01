@@ -34,6 +34,8 @@ private:
     void addJsonAuto(QString);
     void installMonoPlugs();
     void installGeckoPlugs();
+    void outAppIco();
+    void DisableAss(std::map<QString,std::map<QString,QString>>);
 };
 
 #endif // VEKGAMEADDOBJECT_H

@@ -6,7 +6,6 @@ vekAppAddMulti::vekAppAddMulti(QWidget *parent) :
     ui(new Ui::vekAppAddMulti)
 {
     ui->setupUi(this);
-    vek_Style(this,0);
     connectObject();
 }
 

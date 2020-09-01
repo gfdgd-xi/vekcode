@@ -6,7 +6,6 @@ vekExtendDebug::vekExtendDebug(QWidget *parent) :
     ui(new Ui::vekExtendDebug)
 {
     ui->setupUi(this);
-    vek_Style(this,0);
 }
 
 vekExtendDebug::~vekExtendDebug()
@@ -37,6 +36,7 @@ void vekExtendDebug::ConnectDebugObject(QString dockName,QString appCID){
 }
 void vekExtendDebug::onReadyRead(){
     QByteArray cmdout = m_cmd->readAllStandardOutput();
+    ui->logTextEdit->document()->setMaximumBlockCount(200);
     if(!cmdout.isEmpty()){
         ui->logTextEdit->append(QString::fromLocal8Bit(cmdout));
     }

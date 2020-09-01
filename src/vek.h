@@ -3,13 +3,14 @@
 #include "vekWineOption.h"
 #include "vekAbout.h"
 #include "vekAppAddMT.h"
-#include "obj/pObject.h"
 #include "view/aview/vekAppListView.h"
 #include "obj/common.h"
 #include "vekExtendDebug.h"
 #include "vekSourceEdit.h"
 #include "obj/objectProcManage.h"
 #include "obj/objectTray.h"
+#include "QTranslator"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -23,6 +24,7 @@ class vek : public QWidget
 public:
     explicit vek(QWidget *parent = nullptr);
     ~vek();
+    QApplication* vekThis;
     void connectObject();
 private:
     Ui::vek *ui=nullptr;
@@ -30,7 +32,9 @@ private:
     vekAbout* _vek_About=nullptr;
     vekSourceEdit* _vek_source_esit=nullptr;
     objectTray* objTray=nullptr;
-    void setProcRow();
+    void setProcRow(); 
+    QString strStyle=nullptr;
+    QString strLang=nullptr;
 public slots:
     void startTray();
     void exitTray(bool);
@@ -47,5 +51,7 @@ private slots:
     void installApp();
     void unSourceEdit();
     void setAppSize();
+    void vekStyle();
+    void vekLanguage();
 };
 #endif // VEK_H

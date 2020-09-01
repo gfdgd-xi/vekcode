@@ -6,7 +6,6 @@ vekAppAddAT::vekAppAddAT(QWidget *parent) :
     ui(new Ui::vekAppAddAT)
 {
     ui->setupUi(this);
-    vek_Style(this,0);
     qwidgetGeometry(this);
 }
 

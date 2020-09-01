@@ -12,5 +12,8 @@
         <file>res/img/32.png</file>
         <file>res/img/aliPay.png</file>
         <file>res/img/wechat.png</file>
+        <file>res/lang/vek_us_EN.ts</file>
+        <file>res/lang/vek_zh_CN.qm</file>
+        <file>res/lang/vek_zh_CN.ts</file>
     </qresource>
 </RCC>

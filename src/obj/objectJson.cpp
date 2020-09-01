@@ -39,6 +39,7 @@ json objectJson::DataSerialize(json jsonData,const BaseLocalData _baseLocalData)
             jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(WriteCopy)]=by.WriteCopy;
             jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(SharedMemory)]=by.SharedMemory;
             jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(RtServer)]=by.RtServer;
+            jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(DisableAss)]=by.DisableAss;
             jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(DefaultFonts)]=by.DefaultFonts;
             jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(DxvkConfigFileState)]=by.DxvkConfigFileState;
             if(!by.DockerEnv.empty()){
@@ -202,6 +203,7 @@ bool objectJson::unDataSerializeLocalData(){
                                 _base_app_data.SharedMemory=it.value().at("SharedMemory").get<bool>();
                                 _base_app_data.RtServer=it.value().at("RtServer").get<bool>();
                                 _base_app_data.DefaultFonts=it.value().at("DefaultFonts").get<bool>();
+                                _base_app_data.DisableAss=it.value().at("DisableAss").get<bool>();
                                 _base_app_data.DxvkConfigFileState=it.value().at("DxvkConfigFileState").get<bool>();
                                 _base_app_data.AttachProc.clear();
                                 if(it.value().at("AttachProc")!=NULL){

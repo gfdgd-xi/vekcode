@@ -68,10 +68,11 @@ int main(int argc, char *argv[])
     objSource->loadAllData();
     delete objSource;
     objSource=nullptr;
-    vek w;
-    w.show();
-    w.connectObject();
-    w.on_action_About_triggered();
+    vek vekMainWindows;
+    vekMainWindows.show();
+    vekMainWindows.connectObject();
+    vekMainWindows.on_action_About_triggered();
+    vekMainWindows.vekThis=&a;
     return a.exec();
 }
 

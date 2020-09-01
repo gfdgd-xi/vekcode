@@ -31,6 +31,7 @@ typedef struct {
     bool SharedMemory=false;
     bool RtServer=false;
     bool DefaultFonts=false;
+    bool DisableAss=false;
     std::vector<QString> AttachProc={};
     std::map<QString,QString> DockerEnv={};
     std::vector<QString> DockerLibs={};
@@ -154,9 +155,10 @@ extern BaseLocalData g_vekLocalData;
 extern std::map<QString,std::map<QString,QString>> fontRes;
 extern std::map<QString,std::map<QString,QString>> dxvkResCof;
 extern std::map<QString,std::map<QString,QString>> dxvkResHUD;
+extern std::map<QString,std::map<QString,QString>> winebuilder;
+extern std::map<QString,std::map<QString,QString>> winemine;
 extern std::map<QString,std::map<QString,QString>> dxvkRes;
 extern std::map<QString,std::map<QString,QString>> dxvkResCache;
 extern std::map<QString,std::map<QString,QString>> dxvkResLog;
 extern std::vector<QString> taskList;
-
 #endif // BASEDATA_H

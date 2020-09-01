@@ -4,7 +4,6 @@
 #include "obj/common.h"
 #include "obj/objectJson.h"
 #include "obj/objectAppAT.h"
-#include "obj/pObject.h"
 #include "view/jview/vekViewAT.h"
 namespace Ui {
 class vekAppAddAT;

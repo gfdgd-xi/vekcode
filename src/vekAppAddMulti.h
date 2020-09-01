@@ -3,7 +3,6 @@
 
 #include "obj/common.h"
 #include "obj/objectAppMT.h"
-#include "obj/pObject.h"
 namespace Ui {
 class vekAppAddMulti;
 }
