@@ -1,6 +1,7 @@
 ﻿#include "objectGetCurl.h"
 objectGetCurl::objectGetCurl(QObject *parent) : QThread(parent)
 {
+
 }
 objectGetCurl::~objectGetCurl()
 {
@@ -111,10 +112,8 @@ bool objectGetCurl::DownloadFile(std::string URLADDR,std::string path)
             if((CURLE_OK == curl_res) && url)
                 printf("重定向后的url: %s\n", url);
         }
-        /* always cleanup */
         fclose(file);
         curl_easy_cleanup(curl);
-        /* we're done with libcurl, so clean it up */
         curl_global_cleanup();
     }
     return !curl_res;

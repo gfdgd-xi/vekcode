@@ -95,7 +95,7 @@ void vekAppPanel::addAppDiy(){
         vek_app_add=new vekAppAddMT();
         vek_app_add->setAttribute(Qt::WA_DeleteOnClose,true);
         vek_app_add->setWindowFlags(Qt::WindowStaysOnTopHint);
-        vek_app_add->setWindowTitle("VekAppAdd");
+        vek_app_add->setWindowTitle("Vek软件增加");
         vek_app_add->vekAppAddConnectObject(nullptr,nullptr,object_addApp);
         vek_app_add->show();
         connect(vek_app_add,&vekAppAddMT::_unDiyAppAdd,this,&vekAppPanel::unDiyAppAdd);

@@ -11,7 +11,7 @@ objectJson::~objectJson()
 json objectJson::DataSerialize(json jsonData,const BaseLocalData _baseLocalData){
     //序列化容器列表
     //ax.first->容器名
-    for(auto ax:g_vekLocalData.dockerVec){
+    for(auto ax:_baseLocalData.dockerVec){
         //bx.first->游戏CID
         jsonData["Docker"][ax.first.toStdString()][toStr(WineVersion)]=ax.second.WineVersion.toStdString();
         jsonData["Docker"][ax.first.toStdString()][toStr(WinePath)]=ax.second.WinePath.toStdString();
@@ -166,7 +166,7 @@ bool objectJson::unDataSerializeLocalData(){
                 for(auto [ax,bx]:v.items()){
                     BaseDockData baseDockData={};
                     auto it = bx.begin();
-                    for(it;it!=bx.end();++it)
+                    for(it=bx.begin();it!=bx.end();++it)
                     {
                         if(it.value().is_string()){
                             baseDockData.WinePath=QString::fromStdString(bx.at(toStr(WinePath)));
@@ -283,7 +283,7 @@ bool objectJson::unDataSerializeLocalData(){
                                 g_vekLocalData.appJsonList.insert(pair<QString,std::map<QString,std::map<QString,BaseAppJson>>>(QString::fromStdString(u),appTypeList));
                                 /*
                                 if(u==b){
-                                    for(auto&[w,o]:i.items()){  
+                                    for(auto&[w,o]:i.items()){
                                         g_vekLocalData.appJsonList[QString::fromStdString(u)].insert(pair<QString,QString>(QString::fromStdString(w),QString::fromStdString(o)));
                                     }
                                 }
@@ -356,7 +356,6 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
                 }
             }
             if(QString::fromStdString(k)=="AttachProc"){
-                //_baseAutoSetJson->AttachProc.clear();
                 if(!j.empty()){
                     for(auto&zu:j.items()){
                         _baseAutoSetJson->AttachProc.push_back(QString::fromStdString(zu.value()));
@@ -364,7 +363,6 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
                 }
             }
             if(QString::fromStdString(k)=="Env"){
-                //_baseAutoSetJson->Env.clear();
                 if(!j.empty()){
                     for(auto&[iu,zu]:j.items()){
                         _baseAutoSetJson->Env.insert(pair<QString,QString>(QString::fromStdString(iu),QString::fromStdString(zu)));
@@ -372,7 +370,6 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
                 }
             }
             if(QString::fromStdString(k)=="Libs"){
-                //_baseAutoSetJson->Libs.clear();
                 if(!j.empty()){
                     for(auto& d:j.items()){
                         _baseAutoSetJson->Libs.push_back(QString::fromStdString(d.value()));
@@ -385,7 +382,6 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
                 }
             }
             if(QString::fromStdString(k)=="Regs"){
-                //_baseAutoSetJson->Regs.clear();
                 if(!j.empty()){
                     for(auto ad:j.items()){
                         BaseDockRegs rbaseRegs;
@@ -442,12 +438,6 @@ bool objectJson::unSerializeLocalWineApp(QString key,const QString urlData,UNJSO
                     g_vekLocalData.appJsonList[key][QString::fromStdString(x)][QString::fromStdString(z)].appJson=QString::fromStdString(i.at(toStr(AppJson)));
                 }
             }
-            /*
-            for(auto &[x, y] :jdata.items())
-            {
-                g_vekLocalData.appJsonList[key][QString::fromStdString(x)]=QString::fromStdString(y);
-            }
-            */
             break;
         }
 
@@ -600,11 +590,6 @@ void objectJson::deleteAppNodeData(BaseDockData dockData, QString appCID){
 //更新APP节点信息
 void objectJson::updateAppNodeData(BaseDockData dockData,BaseAppData appData){
     deleteDockerNodeData(dockData.DockerName);
-    /*
-    if(appData.AppCID!=nullptr){
-        deleteAppNodeData(dockData,appData.AppCID);
-    }
-    */
     addAppNodeData(dockData,appData);
 }
 //××××××××××××××××Wine信息操作×××××××××××××××××//

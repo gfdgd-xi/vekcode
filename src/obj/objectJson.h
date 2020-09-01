@@ -5,6 +5,7 @@
 #include "common.h"
 #include "baseData.h"
 using json = nlohmann::json;
+
 typedef enum{
     unJsonWineList,
     unJsonGameList,

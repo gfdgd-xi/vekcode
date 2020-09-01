@@ -12,7 +12,8 @@ vekAppData::~vekAppData()
 
 QVariant vekAppData::data( const QModelIndex & index, int role ) const
 {
-    if (index.row() > m_ItemDataVec.size())
+    int pIndex=m_ItemDataVec.size();
+    if (index.row() > pIndex)
     {
         return QVariant();
     }
@@ -73,7 +74,8 @@ void vekAppData::addItem( BaseAppData *pItem )
 
 BaseAppData* vekAppData::getItem( int index )
 {
-    if (index > -1 && index < m_ItemDataVec.size())
+    int pindex=m_ItemDataVec.size();
+    if (index > -1 && index < pindex)
     {
         return m_ItemDataVec[index];
     }

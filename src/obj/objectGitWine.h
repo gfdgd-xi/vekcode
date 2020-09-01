@@ -3,8 +3,6 @@
 
 #include "objectJson.h"
 #include "git2.h"
-#include "git2/clone.h"
-#include "git2/cred_helpers.h"
 #include "common.h"
 #include "objectGetCurl.h"
 //进度数据

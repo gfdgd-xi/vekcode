@@ -9,7 +9,8 @@ vekModelAT::~vekModelAT(){
 }
 QVariant vekModelAT::data( const QModelIndex & index, int role ) const
 {
-    if (index.row() >m_ItemDataVec.size())
+    int pIndex=m_ItemDataVec.size();
+    if (index.row() >pIndex)
     {
         return QVariant();
     }
@@ -65,7 +66,8 @@ int vekModelAT::rowCount( const QModelIndex & parent ) const
 
 BaseAppJson* vekModelAT::getItem( int index )
 {
-    if (index > -1 && index < m_ItemDataVec.size())
+    int pIndex=m_ItemDataVec.size();
+    if (index > -1 && index < pIndex)
     {
         return m_ItemDataVec[index];
     }

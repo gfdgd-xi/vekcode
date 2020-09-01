@@ -23,7 +23,7 @@ void vekExportJson::SaveJson(){
     QString saveStr=ui->textEdit_OutPutStr->toPlainText();
     QString savePath = QFileDialog::getSaveFileName(this,tr("选择保存json路径"),".",tr("json Files(*.json)"));
     bool vekMesgDxvkSave=false;
-    if(savePath!=nullptr&saveStr!=nullptr){
+    if(savePath!=nullptr&&saveStr!=nullptr){
        vekMesgDxvkSave=vekMesg("是否把json配置文件保存到"+savePath);
     }else{
         return;

@@ -79,7 +79,6 @@ void vekAppAddMT::vekAppAddConnectObject(BaseDockData* _data,QString _appCID,obj
     ui->comboBox_dockbit->setCurrentText(tempDockData->DockerVer);
     ui->comboBox_winebit->setCurrentText(tempDockData->DockerWineVersion);
     ui->checkBox_Ass->setChecked(tempAppData->DisableAss);
-    ui->comboBox_dockbit->setEnabled(false);
     ui->lineEdit_AppName->setText(tempAppData->AppName);
     ui->lineEdit_AppInstallExe->setText(tempAppData->AppExe);
     ui->lineEdit_workPath->setText(tempAppData->WorkPath);
@@ -95,7 +94,12 @@ void vekAppAddMT::vekAppAddConnectObject(BaseDockData* _data,QString _appCID,obj
     ui->checkBox_DefaultFonts->setChecked(tempAppData->DefaultFonts);
     ui->lineEdit_MainProcName->setText(tempAppData->MainPrcoName);
     ui->checkBox_dxvkConfigState->setChecked(tempAppData->DxvkConfigFileState);
-
+    if(objType==object_setApp){
+        if(tempDockData->DockerPath!=nullptr){
+            ui->comboBox_dockbit->setEnabled(false);
+            ui->comboBox_DockName->setEnabled(false);
+        }
+    }
     dxvkOptionLoad();
     loadTableView(ui->tableView_EnvList,tempAppData);
     loadTableView(ui->tableView_ProcList,tempAppData);
@@ -272,7 +276,7 @@ void vekAppAddMT::onTaskBoxContextMenuEvent()
 {
     QAction *pEven = qobject_cast<QAction *>(this->sender());
     int iType = pEven->data().toInt();
-    QTableView* _tempQTableView;
+    QTableView* _tempQTableView=new QTableView;
     if(pEven->objectName()=="tableView_EnvList"){
         _tempQTableView=ui->tableView_EnvList;
     }else if(pEven->objectName()=="tableView_ProcList"){
@@ -375,7 +379,7 @@ bool vekAppAddMT::vekAppConfigObj(){
         for(int i=0;i<=envCurRow-1;i++){
             QString dataTempA = modelEnv->data(modelEnv->index(i,0)).value<QString>();
             QString dataTempB = modelEnv->data(modelEnv->index(i,1)).value<QString>();
-            if(dataTempA!=nullptr&dataTempB!=nullptr){
+            if(dataTempA!=nullptr&&dataTempB!=nullptr){
                 tempAppData->DockerEnv.insert(pair<QString,QString>(dataTempA,dataTempB));
             }
         }
@@ -400,7 +404,7 @@ bool vekAppAddMT::vekAppConfigObj(){
             _tRegs.rKey = modelRegs->data(modelRegs->index(i,1)).value<QString>();
             _tRegs.rTValue= modelRegs->data(modelRegs->index(i,2)).value<QString>();
             _tRegs.rValue = modelRegs->data(modelRegs->index(i,3)).value<QString>();
-            if(_tRegs.rPath!=nullptr&_tRegs.rKey!=nullptr&_tRegs.rTValue!=nullptr){
+            if(_tRegs.rPath!=nullptr&&_tRegs.rKey!=nullptr&&_tRegs.rTValue!=nullptr){
                 tempAppData->DockerRegs.push_back(_tRegs);
             }
         }
@@ -563,6 +567,7 @@ void vekAppAddMT::objectButton(){
         }else{
             if(vekMesg("是否解锁初始化功能限制请谨慎操作?")){
                 ui->comboBox_dockbit->setEnabled(true);
+                ui->comboBox_DockName->setEnabled(true);
             }
         }
     }

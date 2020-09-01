@@ -163,7 +163,7 @@ void vekAppListView::setItemSlot(){
             //绑定传参槽
             _vek_App_Add=new vekAppAddMT();
             _vek_App_Add->setAttribute(Qt::WA_DeleteOnClose,true);
-            _vek_App_Add->setWindowTitle("VekAppSet");
+            _vek_App_Add->setWindowTitle("Vek软件设置");
             QString currentAppCID=m_pModel->getItem(this->currentIndex().row())->AppCID;
             _vek_App_Add->vekAppAddConnectObject(&g_vekLocalData.dockerVec.at(mBox->tabText(mBox->currentIndex())),currentAppCID,object_setApp);
             _vek_App_Add->setWindowFlags(Qt::WindowStaysOnTopHint);
@@ -213,7 +213,7 @@ void vekAppListView::setUpDelData(BaseDockData dockData,BaseAppData* appData,obj
 }
 void vekAppListView::deleteDockerTab(QString dockPathStr,QString dockNameStr){
         mBox->removeTab(mBox->currentIndex());
-        if(dockPathStr!=NULL&dockNameStr!=NULL){
+        if(dockPathStr!=NULL&&dockNameStr!=NULL){
             QDir dockPath(dockPathStr+dockNameStr);
             if(dockPath.exists()){
                 dockPath.removeRecursively();
