@@ -136,6 +136,8 @@ json objectJson::DataSerialize(json jsonData,const BaseLocalData _baseLocalData)
             }
         }
     }
+    jsonData["Options"]["vekStyle"]=_baseLocalData.vekOptions.vekStyle.toStdString();
+    jsonData["Options"]["vekLang"]=_baseLocalData.vekOptions.vekLang.toStdString();
     return jsonData;
 }
 
@@ -235,7 +237,8 @@ bool objectJson::unDataSerializeLocalData(){
                     g_vekLocalData.dockerVec.insert(pair<QString,BaseDockData>(QString::fromStdString(ax),baseDockData));
                 }
                 //禁止修改
-            }else if(k=="Wine"){
+            }
+            else if(k=="Wine"){
                 BaseWineData _base_wine_data={};
                 for(auto& [x,y]: v.items()){
                     _base_wine_data.IwineName=QString::fromStdString(y.at("IwineName"));
@@ -252,7 +255,8 @@ bool objectJson::unDataSerializeLocalData(){
                     }
                     g_vekLocalData.wineVec.insert(pair<QString,BaseWineData>(_base_wine_data.IwineName,_base_wine_data));
                 }
-            }else if(k=="AppScrSource"){
+            }
+            else if(k=="AppScrSource"){
                 //软件数据反序列化
                 for(auto [b,c] :v.items())
                 {
@@ -281,16 +285,8 @@ bool objectJson::unDataSerializeLocalData(){
                                   appTypeList.insert(pair<QString,std::map<QString,BaseAppJson>>(QString::fromStdString(di),appList));
                                 }
                                 g_vekLocalData.appJsonList.insert(pair<QString,std::map<QString,std::map<QString,BaseAppJson>>>(QString::fromStdString(u),appTypeList));
-                                /*
-                                if(u==b){
-                                    for(auto&[w,o]:i.items()){
-                                        g_vekLocalData.appJsonList[QString::fromStdString(u)].insert(pair<QString,QString>(QString::fromStdString(w),QString::fromStdString(o)));
-                                    }
-                                }
-                                */
                             }
                         }
-                        //continue;
                     }
                 }
             }
@@ -329,6 +325,10 @@ bool objectJson::unDataSerializeLocalData(){
                         }
                     }
                 }
+            }
+            else if(k=="Options"){
+                g_vekLocalData.vekOptions.vekStyle=QString::fromStdString(j3.at("Options").at("vekStyle"));
+                g_vekLocalData.vekOptions.vekLang=QString::fromStdString(j3.at("Options").at("vekLang"));
             }
         }
         return true;

@@ -323,18 +323,10 @@
       <string>主题样式</string>
      </property>
      <addaction name="styleDefault"/>
-     <addaction name="styleDark "/>
+     <addaction name="styleDark"/>
      <addaction name="styleLight"/>
     </widget>
-    <widget class="QMenu" name="menu_6">
-     <property name="title">
-      <string>语言切换</string>
-     </property>
-     <addaction name="langChinese"/>
-     <addaction name="langEnglish"/>
-    </widget>
     <addaction name="menu_5"/>
-    <addaction name="menu_6"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menuWine"/>
@@ -375,9 +367,9 @@
     <string>Default</string>
    </property>
   </action>
-  <action name="styleDark ">
+  <action name="styleDark">
    <property name="text">
-    <string>Dark </string>
+    <string>Dark</string>
    </property>
    <property name="toolTip">
     <string>Dark </string>

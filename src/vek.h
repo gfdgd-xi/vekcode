@@ -33,8 +33,6 @@ private:
     vekSourceEdit* _vek_source_esit=nullptr;
     objectTray* objTray=nullptr;
     void setProcRow(); 
-    QString strStyle=nullptr;
-    QString strLang=nullptr;
 public slots:
     void startTray();
     void exitTray(bool);

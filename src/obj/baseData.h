@@ -5,6 +5,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
+
 typedef struct{
     QString rPath=nullptr;
     QString rKey=nullptr;
@@ -100,15 +101,22 @@ typedef struct{
     bool GeckoState=false;
 }BaseDockData;
 
+typedef struct{
+    QString vekStyle="styleDefault";
+    QString vekLang="langChinese";
+}Options;
+
 typedef struct {
     std::map<QString,BaseDockData> dockerVec={};
     std::map<QString,BaseWineData> wineVec={};
     std::map<QString,QString> appScrSource={};
-    //std::map<QString,std::map<QString,QString>> appJsonList={};
     std::map<QString,std::map<QString,std::map<QString,BaseAppJson>>> appJsonList={};
     std::map<QString,QString> wineSource={};
     std::map<QString,std::map<QString,BaseWineGit>> wineJsonList={};
+    Options vekOptions={};
 }BaseLocalData;
+
+
 typedef enum{
     object_winecfg,
     object_regedit,
