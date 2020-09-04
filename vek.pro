@@ -1,14 +1,15 @@
 QT += widgets
+QT -= network
 #QT += concurrent
+
 CONFIG += c++17
 CONFIG += static
 CONFIG += release
-QMAKE_CXXFLAGS += -Wno-unused-parameter
-QMAKE_CXXFLAGS += -Wno-unused-variable
-QMAKE_CXXFLAGS += -Wno-unused-value
-QMAKE_CXXFLAGS += -Wmissing-field-initializers
-QMAKE_CXXFLAGS += -Wreturn-type
-QT -= network
+
+QTPLUGIN.platforms = qxcb qminimal qcore
+CONFIG -= import_plugins
+
+unix|win32: LIBS += -lpthread -ldl -lgthread-2.0 -lglib-2.0
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -112,6 +113,8 @@ RC_ICONS = res\img\vek.ico
 
 DISTFILES += \
     vek_us_EN.ts
+#QMAKE_PRL_LIBS = -L$$PWD/../Qt5.14.2/5.14.2/mingw73_64-static/lib/ -lpthread -lm -lz -licui18n -licuuc -licudata -ldl libqtpcre2.a -lgthread-2.0 -lglib-2.0
+#LIBS +=  -lm -licui18n -licuuc -licudata -lqtpcre2 -ldl -lgthread-2.0 -lglib-2.0 -lpthread
 ######curl##########
 DEFINES += CURL_STATICLIB
 LIBS += -L$$PWD/3rdparty/curl/lib/ -lcurl -lssl -lcrypto -lz
@@ -127,10 +130,11 @@ LIBS+= $$PWD/3rdparty/curl/lib/libz.a
 INCLUDEPATH += $$PWD/3rdparty/json
 DEPENDPATH += $$PWD/3rdparty/json
 ##########libgit2#########
-unix:!macx: LIBS += -L$$PWD/3rdparty/libgit2/lib/ -lgit2 -lpcre -lssl -lcrypto  -lz
+unix:!macx: LIBS += -L$$PWD/3rdparty/libgit2/lib/ -lgit2 -lpcre -lssl -lcrypto -lz
 INCLUDEPATH += $$PWD/3rdparty/libgit2/include
 DEPENDPATH += $$PWD/3rdparty/libgit2/include
 unix:!macx: PRE_TARGETDEPS += $$PWD/3rdparty/libgit2/lib/libgit2.a
 unix:!macx: PRE_TARGETDEPS += $$PWD/3rdparty/libgit2/lib/libcrypto.a
 unix:!macx: PRE_TARGETDEPS += $$PWD/3rdparty/libgit2/lib/libssl.a
+
 
