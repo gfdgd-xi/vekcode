@@ -131,6 +131,8 @@ void vekExtendDebug::ExtendApp(){
     m_cmd->setWorkingDirectory(appData.WorkPath);
     m_cmd->start("bash");
     connect(m_cmd,SIGNAL(readyReadStandardOutput()),this,SLOT(onReadyRead()));
+    QString codez=dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion+" "+"winecfg /v "+appData.DockSysVersion;
+    m_cmd->write(codez.toLocal8Bit()+'\n');
     QString codes=codeDebug+" "+dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion+" "+codeArgs.join(" ");
     m_cmd->write(codes.toLocal8Bit()+'\n');
     qDebug()<<"|++++++++++++++++++++++++++++|";
