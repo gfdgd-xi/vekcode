@@ -490,7 +490,7 @@
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
              </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="1,10,1,10,1,10,1,10">
+             <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="1,10,1,10,1,10">
               <property name="spacing">
                <number>3</number>
               </property>
@@ -524,16 +524,6 @@
               </item>
               <item>
                <widget class="QComboBox" name="comboBox_dockSystemVersion"/>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_13">
-                <property name="text">
-                 <string>运行APP系统:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QComboBox" name="comboBox_RunAppSys"/>
               </item>
               <item>
                <widget class="QLabel" name="label_11">
@@ -600,7 +590,6 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;关联性对应说明：&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;容器系统版本为32位(win32):&amp;quot;容器系统&amp;quot;和&amp;quot;运行APP系统&amp;quot;可为xp win10 win8 win7          执行wine:仅wine&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;容器系统版本为64位(win64):&amp;quot;容器系统&amp;quot;和&amp;quot;运行APP系统&amp;quot;可为xp64 win10 win8 win7     执行wine:wine or wine64&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;容器高级参数不建议修改&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                </widget>

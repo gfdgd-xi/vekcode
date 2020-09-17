@@ -51,9 +51,6 @@ void vekAppAddMT::vekAppAddConnectObject(BaseDockData* _data,QString _appCID,obj
     for(auto&y:_dockSystemVersion){
         ui->comboBox_dockSystemVersion->addItem(y);
     }
-    for(auto&d:_dockSystemVersion){
-        ui->comboBox_RunAppSys->addItem(d);
-    }
     for(auto n:_dockVer){
         ui->comboBox_dockbit->addItem(n);
     }
@@ -71,13 +68,12 @@ void vekAppAddMT::vekAppAddConnectObject(BaseDockData* _data,QString _appCID,obj
     ui->pushButton_setIco->setIcon(QIcon(tempAppData->AppIco));
     ui->lineEdit_RunDockPath->setText(tempDockData->DockerPath);
     ui->comboBox_DockName->setCurrentText(tempDockData->DockerName);
-    ui->comboBox_RunWine->setCurrentText(tempDockData->WineVersion);
-    ui->comboBox_dockSystemVersion->setCurrentText(tempDockData->DockerSystemVersion);
-    ui->comboBox_RunAppSys->setCurrentText(tempAppData->DockSysVersion);
+    ui->comboBox_RunWine->setCurrentText(tempDockData->WineVersion);  
     ui->checkBox_Mono->setChecked(tempDockData->MonoState);
     ui->checkBox_Gecko->setChecked(tempDockData->GeckoState);
     ui->comboBox_dockbit->setCurrentText(tempDockData->DockerVer);
     ui->comboBox_winebit->setCurrentText(tempDockData->DockerWineVersion);
+    ui->comboBox_dockSystemVersion->setCurrentText(tempAppData->DockSysVersion);
     ui->checkBox_Ass->setChecked(tempAppData->DisableAss);
     ui->lineEdit_AppName->setText(tempAppData->AppName);
     ui->lineEdit_AppInstallExe->setText(tempAppData->AppExe);
@@ -98,6 +94,7 @@ void vekAppAddMT::vekAppAddConnectObject(BaseDockData* _data,QString _appCID,obj
         if(tempDockData->DockerPath!=nullptr){
             ui->comboBox_dockbit->setEnabled(false);
             ui->comboBox_DockName->setEnabled(false);
+            ui->comboBox_dockSystemVersion->setEnabled(false);
         }
     }
     dxvkOptionLoad();
@@ -146,7 +143,6 @@ void vekAppAddMT::dxvkOptionLinkState(bool cState){
     ui->lineEdit_dxvkConfigFIle->setEnabled(cState);
     ui->textEdit_dxvkConfigFileData->setEnabled(cState);
     ui->pushButton_SaveDxvkConfFile->setEnabled(cState);
-
 }
 void vekAppAddMT::dxvkOptionLoad(){
     dxvkOptionLinkState(false);
@@ -343,7 +339,7 @@ bool vekAppAddMT::vekAppConfigObj(){
         tempAppData->AppIco=":/res/img/vek.ico";
     }
     //dxvk参数
-    tempAppData->DockSysVersion=ui->comboBox_RunAppSys->currentText();
+    tempAppData->DockSysVersion=ui->comboBox_dockSystemVersion->currentText();
     tempAppData->MainPrcoName=ui->lineEdit_MainProcName->text();
     tempAppData->DxvkState=ui->checkBox_stateDxvk->checkState();
     tempAppData->DxvkVerson=ui->comboBox_dxvkversion->currentText();
@@ -554,6 +550,7 @@ void vekAppAddMT::objectButton(){
             if(vekMesg("是否解锁初始化功能限制请谨慎操作?")){
                 ui->comboBox_dockbit->setEnabled(true);
                 ui->comboBox_DockName->setEnabled(true);
+                ui->comboBox_dockSystemVersion->setEnabled(true);
             }
         }
     }
