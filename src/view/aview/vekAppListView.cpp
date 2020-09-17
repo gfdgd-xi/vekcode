@@ -197,29 +197,30 @@ void vekAppListView::setUpDelData(BaseDockData dockData,BaseAppData* appData,obj
         QString dockPathStr=dockData.DockerPath+"/";
         QString dockNameStr=dockData.DockerName;
         objectJson _objectJson;
+        bool dState=false;
         if(objTypeView==object_delApp){
             if(m_pModel->rowCount()<=1){
-                if(vekMesg("提示:这是"+dockNameStr+"最后一个程序,若是执意删除则Vek将删除"+dockNameStr+"容器")){
-                    deleteDockerTab(dockPathStr,dockNameStr);
-                    _objectJson.deleteDockerNodeData(dockData.DockerName);
-                }else{
-                    return;
-                }
+                 dState=vekMesg("提示:这是"+dockNameStr+"最后一个程序,若是执意删除则Vek将删除"+dockNameStr+"容器");
             }
             m_pModel->deleteItem(index);
             _objectJson.deleteAppNodeData(dockData,deleteCID);
+            if(dState){
+                deleteDockerTab(dockPathStr,dockNameStr);
+                _objectJson.deleteDockerNodeData(dockData.DockerName);
+            }
         }
         //修改设置
         if(objTypeView==object_setApp){
-            m_pModel->deleteItem(index);
             QString currentTabText =mBox->tabText(mBox->currentIndex());
+            m_pModel->deleteItem(index);
             //判断设置后的dockName和当前是否相同，该功能是利用设置修改容器名
-            _objectJson.deleteAppNodeData(GetDockerData(currentTabText),appData->AppCID);
-            _objectJson.addAppNodeData(GetDockerData(dockData.DockerName),*appData);
             if(currentTabText==dockData.DockerName){
                 m_pModel->addItem(appData);
+                _objectJson.updateAppNodeData(dockData,*appData);
             }else{
                 //在新的容器中执行
+                _objectJson.deleteAppNodeData(GetDockerData(currentTabText),appData->AppCID);
+                _objectJson.updateAppNodeData(dockData,*appData);
                 auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget();
                 connect(this,SIGNAL(setUpDelDataSignal(BaseDockData*,BaseAppData*)),pObjectVek,SLOT(addAppObject(BaseDockData*,BaseAppData*)));
                 emit setUpDelDataSignal(&dockData,appData);

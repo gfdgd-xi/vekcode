@@ -335,7 +335,7 @@ bool objectAppMT::InitDockObj(bool _forceState){
         outAppIco();
         ExecuteObj(object_dockSysver,object_wineboot_default,object_wineserver_default);
         return true;
-    } catch (nullopt_t) {
+    } catch (nullptr_t) {
         return false;
     }
 }

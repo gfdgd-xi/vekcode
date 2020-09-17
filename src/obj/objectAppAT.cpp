@@ -36,7 +36,7 @@ QString objectAppAT::jsonNetToStr(QString jsonNetUrl){
         delete _vekgetcurl;
         _vekgetcurl=nullptr;
         return jNetData;
-    } catch (nullopt_t) {
+    } catch (nullptr_t) {
         return nullptr;
     }
 }

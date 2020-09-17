@@ -41,8 +41,8 @@ void objectSource::loadAllData(){
     g_vekLocalData.wineJsonList.clear();
     if(!QFile(jsonPath).exists()){
         //默认源数据
-        g_vekLocalData.wineSource.insert(pair<QString,QString>("DefaultWineSrc","https://gitee.com/JackLee02/vekGame/raw/master/wineJsonSource.json"));
-        g_vekLocalData.appScrSource.insert(pair<QString,QString>("DefaultGameSrc","https://gitee.com/JackLee02/vekGame/raw/master/appJsonSource.json"));
+        g_vekLocalData.wineSource["DefaultWineSrc"]="https://gitee.com/JackLee02/vekGame/raw/master/wineJsonSource.json";
+        g_vekLocalData.appScrSource["DefaultGameSrc"]="https://gitee.com/JackLee02/vekGame/raw/master/appJsonSource.json";
         updateSrcDataObject();
     }else{
         if(_objectJson.unDataSerializeLocalData()){

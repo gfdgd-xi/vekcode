@@ -179,13 +179,8 @@ void vekAppPanel::addAppObject(BaseDockData* dcokData,BaseAppData* appData){
     _tempBaseData=appData;
     QString nowTabName=dcokData->DockerName;
     bool tabState=false;
-    std::map<QString,vekAppListView*>::iterator it;
-    for (it=m_pListMap->begin();it != m_pListMap->end();++it)
-    {
-        if(it->first==nowTabName){
-            tabState=true;
-            break;
-        }
+    if(m_pListMap->count(nowTabName)>0){
+        tabState=true;
     }
     if(!tabState){
         addGroupSlot(dcokData);
@@ -226,7 +221,6 @@ void vekAppPanel::addGroupSlot(BaseDockData* dcokData)
         m_pBox->addTab(pListView1,dcokData->DockerName);
         m_pListMap->insert(std::pair<QString,vekAppListView*>(dcokData->DockerName,pListView1));
     }
-    cTab=0;
     upTabIco();
     //要确保每个MyListView钟的m_pListMap都是一致的，不然就会有错了。
     //因为弹出的菜单进行转移的时候需要用到

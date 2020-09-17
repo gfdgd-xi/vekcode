@@ -114,12 +114,8 @@ void vekAppAddMT::initAppAndDockData(BaseDockData* _data,QString _appCID){
     }else{
         *tempDockData=GetDockerData(_data->DockerName);
         if(_appCID!=nullptr){
-            for(auto a:tempDockData->dData){
-                if(a.first==_appCID){
-                    *tempAppData=a.second;
-                    break;
-                }
-            }
+            auto it =tempDockData->dData.find(_appCID);
+            *tempAppData=it->second;
         }
     }
 }
@@ -164,15 +160,9 @@ void vekAppAddMT::dxvkOptionLoad(){
             }
             else
             {
-                for(auto a:g_vekLocalData.wineVec)
-                {
-                    if(a.second.IwineName==ui->comboBox_RunWine->currentText())
-                    {
-                        dxvkPath=a.second.IwinePath+"dxvk/dxvk.conf";
-                        ui->lineEdit_dxvkConfigFIle->setText(dxvkPath);
-                        break;
-                    }
-                }
+                auto it=g_vekLocalData.wineVec.find(ui->comboBox_RunWine->currentText());
+                dxvkPath=it->second.IwinePath+"dxvk/dxvk.conf";
+                ui->lineEdit_dxvkConfigFIle->setText(dxvkPath);
             }
             ui->textEdit_dxvkConfigFileData->setText(getFileStr(dxvkPath));
         }
@@ -338,12 +328,8 @@ bool vekAppAddMT::vekAppConfigObj(){
         tempDockData->DockerName="vekON1";
     }
     tempDockData->WineVersion=ui->comboBox_RunWine->currentText();
-    for(auto &x : g_vekLocalData.wineVec){
-        if(x.first==ui->comboBox_RunWine->currentText()){
-            tempDockData->WinePath=x.second.IwinePath;
-            break;
-        }
-    }
+    auto it=g_vekLocalData.wineVec.find(ui->comboBox_RunWine->currentText());
+    tempDockData->WinePath=it->second.IwinePath;
     tempDockData->DockerSystemVersion=ui->comboBox_dockSystemVersion->currentText();
     tempDockData->DockerVer=ui->comboBox_dockbit->currentText();
     tempDockData->DockerWineVersion=ui->comboBox_winebit->currentText();
@@ -580,8 +566,7 @@ bool vekAppAddMT::vekAppAddObj(bool _forceState){
     objectAppMT* vappAddObj=new objectAppMT(tempAppData,tempDockData);
     if(!vappAddObj->InitDockObj(_forceState)){
         vekError("初始化失败!");
-    }else{
-        AddAppDataToJson(*tempDockData,*tempAppData);
+        return false;
     }
     emit _upData(*tempDockData,tempAppData,objType);
     delete vappAddObj;

@@ -3,8 +3,6 @@
 #include "src/obj/objectSource.h"
 #include "src/obj/objectGetCurl.h"
 #include "src/obj/pObject.h"
-#include <QtPlugin>
-#include <QPluginLoader>
 typedef struct{
     QString version;
     QString urlLogsStr;
