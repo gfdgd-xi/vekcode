@@ -564,6 +564,8 @@ bool vekAppAddMT::vekAppAddObj(bool _forceState){
     if(!vappAddObj->InitDockObj(_forceState)){
         vekError("初始化失败!");
         return false;
+    }else{
+        AddAppDataToJson(*tempDockData,*tempAppData);
     }
     emit _upData(*tempDockData,tempAppData,objType);
     delete vappAddObj;

@@ -1,12 +1,8 @@
 QT += widgets
-CONFIG += release
+#QT += concurrent
 CONFIG += c++17
 CONFIG += static
-
-# The following define makes your compiler emit warnings if you use
-# any Qt feature that has been marked deprecated (the exact warnings
-# depend on your compiler). Please consult the documentation of the
-# deprecated API in order to know how to port your code away from it.
+CONFIG += release
 
 DEFINES += QT_DEPRECATED_WARNINGS
 VERSION = 1.0.1.3
@@ -106,23 +102,20 @@ RC_ICONS = res\img\vek.ico
 
 DISTFILES += \
     vek_us_EN.ts
-
 ######curl##########
 DEFINES += CURL_STATICLIB
 LIBS += -L$$PWD/3rdparty/curl/lib/ -lcurl -lssl -lcrypto -lz
+
 INCLUDEPATH += $$PWD/3rdparty/curl/include
 DEPENDPATH += $$PWD/3rdparty/curl/include
-LIBS+= $$PWD/3rdparty/curl/lib/libcurl.a
-LIBS+= $$PWD/3rdparty/curl/lib/libcrypto.a
-LIBS+= $$PWD/3rdparty/curl/lib/libssl.a
-LIBS+= $$PWD/3rdparty/curl/lib/libz.a
+
 #########rapidjson########
 INCLUDEPATH += $$PWD/3rdparty/json
 DEPENDPATH += $$PWD/3rdparty/json
 ##########libgit2#########
-LIBS += -L$$PWD/3rdparty/libgit2/lib/ -lgit2 -lpcre -lssl -lcrypto -lz
+LIBS += -L$$PWD/3rdparty/libgit2/lib/ -lgit2 -lpcre -lssl -lcrypto
 INCLUDEPATH += $$PWD/3rdparty/libgit2/include
 DEPENDPATH += $$PWD/3rdparty/libgit2/include
--unix:!macx: PRE_TARGETDEPS += $$PWD/3rdparty/libgit2/lib/libgit2.a
--unix:!macx: PRE_TARGETDEPS += $$PWD/3rdparty/libgit2/lib/libcrypto.a
--unix:!macx: PRE_TARGETDEPS += $$PWD/3rdparty/libgit2/lib/libssl.a
+
+
+
