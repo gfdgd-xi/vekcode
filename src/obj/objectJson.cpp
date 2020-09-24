@@ -565,9 +565,7 @@ void objectJson::updateDockerNodeData(BaseDockData dockData,QString dockName){
 //××××××××××××APP信息操作×××××××××××//
 //增加app节点
 void objectJson::addAppNodeData(BaseDockData dockData,BaseAppData appData){
-    if(g_vekLocalData.dockerVec.count(dockData.DockerName)==0){
-       g_vekLocalData.dockerVec[dockData.DockerName]=dockData;
-    }
+    g_vekLocalData.dockerVec[dockData.DockerName]=dockData;
     g_vekLocalData.dockerVec[dockData.DockerName].dData[appData.AppCID]=appData;
     WriteLocalData();
 }
