@@ -5,7 +5,7 @@ CONFIG += static
 CONFIG += release
 
 DEFINES += QT_DEPRECATED_WARNINGS
-VERSION = 1.0.1.3
+VERSION = 1.0.1.4
 DEFINES +=APP_VERSION=\\\"$$VERSION\\\"
 QMAKE_CXXFLAGS_RELEASE += -O3       # Release -O3
 # You can also make your code fail to compile if it uses deprecated APIs.
