@@ -213,19 +213,20 @@ void vekAppListView::setUpDelData(BaseDockData dockData,BaseAppData* appData,obj
         if(objTypeView==object_setApp){
             QString currentTabText =mBox->tabText(mBox->currentIndex());
             m_pModel->deleteItem(index);
+            auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget();
             //判断设置后的dockName和当前是否相同，该功能是利用设置修改容器名
             if(currentTabText==dockData.DockerName){
                 m_pModel->addItem(appData);
                 _objectJson.updateAppNodeData(dockData,*appData);
+                connect(this,SIGNAL(setUpGroupTabIcoSignal()),pObjectVek,SLOT(upTabIco()));
+                emit setUpGroupTabIcoSignal();
             }else{
                 //在新的容器中执行
                 _objectJson.deleteAppNodeData(GetDockerData(currentTabText),appData->AppCID);
-                _objectJson.updateAppNodeData(dockData,*appData);
-                auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget();
+                _objectJson.updateAppNodeData(dockData,*appData);     
                 connect(this,SIGNAL(setUpDelDataSignal(BaseDockData*,BaseAppData*)),pObjectVek,SLOT(addAppObject(BaseDockData*,BaseAppData*)));
                 emit setUpDelDataSignal(&dockData,appData);
-            }
-
+            }  
         }
     }
 }

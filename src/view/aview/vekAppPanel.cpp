@@ -20,7 +20,6 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
     gridLayout->setContentsMargins(0,0,0,0);
     m_pBox->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
     m_pListMap = new std::map<QString,vekAppListView*>();
-    cTab=0;
     std::map<QString,BaseDockData>::iterator it;
     std::map<QString,BaseAppData>::reverse_iterator its;
     for(it=g_vekLocalData.dockerVec.begin();it!=g_vekLocalData.dockerVec.end();it++){
@@ -198,6 +197,7 @@ void vekAppPanel::addAppObject(BaseDockData* dcokData,BaseAppData* appData){
     pList->addItem(_tempBaseData);
 }
 void vekAppPanel::upTabIco(){
+    cTab=0;
     for(auto a:g_vekLocalData.dockerVec){
         if(a.second.DockerVer=="win32"){
             QIcon icon(":/res/img/32.png");
@@ -212,7 +212,6 @@ void vekAppPanel::upTabIco(){
 }
 void vekAppPanel::addGroupSlot(BaseDockData* dcokData)
 {
-    cTab=0;
     if (!dcokData->DockerName.isEmpty())
     {
         vekAppListView *pListView1 = new vekAppListView(this);

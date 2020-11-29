@@ -614,7 +614,7 @@ p, li { white-space: pre-wrap; }
            </rect>
           </property>
           <property name="title">
-           <string>游戏选项-&gt;该功能主要针对特殊情况启动附加指令以达到绕过部分检测或者沙盒的功能</string>
+           <string>软件选项-&gt;该功能主要针对特殊情况启动附加指令以达到绕过部分检测或者沙盒的功能</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,10">
            <item>
@@ -664,7 +664,7 @@ p, li { white-space: pre-wrap; }
            </size>
           </property>
           <property name="title">
-           <string>游戏参数</string>
+           <string>软件参数</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="10,50">
            <property name="spacing">
@@ -720,7 +720,7 @@ p, li { white-space: pre-wrap; }
                   </sizepolicy>
                  </property>
                  <property name="text">
-                  <string>选择运行游戏Win版本:</string>
+                  <string>运行软件Win版本:</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -796,7 +796,7 @@ p, li { white-space: pre-wrap; }
                   </sizepolicy>
                  </property>
                  <property name="text">
-                  <string>设置游戏启动程序</string>
+                  <string>设置软件启动程序</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -842,7 +842,7 @@ p, li { white-space: pre-wrap; }
                   </sizepolicy>
                  </property>
                  <property name="text">
-                  <string>设置游戏工作目录:</string>
+                  <string>设置软件工作目录:</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

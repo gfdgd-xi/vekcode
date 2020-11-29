@@ -34,6 +34,7 @@ signals:
         void toObjectArgs_cl(BaseAppData);
         void _startTray();
         void setUpDelDataSignal(BaseDockData*,BaseAppData*);
+        void setUpGroupTabIcoSignal();
 private:
         vekAppAddMT *_vek_App_Add=nullptr;
         vekExtendDebug* _vExtendDebug=nullptr;

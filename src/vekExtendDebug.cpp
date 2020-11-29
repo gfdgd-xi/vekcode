@@ -154,8 +154,6 @@ void vekExtendDebug::exitDebug(){
         delete m_cmd;
         m_cmd=nullptr;
     }
-    delete _objectExtend;
-    _objectExtend=nullptr;
 }
 void vekExtendDebug::upDllStr(){
     ui->lineEdit_DebugDllStr->setText(DebugDllStr.join(""));

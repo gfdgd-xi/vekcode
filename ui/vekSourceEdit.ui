@@ -69,7 +69,7 @@
        <item>
         <widget class="QGroupBox" name="verticalGroupBox_2">
          <property name="title">
-          <string>游戏源</string>
+          <string>软件源</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <property name="leftMargin">

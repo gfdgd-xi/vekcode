@@ -25,15 +25,15 @@ SOURCES += \
     src/obj/objectSource.cpp \
     src/obj/objectTray.cpp \
     src/obj/pObject.cpp \
-  src/vek.cpp \
-  src/vekAbout.cpp \
-  src/vekAppAddAT.cpp \
-  src/vekAppAddMT.cpp \
-  src/vekAppAddMulti.cpp \
-  src/vekExportJson.cpp \
-  src/vekSourceEdit.cpp \
-  src/vekExtendDebug.cpp \
-  src/vekWineOption.cpp \
+    src/vek.cpp \
+    src/vekAbout.cpp \
+    src/vekAppAddAT.cpp \
+    src/vekAppAddMT.cpp \
+    src/vekAppAddMulti.cpp \
+    src/vekExportJson.cpp \
+    src/vekSourceEdit.cpp \
+    src/vekExtendDebug.cpp \
+    src/vekWineOption.cpp \
     src/view/aview/vekAppData.cpp \
     src/view/aview/vekAppListView.cpp \
     src/view/aview/vekAppPanel.cpp \
