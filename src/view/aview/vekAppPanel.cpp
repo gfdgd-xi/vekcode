@@ -125,6 +125,10 @@ void vekAppPanel::objAppInstall(){
             return;
         }
     }
+    //增加一个对64位安装程序的运行支持，需要自动初始化一个基本64位容器用来运行软件64位安装包。默认为32位。
+    //对系统版本执行文件无要求wine也可以执行wine64的功能，当然区别设置wine64更好。
+    //对于系统版本需要区分。
+    //特别注意需要留意对deepinwine5的区分。因为暂时deepinwine5不支持64位容器，所以禁止使用deepinwine5来初始化64位容器
     BaseDockData baseDockerData;
     BaseAppData  baseAppData;
     objectAppMT* objNewDock=new objectAppMT(&baseAppData,&baseDockerData);
@@ -136,6 +140,10 @@ void vekAppPanel::objAppInstall(){
         dState=true;
     }
     if(dState){
+        dState=vekMesg("确认安装程序类型!Yes->32位,NO->64位");
+        if(!dState){
+            baseDockerData.DockerVer="win64";
+        }
         baseDockerData.WinePath=g_vekLocalData.wineVec.begin()->second.IwinePath;
         baseDockerData.DockerPath=QDir::currentPath()+"/vekDock";
         baseDockerData.DockerName=dockName;
