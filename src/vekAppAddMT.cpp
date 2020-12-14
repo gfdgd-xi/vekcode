@@ -567,7 +567,9 @@ bool vekAppAddMT::vekAppAddObj(bool _forceState){
     }else{
         AddAppDataToJson(*tempDockData,*tempAppData);
     }
-    emit _upData(*tempDockData,tempAppData,objType);
+    if(objType==object_setApp){
+        emit _upData(*tempDockData,tempAppData,objType);
+    }
     delete vappAddObj;
     vappAddObj=nullptr;
     return true;

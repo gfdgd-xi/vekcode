@@ -5,7 +5,7 @@ CONFIG += static
 CONFIG += release
 
 DEFINES += QT_DEPRECATED_WARNINGS
-VERSION = 1.0.1.4
+VERSION = 1.0.1.5
 DEFINES +=APP_VERSION=\\\"$$VERSION\\\"
 QMAKE_CXXFLAGS_RELEASE += -O3       # Release -O3
 # You can also make your code fail to compile if it uses deprecated APIs.
@@ -116,6 +116,3 @@ DEPENDPATH += $$PWD/3rdparty/json
 LIBS += -L$$PWD/3rdparty/libgit2/lib/ -lgit2 -lpcre -lssl -lcrypto
 INCLUDEPATH += $$PWD/3rdparty/libgit2/include
 DEPENDPATH += $$PWD/3rdparty/libgit2/include
-
-
-
