@@ -105,7 +105,7 @@ void vekAppAddMT::vekAppAddConnectObject(BaseDockData* _data,QString _appCID,obj
 }
 void vekAppAddMT::initAppAndDockData(BaseDockData* _data,QString _appCID){
     //_data nullptr =add
-    if(_data==nullptr){
+    if(_data->DockerPath==nullptr){
         tempDockData=new BaseDockData;
         tempDockData->DockerPath=QDir::currentPath()+"/vekDock";
     }else{

@@ -90,10 +90,14 @@ void vekAppAddAT::addAutoApp(){
     }
     BaseAppData* autoAppData=new BaseAppData;
     BaseDockData* autoDockData=new BaseDockData;
-    autoDockData->DockerName=ui->comboBox_DockName->currentText();
-    autoDockData->DockerPath=ui->lineEdit_DockPath->text();
-    autoDockData->WineVersion=ui->comboBox_WinVersion->currentText();
-
+    BaseDockData btmp=GetDockerData(ui->comboBox_DockName->currentText());
+    if(btmp.DockerPath==nullptr){
+        autoDockData->DockerName=ui->comboBox_DockName->currentText();
+        autoDockData->DockerPath=ui->lineEdit_DockPath->text();
+        autoDockData->WineVersion=ui->comboBox_WinVersion->currentText();
+    }else{
+        *autoDockData=btmp;
+    }
     BaseAppJson pAppJsonData=ui->comboBox_JsonUrl->oData;
     if(pAppJsonData.appName==nullptr){
         pAppJsonData.appJson=ui->comboBox_JsonUrl->currentText();
