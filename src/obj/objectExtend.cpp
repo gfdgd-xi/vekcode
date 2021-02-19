@@ -79,7 +79,7 @@ void objectExtend::executeWineBoot(objectWineBoot objWineBootType){
         break;
     default:
         return;
-        break;
+        //break;
     }
     m_cmd->start(wineboot.join(""),QIODevice::ReadWrite);
     qDebug()<<"wineboot:"<<wineboot.join("");
@@ -105,7 +105,7 @@ void objectExtend::executeWineServer(objectWineServer objWineServer){
         break;
     default:
         return;
-        break;
+        //break;
     }
     m_cmd->start(wineserver.join(""),QIODevice::ReadWrite);
     qDebug()<<"wineServer:"<<wineserver.join("");

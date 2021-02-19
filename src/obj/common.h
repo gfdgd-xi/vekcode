@@ -7,6 +7,7 @@
 #ifdef __unix
 #define fopen_s(pFile,filename,mode) ((*(pFile))=fopen((filename),  (mode)))==NULL
 #endif
+#include <iostream>
 using namespace std;
 //#################QT head###############//
 #include <QPushButton>
