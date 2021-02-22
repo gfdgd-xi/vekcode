@@ -13,8 +13,10 @@ class vekAbout : public QDialog
 public:
     explicit vekAbout(QWidget *parent = nullptr);
     ~vekAbout();
+    void GetVerInfo();
 private:
     Ui::vekAbout *ui;
+    QString vekLogShow="https://gitee.com/JackLee02/vekGame/raw/master/vekLogShow.txt";
 signals:
      void _unVekAbout();
 };

@@ -14,7 +14,7 @@ EQ            = =
 
 CC            = clang
 CXX           = clang++
-DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_NO_WARNING_OUTPUT -DQT_NO_DEBUG_OUTPUT -DAPP_VERSION=\"1.0.1.5\" -DCURL_STATICLIB -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_NO_WARNING_OUTPUT -DQT_NO_DEBUG_OUTPUT -DAPP_VERSION=\"1.0.1.6\" -DCURL_STATICLIB -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -Wextra -ffunction-sections -fdata-sections -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -O2 -O3 -std=gnu++1z -Wall -Wextra -ffunction-sections -fdata-sections -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I../../vekcode -I. -I../3rdparty/curl/include -I../3rdparty/json -I../3rdparty/libgit2/include -I../../QT/mingw73_64-static/include -I../../QT/mingw73_64-static/include/QtWidgets -I../../QT/mingw73_64-static/include/QtGui -I../../QT/mingw73_64-static/include/QtCore -I. -I. -I../../QT/mingw73_64-static/mkspecs/linux-clang
@@ -36,8 +36,8 @@ DEL_DIR       = rmdir
 MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
-DISTNAME      = vek1.0.1.5
-DISTDIR = /home/jacklee/vekcode/build/.tmp/vek1.0.1.5
+DISTNAME      = vek1.0.1.6
+DISTDIR = /home/jacklee/vekcode/build/.tmp/vek1.0.1.6
 LINK          = clang++
 LFLAGS        = -ccc-gcc-name g++ -Wl,--gc-sections
 LIBS          = $(SUBLIBS) -L/home/jacklee/vekcode/3rdparty/curl/lib/ -lcurl -L/home/jacklee/vekcode/3rdparty/libgit2/lib/ -lgit2 -lpcre -lssl -lcrypto /home/jacklee/QT/mingw73_64-static/plugins/platforms/libqxcb.a /home/jacklee/QT/mingw73_64-static/lib/libQt5XcbQpa.a /home/jacklee/QT/mingw73_64-static/lib/libQt5ServiceSupport.a /home/jacklee/QT/mingw73_64-static/lib/libQt5ThemeSupport.a /home/jacklee/QT/mingw73_64-static/lib/libQt5FontDatabaseSupport.a -lfontconfig -lfreetype /home/jacklee/QT/mingw73_64-static/lib/libQt5XkbCommonSupport.a /home/jacklee/QT/mingw73_64-static/lib/libQt5EdidSupport.a /home/jacklee/QT/mingw73_64-static/lib/libQt5DBus.a -lX11-xcb -lxcb -lXext -lX11 /home/jacklee/QT/mingw73_64-static/lib/libxcb-static.a -lxkbcommon-x11 -lxkbcommon /home/jacklee/QT/mingw73_64-static/plugins/imageformats/libqgif.a /home/jacklee/QT/mingw73_64-static/plugins/imageformats/libqico.a /home/jacklee/QT/mingw73_64-static/plugins/imageformats/libqjpeg.a /home/jacklee/QT/mingw73_64-static/lib/libQt5Widgets.a /home/jacklee/QT/mingw73_64-static/lib/libQt5Gui.a /home/jacklee/QT/mingw73_64-static/lib/libqtlibpng.a /home/jacklee/QT/mingw73_64-static/lib/libqtharfbuzz.a /home/jacklee/QT/mingw73_64-static/lib/libQt5Core.a -lm -lz -licui18n -licuuc -licudata -ldl /home/jacklee/QT/mingw73_64-static/lib/libqtpcre2.a -lgthread-2.0 -lglib-2.0 -lpthread   

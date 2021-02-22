@@ -7,7 +7,7 @@ CONFIG += release
 DEFINES += QT_DEPRECATED_WARNINGS\
            QT_NO_WARNING_OUTPUT\
            QT_NO_DEBUG_OUTPUT
-VERSION = 1.0.1.5
+VERSION = 1.0.1.6
 DEFINES +=APP_VERSION=\\\"$$VERSION\\\"
 QMAKE_CXXFLAGS_RELEASE += -O3       # Release -O3
 # You can also make your code fail to compile if it uses deprecated APIs.
