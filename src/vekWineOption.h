@@ -25,7 +25,7 @@ private:
     Ui::vekWineOption *ui;
     objectGitWine *githread;
     void InitWineInstall();
-    void GetWineGitInfo();   
+    void GetWineGitInfo();
     void WineVersionComoboBox();
     void controlState(bool pState);
 signals:

@@ -16,7 +16,7 @@ public:
     void GetVerInfo();
 private:
     Ui::vekAbout *ui;
-    QString vekLogShow="https://gitee.com/JackLee02/vekGame/raw/master/vekLogShow.txt";
+    QString vekLogShow="https://gitee.com/JackLee02/vekGame/raw/master/vekLogShow.json";
 signals:
      void _unVekAbout();
 };

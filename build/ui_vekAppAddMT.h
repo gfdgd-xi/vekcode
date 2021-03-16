@@ -58,14 +58,13 @@ public:
     QCheckBox *checkBox_Gecko;
     QCheckBox *checkBox_Mono;
     QCheckBox *checkBox_Ass;
-    QWidget *layoutWidget_2;
+    QWidget *horizontalLayoutWidget_2;
+    QVBoxLayout *verticalLayout;
+    QLabel *label_TipsText;
     QHBoxLayout *horizontalLayout_13;
     QSpacerItem *horizontalSpacer_5;
     QPushButton *pushButton_Set;
     QSpacerItem *horizontalSpacer_6;
-    QWidget *horizontalLayoutWidget_2;
-    QHBoxLayout *horizontalLayout_14;
-    QLabel *label_TipsText;
     QGroupBox *verticalGroupBox_4;
     QVBoxLayout *verticalLayout_9;
     QFrame *frame_2;
@@ -318,18 +317,26 @@ public:
 
         verticalLayout_5->addWidget(horizontalFrame_2);
 
-        layoutWidget_2 = new QWidget(tab);
-        layoutWidget_2->setObjectName(QString::fromUtf8("layoutWidget_2"));
-        layoutWidget_2->setGeometry(QRect(0, 431, 792, 38));
-        horizontalLayout_13 = new QHBoxLayout(layoutWidget_2);
+        horizontalLayoutWidget_2 = new QWidget(tab);
+        horizontalLayoutWidget_2->setObjectName(QString::fromUtf8("horizontalLayoutWidget_2"));
+        horizontalLayoutWidget_2->setGeometry(QRect(0, 400, 791, 54));
+        verticalLayout = new QVBoxLayout(horizontalLayoutWidget_2);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setContentsMargins(0, 0, 0, 0);
+        label_TipsText = new QLabel(horizontalLayoutWidget_2);
+        label_TipsText->setObjectName(QString::fromUtf8("label_TipsText"));
+        label_TipsText->setAlignment(Qt::AlignCenter);
+
+        verticalLayout->addWidget(label_TipsText);
+
+        horizontalLayout_13 = new QHBoxLayout();
         horizontalLayout_13->setSpacing(3);
         horizontalLayout_13->setObjectName(QString::fromUtf8("horizontalLayout_13"));
-        horizontalLayout_13->setContentsMargins(0, 0, 0, 0);
         horizontalSpacer_5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout_13->addItem(horizontalSpacer_5);
 
-        pushButton_Set = new QPushButton(layoutWidget_2);
+        pushButton_Set = new QPushButton(horizontalLayoutWidget_2);
         pushButton_Set->setObjectName(QString::fromUtf8("pushButton_Set"));
         sizePolicy1.setHeightForWidth(pushButton_Set->sizePolicy().hasHeightForWidth());
         pushButton_Set->setSizePolicy(sizePolicy1);
@@ -340,17 +347,8 @@ public:
 
         horizontalLayout_13->addItem(horizontalSpacer_6);
 
-        horizontalLayoutWidget_2 = new QWidget(tab);
-        horizontalLayoutWidget_2->setObjectName(QString::fromUtf8("horizontalLayoutWidget_2"));
-        horizontalLayoutWidget_2->setGeometry(QRect(0, 400, 791, 31));
-        horizontalLayout_14 = new QHBoxLayout(horizontalLayoutWidget_2);
-        horizontalLayout_14->setObjectName(QString::fromUtf8("horizontalLayout_14"));
-        horizontalLayout_14->setContentsMargins(0, 0, 0, 0);
-        label_TipsText = new QLabel(horizontalLayoutWidget_2);
-        label_TipsText->setObjectName(QString::fromUtf8("label_TipsText"));
-        label_TipsText->setAlignment(Qt::AlignCenter);
 
-        horizontalLayout_14->addWidget(label_TipsText);
+        verticalLayout->addLayout(horizontalLayout_13);
 
         verticalGroupBox_4 = new QGroupBox(tab);
         verticalGroupBox_4->setObjectName(QString::fromUtf8("verticalGroupBox_4"));
@@ -767,8 +765,8 @@ public:
         checkBox_Gecko->setText(QCoreApplication::translate("vekAppAddMT", "Gecko\347\273\204\344\273\266", nullptr));
         checkBox_Mono->setText(QCoreApplication::translate("vekAppAddMT", "Mono\347\273\204\344\273\266", nullptr));
         checkBox_Ass->setText(QCoreApplication::translate("vekAppAddMT", "\347\246\201\347\224\250\346\226\207\344\273\266\345\205\263\350\201\224", nullptr));
-        pushButton_Set->setText(QCoreApplication::translate("vekAppAddMT", "\344\277\235\345\255\230", nullptr));
         label_TipsText->setText(QString());
+        pushButton_Set->setText(QCoreApplication::translate("vekAppAddMT", "\344\277\235\345\255\230", nullptr));
         verticalGroupBox_4->setTitle(QCoreApplication::translate("vekAppAddMT", "\345\256\271\345\231\250\351\253\230\347\272\247\345\217\202\346\225\260->\350\255\246\345\221\212:\346\227\240\347\211\271\346\256\212\351\234\200\346\261\202\350\257\267\345\213\277\344\277\256\346\224\271,\345\234\250\346\234\252\345\256\214\345\205\250\347\220\206\350\247\243\350\257\245\351\200\211\351\241\271\346\227\266\350\257\267\345\213\277\344\277\256\346\224\271", nullptr));
         label_9->setText(QCoreApplication::translate("vekAppAddMT", "\345\256\271\345\231\250\347\263\273\347\273\237:", nullptr));
         label_11->setText(QCoreApplication::translate("vekAppAddMT", "\345\256\271\345\231\250\347\263\273\347\273\237\347\211\210\346\234\254:", nullptr));
@@ -776,20 +774,20 @@ public:
         textEdit->setHtml(QCoreApplication::translate("vekAppAddMT", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Microsoft JhengHei UI'; font-size:10.5pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt;\">\345\256\271\345\231\250\347\263\273\347\273\237:\344\270\273\350\246\201\347\224\250\344\272\216\350\264\237\350\264\243\350\256\276\347\275\256\345\256\271\345\231\250\347\232\204\347\263\273\347\273\237\347\211\210\346\234\254,\345\275\261\345\223\215\345\210\260\351\203\250\345\210\206\350\277\220\350\241\214\345\272\223\345\256\211\350\243\205</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt;\">\350"
-                        "\277\220\350\241\214APP\347\263\273\347\273\237:APP\351\200\202\351\205\215\350\277\220\350\241\214\346\227\266\345\200\231\347\232\204\345\256\271\345\231\250\347\211\210\346\234\254\357\274\214\346\257\217\344\270\200\344\270\252APP\345\217\257\350\203\275\345\255\230\345\234\250\350\277\220\350\241\214\347\263\273\347\273\237\347\211\210\346\234\254\347\232\204\345\267\256\345\274\202\357\274\214\350\257\245\345\217\202\346\225\260\344\270\272\345\215\225\344\270\252APP\347\213\254\346\234\211\347\232\204\357\274\214\344\270\215\344\274\232\350\267\237\347\235\200\345\256\271\345\231\250\347\263\273\347\273\237\346\224\271\345\217\230\350\200\214\346\224\271\345\217\230</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt;\">\345\256\271\345\231\250\347\263\273\347\273\237\347\211\210\346\234\254:\344\270\273\350\246\201\346\230\257\347\224\250\344\272\216\345\210\244\346\226\255\345\222\214\350\256"
-                        "\276\347\275\256\344\275\240\347\232\204\345\256\271\345\231\250\346\230\25732\344\275\215\350\277\230\346\230\25764\344\275\215</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt;\">wine\346\211\247\350\241\214\347\211\210\346\234\254:\344\270\273\350\246\201\346\230\257\347\224\250\346\235\245\350\256\276\347\275\256\344\275\240\350\277\220\350\241\214APP\347\232\204\346\211\200\347\224\250\347\232\204wine\347\232\204\346\211\247\350\241\214\346\226\207\344\273\266\357\274\214\350\277\231\351\207\214\345\210\206\344\270\272wine\345\222\214wine64</span></p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:9pt;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt;\">\345\205\263\350"
-                        "\201\224\346\200\247\345\257\271\345\272\224\350\257\264\346\230\216\357\274\232</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt;\">\345\256\271\345\231\250\347\263\273\347\273\237\347\211\210\346\234\254\344\270\27232\344\275\215(win32):&quot;\345\256\271\345\231\250\347\263\273\347\273\237&quot;\345\222\214&quot;\350\277\220\350\241\214APP\347\263\273\347\273\237&quot;\345\217\257\344\270\272xp win10 win8 win7          \346\211\247\350\241\214wine:\344\273\205wine</span></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt;\">\345\256\271\345\231\250\347\263\273\347\273\237\347\211\210\346\234\254\344\270\27264\344\275\215(win64):&quot;\345\256\271\345\231\250\347\263\273\347\273\237&quot;\345\222\214&quot;\350\277\220\350\241\214APP\347\263\273\347\273\237&quot;\345\217\257\344\270\272xp64"
-                        " win10 win8 win7     \346\211\247\350\241\214wine:wine or wine64</span></p>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:20pt;\">\345\256\271\345\231\250\351\253\230\347\272\247\345\217\202\346\225\260\344\270\215\345\273\272\350\256\256\344\277\256\346\224\271</span></p></body></html>", nullptr));
+"</style></head><body style=\" font-family:'Microsoft JhengHei UI'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\345\256\271\345\231\250\347\263\273\347\273\237:\344\270\273\350\246\201\347\224\250\344\272\216\350\264\237\350\264\243\350\256\276\347\275\256\345\256\271\345\231\250\347\232\204\347\263\273\347\273\237\347\211\210\346\234\254,\345\275\261\345\223\215\345\210\260\351\203\250\345\210\206\350\277\220\350\241\214\345\272\223\345\256\211\350\243\205</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\350\277\220\350\241\214APP\347\263\273\347\273\237:APP\351\200\202\351\205\215"
+                        "\350\277\220\350\241\214\346\227\266\345\200\231\347\232\204\345\256\271\345\231\250\347\211\210\346\234\254\357\274\214\346\257\217\344\270\200\344\270\252APP\345\217\257\350\203\275\345\255\230\345\234\250\350\277\220\350\241\214\347\263\273\347\273\237\347\211\210\346\234\254\347\232\204\345\267\256\345\274\202\357\274\214\350\257\245\345\217\202\346\225\260\344\270\272\345\215\225\344\270\252APP\347\213\254\346\234\211\347\232\204\357\274\214\344\270\215\344\274\232\350\267\237\347\235\200\345\256\271\345\231\250\347\263\273\347\273\237\346\224\271\345\217\230\350\200\214\346\224\271\345\217\230</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\345\256\271\345\231\250\347\263\273\347\273\237\347\211\210\346\234\254:\344\270\273\350\246\201\346\230\257\347\224\250\344\272\216\345\210\244\346\226\255\345\222\214\350\256\276\347\275\256\344\275\240\347\232\204\345\256\271\345\231\250\346\230\25732\344\275\215\350\277\230\346\230\257"
+                        "64\344\275\215</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">wine\346\211\247\350\241\214\347\211\210\346\234\254:\344\270\273\350\246\201\346\230\257\347\224\250\346\235\245\350\256\276\347\275\256\344\275\240\350\277\220\350\241\214APP\347\232\204\346\211\200\347\224\250\347\232\204wine\347\232\204\346\211\247\350\241\214\346\226\207\344\273\266\357\274\214\350\277\231\351\207\214\345\210\206\344\270\272wine\345\222\214wine64</p>\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\345\205\263\350\201\224\346\200\247\345\257\271\345\272\224\350\257\264\346\230\216\357\274\232</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0"
+                        "px;\">\345\256\271\345\231\250\347\263\273\347\273\237\347\211\210\346\234\254\344\270\27232\344\275\215(win32):&quot;\345\256\271\345\231\250\347\263\273\347\273\237&quot;\345\222\214&quot;\350\277\220\350\241\214APP\347\263\273\347\273\237&quot;\345\217\257\344\270\272xp win10 win8 win7          \346\211\247\350\241\214wine:\344\273\205wine</p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">\345\256\271\345\231\250\347\263\273\347\273\237\347\211\210\346\234\254\344\270\27264\344\275\215(win64):&quot;\345\256\271\345\231\250\347\263\273\347\273\237&quot;\345\222\214&quot;\350\277\220\350\241\214APP\347\263\273\347\273\237&quot;\345\217\257\344\270\272xp64 win10 win8 win7     \346\211\247\350\241\214wine:wine or wine64</p>\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:20pt;\">\345\256\271\345\231\250\351\253\230\347"
+                        "\272\247\345\217\202\346\225\260\344\270\215\345\273\272\350\256\256\344\277\256\346\224\271</span></p></body></html>", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab), QCoreApplication::translate("vekAppAddMT", "\345\256\271\345\231\250\345\217\202\346\225\260", nullptr));
         groupBox_4->setTitle(QCoreApplication::translate("vekAppAddMT", "\350\275\257\344\273\266\351\200\211\351\241\271->\350\257\245\345\212\237\350\203\275\344\270\273\350\246\201\351\222\210\345\257\271\347\211\271\346\256\212\346\203\205\345\206\265\345\220\257\345\212\250\351\231\204\345\212\240\346\214\207\344\273\244\344\273\245\350\276\276\345\210\260\347\273\225\350\277\207\351\203\250\345\210\206\346\243\200\346\265\213\346\210\226\350\200\205\346\262\231\347\233\222\347\232\204\345\212\237\350\203\275", nullptr));
         label_6->setText(QCoreApplication::translate("vekAppAddMT", "\346\211\247\350\241\214\351\231\204\345\212\240\345\221\275\344\273\244:", nullptr));

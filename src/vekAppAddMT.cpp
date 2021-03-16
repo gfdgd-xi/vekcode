@@ -150,14 +150,14 @@ void vekAppAddMT::dxvkOptionLoad(){
         dxvkOptionLinkState(true);
         if(ui->checkBox_dxvkConfigState->checkState()){
             QString dxvkPath;
-            if(ui->lineEdit_dxvkConfigFIle->text()!=NULL)
+            if(ui->lineEdit_dxvkConfigFIle->text()!=nullptr)
             {
                 dxvkPath=ui->lineEdit_dxvkConfigFIle->text();
             }
             else
             {
                 auto it=g_vekLocalData.wineVec.find(ui->comboBox_RunWine->currentText());
-                dxvkPath=it->second.IwinePath+"dxvk/dxvk.conf";
+                dxvkPath=it->second.IwinePath+"/dxvk/dxvk.conf";
                 ui->lineEdit_dxvkConfigFIle->setText(dxvkPath);
             }
             ui->textEdit_dxvkConfigFileData->setText(getFileStr(dxvkPath));

@@ -58,7 +58,7 @@ void vekWineOption::WineVersionComoboBox(){
     }
 }
 void vekWineOption::onButton_Install()
-{  
+{
     if(ui->lineEdit_InstallPath->text()==nullptr){
         vekTip("请选择Wine安装路径");
         return;
@@ -101,7 +101,7 @@ void vekWineOption::deleteWine(){
         }
     }
     if(vekMesg("您确定要删除"+wineName+"路径为:"+winePath)){
-        if(winePath!=NULL){
+        if(winePath!=nullptr){
             QDir wineInstallDir(winePath);
             if(wineInstallDir.exists()){
                 wineInstallDir.removeRecursively();
@@ -140,7 +140,7 @@ void vekWineOption::on_toolButton()
 {
     QWidget *qwidget = new QWidget();
     QString installPath=QFileDialog::getExistingDirectory(qwidget,"选择Wine保存目录","",QFileDialog::ShowDirsOnly);
-    if(installPath!=NULL){
+    if(installPath!=nullptr){
         ui->lineEdit_InstallPath->setText(installPath);
     }
 

@@ -13,6 +13,8 @@ typedef struct progress_data {
     const char *path;
 } progress_data;
 
+
+
 class objectGitWine : public QThread
 {
     Q_OBJECT
@@ -31,6 +33,7 @@ public slots:
        void curlPrgressSlots();
 private:
        objectGetCurl _vekgetcurl;
+
        void vek_Clone(BaseWineData _wd);
        void output_progress(progress_data *pd);
 static void checkout_progress(const char *path, size_t cur, size_t tot, void *payload);
