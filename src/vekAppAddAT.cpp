@@ -47,19 +47,19 @@ void vekAppAddAT::SetObject(){
     QWidget *qwidget = new QWidget();
     if(action_obnject->objectName()=="pushButton_AutoJson"){
         QString strPath=QFileDialog::getOpenFileName(qwidget,"选择JSON脚本","","Json Files(*.json)");
-        if(strPath!=NULL){
+        if(strPath!=nullptr){
             ui->comboBox_JsonUrl->setCurrentText(strPath);
         }
     }
     if(action_obnject->objectName()=="pushButton_AutoDockPath"){
         QString dockPath=QFileDialog::getExistingDirectory(qwidget,"选择目录","",nullptr);
-        if(dockPath!=NULL){
+        if(dockPath!=nullptr){
             ui->lineEdit_DockPath->setText(dockPath);
         }
     }
     if(action_obnject->objectName()=="pushButton_SetExePath"){
         QString strPath=QFileDialog::getOpenFileName(qwidget,"选择游戏EXE执行文件","","EXE Files(*.exe)");
-        if(strPath!=NULL){
+        if(strPath!=nullptr){
             QFileInfo fi = QFileInfo(strPath);
             ui->lineEdit_AppExePath->setText(strPath);
         }

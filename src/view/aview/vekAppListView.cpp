@@ -232,7 +232,7 @@ void vekAppListView::setUpDelData(BaseDockData dockData,BaseAppData* appData,obj
 }
 void vekAppListView::deleteDockerTab(QString dockPathStr,QString dockNameStr){
     mBox->removeTab(mBox->currentIndex());
-    if(dockPathStr!=NULL&&dockNameStr!=NULL){
+    if(dockPathStr!=nullptr&&dockNameStr!=nullptr){
         QDir dockPath(dockPathStr+dockNameStr);
         if(dockPath.exists()){
             dockPath.removeRecursively();

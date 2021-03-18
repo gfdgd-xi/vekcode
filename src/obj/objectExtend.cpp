@@ -136,19 +136,22 @@ void objectExtend::executeWinetricks(){
     m_cmd->start(mdCode,QIODevice::ReadWrite);
     qDebug()<<"WineTricks:"<<codeArgs.join(" ");
     m_cmd->waitForFinished(-1);
-    dockEditSystemVersion();
+    if(dockData.WineVersion.contains("deepin",Qt::CaseSensitive)){
+        switchSysVersion(DOCKER,DEEPIN);
+    }else{
+        switchSysVersion(DOCKER,WINEHQ);
+    }
     waitObjectDone(wType);
 }
 //执行游戏
 void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
     executeWineBoot(object_wineboot_r);
     monitorProc();
-    if(dockData.WineVersion.contains("deepin-wine5",Qt::CaseSensitive)){
-        appDeepinVersion();
+    if(dockData.WineVersion.contains("deepin",Qt::CaseSensitive)){
+        switchSysVersion(DOCKER,DEEPIN);
     }else{
-        appEditSystemVersion();
+        switchSysVersion(DOCKER,WINEHQ);
     }
-
     m_cmd->closeReadChannel(QProcess::StandardOutput);
     m_cmd->closeReadChannel(QProcess::StandardError);
     m_cmd->setWorkingDirectory(appData.WorkPath);
@@ -187,40 +190,37 @@ void objectExtend::extendWineRegeditCode(QString code){
     }
     waitObjectDone(true);
 }
-//WineHQ软件运行时版本切换
-void objectExtend::appEditSystemVersion(){
-   QStringList codeArgs;
-   codeArgs.append("winecfg");
-   codeArgs.append("/v");
-   codeArgs.append(appData.DockSysVersion);
-   baseExecuteWineCode(startArgs,codeArgs);
+//容器系统版本切换
+void objectExtend::switchSysVersion(SWITCH_SYSTEM_VERSION ssv,SWITCH_WINE_SYSTEM_VERSION swsv){
+    switch(swsv){
+    case::WINEHQ:
+        hqSwitchSysVersion(ssv);
+        break;
+    default:
+        deepinSwitchSysVerion(ssv);
+    }
 }
-void objectExtend::dockEditSystemVersion(){
+//WineHQ容器系统版本切换
+void objectExtend::hqSwitchSysVersion(SWITCH_SYSTEM_VERSION ssv){
    QStringList codeArgs;
    codeArgs.append("winecfg");
    codeArgs.append("/v");
+   if(ssv==APP){
+       codeArgs.append(appData.DockSysVersion);
+   }
    codeArgs.append(dockData.DockerSystemVersion);
    baseExecuteWineCode(startArgs,codeArgs);
 }
-//deepin-wine5版本切换
-void objectExtend::dockDeepinVersion(){
+//deepin-wine5容器系统版本切换
+void objectExtend::deepinSwitchSysVerion(SWITCH_SYSTEM_VERSION ssv){
     executeWineBoot(object_wineboot_r);
     QStringList codeArgs;
     qputenv("WINE", (dockData.WinePath+"/wine/bin/wine").toStdString().c_str());
     codeArgs.append(dockData.WinePath+"/wine/bin/winetricks");
+    if(ssv==APP){
+        codeArgs.append(appData.DockSysVersion);
+    }
     codeArgs.append(dockData.DockerSystemVersion);
-    QString mdCode = codeArgs.join(" ");
-    m_cmd->start(mdCode,QIODevice::ReadWrite);
-    qDebug()<<"WineTricks:"<<codeArgs.join(" ");
-    m_cmd->waitForFinished(-1);
-}
-//deepin-wine5版本切换
-void objectExtend::appDeepinVersion(){
-    executeWineBoot(object_wineboot_r);
-    QStringList codeArgs;
-    qputenv("WINE", (dockData.WinePath+"/wine/bin/wine").toStdString().c_str());
-    codeArgs.append(dockData.WinePath+"/wine/bin/winetricks");
-    codeArgs.append(appData.DockSysVersion);
     QString mdCode = codeArgs.join(" ");
     m_cmd->start(mdCode,QIODevice::ReadWrite);
     qDebug()<<"WineTricks:"<<codeArgs.join(" ");
@@ -347,10 +347,10 @@ void objectExtend::run(){
     }else if(objType==object_regobject){
         extendWineRegeditCode(startArgs);
     }else if(objType==object_dockSysver){
-        if(dockData.WineVersion.contains("deepin-wine5",Qt::CaseSensitive)){
-            dockDeepinVersion();
+        if(dockData.WineVersion.contains("deepin",Qt::CaseSensitive)){
+            switchSysVersion(DOCKER,DEEPIN);
         }else{
-            dockEditSystemVersion();
+            switchSysVersion(DOCKER,WINEHQ);
         }
     }else if(objType==object_wineboot){
         executeWineBoot(objWineBootType);

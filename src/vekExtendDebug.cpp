@@ -131,7 +131,14 @@ void vekExtendDebug::ExtendApp(){
     m_cmd->setWorkingDirectory(appData.WorkPath);
     m_cmd->start("bash");
     connect(m_cmd,SIGNAL(readyReadStandardOutput()),this,SLOT(onReadyRead()));
-    QString codez=dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion+" "+"winecfg /v "+appData.DockSysVersion;
+    QString codez;
+    //deepin-wine5不支持winecfg /v winxp方式切换容器系统版本。顾采用wine winetricks winxp切换容器系统版本
+    if(dockData.WineVersion.contains("deepin-wine5",Qt::CaseSensitive)){
+        codez=dockData.WinePath+"/wine/bin/wine"+" "+dockData.WinePath+"/wine/bin/winetricks "+appData.DockSysVersion;
+    }else{
+        codez=dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion+" "+"winecfg /v "+appData.DockSysVersion;
+    }
+
     m_cmd->write(codez.toLocal8Bit()+'\n');
     QString codes=codeDebug+" "+dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion+" "+codeArgs.join(" ");
     m_cmd->write(codes.toLocal8Bit()+'\n');

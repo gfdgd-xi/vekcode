@@ -447,10 +447,15 @@ bool vekAppAddMT::checkAppOption(){
     return optionAppState;
 }
 //检查docker参数
+//2021-3-18增加对deepin-wine5在64位容器的隔离
 bool vekAppAddMT::checkDocerOption(){
-    bool optionDockState=true;
+    bool optionDockState=true;  
     if(tempDockData->WineVersion==nullptr){
         vekError("请先安装wine");
+        optionDockState=false;
+    }
+    if(tempDockData->WineVersion.contains("deepin",Qt::CaseSensitive)&tempDockData->DockerVer=="win64"){
+        vekError("Deepin-Wine5不支持64位容器");
         optionDockState=false;
     }
     if(tempDockData->DockerPath==nullptr)

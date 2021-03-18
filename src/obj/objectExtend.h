@@ -5,6 +5,16 @@
 #include "objectJson.h"
 #include "pObject.h"
 #include "objectProcManage.h"
+
+enum SWITCH_SYSTEM_VERSION{
+    APP,
+    DOCKER
+};
+enum SWITCH_WINE_SYSTEM_VERSION{
+    WINEHQ,
+    DEEPIN
+};
+
 class objectExtend :public QThread
 {
     Q_OBJECT
@@ -33,11 +43,10 @@ private:
     void executeWineServer(objectWineServer);
     void executeWinetricks();
     void executeWinetricksLibs();
+    void switchSysVersion(SWITCH_SYSTEM_VERSION,SWITCH_WINE_SYSTEM_VERSION);
     void waitObjectDone(bool);
-    void dockEditSystemVersion();
-    void appEditSystemVersion();
-    void dockDeepinVersion();
-    void appDeepinVersion();
+    void hqSwitchSysVersion(SWITCH_SYSTEM_VERSION ssv);
+    void deepinSwitchSysVerion(SWITCH_SYSTEM_VERSION ssv);
     void extendPlugs();
     void monitorProc();
     void forcekill();
