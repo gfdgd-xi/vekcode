@@ -210,7 +210,7 @@ void objectAppMT::DockLibsInstall(){
         for(auto af:appData->DockerLibs){
             QStringList libList;
             libList.clear();
-            if(af!=NULL){
+            if(af!=nullptr){
                 libList<<af;
                 argsList.push_back(libList);
             }
@@ -254,7 +254,7 @@ void objectAppMT::newDock(){
     qDebug()<<dockData->DockerPath;
     qDebug()<<dockData->DockerName;
     argsList.clear();
-    if(dockData->DockerPath==NULL&&dockData->DockerName==NULL){
+    if(dockData->DockerPath==nullptr&&dockData->DockerName==nullptr){
         return;
     }
     InitDockDir(true,dockPath,dockDir);
@@ -312,7 +312,7 @@ void objectAppMT::outAppIco(){
 bool objectAppMT::InitDockObj(bool _forceState){
     QDir dockPath(dockData->DockerPath);
     QDir dockDir(dockData->DockerPath+"/"+dockData->DockerName);
-    if(dockData->DockerPath==NULL&&dockData->DockerName==NULL){
+    if(dockData->DockerPath==nullptr&&dockData->DockerName==nullptr){
         return false;
     }
     try {
@@ -349,7 +349,7 @@ void objectAppMT::WaitObjectDone(objectExtend* _waitObject){
 //执行
 void objectAppMT::ExecuteObj(objectType _objType,objectWineBoot _objWineBootType,objectWineServer _objWineServer){
     objectExtend* objExtend = new objectExtend();
-    if(dockData->DockerPath==NULL||dockData->DockerName==NULL){return;}
+    if(dockData->DockerPath==nullptr||dockData->DockerName==nullptr){return;}
     objExtend->setDockOptionObjectData(*dockData,appData->AppCID,argsList,_objType,_objWineBootType,_objWineServer);
     WaitObjectDone(objExtend);
 }

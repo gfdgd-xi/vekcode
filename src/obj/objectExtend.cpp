@@ -143,7 +143,12 @@ void objectExtend::executeWinetricks(){
 void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
     executeWineBoot(object_wineboot_r);
     monitorProc();
-    appEditSystemVersion();
+    if(dockData.WineVersion.contains("deepin-wine5",Qt::CaseSensitive)){
+        appDeepinVersion();
+    }else{
+        appEditSystemVersion();
+    }
+
     m_cmd->closeReadChannel(QProcess::StandardOutput);
     m_cmd->closeReadChannel(QProcess::StandardError);
     m_cmd->setWorkingDirectory(appData.WorkPath);
@@ -182,6 +187,7 @@ void objectExtend::extendWineRegeditCode(QString code){
     }
     waitObjectDone(true);
 }
+//WineHQ软件运行时版本切换
 void objectExtend::appEditSystemVersion(){
    QStringList codeArgs;
    codeArgs.append("winecfg");
@@ -196,6 +202,31 @@ void objectExtend::dockEditSystemVersion(){
    codeArgs.append(dockData.DockerSystemVersion);
    baseExecuteWineCode(startArgs,codeArgs);
 }
+//deepin-wine5版本切换
+void objectExtend::dockDeepinVersion(){
+    executeWineBoot(object_wineboot_r);
+    QStringList codeArgs;
+    qputenv("WINE", (dockData.WinePath+"/wine/bin/wine").toStdString().c_str());
+    codeArgs.append(dockData.WinePath+"/wine/bin/winetricks");
+    codeArgs.append(dockData.DockerSystemVersion);
+    QString mdCode = codeArgs.join(" ");
+    m_cmd->start(mdCode,QIODevice::ReadWrite);
+    qDebug()<<"WineTricks:"<<codeArgs.join(" ");
+    m_cmd->waitForFinished(-1);
+}
+//deepin-wine5版本切换
+void objectExtend::appDeepinVersion(){
+    executeWineBoot(object_wineboot_r);
+    QStringList codeArgs;
+    qputenv("WINE", (dockData.WinePath+"/wine/bin/wine").toStdString().c_str());
+    codeArgs.append(dockData.WinePath+"/wine/bin/winetricks");
+    codeArgs.append(appData.DockSysVersion);
+    QString mdCode = codeArgs.join(" ");
+    m_cmd->start(mdCode,QIODevice::ReadWrite);
+    qDebug()<<"WineTricks:"<<codeArgs.join(" ");
+    m_cmd->waitForFinished(-1);
+}
+
 //等待任务结束
 void objectExtend::waitObjectDone(bool objState){
     if(!objState){
@@ -293,7 +324,7 @@ void objectExtend::forcekill(){
     pi.pDockPath=dockData.DockerPath;
     pi.pWinePath=dockData.WinePath;
     pi.pAttachProc=appData.AttachProc;
-    if(objType==object_forcekill){;
+    if(objType==object_forcekill){
         pi.pAttachProc.push_back(appData.MainPrcoName);
     }
     objProcMangs->iprocInfo=pi;
@@ -316,7 +347,11 @@ void objectExtend::run(){
     }else if(objType==object_regobject){
         extendWineRegeditCode(startArgs);
     }else if(objType==object_dockSysver){
-        dockEditSystemVersion();
+        if(dockData.WineVersion.contains("deepin-wine5",Qt::CaseSensitive)){
+            dockDeepinVersion();
+        }else{
+            dockEditSystemVersion();
+        }
     }else if(objType==object_wineboot){
         executeWineBoot(objWineBootType);
     }else if(objType==object_wineserver){

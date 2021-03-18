@@ -17,6 +17,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QVBoxLayout>
@@ -39,6 +40,12 @@ public:
     QComboBox *comboBox_DebugDllList;
     QPushButton *pushButton_DebugDllAdd;
     QPushButton *pushButton_DebugDllDel;
+    QHBoxLayout *horizontalLayout_5;
+    QRadioButton *radioButton;
+    QRadioButton *radioButton_2;
+    QLabel *label_3;
+    QComboBox *comboBox;
+    QSpacerItem *horizontalSpacer_3;
     QHBoxLayout *horizontalLayout_4;
     QSpacerItem *horizontalSpacer;
     QPushButton *pushButton_DebugStart;
@@ -122,6 +129,35 @@ public:
 
         verticalLayout_2->addLayout(horizontalLayout);
 
+        horizontalLayout_5 = new QHBoxLayout();
+        horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
+        radioButton = new QRadioButton(vekExtendDebug);
+        radioButton->setObjectName(QString::fromUtf8("radioButton"));
+
+        horizontalLayout_5->addWidget(radioButton);
+
+        radioButton_2 = new QRadioButton(vekExtendDebug);
+        radioButton_2->setObjectName(QString::fromUtf8("radioButton_2"));
+
+        horizontalLayout_5->addWidget(radioButton_2);
+
+        label_3 = new QLabel(vekExtendDebug);
+        label_3->setObjectName(QString::fromUtf8("label_3"));
+
+        horizontalLayout_5->addWidget(label_3);
+
+        comboBox = new QComboBox(vekExtendDebug);
+        comboBox->setObjectName(QString::fromUtf8("comboBox"));
+
+        horizontalLayout_5->addWidget(comboBox);
+
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_5->addItem(horizontalSpacer_3);
+
+
+        verticalLayout_2->addLayout(horizontalLayout_5);
+
         horizontalLayout_4 = new QHBoxLayout();
         horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -163,6 +199,9 @@ public:
         label_2->setText(QCoreApplication::translate("vekExtendDebug", "\351\231\204\345\212\240\350\260\203\350\257\225\345\272\223\350\241\250:", nullptr));
         pushButton_DebugDllAdd->setText(QCoreApplication::translate("vekExtendDebug", "\345\242\236\345\212\240", nullptr));
         pushButton_DebugDllDel->setText(QCoreApplication::translate("vekExtendDebug", "\345\210\240\351\231\244", nullptr));
+        radioButton->setText(QCoreApplication::translate("vekExtendDebug", "\346\227\245\345\277\227\346\273\232\345\212\250", nullptr));
+        radioButton_2->setText(QCoreApplication::translate("vekExtendDebug", "\345\206\231\345\205\245\346\227\245\345\277\227", nullptr));
+        label_3->setText(QCoreApplication::translate("vekExtendDebug", "\346\227\245\345\277\227\347\272\247\345\210\253:", nullptr));
         pushButton_DebugStart->setText(QCoreApplication::translate("vekExtendDebug", "\350\260\203\350\257\225\350\277\220\350\241\214", nullptr));
         pushButton_DebugForceExit->setText(QCoreApplication::translate("vekExtendDebug", "\345\274\272\350\241\214\347\273\223\346\235\237\350\260\203\350\257\225", nullptr));
     } // retranslateUi

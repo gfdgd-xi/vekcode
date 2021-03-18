@@ -91,9 +91,9 @@ bool objectAppAT::objDockerData(){
     }
     baseDockData.WinePath=g_vekLocalData.wineVec.at(baseDockData.WineVersion).IwinePath;
     QVariant monoState=_baseAutoSetJson->Docker.at(toStr(MonoState));
-    baseDockData.MonoState=(monoState).toBool();;
+    baseDockData.MonoState=(monoState).toBool();
     QVariant geckoState=_baseAutoSetJson->Docker.at(toStr(GeckoState));
-    baseDockData.GeckoState=(geckoState).toBool();;
+    baseDockData.GeckoState=(geckoState).toBool();
     return true;
 }
 void objectAppAT::objAppData(){

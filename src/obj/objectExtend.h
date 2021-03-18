@@ -36,6 +36,8 @@ private:
     void waitObjectDone(bool);
     void dockEditSystemVersion();
     void appEditSystemVersion();
+    void dockDeepinVersion();
+    void appDeepinVersion();
     void extendPlugs();
     void monitorProc();
     void forcekill();

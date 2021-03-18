@@ -403,7 +403,7 @@ bool vekAppAddMT::checkAllOption(){
         allOptionState=false;
     }
     if(!checkDxvkOption()){
-        allOptionState=false;;
+        allOptionState=false;
     }
     qDebug()<<"所有参数"<<allOptionState;
     return allOptionState;
@@ -477,7 +477,7 @@ void vekAppAddMT::objectButton(){
     //设置游戏ico
     if(action_obnject->objectName()=="pushButton_setIco"){
         QString strIco=QFileDialog::getOpenFileName(qwidget,"选择游戏图标","","Ico Files(*.ico);;PNG Files(*.png);;JPEG Files(*.jpeg)");
-        if(strIco!=NULL){
+        if(strIco!=nullptr){
             ui->pushButton_setIco->setIcon(QIcon(strIco));
         }else{
             ui->pushButton_setIco->setIcon(QIcon(":/res/img/vek.ico"));
@@ -486,7 +486,7 @@ void vekAppAddMT::objectButton(){
     //设置游戏exe
     if(action_obnject->objectName()=="pushButton_SetAppExe"){
         QString exePath=QFileDialog::getOpenFileName(qwidget,"选择要添加的程序","","exe Files(*.exe)");
-        if(exePath!=NULL){
+        if(exePath!=nullptr){
             QFileInfo fi = QFileInfo(exePath);
             if(ui->lineEdit_AppName->text()==nullptr){
                 ui->lineEdit_AppName->setText(fi.baseName());
@@ -498,14 +498,14 @@ void vekAppAddMT::objectButton(){
     //设置工作目录
     if(action_obnject->objectName()=="pushButton_workPath"){
         QString workPath=QFileDialog::getExistingDirectory(qwidget,"选择目录","",nullptr);
-        if(workPath!=NULL){
+        if(workPath!=nullptr){
             ui->lineEdit_workPath->setText(workPath);
         }
     }
     //设置DOCK路径
     if(action_obnject->objectName()=="pushButton_SetDockPath"){
         QString dockPath=QFileDialog::getExistingDirectory(qwidget,"选择目录","",nullptr);
-        if(dockPath!=NULL){
+        if(dockPath!=nullptr){
             ui->lineEdit_RunDockPath->setText(dockPath);
         }
     }
@@ -525,7 +525,7 @@ void vekAppAddMT::objectButton(){
         }else{
             savePath = QFileDialog::getSaveFileName(this,tr("选择保存dxvk.conf路径"),".",tr("DxvkConf Files(*.conf)"));
         }
-        if(savePath!=NULL){
+        if(savePath!=nullptr){
             ui->lineEdit_dxvkConfigFIle->setText(savePath);
             saveStrToFile(ui->textEdit_dxvkConfigFileData->toPlainText(),savePath);
             ui->lineEdit_dxvkConfigFIle->setText(savePath);
