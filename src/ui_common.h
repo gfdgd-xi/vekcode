@@ -4,6 +4,7 @@
 #include "ui_vek.h"
 #include "ui_vekAbout.h"
 #include "ui_vekExtendDebug.h"
+#include "ui_vekPackage.h"
 #include "ui_vekAppAddMT.h"
 #include "ui_vekWineOption.h"
 #include "ui_vekAppAddMulti.h"

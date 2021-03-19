@@ -33,6 +33,7 @@ SOURCES += \
     src/vekAppAddMT.cpp \
     src/vekAppAddMulti.cpp \
     src/vekExportJson.cpp \
+    src/vekPackage.cpp \
     src/vekSourceEdit.cpp \
     src/vekExtendDebug.cpp \
     src/vekWineOption.cpp \
@@ -65,6 +66,7 @@ HEADERS += \
     src/vekAppAddMulti.h \
     src/vekExportJson.h \
     src/vekExtendDebug.h \
+    src/vekPackage.h \
     src/vekSourceEdit.h \
     src/vekWineOption.h \
     src/view/aview/vekAppData.h \
@@ -83,6 +85,7 @@ FORMS += \
     ui/vek.ui \
     ui/vekAbout.ui \
     ui/vekExtendDebug.ui \
+    ui/vekPackage.ui \
     ui/vekWineOption.ui
 
 #DEBUG
