@@ -112,29 +112,39 @@ void objectExtend::executeWineServer(objectWineServer objWineServer){
     m_cmd->waitForFinished(-1);
     waitObjectDone(true);
 }
-//运行Winetricks
-void objectExtend::executeWinetricks(){
-    //遗留问题->在运行WineTricks之前需要强制结束当前所有运行的wineserver
-    //executeWineServer(object_wineserver_k);
+void objectExtend::executeWinetricks(objectType _wType){
     executeWineBoot(object_wineboot_r);
     QStringList codeArgs;
-    bool wType=false;
     qputenv("WINE", (dockData.WinePath+"/wine/bin/wine").toStdString().c_str());
     codeArgs.append(dockData.WinePath+"/wine/bin/winetricks");
-    if(objType==object_winetricks_gui){
-        codeArgs.append("--gui");
-        wType=true;
-    }else if(objType==object_winetricks_libs){
-        for(auto d:argsList){
-            for(auto x:d){
-
-                codeArgs.append(x);
-            }
+    switch (_wType) {
+      case object_winetricks_gui:
+        executeWinetricks_gui(codeArgs);
+        break;
+    case object_winetricks_cmd_libs:
+        executeWinetricks_cmd_libs(codeArgs);
+        break;
+    }
+}
+//winetricks gui模式
+void objectExtend::executeWinetricks_gui(QStringList cArgs){
+   cArgs.append("--gui");
+   ExtendWinetricksCode(cArgs,true);
+}
+//winetricks 命令和静默libs安装模式
+void objectExtend::executeWinetricks_cmd_libs(QStringList cArgs){
+    for(auto d:argsList){
+        for(auto x:d){
+            cArgs.append(x);
         }
     }
-    QString mdCode = codeArgs.join(" ");
+   ExtendWinetricksCode(cArgs,false);
+}
+//winetricks执行命令
+void objectExtend::ExtendWinetricksCode(QStringList cArgs,bool wType){
+    QString mdCode = cArgs.join(" ");
     m_cmd->start(mdCode,QIODevice::ReadWrite);
-    qDebug()<<"WineTricks:"<<codeArgs.join(" ");
+    qDebug()<<"WineTricks:"<<cArgs.join(" ");
     m_cmd->waitForFinished(-1);
     if(dockData.WineVersion.contains("deepin",Qt::CaseSensitive)){
         switchSysVersion(DOCKER,DEEPIN);
@@ -342,8 +352,8 @@ void objectExtend::run(){
         optionExtend();
     }else if(objType==object_start){
         extendApp();
-    }else if(objType==object_winetricks_gui||objType==object_winetricks_libs){
-        executeWinetricks();
+    }else if(objType==object_winetricks_gui||objType==object_winetricks_cmd_libs){
+        executeWinetricks(objType);
     }else if(objType==object_regobject){
         extendWineRegeditCode(startArgs);
     }else if(objType==object_dockSysver){

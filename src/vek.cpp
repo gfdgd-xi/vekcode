@@ -20,6 +20,9 @@ void vek::connectObject(){
     connect(ui->styleDefault,&QAction::triggered,this,&vek::vekStyle);
     connect(ui->styleDark,&QAction::triggered,this,&vek::vekStyle);
     connect(ui->styleLight,&QAction::triggered,this,&vek::vekStyle);
+    //开发功能测试
+    connect(ui->action_Dev,&QAction::triggered,this,&vek::option_Dev);
+
     //语言切换
     //connect(ui->langChinese,&QAction::triggered,this,&vek::vekLanguage);
     //connect(ui->langEnglish,&QAction::triggered,this,&vek::vekLanguage);
@@ -29,6 +32,15 @@ void vek::connectObject(){
     this->setWindowTitle(vStr);
     setAppSize();
     vekStyle();
+}
+void vek::option_Dev(){
+    if(_vek_Package==nullptr){
+        _vek_Package=new vekPackage();
+        _vek_Package->setAttribute(Qt::WA_DeleteOnClose,true);
+        _vek_Package->setWindowFlags(Qt::WindowStaysOnTopHint);
+        _vek_Package->setGeometry(this->geometry());
+        _vek_Package->show();
+    }
 }
 void vek::setAppSize(){
     int approw=0;

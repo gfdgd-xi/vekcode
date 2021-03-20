@@ -97,9 +97,9 @@
         <property name="lineWidth">
          <number>1</number>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1,1,12,5">
+        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1,1,0,12,5">
          <property name="spacing">
-          <number>0</number>
+          <number>1</number>
          </property>
          <property name="leftMargin">
           <number>0</number>
@@ -168,6 +168,43 @@
            <property name="text">
             <string>运行应用</string>
            </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="fram_wrserver">
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>winetricks上游服务器</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBox"/>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>
@@ -362,6 +399,7 @@
     <property name="title">
      <string>帮助</string>
     </property>
+    <addaction name="action_Dev"/>
     <addaction name="action_About"/>
    </widget>
    <widget class="QMenu" name="menu_3">
@@ -459,6 +497,11 @@
   <action name="langEnglish">
    <property name="text">
     <string>English</string>
+   </property>
+  </action>
+  <action name="action_Dev">
+   <property name="text">
+    <string>开发功能测试</string>
    </property>
   </action>
  </widget>

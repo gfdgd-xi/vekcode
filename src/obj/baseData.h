@@ -116,6 +116,9 @@ typedef struct {
     Options vekOptions={};
 }BaseLocalData;
 
+typedef struct{
+    std::map<QString,QString> wtServer={};
+}BaseWtServer;
 
 typedef enum{
     object_winecfg,
@@ -123,10 +126,12 @@ typedef enum{
     object_control,
     object_uninstall,
     object_winetricks_gui,
+    object_winetricks_cmd_libs,
     object_start,
     object_debugstart,
     object_setgame,
     object_exportJson,
+    object_packageDeb,
     object_forcekill,
     object_deletegame,
     object_regobject,
@@ -134,7 +139,6 @@ typedef enum{
     object_wineserver,
     object_dockSysver,
     object_disable,
-    object_winetricks_libs,
     object_plugs,
     object_default
 }objectType;

@@ -24,7 +24,7 @@ private slots:
         void moveSlot();
         void setItemSlot();
         void unAppAdd();
-        void setUpDelData(BaseDockData,BaseAppData*,objectTypeView);
+        void setUpDelData(BaseDockData,BaseAppData*,objectTypeView);     
         void unExportJson();
         void unDebugApp();
 public slots:
@@ -52,14 +52,18 @@ private:
         void ExportJson();
         void startApp(objectType);
         void deleteDockerTab(QString,QString);
+        std::vector<QStringList> vekWinetricks_cArgs();
         std::vector<QString> objectTypeStr={"容器设置",
                                             "容器注册表",
                                             "容器控制面板",
                                             "容器软件删除|增加",
-                                            "winetricks","运行程序",
+                                            "winetricks gui-界面模式",
+                                            "winetricks cmd-命令模式",
+                                            "运行程序",
                                             "调试运行(测试功能)",
                                             "修改程序设置",
-                                            "导出自动配置文件",
+                                            "导出配置文件",
+                                            "导出deb安装包",
                                             "强行关闭本程序",
                                             "删除本程序"};
         QMenu *pMenu=nullptr;

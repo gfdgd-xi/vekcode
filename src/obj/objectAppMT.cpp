@@ -215,7 +215,7 @@ void objectAppMT::DockLibsInstall(){
                 argsList.push_back(libList);
             }
         }
-        ExecuteObj(object_winetricks_libs,object_wineboot_default,object_wineserver_default);
+        ExecuteObj(object_winetricks_cmd_libs,object_wineboot_default,object_wineserver_default);
     }  
 }
 void objectAppMT::installMonoPlugs(){

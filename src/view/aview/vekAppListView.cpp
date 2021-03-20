@@ -67,6 +67,7 @@ void vekAppListView::ObjectRun(){
         }
         objectExtend* _objectExtend=new objectExtend();
         objectType _objType=object_default;
+        std::vector<QStringList> _codeAgrs;
         switch(object_int)
         {
         case object_winecfg:
@@ -84,6 +85,13 @@ void vekAppListView::ObjectRun(){
         case object_winetricks_gui:
             _objType=object_winetricks_gui;
             break;
+        case object_winetricks_cmd_libs:
+            _objType=object_winetricks_cmd_libs;
+            _codeAgrs=vekWinetricks_cArgs();
+            if(_codeAgrs.empty()){
+                return;
+            }
+            break;
         case object_start:
             _objType=object_start;
             break;
@@ -93,21 +101,19 @@ void vekAppListView::ObjectRun(){
         case object_debugstart:
             objectExtendApp();
             return;
-            break;
         case object_setgame:
             setItemSlot();
             return;
-            break;
         case object_deletegame:
             setUpDelData(GetDockerData(mBox->tabText(mBox->currentIndex())),m_pModel->getItem(index),object_delApp);
             return;
-            break;
         case object_exportJson:
             ExportJson();
             return;
-            break;
-        }
-        std::vector<QStringList> _codeAgrs;
+        case object_packageDeb:
+            vekTip("功能开发中!");
+            return;
+        }       
         if(_objType==object_start){
             startApp(object_start);
         }else{
@@ -115,6 +121,21 @@ void vekAppListView::ObjectRun(){
             _objectExtend->start();
         }
     }
+}
+std::vector<QStringList> vekAppListView::vekWinetricks_cArgs(){
+        QString dlgTitle="winetricks命令框";
+        QString txtLabel="直接输入功能,多个库和功能空格隔开·例如:vcrun2012 vcrun2015";
+        QString defaultInput;
+        QLineEdit::EchoMode echoMode=QLineEdit::Normal;//正常文字输入
+        bool ok=false;
+        QString arg = QInputDialog::getText(nullptr, dlgTitle,txtLabel, echoMode,defaultInput, &ok);
+        std::vector<QStringList> args;
+        if (ok && !arg.isEmpty())
+        {
+            QStringList _args=arg.split(" ");
+            args.push_back(_args);
+        }
+        return args;
 }
 void vekAppListView::startApp(objectType _objType){
     std::vector<QStringList> _codeAgrs;

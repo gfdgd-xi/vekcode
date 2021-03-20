@@ -41,8 +41,10 @@ private:
     void extendWineRegeditCode(QString);
     void executeWineBoot(objectWineBoot);
     void executeWineServer(objectWineServer);
-    void executeWinetricks();
-    void executeWinetricksLibs();
+    void executeWinetricks(objectType);
+    void executeWinetricks_gui(QStringList);
+    void executeWinetricks_cmd_libs(QStringList);
+    void ExtendWinetricksCode(QStringList,bool);
     void switchSysVersion(SWITCH_SYSTEM_VERSION,SWITCH_WINE_SYSTEM_VERSION);
     void waitObjectDone(bool);
     void hqSwitchSysVersion(SWITCH_SYSTEM_VERSION ssv);

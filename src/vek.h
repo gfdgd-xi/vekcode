@@ -10,7 +10,7 @@
 #include "obj/objectProcManage.h"
 #include "obj/objectTray.h"
 #include "QTranslator"
-
+#include "vekPackage.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -31,6 +31,7 @@ private:
     vekWineOption *_vek_wine_option=nullptr;
     vekAbout* _vek_About=nullptr;
     vekSourceEdit* _vek_source_esit=nullptr;
+    vekPackage* _vek_Package=nullptr;
     objectTray* objTray=nullptr;
     void setProcRow(); 
 public slots:
@@ -51,5 +52,6 @@ private slots:
     void setAppSize();
     void vekStyle();
     void vekLanguage();
+    void option_Dev();
 };
 #endif // VEK_H
