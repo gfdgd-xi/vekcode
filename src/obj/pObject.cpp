@@ -10,6 +10,11 @@ bool vekMesg(QString tipText){
     QMessageBox msgBox;
     msgBox.setInformativeText(tipText);
     msgBox.setStandardButtons(QMessageBox::Ok|QMessageBox::Cancel);
+    msgBox.setStyleSheet("QLabel{"
+                          "qproperty-alignment:AlignHCenter;"
+                          "min-width: 400px;"
+                          "min-height: 20px; "
+                          "}");
     int msgRet=msgBox.exec();
     if(msgRet==QMessageBox::Ok){
         return true;

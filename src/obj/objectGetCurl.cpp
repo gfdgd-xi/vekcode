@@ -71,7 +71,7 @@ int objectGetCurl::ProgressCallback(void *clientp, double dltotal, double dlnow,
         }
     }
     if(olnow!=dlnow){
-        string logText="文件名:"+dThis->fileName.toStdString()+"   总大小/当前下载进度:"+std::to_string((long)dltotal)+"/"+std::to_string((long)dlnow);
+        string logText="文件名:"+dThis->fileName.toStdString()+"   当前下载进度/总大小:"+std::to_string((long)dlnow)+"/"+std::to_string((long)dltotal);
         dThis->outLogText(logText);
         olnow=dlnow;
     }

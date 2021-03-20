@@ -53,7 +53,10 @@ private:
         void startApp(objectType);
         void deleteDockerTab(QString,QString);
         std::vector<QStringList> vekWinetricks_cArgs();
-        std::vector<QString> objectTypeStr={"容器设置",
+        std::vector<QString> objectTypeStr={"转到软件目录",
+                                            "转到容器目录",
+                                            "转到Wine目录",
+                                            "容器设置",
                                             "容器注册表",
                                             "容器控制面板",
                                             "容器软件删除|增加",

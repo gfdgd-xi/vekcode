@@ -63,33 +63,36 @@ void vekSourceEdit::loadSrcDataTableView(QTableView* qTableView)
     qTableView->setContextMenuPolicy(Qt::CustomContextMenu);  //少这句，右键没有任何反应的。
     connect(qTableView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(clicked_rightMenu(QPoint)));
 }
-void vekSourceEdit::clicked_rightMenu(const QPoint &/*pos*/)
+void vekSourceEdit::clicked_rightMenu(const QPoint &pos)
 {
     QTableView* signalSrc = (QTableView*)sender();  // 获取到了发送该信号按钮的指针
-    //创建菜单对象
-    QMenu *pMenu = new QMenu(this);
-    QAction *pNewTask = new QAction(tr("新建源"), this);
-    QAction *pDeleteTask = new QAction(tr("删除源"), this);
-    QAction *pUpdateTask = new QAction(tr("更新源"), this);
-    pNewTask->setData(1);
-    pDeleteTask ->setData(2);
-    pUpdateTask->setData(3);
-    pNewTask->setObjectName(signalSrc->objectName());
-    pDeleteTask->setObjectName(signalSrc->objectName());
-    pUpdateTask->setObjectName(signalSrc->objectName());
-    //把QAction对象添加到菜单上
-    pMenu->addAction(pNewTask);
-    pMenu->addAction(pDeleteTask);
-    pMenu->addAction(pUpdateTask);
-    //连接鼠标右键点击信号
-    connect(pNewTask, SIGNAL(triggered()), this, SLOT(onTaskBoxContextMenuEvent()));
-    connect(pDeleteTask, SIGNAL(triggered()), this, SLOT(onTaskBoxContextMenuEvent()));
-    connect(pUpdateTask, SIGNAL(triggered()),this, SLOT(onTaskBoxContextMenuEvent()));
-    //在鼠标右键点击的地方显示菜单
-    pMenu->exec(QCursor::pos());
-    QList<QAction*> list = pMenu->actions();
-    foreach (QAction* pAction, list) delete pAction;
-    delete pMenu;
+    QModelIndex index = signalSrc->indexAt(pos);
+    if(index.row()>-1){
+        //创建菜单对象
+        QMenu *pMenu = new QMenu(this);
+        QAction *pNewTask = new QAction(tr("新建源"), this);
+        QAction *pDeleteTask = new QAction(tr("删除源"), this);
+        QAction *pUpdateTask = new QAction(tr("更新源"), this);
+        pNewTask->setData(1);
+        pDeleteTask ->setData(2);
+        pUpdateTask->setData(3);
+        pNewTask->setObjectName(signalSrc->objectName());
+        pDeleteTask->setObjectName(signalSrc->objectName());
+        pUpdateTask->setObjectName(signalSrc->objectName());
+        //把QAction对象添加到菜单上
+        pMenu->addAction(pNewTask);
+        pMenu->addAction(pDeleteTask);
+        pMenu->addAction(pUpdateTask);
+        //连接鼠标右键点击信号
+        connect(pNewTask, SIGNAL(triggered()), this, SLOT(onTaskBoxContextMenuEvent()));
+        connect(pDeleteTask, SIGNAL(triggered()), this, SLOT(onTaskBoxContextMenuEvent()));
+        connect(pUpdateTask, SIGNAL(triggered()),this, SLOT(onTaskBoxContextMenuEvent()));
+        //在鼠标右键点击的地方显示菜单
+        pMenu->exec(QCursor::pos());
+        QList<QAction*> list = pMenu->actions();
+        foreach (QAction* pAction, list) delete pAction;
+        delete pMenu;
+    }
 }
 
 void vekSourceEdit::onTaskBoxContextMenuEvent()

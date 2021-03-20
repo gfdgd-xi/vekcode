@@ -1,10 +1,10 @@
 ﻿#include "objectGitWine.h"
 
-objectGitWine *pThis;
-
+//objectGitWine *pThis;
+objectGitWine *g_calcThread = new objectGitWine;
 objectGitWine::objectGitWine(QObject *parent) : QThread(parent)
 {
-    delete pThis;
+    //delete pThis;
 }
 objectGitWine::~objectGitWine(){
 }
@@ -36,26 +36,26 @@ int objectGitWine::sideband_progress(const char *str, int len, void *payload)
 {
     (void)payload; /* unused */
     string prlog="remote:"+std::to_string(len)+str;
-    pThis->outputPrgressSlots(prlog);
+    g_calcThread->outputPrgressSlots(prlog);
     fflush(stdout);
     return 0;
 }
 //拉取进度
 int objectGitWine::fetch_progress(const git_indexer_progress *stats, void *payload)
 {
-    progress_data *pd = (progress_data*)payload;
+    progress_data* pd = (progress_data*)payload;
     pd->fetch_progress = *stats;
-    pThis->output_progress(pd);
+    g_calcThread->output_progress(pd);
     return 0;
 }
 //检查输出进度
 void objectGitWine::checkout_progress(const char *path, size_t cur, size_t tot, void *payload)
 {
-    progress_data *pd = (progress_data*)payload;
+    progress_data* pd = (progress_data*)payload;
     pd->completed_steps = cur;
     pd->total_steps = tot;
     pd->path = path;
-    pThis->output_progress(pd);
+    g_calcThread->output_progress(pd);
 }
 //sslcert
 int objectGitWine::ssl_cert(git_cert *cert, int valid, const char *host, void *payload)
@@ -67,16 +67,23 @@ int objectGitWine::ssl_cert(git_cert *cert, int valid, const char *host, void *p
     return 1;
 }
 void objectGitWine::outputPrgressSlots(string text){
-    outputPrgressText=QString::fromStdString(text);
-    emit outputPrgressSignals();
+    QtConcurrent::run([=]()
+    {
+        outputPrgressText=QString::fromStdString(text);
+        emit outputPrgressSignals();
+    });
+
 }
 void objectGitWine::curlPrgressSlots(){
-    outputPrgressText=_vekgetcurl.outputPrgressText;
-    emit outputPrgressSignals();
+    QtConcurrent::run([=]()
+    {
+        outputPrgressText=_vekgetcurl.outputPrgressText;
+        emit outputPrgressSignals();
+    });
+
 }
 void objectGitWine::vek_Clone(BaseWineData _wd){
-
-    pThis->outputPrgressSlots("Init Repo");
+    outputPrgressSlots("Init Repo");
     if(!git_libgit2_init())
         return;
     progress_data pd;
@@ -98,34 +105,39 @@ void objectGitWine::vek_Clone(BaseWineData _wd){
     const char *path = b2.data();
     b3.append(_wd.IwineUrl);
     const char *url = b3.data();
-    pThis->outputPrgressSlots("clone:"+_wd.IwineName.toStdString());
+    outputPrgressSlots("clone:"+_wd.IwineName.toStdString());
     git_clone(&cloned_repo, url, path, &clone_opts);
     git_repository_free(cloned_repo);
     git_libgit2_shutdown();
-    pThis->outputPrgressSlots("Done clone!");
+    outputPrgressSlots("Done clone!");
 }
 
 void objectGitWine::run()
 {
-   pThis=this;
-   if(_wd.IwinePath==nullptr){
-       return;
-   }
-   QDir dir(_wd.IwinePath);
-   if(dir.exists()){
-       dir.removeRecursively();
-   }
-   vek_Clone(_wd);
-   dir.mkdir(_wd.IwinePath+"/plugs");
-   outputPrgressSlots("开始下载组件请稍等!");
-   connect(&_vekgetcurl,&objectGetCurl::curlPrgressSignals,this,&objectGitWine::curlPrgressSlots);
-   _vekgetcurl.DoewloadPlugs(_wd.IwineMono,_wd.IwinePath+"/plugs/Mono.msi");
-   _vekgetcurl.DoewloadPlugs(_wd.IwineGeckoX86,_wd.IwinePath+"/plugs/GeckoX86.msi");
-   _vekgetcurl.DoewloadPlugs(_wd.IwineGeckoX86_64,_wd.IwinePath+"/plugs/GeckoX86_64.msi");
-   outputPrgressSlots("组件下载完毕!");
-   objectJson* _objectJson=new objectJson() ;
-   _objectJson->updateWineNodeData(_wd);
-   delete _objectJson;
-   _objectJson=nullptr;
-   emit overThreadSignals();
+    try{
+        //pThis=this;
+        if(_wd.IwinePath==nullptr){
+            return;
+        }
+        QDir dir(_wd.IwinePath);
+        if(dir.exists()){
+            dir.removeRecursively();
+        }
+        vek_Clone(_wd);
+        dir.mkdir(_wd.IwinePath+"/plugs");
+        outputPrgressSlots("开始下载组件请稍等!");
+        connect(&_vekgetcurl,&objectGetCurl::curlPrgressSignals,this,&objectGitWine::curlPrgressSlots);
+        _vekgetcurl.DoewloadPlugs(_wd.IwineMono,_wd.IwinePath+"/plugs/Mono.msi");
+        _vekgetcurl.DoewloadPlugs(_wd.IwineGeckoX86,_wd.IwinePath+"/plugs/GeckoX86.msi");
+        _vekgetcurl.DoewloadPlugs(_wd.IwineGeckoX86_64,_wd.IwinePath+"/plugs/GeckoX86_64.msi");
+        outputPrgressSlots("组件下载完毕!");
+        objectJson* _objectJson=new objectJson() ;
+        _objectJson->updateWineNodeData(_wd);
+        delete _objectJson;
+        _objectJson=nullptr;
+        emit overThreadSignals(true);
+    }catch(...){
+        emit overThreadSignals(false);
+    }
+
 }
