@@ -1,13 +1,14 @@
 ﻿#include "objectGetCurl.h"
 
-objectGetCurl* dThis=nullptr;
+objectGetCurl *objectGetCurl::objGitCurl = nullptr;
 
 objectGetCurl::objectGetCurl(QObject *parent) : QThread(parent)
 {
+    objGitCurl=this;
 }
 objectGetCurl::~objectGetCurl()
 {
-    delete dThis;
+
 }
 static size_t getData(void *buffer, size_t sz, size_t nmemb, void *writer)
 {
@@ -61,13 +62,13 @@ int objectGetCurl::ProgressCallback(void *clientp, double dltotal, double dlnow,
 {
     UNUSED(ultotal);
     UNUSED(ulnow);
-    dThis = (objectGetCurl*)clientp;
+    objectGetCurl* dThis = (objectGetCurl*)clientp;
     if ( dltotal > -0.1 && dltotal < 0.1 )
     {
         return 0;
     }
     //int nPos = (int) ( (dlnow/dltotal)*100 );
-    QThread::msleep(5);
+    //QThread::msleep(5);
     if(dThis->fileName==nullptr){
         if(QFile(dThis->filePath).exists()){
             dThis->fileName=QFileInfo(dThis->filePath).baseName();
@@ -75,14 +76,13 @@ int objectGetCurl::ProgressCallback(void *clientp, double dltotal, double dlnow,
     }
     if(olnow!=dlnow){
         string logText="文件名:"+dThis->fileName.toStdString()+"   当前下载进度/总大小:"+std::to_string((long)dlnow)+"/"+std::to_string((long)dltotal);
-        dThis->outLogText(logText);
+        objGitCurl->outLogText(logText);
         olnow=dlnow;
     }
     return 0;
 }
 void objectGetCurl::outLogText(string text){
-    outputPrgressText=QString::fromStdString(text);
-    emit curlPrgressSignals();
+    emit curlPrgressSignals(text);
 }
 
 bool objectGetCurl::DownloadFile(std::string URLADDR,std::string path)

@@ -7,18 +7,8 @@ vekWineOption::vekWineOption(QWidget *parent) :
     ui(new Ui::vekWineOption)
 {
     ui->setupUi(this);
-    githread = new objectGitWine();
-    //下载按钮槽事件绑定
-    //connect(ui->pushButton_Install,&QPushButton::clicked,this,&vekWineOption::onButton_Install);
-    //connect(ui->pushButton_deleteWine,&QPushButton::clicked,this,&vekWineOption::deleteWine);
     connect(ui->toolButton_SetInstallDir,&QPushButton::clicked,this,&vekWineOption::on_toolButton);
-    //
-    connect(githread,SIGNAL(outputPrgressSignals()),this,SLOT(appendTextToLog()));
-    connect(githread,SIGNAL(overThreadSignals(bool)),this,SLOT(overGitThreadSignals(bool)));
-    connect(ui->comboBox_wineSrc,&QComboBox::currentTextChanged,this,&vekWineOption::WineVersionComoboBox);
-    GetWineGitInfo();
-
-
+    connect(ui->comboBox_wineSrc,&QComboBox::currentTextChanged,this,&vekWineOption::wineVersionComoboBox);
 }
 
 vekWineOption::~vekWineOption()
@@ -26,117 +16,104 @@ vekWineOption::~vekWineOption()
     delete ui;
     emit _unInitWineOption();
 }
-void vekWineOption::loadData(){
-    LoadWineList(ui->tableView_winen);
-    LoadWineList(ui->tableView_wined);
+void vekWineOption::loadWineData(){
+    loadWineList(ui->tableView_winen);
+    loadWineList(ui->tableView_wined);
 }
-void vekWineOption::LoadWineList(QTableView* qTableView){
-
+void vekWineOption::loadWineList(QTableView* qTableView){
+    QStringList columnTitles;
+    qTableView->disconnect(SIGNAL(customContextMenuRequested(QPoint)));
+    ItemModelWine = new QStandardItemModel();
     if(qTableView==ui->tableView_winen){
-        ItemModelWinen = new QStandardItemModel();
+        columnTitles << "当前源提供Wine版本列表";
         if(!g_vekLocalData.wineJsonList.empty()){
             for(auto &d : g_vekLocalData.wineJsonList){
-                for(auto &x:d.second){
-                    ItemModelWinen->appendRow(new QStandardItem(x.second.WineName));
+                if(d.first==ui->comboBox_wineSrc->currentText()){
+                    for(auto &x:d.second){
+                        ItemModelWine->appendRow(new QStandardItem(x.second.WineName));
+                    }
                 }
             }
-            qTableView->setModel(ItemModelWinen);
-            ItemModelWinen->setHeaderData(0,Qt::Horizontal,QString::fromLocal8Bit("当前源提供Wine版本列表"));
         }
-    }else{      
-        ItemModelWined = new QStandardItemModel();
+    }else{
+        columnTitles << "已安装Wine版本列表";
         if(!g_vekLocalData.wineVec.empty()){
             for(auto &d : g_vekLocalData.wineVec){
-                ItemModelWined->appendRow(new QStandardItem(d.second.IwineName));
+                ItemModelWine->appendRow(new QStandardItem(d.second.IwineName));
             }
         }
-        qTableView->setModel(ItemModelWined);
-        ItemModelWined->setHeaderData(0,Qt::Horizontal,QString::fromLocal8Bit("已安装Wine版本列表"));
     }
+    qTableView->setModel(ItemModelWine);
     qTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     qTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     qTableView->setSelectionMode(QAbstractItemView::SingleSelection);
-    //绑定右键
     qTableView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(qTableView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(clicked_rightMenu(QPoint)));
-}
-void vekWineOption::AddWine(){
-
-}
-void vekWineOption::RemoveWine(){
+    ItemModelWine->setHorizontalHeaderLabels(columnTitles);
 
 }
 void vekWineOption::clicked_rightMenu(const QPoint &pos)
 {
-    QTableView* signalSrc = (QTableView*)sender();  // 获取到了发送该信号按钮的指针
+    QTableView* signalSrc = (QTableView*)sender();
     QModelIndex index = signalSrc->indexAt(pos);
-    _pos=pos;
-    //创建菜单对象
+    qInfo()<<index.row();
     if(index.row()>-1){
+        QMenu *pMenu=nullptr;
+        QAction *pTask = nullptr;
         if(signalSrc==ui->tableView_winen){
-            QMenu *pMenu = new QMenu(ui->tableView_winen);
-            QAction *pInstallTask = new QAction(tr("安装"));
-            pInstallTask->setData(1);
-            pInstallTask->setObjectName(signalSrc->objectName());
-            //把QAction对象添加到菜单上
-            pMenu->addAction(pInstallTask);
-            //连接鼠标右键点击信号
-            connect(pInstallTask, SIGNAL(triggered()), this, SLOT(onTaskBoxContextMenuEvent()));
-            pMenu->exec(QCursor::pos());
-            QList<QAction*> list = pMenu->actions();
-            foreach (QAction* pAction, list) delete pAction;
-            delete pMenu;
+            pMenu = new QMenu(ui->tableView_winen);
+            pTask=new QAction(tr("安装"));
+            pTask ->setData(1);
+            pTask->setObjectName(signalSrc->objectName());
         }else{
-            QMenu *pMenu = new QMenu(ui->tableView_wined);
-            QAction *pDeleteTask = new QAction(tr("删除"));
-            pDeleteTask ->setData(1);
-            pDeleteTask->setObjectName(signalSrc->objectName());
-            //把QAction对象添加到菜单上
-            pMenu->addAction(pDeleteTask);
-            //连接鼠标右键点击信号
-            connect(pDeleteTask, SIGNAL(triggered()), this, SLOT(onTaskBoxContextMenuEvent()));
-            pMenu->exec(QCursor::pos());
-            QList<QAction*> list = pMenu->actions();
-            foreach (QAction* pAction, list) delete pAction;
-            delete pMenu;
+            pMenu = new QMenu(ui->tableView_wined);
+            pTask = new QAction(tr("删除"));
+            pTask ->setData(1);
+            pTask->setObjectName(signalSrc->objectName());
         }
+        pMenu->addAction(pTask);
+        connect(pTask, SIGNAL(triggered()), this, SLOT(onTaskBoxContextMenuEvent()));
+        pMenu->exec(QCursor::pos());
+        QList<QAction*> list = pMenu->actions();
+        foreach (QAction* pAction, list) delete pAction;
+        delete pMenu;
     }
 }
 void vekWineOption::onTaskBoxContextMenuEvent()
 {
     QAction *pEven = qobject_cast<QAction *>(this->sender());
-
+    QTableView* tempQTableView;
     if(pEven->objectName()=="tableView_winen"){
-        QModelIndex index = ui->tableView_winen->indexAt(_pos);
-        QAbstractItemModel *modessl = ui->tableView_winen->model();
-        QModelIndex indextemp = modessl->index(index.row(),0);
-        QString selwine = modessl->data(indextemp).value<QString>();
-        installWine(selwine);
+        tempQTableView=ui->tableView_winen;
     }else{
-        QModelIndex index = ui->tableView_wined->indexAt(_pos);
-        QAbstractItemModel *modessl = ui->tableView_wined->model();
-        QModelIndex indextemp = modessl->index(index.row(),0);
-        QString selwine = modessl->data(indextemp).value<QString>();
-        deleteWine(selwine);
+        tempQTableView=ui->tableView_wined;
+    }
+    int curRow=tempQTableView->currentIndex().row();
+    QAbstractItemModel *modessl = tempQTableView->model();
+    QModelIndex indextemp = modessl->index(curRow,0);
+    QString datatemp = modessl->data(indextemp).value<QString>();
+    if(pEven->objectName()=="tableView_winen"){
+        installWine(datatemp);
+    }else{
+        deleteWine(datatemp);
     }
     delete pEven;
 }
 //获取远程仓库wine版本信息
-void vekWineOption::GetWineGitInfo(){
+void vekWineOption::getWineGitInfo(){
     if(!g_vekLocalData.wineSource.empty()){
         for(auto &d:g_vekLocalData.wineSource){
             ui->comboBox_wineSrc->addItem(d.first);
         }
     }
-    WineVersionComoboBox();
     ui->lineEdit_InstallPath->setText(QDir::currentPath());
 }
-void vekWineOption::WineVersionComoboBox(){
+void vekWineOption::wineVersionComoboBox(){
     QString nowWineSrc=ui->comboBox_wineSrc->currentText();
     if(nowWineSrc==nullptr){
         nowWineSrc="DefaultSrc";
     }
-    loadData();
+    loadWineData();
 }
 void vekWineOption::installWine(QString wineName)
 {
@@ -147,29 +124,35 @@ void vekWineOption::installWine(QString wineName)
     }
     QString selPath=ui->lineEdit_InstallPath->text();
     QString selSrc=ui->comboBox_wineSrc->currentText();
-    BaseWineData iWD;
+    BaseWineData isWData={};
     for(auto [d,p] :g_vekLocalData.wineJsonList){
         if(d==selSrc){
             for(auto dx:p){
                 if(dx.first==wineName){
-                    iWD.IwineSrc=selSrc;
-                    iWD.IwineName=dx.second.WineName;
-                    iWD.IwineVer=dx.second.WineVersion;
-                    iWD.IwineUrl=dx.second.WineGit;
-                    iWD.IwinePath=selPath+"/vekWine/"+dx.second.WineName;
-                    iWD.IwineMono=dx.second.Mono;
-                    iWD.IwineGeckoX86=dx.second.GeckoX86;
-                    iWD.IwineGeckoX86_64=dx.second.GeckoX86_64;
+                    isWData.IwineSrc=selSrc;
+                    isWData.IwineName=dx.second.WineName;
+                    isWData.IwineVer=dx.second.WineVersion;
+                    isWData.IwineUrl=dx.second.WineGit;
+                    isWData.IwinePath=selPath+"/vekWine/"+dx.second.WineName;
+                    isWData.IwineMono=dx.second.Mono;
+                    isWData.IwineGeckoX86=dx.second.GeckoX86;
+                    isWData.IwineGeckoX86_64=dx.second.GeckoX86_64;
                     for(auto v:dx.second.WineDxvk){
-                        iWD.IwineDxvk.insert(iWD.IwineDxvk.end(),v);
+                        isWData.IwineDxvk.insert(isWData.IwineDxvk.end(),v);
                     }
                     break;
                 }
             }
         }
     }
-    githread->_wd=iWD;
-    githread->start();
+    obj_Thread= new QThread;
+    objWine_Thread = new objectGitWine(isWData);
+    connect(this,SIGNAL(ToThread()),objWine_Thread,SLOT(gitWine()));
+    connect(objWine_Thread,SIGNAL(toPrgStr(QString)),this,SLOT(appendTextToLog(QString)));
+    connect(objWine_Thread,SIGNAL(overThreadSignals(bool)),this,SLOT(overGitThreadSignals(bool)));
+    objWine_Thread->moveToThread(obj_Thread);
+    obj_Thread->start();
+    emit ToThread();
     controlState(false);
 }
 void vekWineOption::deleteWine(QString wineName){
@@ -193,10 +176,8 @@ void vekWineOption::deleteWine(QString wineName){
                     wineInstallDir.removeRecursively();
                     g_vekLocalData.wineVec.erase(wineName);
                     DeleteWineDataToJson(wineName);
+                    loadWineData();
                     vekTip("删除成功!");
-                    QModelIndex index = ui->tableView_wined->indexAt(_pos);
-                    ItemModelWined->removeRow(index.row());
-                    ui->tableView_wined->setModel(ItemModelWined);
                 }
             }else{
                 vekTip("删除失败!");
@@ -212,26 +193,24 @@ void vekWineOption::controlState(bool pState){
     ui->lineEdit_InstallPath->setEnabled(pState);
     ui->toolButton_SetInstallDir->setEnabled(pState);
 }
-void vekWineOption::appendTextToLog()
+void vekWineOption::appendTextToLog(QString info_logo)
 {
     ui->textEdit->document()->setMaximumBlockCount(1000);
-    ui->textEdit->append(githread->outputPrgressText);
+    ui->textEdit->append(info_logo);
     QTextCursor cursor=ui->textEdit->textCursor();
     cursor.movePosition(QTextCursor::End);
     ui->textEdit->setTextCursor(cursor);
 }
 void vekWineOption::overGitThreadSignals(bool error)
 {
-    githread->exit();
+    obj_Thread->exit();
     controlState(true);
     if(!error){
-       ui->textEdit->append("下载Wine出错请重试!");
+        ui->textEdit->append("下载Wine出错请重试!");
     }else{
-        QtConcurrent::run([=]()
-        {
-            loadData();
-        });
+        loadWineData();
     }
+    obj_Thread=nullptr;
 }
 void vekWineOption::on_toolButton()
 {
@@ -240,5 +219,4 @@ void vekWineOption::on_toolButton()
     if(installPath!=nullptr){
         ui->lineEdit_InstallPath->setText(installPath);
     }
-
 }

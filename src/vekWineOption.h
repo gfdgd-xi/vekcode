@@ -18,10 +18,11 @@ class vekWineOption : public QWidget
 
 public:
     explicit vekWineOption(QWidget *parent = nullptr);
-    void dealclicked();
     ~vekWineOption();
+    void getWineGitInfo();
+    void loadWineData();
 private slots:
-    void appendTextToLog();
+    void appendTextToLog(QString);
     void overGitThreadSignals(bool);
     void on_toolButton();
     void installWine(QString);
@@ -30,19 +31,17 @@ private slots:
     void onTaskBoxContextMenuEvent();
 private:
     Ui::vekWineOption *ui;
-    objectGitWine *githread;
-    QStandardItemModel *ItemModelWinen;
-    QStandardItemModel *ItemModelWined;
-    QPoint _pos;
-    void GetWineGitInfo();
-    void WineVersionComoboBox();
+    QStandardItemModel *ItemModelWine;
+    //Wine线程
+    QThread *obj_Thread;
+    objectGitWine *objWine_Thread;
     void controlState(bool pState);
-    void loadData();
-    void LoadWineList(QTableView*);
-    void AddWine();
-    void RemoveWine();  
+    void loadWineList(QTableView*);
+private slots:
+    void wineVersionComoboBox();
 signals:
     void _unInitWineOption();
+    void ToThread();
 };
 
 #endif // VEKOPTION_H

@@ -140,6 +140,8 @@ void vek::on_action_WineInstall_triggered()
         _vek_wine_option->setGeometry(this->geometry());
         _vek_wine_option->setWindowFlags(Qt::WindowStaysOnTopHint);
         _vek_wine_option->show();
+        _vek_wine_option->getWineGitInfo();
+        _vek_wine_option->loadWineData();
         connect(_vek_wine_option,&vekWineOption::_unInitWineOption,this,&vek::unInitWineOption);
     }
 }
