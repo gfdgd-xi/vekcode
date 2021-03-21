@@ -1,10 +1,13 @@
 ﻿#include "objectGetCurl.h"
+
+objectGetCurl* dThis=nullptr;
+
 objectGetCurl::objectGetCurl(QObject *parent) : QThread(parent)
 {
-
 }
 objectGetCurl::~objectGetCurl()
 {
+    delete dThis;
 }
 static size_t getData(void *buffer, size_t sz, size_t nmemb, void *writer)
 {
@@ -52,7 +55,7 @@ size_t objectGetCurl::DownloadCallback(void* pBuffer, size_t nSize, size_t nMemB
     size_t nWrite = fwrite(pBuffer, nSize, nMemByte, fp);
     return nWrite;
 }
-static objectGetCurl* dThis=nullptr;
+
 double olnow=0;
 int objectGetCurl::ProgressCallback(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow)
 {

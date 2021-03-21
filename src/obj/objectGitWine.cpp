@@ -1,42 +1,43 @@
 ﻿#include "objectGitWine.h"
 
-//objectGitWine *pThis;
-objectGitWine *g_calcThread = new objectGitWine;
+objectGitWine* pThis=new objectGitWine;
+
 objectGitWine::objectGitWine(QObject *parent) : QThread(parent)
 {
-    //delete pThis;
+    pThis=this;
 }
 objectGitWine::~objectGitWine(){
+    delete pThis;
 }
+
 //输出进度信息
 void objectGitWine::output_progress(progress_data *pd)
 {
-    int network_percent = pd->fetch_progress.total_objects > 0 ?
-        (100*pd->fetch_progress.received_objects) / pd->fetch_progress.total_objects :
-        0;
-    int index_percent = pd->fetch_progress.total_objects > 0 ?
-        (100*pd->fetch_progress.indexed_objects) / pd->fetch_progress.total_objects :
-        0;
 
+    int network_percent = pd->fetch_progress.total_objects > 0 ?
+                (100*pd->fetch_progress.received_objects) / pd->fetch_progress.total_objects :
+                0;
+    int index_percent = pd->fetch_progress.total_objects > 0 ?
+                (100*pd->fetch_progress.indexed_objects) / pd->fetch_progress.total_objects :
+                0;
     int checkout_percent = pd->total_steps > 0
-        ? (int)((100 * pd->completed_steps) / pd->total_steps)
-        : 0;
+            ? (int)((100 * pd->completed_steps) / pd->total_steps)
+            : 0;
     size_t kbytes = pd->fetch_progress.received_bytes / 1024;
 
-        string prlog="Net:   "+std::to_string(network_percent)+"%   "+
-        "("+std::to_string(kbytes)+"   kb,"+std::to_string(pd->fetch_progress.received_objects)+"/"+std::to_string(pd->fetch_progress.total_objects)+")"+
-        "   idx:   "+std::to_string(index_percent)+"%"+"("+std::to_string(pd->fetch_progress.indexed_objects)+"/"+std::to_string(pd->fetch_progress.total_objects)+")"+
-        "   chk:   "+std::to_string(checkout_percent)+"%"+"("+std::to_string(pd->completed_steps)+"/"+std::to_string(pd->total_steps)+")"+
-        "   Resolving deltas:   "+"("+std::to_string(pd->fetch_progress.indexed_deltas)+"/"+std::to_string(pd->fetch_progress.total_deltas)+")";
-        outputPrgressSlots(prlog);
-        //qDebug()<<QString::fromStdString(prlog);
+    string prlog="Net:   "+std::to_string(network_percent)+"%   "+
+            "("+std::to_string(kbytes)+"   kb,"+std::to_string(pd->fetch_progress.received_objects)+"/"+std::to_string(pd->fetch_progress.total_objects)+")"+
+            "   idx:   "+std::to_string(index_percent)+"%"+"("+std::to_string(pd->fetch_progress.indexed_objects)+"/"+std::to_string(pd->fetch_progress.total_objects)+")"+
+            "   chk:   "+std::to_string(checkout_percent)+"%"+"("+std::to_string(pd->completed_steps)+"/"+std::to_string(pd->total_steps)+")"+
+            "   Resolving deltas:   "+"("+std::to_string(pd->fetch_progress.indexed_deltas)+"/"+std::to_string(pd->fetch_progress.total_deltas)+")";
+    pThis->outputPrgressSlots(prlog);
 }
 //网络进度
 int objectGitWine::sideband_progress(const char *str, int len, void *payload)
 {
     (void)payload; /* unused */
     string prlog="remote:"+std::to_string(len)+str;
-    g_calcThread->outputPrgressSlots(prlog);
+    pThis->outputPrgressSlots(prlog);
     fflush(stdout);
     return 0;
 }
@@ -45,7 +46,7 @@ int objectGitWine::fetch_progress(const git_indexer_progress *stats, void *paylo
 {
     progress_data* pd = (progress_data*)payload;
     pd->fetch_progress = *stats;
-    g_calcThread->output_progress(pd);
+    output_progress(pd);
     return 0;
 }
 //检查输出进度
@@ -55,17 +56,18 @@ void objectGitWine::checkout_progress(const char *path, size_t cur, size_t tot, 
     pd->completed_steps = cur;
     pd->total_steps = tot;
     pd->path = path;
-    g_calcThread->output_progress(pd);
+    output_progress(pd);
 }
 //sslcert
 int objectGitWine::ssl_cert(git_cert *cert, int valid, const char *host, void *payload)
 {
-   GIT_UNUSED(valid);
-   GIT_UNUSED(cert);
-   GIT_UNUSED(host);
-   GIT_UNUSED(payload);
+    GIT_UNUSED(valid);
+    GIT_UNUSED(cert);
+    GIT_UNUSED(host);
+    GIT_UNUSED(payload);
     return 1;
 }
+
 void objectGitWine::outputPrgressSlots(string text){
     QtConcurrent::run([=]()
     {
@@ -82,6 +84,7 @@ void objectGitWine::curlPrgressSlots(){
     });
 
 }
+
 void objectGitWine::vek_Clone(BaseWineData _wd){
     outputPrgressSlots("Init Repo");
     if(!git_libgit2_init())
@@ -114,8 +117,8 @@ void objectGitWine::vek_Clone(BaseWineData _wd){
 
 void objectGitWine::run()
 {
+
     try{
-        //pThis=this;
         if(_wd.IwinePath==nullptr){
             return;
         }

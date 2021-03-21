@@ -40,7 +40,7 @@ private:
     void loadData();
     void LoadWineList(QTableView*);
     void AddWine();
-    void RemoveWine();
+    void RemoveWine();  
 signals:
     void _unInitWineOption();
 };
