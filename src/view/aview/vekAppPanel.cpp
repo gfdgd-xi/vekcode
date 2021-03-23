@@ -197,7 +197,7 @@ void vekAppPanel::objAppInstall(){
         }
     }
     if(baseDockerData.WineVersion.contains("deepin",Qt::CaseSensitive)){
-        vekError("deepin-wine5不支持64位容器,可能部分64位软件软件安装程序无法运行!");
+        vekError("deepin-wine5不支持64位容器,可能部分64位软件安装程序无法运行!");
     }
     objectExtend* _objectExtend=new objectExtend();
     objectType _objType=object_uninstall;
@@ -234,7 +234,6 @@ void vekAppPanel::objInitDock(){
     sName = QInputDialog::getItem(this, wTitle,wLabel,items,wIndex,wtable,&w_ok);
     //选择容器系统版本
     if(sName.contains("deepin",Qt::CaseSensitive)){
-        vekError("deepin-wine5不支持64位容器,默认强行以32位初始化容器!");
         itemsbit<<"win32";
     }else{
         itemsbit<<"win32"<<"win64";

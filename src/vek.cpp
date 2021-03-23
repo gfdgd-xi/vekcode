@@ -23,7 +23,6 @@ void vek::connectObject(){
     connect(ui->styleLight,&QAction::triggered,this,&vek::vekStyle);
     //开发功能测试
     connect(ui->action_Dev,&QAction::triggered,this,&vek::option_Dev);
-
     //语言切换
     //connect(ui->langChinese,&QAction::triggered,this,&vek::vekLanguage);
     //connect(ui->langEnglish,&QAction::triggered,this,&vek::vekLanguage);
