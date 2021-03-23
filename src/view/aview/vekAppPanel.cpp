@@ -170,6 +170,17 @@ void vekAppPanel::objAppInstall(){
             vekError("deepin-wine5不支持64位容器,默认强行以32位初始化容器!");
             baseDockerData.DockerVer="win32";
         }
+        for(auto a:g_vekLocalData.dockerVec){
+            if(a.first==dockName){
+                dState=vekMesg("发现相同容器如继续执行将重置该容器,是否覆盖容器创建?");
+                break;
+            }
+        }
+        if(!dState){
+            addGroupSlot(&baseDockerData);
+        }else{
+            return;
+        }
         baseDockerData.DockerPath=QDir::currentPath()+"/vekDock";
         baseDockerData.DockerName=dockName;
         baseDockerData.MonoState=true;
@@ -196,7 +207,88 @@ void vekAppPanel::objAppInstall(){
     delete objNewDock;
     objNewDock=nullptr;
 }
-
+void vekAppPanel::objInitDock(){
+    bool dState=false;
+    QString dockName;
+    QString dockBit="win32";
+    if(g_vekLocalData.wineVec.empty()){
+        vekTip("未发现您的电脑上装有wine请安装wine后重试");
+        return;
+    }
+    BaseDockData baseDockerData;
+    BaseAppData  baseAppData;
+    objectAppMT* objNewDock=new objectAppMT(&baseAppData,&baseDockerData);
+    baseAppData.DefaultFonts=true;
+    QString sName;
+    QStringList items;
+    QStringList itemsbit;
+    //选择wine版本
+    for(auto wName:g_vekLocalData.wineVec){
+        items<<wName.second.IwineName;
+    }
+    QString wTitle="选择Wine版本";
+    QString wLabel="当前Wine版本列表";
+    int     wIndex=0;
+    bool    wtable=false;
+    bool    w_ok=false;
+    sName = QInputDialog::getItem(this, wTitle,wLabel,items,wIndex,wtable,&w_ok);
+    //选择容器系统版本
+    if(sName.contains("deepin",Qt::CaseSensitive)){
+        vekError("deepin-wine5不支持64位容器,默认强行以32位初始化容器!");
+        itemsbit<<"win32";
+    }else{
+        itemsbit<<"win32"<<"win64";
+    }
+    QString dTitle="选择容器系统版本";
+    QString dLabel="支持容器列表";
+    int     dIndex=0;
+    bool    dtable=false;
+    bool    dok=false;
+    dockBit = QInputDialog::getItem(this, dTitle,dLabel,itemsbit,dIndex,dtable,&dok);
+    //输入容器名
+    QString dnTitle="容器名";
+    QString dnLabel="建议采用英文名字";
+    dockName="vekON1";
+    QLineEdit::EchoMode echoMode=QLineEdit::Normal;//正常文字输入
+    bool dn_ok=false;
+    dockName = QInputDialog::getText(nullptr, dnTitle,dnLabel, echoMode,dockName, &dn_ok);
+    for(auto wName:g_vekLocalData.wineVec){
+        if(wName.second.IwineName==sName){
+            baseDockerData.WinePath=g_vekLocalData.wineVec[sName].IwinePath;
+            break;
+        }
+    }
+    if(dockName==nullptr){
+        vekTip("容器名不能为空!");
+        return;
+    }
+    if(baseDockerData.WinePath==nullptr){
+        vekTip("找不到选用对应Wine");
+        return;
+    }
+    for(auto a:g_vekLocalData.dockerVec){
+        if(a.first==dockName){
+            dState=true;
+            break;
+        }
+    }
+    if(dState){
+        dState=vekMesg("发现相同容器如继续执行将重置该容器,是否覆盖容器创建?");
+        if(!dState){
+            return;
+        }
+    }
+    if(!dState){
+       addGroupSlot(&baseDockerData);
+    }
+    baseDockerData.DockerVer=dockBit;
+    baseDockerData.DockerPath=QDir::currentPath()+"/vekDock";
+    baseDockerData.DockerName=dockName;
+    baseDockerData.MonoState=true;
+    baseDockerData.GeckoState=true;
+    objNewDock->newDock();
+    objNewDock=nullptr;
+}
 void vekAppPanel::objectRunApp(){
     if(m_pListMap!=nullptr){
         m_pListMap->at(m_pBox->tabText(m_pBox->currentIndex()))->ObjectRun();

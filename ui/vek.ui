@@ -97,7 +97,7 @@
         <property name="lineWidth">
          <number>1</number>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1,1,0,12,5">
+        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0,1,1,0,12,5">
          <property name="spacing">
           <number>1</number>
          </property>
@@ -129,6 +129,19 @@
            </property>
            <property name="text">
             <string>安装应用</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_initDocker">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>增加容器</string>
            </property>
           </widget>
          </item>

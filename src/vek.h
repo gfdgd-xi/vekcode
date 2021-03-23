@@ -53,5 +53,6 @@ private slots:
     void vekStyle();
     void vekLanguage();
     void option_Dev();
+    void addInitDocker();
 };
 #endif // VEK_H

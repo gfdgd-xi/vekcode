@@ -36,7 +36,7 @@ void vekExtendDebug::ConnectDebugObject(QString dockName,QString appCID){
 }
 void vekExtendDebug::onReadyRead(){
     QByteArray cmdout = m_cmd->readAllStandardOutput();
-    ui->logTextEdit->document()->setMaximumBlockCount(200);
+    ui->logTextEdit->document()->setMaximumBlockCount(20000);
     if(!cmdout.isEmpty()){
         ui->logTextEdit->append(QString::fromLocal8Bit(cmdout));
     }

@@ -269,6 +269,7 @@ void objectAppMT::newDock(){
     }
     DisableAss(winebuilder);
     DisableAss(winemine);
+    SaveDockerDataToJson(*dockData,dockData->DockerName);
 }
 void objectAppMT::sObjectInstall(){
     DxvkFileInstall();

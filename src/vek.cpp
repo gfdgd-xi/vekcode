@@ -16,6 +16,7 @@ void vek::connectObject(){
     connect(ui->pushButton_vekAddApp,&QPushButton::clicked,this,&vek::vekAddApp);
     connect(ui->pushButton_vekRunApp,&QPushButton::clicked,this,&vek::vekRunApp);
     connect(ui->pushButton_InstallApp,&QPushButton::clicked,this,&vek::installApp);
+    connect(ui->pushButton_initDocker,&QPushButton::clicked,this,&vek::addInitDocker);
     //默认样式
     connect(ui->styleDefault,&QAction::triggered,this,&vek::vekStyle);
     connect(ui->styleDark,&QAction::triggered,this,&vek::vekStyle);
@@ -91,6 +92,9 @@ void vek::exitTray(bool trayState){
 }
 void vek::installApp(){
     ui->tabWidget->objAppInstall();
+}
+void vek::addInitDocker(){
+    ui->tabWidget->objInitDock();
 }
 void vek::on_action_EditSource_triggered(){
     if(_vek_source_esit==nullptr){

@@ -20,6 +20,7 @@ public slots:
     void upTabIco();
     void objectRunApp();
     void objAppInstall();
+    void objInitDock();
 private:
     QTabWidget *m_pBox;
     vekAppAddMT* vek_app_add=nullptr;
@@ -36,6 +37,7 @@ private:
     void vekLoadJsonData();
     void vek_InitTabWidgetListApp();
     string GetReData(QString);
+
 signals:
     void toObjAutoArgs_ptr();
 };
