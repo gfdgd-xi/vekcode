@@ -9,7 +9,7 @@ objectExtend::~objectExtend(){
     m_cmd=nullptr;
 }
 void objectExtend::setDockOptionObjectData(BaseDockData _dockData,QString _appCID,std::vector<QStringList> _agrsList,objectType _objType,objectWineBoot _objWineBootType,objectWineServer _objWineServer){
-    appData=GetAppData(_dockData,_appCID);
+    appData=pObject::getAppData(_dockData,_appCID);
     dockData=_dockData;
     argsList=_agrsList;
     objType=_objType;
@@ -293,7 +293,7 @@ void objectExtend::dyncDxvkRegs(std::map<QString,std::map<QString,QString>> dxvk
     for(auto a:dxvkResStr){
         for(auto b:a.second){
          argsList.clear();
-         argsList.push_back(DockRegeditStr("add",a.first,b.first,"REG_SZ",appData.WorkPath));
+         argsList.push_back(pObject::dockerRegeditStr("add",a.first,b.first,"REG_SZ",appData.WorkPath));
         }
     }
     extendWineRegeditCode(startArgs);

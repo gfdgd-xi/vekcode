@@ -29,7 +29,7 @@ QStringList objectAppMT::GetDxvkFileList(QString basedxvkDir){
 void objectAppMT::DxvkFileInstall(){
     //wine下的dxvk目录
     QString baseDxvkDir=dockData->WinePath+"/dxvk";
-    qDebug()<<baseDxvkDir;
+    pObject::oLogs(baseDxvkDir);
     //获取dxvk目录下的文件列表
     QStringList dxvkFileList=GetDxvkFileList(baseDxvkDir);
     //dock下的系统区别
@@ -93,7 +93,7 @@ void objectAppMT::DxvkRegedit(QStringList dxvkFileList){
     }
     for(auto d:dxvkFileList){
         QString _rKey=QFileInfo(d).baseName();
-        argsList.push_back(DockRegeditStr(_rObj,_rPath,_rKey,"REG_SZ",_rValue));
+        argsList.push_back(pObject::dockerRegeditStr(_rObj,_rPath,_rKey,"REG_SZ",_rValue));
     }
     ExecuteObj(object_regobject,object_wineboot_default,object_wineserver_default);
 }
@@ -116,7 +116,7 @@ void objectAppMT::DxvkHUDRegs(){
     }else{
         _rObj="delete";
     }
-    argsList.push_back(DockRegeditStr(_rObj,_rPath,_rKey,"REG_SZ",_rValue));
+    argsList.push_back(pObject::dockerRegeditStr(_rObj,_rPath,_rKey,"REG_SZ",_rValue));
     ExecuteObj(object_regobject,object_wineboot_default,object_wineserver_default);
 }
 //dxvkConfig注册表增加环境变量
@@ -137,7 +137,7 @@ void objectAppMT::DxvkConfigFile(){
     }else{
         _rObj="delete";
     }
-    argsList.push_back(DockRegeditStr(_rObj,_rPath,_rKey,"REG_SZ",_rValue));
+    argsList.push_back(pObject::dockerRegeditStr(_rObj,_rPath,_rKey,"REG_SZ",_rValue));
     ExecuteObj(object_regobject,object_wineboot_default,object_wineserver_default);
 }
 
@@ -153,8 +153,8 @@ void objectAppMT::DefaultFontsFileInstall(){
     if(appData->DefaultFonts){
         if(QFile(fontsDirStr).exists()){
             for(auto f:fontsList){
-                qDebug()<<fontsDirStr+"/"+f;
-                qDebug()<<dockData->DockerPath+"/"+dockData->DockerName+"/drive_c/windows/Fonts/"+f;
+                pObject::oLogs(fontsDirStr+"/"+f);
+                pObject::oLogs(dockData->DockerPath+"/"+dockData->DockerName+"/drive_c/windows/Fonts/"+f);
                 QFile::copy(fontsDirStr+"/"+f, dockData->DockerPath+"/"+dockData->DockerName+"/drive_c/windows/Fonts/"+f);
             }
         }
@@ -172,7 +172,7 @@ void objectAppMT::DefaultFontsRegs(){
         for(auto b:a.second){
             _rKey=b.first;
             _rValue=b.second;
-            argsList.push_back(DockRegeditStr("add",_rPath,_rKey,"REG_SZ",_rValue));
+            argsList.push_back(pObject::dockerRegeditStr("add",_rPath,_rKey,"REG_SZ",_rValue));
         }
     }
     ExecuteObj(object_regobject,object_wineboot_default,object_wineserver_default);
@@ -199,7 +199,7 @@ void objectAppMT::InitDockDir(bool foceState,QDir _dockPath,QDir _dockDir){
     QFile userdefFile=_dockDir.path()+"/userdef.reg";
     while(true){
         if(systemFile.exists()&userFile.exists()&userdefFile.exists()){
-            qDebug()<<"容器初始化完毕！";
+            pObject::oLogs("容器初始化完毕！");
             break;
         }
     }
@@ -244,15 +244,15 @@ void objectAppMT::optionRegs(){
     argsList.clear();
     for(auto d:appData->DockerRegs)
     {
-        argsList.push_back(DockRegeditStr("add",d.rPath,d.rKey,d.rTValue,d.rValue));
+        argsList.push_back(pObject::dockerRegeditStr("add",d.rPath,d.rKey,d.rTValue,d.rValue));
     }
     ExecuteObj(object_regobject,object_wineboot_default,object_wineserver_default);
 }
 void objectAppMT::newDock(){
     QDir dockPath(dockData->DockerPath);
     QDir dockDir(dockData->DockerPath+"/"+dockData->DockerName);
-    qDebug()<<dockData->DockerPath;
-    qDebug()<<dockData->DockerName;
+    pObject::oLogs(dockData->DockerPath);
+    pObject::oLogs(dockData->DockerName);
     argsList.clear();
     if(dockData->DockerPath==nullptr&&dockData->DockerName==nullptr){
         return;
@@ -269,7 +269,7 @@ void objectAppMT::newDock(){
     }
     DisableAss(winebuilder);
     DisableAss(winemine);
-    SaveDockerDataToJson(*dockData,dockData->DockerName);
+    pObject::saveDockerDataToJson(*dockData,dockData->DockerName);
 }
 void objectAppMT::sObjectInstall(){
     DxvkFileInstall();
@@ -294,7 +294,7 @@ void objectAppMT::DisableAss(std::map<QString,std::map<QString,QString>> regStr)
     }else{
         _rObj="delete";
     }
-    argsList.push_back(DockRegeditStr(_rObj,_rPath,_rKey,"REG_SZ",_rValue));
+    argsList.push_back(pObject::dockerRegeditStr(_rObj,_rPath,_rKey,"REG_SZ",_rValue));
     ExecuteObj(object_regobject,object_wineboot_default,object_wineserver_default);
 }
 void objectAppMT::outAppIco(){
@@ -303,7 +303,7 @@ void objectAppMT::outAppIco(){
         QDir(QDir::currentPath()).mkdir("vekCache");
     }
     QString exeName=QFileInfo(appData->AppExe).baseName();
-    QString exePath=StrPathNullToStr(appData->AppExe);
+    QString exePath=pObject::pathNullToStr(appData->AppExe);
     char* outCode=("wrestool -x -t 14 "+exePath+ ">"+ icoCacheDir+exeName).toLocal8Bit().data();
     system(outCode);
     if(QFileInfo(icoCacheDir+exeName).size()>0){

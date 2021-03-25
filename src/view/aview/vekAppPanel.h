@@ -27,6 +27,7 @@ private:
     vekAppAddMulti* vek_app_multi_add=nullptr;
     vekAppAddAT* vek_app_add_auto=nullptr;
     objectTray* objTray=nullptr;
+    int cindex;
     void unMultAppAdd();
     void unDiyAppAdd();
     void unAutoDock();
@@ -37,7 +38,10 @@ private:
     void vekLoadJsonData();
     void vek_InitTabWidgetListApp();
     string GetReData(QString);
-
+private slots:
+    void deleteGroupSlot(bool);
+protected:
+    void contextMenuEvent ( QContextMenuEvent * event );
 signals:
     void toObjAutoArgs_ptr();
 };

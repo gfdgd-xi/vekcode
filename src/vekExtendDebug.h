@@ -21,6 +21,7 @@ private:
     QProcess *m_cmd=nullptr;
     BaseAppData appData;
     BaseDockData dockData;
+    bool checkStatic;
     void upDllStr();
     std::vector<QString> dllList={"accel","adpcm","advapi","animate","aspi",
     "atom","avicap","avifile","bidi","bitblt",

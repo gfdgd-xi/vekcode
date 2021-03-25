@@ -6,7 +6,7 @@ vekAppAddAT::vekAppAddAT(QWidget *parent) :
     ui(new Ui::vekAppAddAT)
 {
     ui->setupUi(this);
-    qwidgetGeometry(this);
+    pObject::qwidgetGeometry(this);
 }
 
 vekAppAddAT::~vekAppAddAT()
@@ -25,7 +25,7 @@ void vekAppAddAT::connectDockObject(){
             ui->comboBox_WinVersion->addItem(x.first);
         }
     }else{
-        vekTip("请先安装Wine");
+        pObject::vekTip("请先安装Wine");
         this->close();
     }
 
@@ -68,29 +68,29 @@ void vekAppAddAT::SetObject(){
 }
 void vekAppAddAT::addAutoApp(){
     if(ui->comboBox_JsonUrl->currentText()==nullptr){
-        vekTip("请设置Json文件");
+        pObject::vekTip("请设置Json文件");
         return;
     }
     if(ui->comboBox_DockName->currentText()==nullptr){
-        vekTip("请为容器命名");
+        pObject::vekTip("请为容器命名");
         return;
     }
     if(ui->lineEdit_DockPath->text()==nullptr){
-        vekTip("请指定容器保存路径");
+        pObject::vekTip("请指定容器保存路径");
         return;
     }
     if(ui->comboBox_WinVersion->currentText()==nullptr){
-        vekTip("请安装wine!");
+        pObject::vekTip("请安装wine!");
         this->close();
         return;
     }
     if(ui->lineEdit_AppExePath->text()==nullptr){
-        vekTip("请设置游戏运行exe文件路径");
+        pObject::vekTip("请设置游戏运行exe文件路径");
         return;
     }
     BaseAppData* autoAppData=new BaseAppData;
     BaseDockData* autoDockData=new BaseDockData;
-    BaseDockData btmp=GetDockerData(ui->comboBox_DockName->currentText());
+    BaseDockData btmp=pObject::getDockerData(ui->comboBox_DockName->currentText());
     if(btmp.DockerPath==nullptr){
         autoDockData->DockerName=ui->comboBox_DockName->currentText();
         autoDockData->DockerPath=ui->lineEdit_DockPath->text();
@@ -132,7 +132,7 @@ void vekAppAddAT::ErrorText(QString ErrorInfo,bool cState){
     controlState(cState);
 }
 void vekAppAddAT::ObjDone(BaseDockData* _aDockData,BaseAppData* aAppData){
-    AddAppDataToJson(*_aDockData,*aAppData);
+    pObject::addAppDataToJson(*_aDockData,*aAppData);
     emit autoObjDock(_aDockData,aAppData);
     this->close();
 }

@@ -2,7 +2,6 @@
 #include "src/obj/baseRes.h"
 #include "src/obj/objectSource.h"
 #include "src/obj/objectGetCurl.h"
-#include "src/obj/pObject.h"
 
 typedef struct{
     QString version;
@@ -40,7 +39,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     if(getVinfo()){
-        if(vekMesg("发现新版本,是否执行更新!")){
+        if(pObject::vekMesg("发现新版本,是否执行更新!")){
             QString strPrefix = ":/res/vup/vUpdate";
             if(QFile(QDir::currentPath()+"/vUpdate").exists()){
                 QFile(QDir::currentPath()+"/vUpdate").remove();

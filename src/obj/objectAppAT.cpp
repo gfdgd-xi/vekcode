@@ -81,15 +81,15 @@ bool objectAppAT::objDockerData(){
         //如果容器存在
         qDebug()<<"如果容器存在";
         if(baseDockData.DockerVer!=_baseAutoSetJson->Docker.at(toStr(DockerVersion))){
-            vekError("当前容器版本为:"+baseDockData.DockerVer+"配置文件容器版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerVersion)));
+            pObject::vekError("当前容器版本为:"+baseDockData.DockerVer+"配置文件容器版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerVersion)));
             return false;
         }
         if(baseDockData.DockerWineVersion!=_baseAutoSetJson->Docker.at(toStr(DockerWineVersion))){
-            vekError("当前容器Wine版本为:"+baseDockData.DockerWineVersion+"配置文件容器Wine版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerWineVersion)));
+            pObject::vekError("当前容器Wine版本为:"+baseDockData.DockerWineVersion+"配置文件容器Wine版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerWineVersion)));
             return false;
         }
         if(baseDockData.WineVersion.contains("deepin",Qt::CaseSensitive)&_baseAutoSetJson->Docker.at(toStr(DockerVersion))=="win64"){
-            vekError("当前容器Wine版本为:"+baseDockData.WineVersion+"配置文件容器版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerVersion))+"\n"+"deepin-wine5不支持64位容器!");
+            pObject::vekError("当前容器Wine版本为:"+baseDockData.WineVersion+"配置文件容器版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerVersion))+"\n"+"deepin-wine5不支持64位容器!");
             return false;
         }
     }
@@ -177,7 +177,8 @@ void objectAppAT::run(){
         emit Error("配置文件出错!",true);
         return;
     }
-    qDebug()<<"配置文件"<<appJsonData.appJson;
+    pObject::oLogs("配置文件:"+appJsonData.appJson);
+
     if(!jsonUnserialize(appJsonData,jtype)){
         emit Error("配置容器出错!",true);
         return;

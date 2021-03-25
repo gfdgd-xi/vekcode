@@ -131,7 +131,7 @@ void vekSourceEdit::objectDeleteSrc(QTableView* qTableView){
     int curRows = qTableView->model()->rowCount();
     qDebug()<<curRows-1;
     if(curRows-1<=0){
-       vekTip("不能删除唯一源");
+       pObject::vekTip("不能删除唯一源");
        return;
     }
     if(curRow > -1){

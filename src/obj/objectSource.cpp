@@ -1,5 +1,5 @@
 #include "objectSource.h"
-
+#include "pObject.h"
 objectSource::objectSource()
 {
 
@@ -22,7 +22,7 @@ void objectSource::updateSrcDataObject(){
         if(sdata!="error"){
             _objectJson.unSerializeLocalWineApp(d,QString::fromStdString(sdata),unJsonWineList);
         }else{
-            vekError("更新wine源数据失败");
+            pObject::vekError("更新wine源数据失败");
         }
     }
     for(auto &[i,o]:g_vekLocalData.appScrSource){
@@ -30,7 +30,7 @@ void objectSource::updateSrcDataObject(){
         if(sdata!="error"){
             _objectJson.unSerializeLocalWineApp(i,QString::fromStdString(sdata),unJsonGameList);
         }else{
-            vekError("更新游戏源数据失败");
+            pObject::vekError("更新游戏源数据失败");
         }
     }
 }

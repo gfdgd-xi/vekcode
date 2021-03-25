@@ -24,14 +24,14 @@ void vekExportJson::SaveJson(){
     QString savePath = QFileDialog::getSaveFileName(this,tr("选择保存json路径"),".",tr("json Files(*.json)"));
     bool vekMesgDxvkSave=false;
     if(savePath!=nullptr&&saveStr!=nullptr){
-       vekMesgDxvkSave=vekMesg("是否把json配置文件保存到"+savePath);
+       vekMesgDxvkSave=pObject::vekMesg("是否把json配置文件保存到"+savePath);
     }else{
         return;
     }
     if(vekMesgDxvkSave)
     {
         if(QFile(savePath).exists()){
-            if(vekMesg("是否覆盖"+savePath)){
+            if(pObject::vekMesg("是否覆盖"+savePath)){
                 QFile(savePath).remove();
             }else{
                 savePath = QFileDialog::getSaveFileName(this,tr("选择保存json路径"),".",tr("json Files(*.json)"));
@@ -41,6 +41,6 @@ void vekExportJson::SaveJson(){
         savePath = QFileDialog::getSaveFileName(this,tr("选择保存json路径"),".",tr("json Files(*.json)"));
     }
     if(savePath!=NULL){
-        saveStrToFile(ui->textEdit_OutPutStr->toPlainText(),savePath);
+        pObject::saveStrToFile(ui->textEdit_OutPutStr->toPlainText(),savePath);
     }
 }

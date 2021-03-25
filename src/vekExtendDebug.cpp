@@ -33,16 +33,21 @@ void vekExtendDebug::ConnectDebugObject(QString dockName,QString appCID){
             }
         }
     }
+    QStringList logn;
+    logn<<"500"<<"1000"<<"20000"<<"50000";
+    ui->comboBox_logint->addItems(logn);
 }
 void vekExtendDebug::onReadyRead(){
     QByteArray cmdout = m_cmd->readAllStandardOutput();
-    ui->logTextEdit->document()->setMaximumBlockCount(20000);
+    ui->logTextEdit->document()->setMaximumBlockCount(ui->comboBox_logint->currentText().toInt());
     if(!cmdout.isEmpty()){
         ui->logTextEdit->append(QString::fromLocal8Bit(cmdout));
     }
-    QTextCursor cursor=ui->logTextEdit->textCursor();
-    cursor.movePosition(QTextCursor::End);
-    ui->logTextEdit->setTextCursor(cursor);
+    if(ui->radioButton_radiologs->isChecked()){
+        QTextCursor cursor=ui->logTextEdit->textCursor();
+        cursor.movePosition(QTextCursor::End);
+        ui->logTextEdit->setTextCursor(cursor);
+    }
 }
 void vekExtendDebug::addDll(){
     QString xData="+"+ui->comboBox_DebugDllList->currentText();

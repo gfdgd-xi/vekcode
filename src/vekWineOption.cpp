@@ -119,7 +119,7 @@ void vekWineOption::installWine(QString wineName)
 {
 
     if(ui->lineEdit_InstallPath->text()==nullptr){
-        vekTip("请选择Wine安装路径");
+        pObject::vekTip("请选择Wine安装路径");
         return;
     }
     QString selPath=ui->lineEdit_InstallPath->text();
@@ -159,7 +159,7 @@ void vekWineOption::deleteWine(QString wineName){
     int curRow=ui->tableView_wined->model()->rowCount();
     bool sDelWine=true;
     if(curRow-1==0){
-        sDelWine=vekMesg("删除最后一个Wine容器内的程序将无法运行!是否坚持删除?");
+        sDelWine=pObject::vekMesg("删除最后一个Wine容器内的程序将无法运行!是否坚持删除?");
     }
     if(sDelWine){
         QString winePath=nullptr;
@@ -169,18 +169,18 @@ void vekWineOption::deleteWine(QString wineName){
                 break;
             }
         }
-        if(vekMesg("您确定要删除"+wineName+"\n路径为:"+winePath)){
+        if(pObject::vekMesg("您确定要删除"+wineName+"\n路径为:"+winePath)){
             if(winePath!=nullptr){
                 QDir wineInstallDir(winePath);
                 if(wineInstallDir.exists()){
                     wineInstallDir.removeRecursively();
                     g_vekLocalData.wineVec.erase(wineName);
-                    DeleteWineDataToJson(wineName);
+                    pObject::deleteWineDataToJson(wineName);
                     loadWineData();
-                    vekTip("删除成功!");
+                    pObject::vekTip("删除成功!");
                 }
             }else{
-                vekTip("删除失败!");
+                pObject::vekTip("删除失败!");
                 return;
             }
         }

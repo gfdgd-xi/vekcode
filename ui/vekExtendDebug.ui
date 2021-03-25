@@ -105,7 +105,10 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
-        <widget class="QRadioButton" name="radioButton">
+        <widget class="QRadioButton" name="radioButton_radiologs">
+         <property name="focusPolicy">
+          <enum>Qt::StrongFocus</enum>
+         </property>
          <property name="text">
           <string>日志滚动</string>
          </property>
@@ -113,6 +116,9 @@
        </item>
        <item>
         <widget class="QRadioButton" name="radioButton_2">
+         <property name="focusPolicy">
+          <enum>Qt::StrongFocus</enum>
+         </property>
          <property name="text">
           <string>写入日志</string>
          </property>
@@ -126,7 +132,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox"/>
+        <widget class="QComboBox" name="comboBox_logint"/>
        </item>
        <item>
         <spacer name="horizontalSpacer_3">

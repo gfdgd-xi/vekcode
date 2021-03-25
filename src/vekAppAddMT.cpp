@@ -6,7 +6,7 @@ vekAppAddMT::vekAppAddMT(QWidget *parent) :
     ui(new Ui::vekAppAddMT)
 {
     ui->setupUi(this);
-    qwidgetGeometry(this);
+    pObject::qwidgetGeometry(this);
 }
 
 vekAppAddMT::~vekAppAddMT()
@@ -45,7 +45,7 @@ void vekAppAddMT::vekAppAddConnectObject(BaseDockData* _data,QString _appCID,obj
             }
         }
     }else{
-        vekTip("请先安装Wine");
+        pObject::vekTip("请先安装Wine");
         this->close();
     }
     for(auto&y:_dockSystemVersion){
@@ -109,7 +109,7 @@ void vekAppAddMT::initAppAndDockData(BaseDockData* _data,QString _appCID){
         tempDockData=new BaseDockData;
         tempDockData->DockerPath=QDir::currentPath()+"/vekDock";
     }else{
-        *tempDockData=GetDockerData(_data->DockerName);
+        *tempDockData=pObject::getDockerData(_data->DockerName);
         if(_appCID!=nullptr){
             auto it =tempDockData->dData.find(_appCID);
             *tempAppData=it->second;
@@ -160,7 +160,7 @@ void vekAppAddMT::dxvkOptionLoad(){
                 dxvkPath=it->second.IwinePath+"/dxvk/dxvk.conf";
                 ui->lineEdit_dxvkConfigFIle->setText(dxvkPath);
             }
-            ui->textEdit_dxvkConfigFileData->setText(getFileStr(dxvkPath));
+            ui->textEdit_dxvkConfigFileData->setText(pObject::getFileStr(dxvkPath));
         }
     }else{
         ui->checkBox_statedxvkhud->setChecked(false);
@@ -413,7 +413,7 @@ bool vekAppAddMT::checkDxvkOption(){
     bool dxvkState=true;
     if(tempAppData->DxvkConfigFileState){
         if(tempAppData->DxvkConfigFile==nullptr){
-            vekError("启用dxvk配置文件功能后,必须指定dxvk配置文件路径");
+            pObject::vekError("启用dxvk配置文件功能后,必须指定dxvk配置文件路径");
             dxvkState=false;
         }
     }
@@ -425,22 +425,22 @@ bool vekAppAddMT::checkAppOption(){
     bool optionAppState=true;
     if(tempAppData->AppName==nullptr)
     {
-        vekError("请填写游戏名");
+        pObject::vekError("请填写游戏名");
         optionAppState=false;
     }
     if(tempAppData->AppExe==nullptr)
     {
-        vekError("请设置游戏执行文件");
+        pObject::vekError("请设置游戏执行文件");
         optionAppState=false;
     }
     if(tempAppData->WorkPath==nullptr)
     {
-        vekError("请设置游戏工作目录");
+        pObject::vekError("请设置游戏工作目录");
         optionAppState=false;
     }
 
     if(tempAppData->MainPrcoName==nullptr){
-        vekError("主进程名不能为空");
+        pObject::vekError("主进程名不能为空");
         optionAppState=false;
     }
     qDebug()<<"app参数"<<optionAppState;
@@ -451,24 +451,24 @@ bool vekAppAddMT::checkAppOption(){
 bool vekAppAddMT::checkDocerOption(){
     bool optionDockState=true;  
     if(tempDockData->WineVersion==nullptr){
-        vekError("请先安装wine");
+        pObject::vekError("请先安装wine");
         optionDockState=false;
     }
     if(tempDockData->WineVersion.contains("deepin",Qt::CaseSensitive)&tempDockData->DockerVer=="win64"){
-        vekError("Deepin-Wine5不支持64位容器");
+        pObject::vekError("Deepin-Wine5不支持64位容器");
         optionDockState=false;
     }
     if(tempDockData->DockerPath==nullptr)
     {
-        vekError("请设置wine运行容器路径");
+        pObject::vekError("请设置wine运行容器路径");
         optionDockState=false;
     }
     if(tempDockData->DockerName==nullptr){
-        vekError("请设置容器名字");
+        pObject::vekError("请设置容器名字");
         optionDockState=false;
     }
     if(tempDockData->WinePath==nullptr){
-        vekError("请先安装wine");
+        pObject::vekError("请先安装wine");
         optionDockState=false;
     }
     qDebug()<<"Docker参数"<<optionDockState;
@@ -517,11 +517,11 @@ void vekAppAddMT::objectButton(){
     //保存Save
     if(action_obnject->objectName()=="pushButton_SaveDxvkConfFile"){
         QString savePath=ui->lineEdit_dxvkConfigFIle->text();
-        bool vekMesgDxvkSave=vekMesg("是否把dxvk配置文件保存到"+savePath);
+        bool vekMesgDxvkSave=pObject::vekMesg("是否把dxvk配置文件保存到"+savePath);
         if(vekMesgDxvkSave)
         {
             if(QFile(savePath).exists()){
-                if(vekMesg("是否覆盖"+savePath)){
+                if(pObject::vekMesg("是否覆盖"+savePath)){
                     QFile(savePath).remove();
                 }else{
                     savePath = QFileDialog::getSaveFileName(this,tr("选择保存dxvk.conf路径"),".",tr("DxvkConf Files(*.conf)"));
@@ -532,7 +532,7 @@ void vekAppAddMT::objectButton(){
         }
         if(savePath!=nullptr){
             ui->lineEdit_dxvkConfigFIle->setText(savePath);
-            saveStrToFile(ui->textEdit_dxvkConfigFileData->toPlainText(),savePath);
+            pObject::saveStrToFile(ui->textEdit_dxvkConfigFileData->toPlainText(),savePath);
             ui->lineEdit_dxvkConfigFIle->setText(savePath);
         }
     }
@@ -547,12 +547,12 @@ void vekAppAddMT::objectButton(){
     //初始化
     if(action_obnject->objectName()=="pushButton_initDock"){
         if(ui->comboBox_dockbit->isEnabled()){
-            if(vekMesg("强制初始化容器会导致部分软件无法运行和适配请慎重!")){
+            if(pObject::vekMesg("强制初始化容器会导致部分软件无法运行和适配请慎重!")){
                 ui->label_TipsText->setText("正在初始化容器请稍后!");
                 vekAppAddObj(true);
             }
         }else{
-            if(vekMesg("是否解锁初始化功能限制请谨慎操作?")){
+            if(pObject::vekMesg("是否解锁初始化功能限制请谨慎操作?")){
                 ui->comboBox_dockbit->setEnabled(true);
                 ui->comboBox_DockName->setEnabled(true);
                 ui->comboBox_dockSystemVersion->setEnabled(true);
@@ -567,10 +567,10 @@ bool vekAppAddMT::vekAppAddObj(bool _forceState){
     }
     objectAppMT* vappAddObj=new objectAppMT(tempAppData,tempDockData);
     if(!vappAddObj->InitDockObj(_forceState)){
-        vekError("初始化失败!");
+        pObject::vekError("初始化失败!");
         return false;
     }else{
-        AddAppDataToJson(*tempDockData,*tempAppData);
+        pObject::addAppDataToJson(*tempDockData,*tempAppData);
     }
     if(objType==object_setApp){
         emit _upData(*tempDockData,tempAppData,objType);

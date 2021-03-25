@@ -1,5 +1,6 @@
 ﻿#include "vek.h"
 #include "ui_common.h"
+
 vek::vek(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::vek)
@@ -26,7 +27,7 @@ void vek::connectObject(){
     //语言切换
     //connect(ui->langChinese,&QAction::triggered,this,&vek::vekLanguage);
     //connect(ui->langEnglish,&QAction::triggered,this,&vek::vekLanguage);
-    qwidgetGeometry(this);
+    pObject::qwidgetGeometry(this);
     QString vStr="Vek-";
     vStr.append(APP_VERSION);
     this->setWindowTitle(vStr);

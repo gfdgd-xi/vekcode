@@ -7,7 +7,7 @@ vekAbout::vekAbout(QWidget *parent) :
     ui(new Ui::vekAbout)
 {
     ui->setupUi(this);
-    qwidgetGeometry(this);
+    pObject::qwidgetGeometry(this);
 }
 
 vekAbout::~vekAbout()

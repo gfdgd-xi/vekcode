@@ -51,6 +51,23 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
     }
 
 }
+
+void vekAppPanel::contextMenuEvent( QContextMenuEvent * event )
+{
+    cindex=m_pBox->tabBar()->tabAt(event->pos());
+    if(cindex>-1){
+        QMenu *pMenu = new QMenu(this);
+        QAction *pAddGroupAct = new QAction(tr("删除容器"),pMenu);
+        pAddGroupAct->setObjectName(m_pBox->tabText(cindex));
+        pMenu->addAction(pAddGroupAct);
+        connect(pAddGroupAct,SIGNAL(triggered (bool)),this,SLOT(deleteGroupSlot(bool)));
+        pMenu->exec(QCursor::pos());
+        QList<QAction*> list = pMenu->actions();
+        foreach (QAction* pAction, list) delete pAction;
+        delete pMenu;
+    }
+}
+
 //读取数据to容器列表
 void vekAppPanel::vekLoadJsonData(){
     if(g_vekLocalData.dockerVec.empty()){
@@ -95,7 +112,7 @@ void vekAppPanel::addAppDiy(){
         vek_app_add->setAttribute(Qt::WA_DeleteOnClose,true);
         vek_app_add->setWindowFlags(Qt::WindowStaysOnTopHint);
         vek_app_add->setWindowTitle("Vek软件增加");
-        BaseDockData tmpData=GetDockerData(m_pBox->tabText(m_pBox->currentIndex()));
+        BaseDockData tmpData=pObject::getDockerData(m_pBox->tabText(m_pBox->currentIndex()));
         vek_app_add->vekAppAddConnectObject(&tmpData,nullptr,object_addApp);
         vek_app_add->show();
         connect(vek_app_add,&vekAppAddMT::_unDiyAppAdd,this,&vekAppPanel::unDiyAppAdd);
@@ -117,11 +134,11 @@ void vekAppPanel::addAppAuto(){
 void vekAppPanel::objAppInstall(){
     bool dState=false;
     if(g_vekLocalData.wineVec.empty()){
-        vekTip("未发现您的电脑上装有wine请安装wine后重试");
+        pObject::vekTip("未发现您的电脑上装有wine请安装wine后重试");
         return;
     }
     if(g_vekLocalData.dockerVec.empty()){
-        dState=vekMesg("您的电脑上未发现容器无法安装软件,是否初始化一个容器用于软件安装");
+        dState=pObject::vekMesg("您的电脑上未发现容器无法安装软件,是否初始化一个容器用于软件安装");
         if(!dState){
             return;
         }
@@ -153,6 +170,9 @@ void vekAppPanel::objAppInstall(){
             bool    editable=false;
             bool    ok=false;
             sName = QInputDialog::getItem(this, dlgTitle,txtLabel,items,curIndex,editable,&ok);
+            if(!ok){
+                return;
+            }
             for(auto wName:g_vekLocalData.wineVec){
                 if(wName.second.IwineName==sName){
                     baseDockerData.WinePath=g_vekLocalData.wineVec[sName].IwinePath;
@@ -162,17 +182,17 @@ void vekAppPanel::objAppInstall(){
             baseDockerData.WinePath=g_vekLocalData.wineVec.begin()->second.IwinePath;
             sName=g_vekLocalData.wineVec.begin()->second.IwineName;
         }
-        dState=vekMesg("确认安装程序类型!Yes->32位,NO->64位");
+        dState=pObject::vekMesg("确认安装程序类型!Yes->32位,NO->64位");
         if(!dState){
             baseDockerData.DockerVer="win64";
         }
         if(g_vekLocalData.wineVec[sName].IwineName.contains("deepin",Qt::CaseSensitive)&baseDockerData.DockerVer=="win64"){
-            vekError("deepin-wine5不支持64位容器,默认强行以32位初始化容器!");
+            pObject::vekError("deepin-wine5不支持64位容器,默认强行以32位初始化容器!");
             baseDockerData.DockerVer="win32";
         }
         for(auto a:g_vekLocalData.dockerVec){
             if(a.first==dockName){
-                dState=vekMesg("发现相同容器如继续执行将重置该容器,是否覆盖容器创建?");
+                dState=pObject::vekMesg("发现相同容器如继续执行将重置该容器,是否覆盖容器创建?");
                 break;
             }
         }
@@ -197,7 +217,7 @@ void vekAppPanel::objAppInstall(){
         }
     }
     if(baseDockerData.WineVersion.contains("deepin",Qt::CaseSensitive)){
-        vekError("deepin-wine5不支持64位容器,可能部分64位软件安装程序无法运行!");
+        pObject::vekError("deepin-wine5不支持64位容器,可能部分64位软件安装程序无法运行!");
     }
     objectExtend* _objectExtend=new objectExtend();
     objectType _objType=object_uninstall;
@@ -212,7 +232,7 @@ void vekAppPanel::objInitDock(){
     QString dockName;
     QString dockBit="win32";
     if(g_vekLocalData.wineVec.empty()){
-        vekTip("未发现您的电脑上装有wine请安装wine后重试");
+        pObject::vekTip("未发现您的电脑上装有wine请安装wine后重试");
         return;
     }
     BaseDockData baseDockerData;
@@ -232,6 +252,9 @@ void vekAppPanel::objInitDock(){
     bool    wtable=false;
     bool    w_ok=false;
     sName = QInputDialog::getItem(this, wTitle,wLabel,items,wIndex,wtable,&w_ok);
+    if(!w_ok){
+        return;
+    }
     //选择容器系统版本
     if(sName.contains("deepin",Qt::CaseSensitive)){
         itemsbit<<"win32";
@@ -242,8 +265,11 @@ void vekAppPanel::objInitDock(){
     QString dLabel="支持容器列表";
     int     dIndex=0;
     bool    dtable=false;
-    bool    dok=false;
-    dockBit = QInputDialog::getItem(this, dTitle,dLabel,itemsbit,dIndex,dtable,&dok);
+    bool    d_ok=false;
+    dockBit = QInputDialog::getItem(this, dTitle,dLabel,itemsbit,dIndex,dtable,&d_ok);
+    if(!d_ok){
+        return;
+    }
     //输入容器名
     QString dnTitle="容器名";
     QString dnLabel="建议采用英文名字";
@@ -251,6 +277,9 @@ void vekAppPanel::objInitDock(){
     QLineEdit::EchoMode echoMode=QLineEdit::Normal;//正常文字输入
     bool dn_ok=false;
     dockName = QInputDialog::getText(nullptr, dnTitle,dnLabel, echoMode,dockName, &dn_ok);
+    if(!dn_ok){
+        return;
+    }
     for(auto wName:g_vekLocalData.wineVec){
         if(wName.second.IwineName==sName){
             baseDockerData.WinePath=g_vekLocalData.wineVec[sName].IwinePath;
@@ -258,11 +287,11 @@ void vekAppPanel::objInitDock(){
         }
     }
     if(dockName==nullptr){
-        vekTip("容器名不能为空!");
+        pObject::vekTip("容器名不能为空!");
         return;
     }
     if(baseDockerData.WinePath==nullptr){
-        vekTip("找不到选用对应Wine");
+        pObject::vekTip("找不到选用对应Wine");
         return;
     }
     for(auto a:g_vekLocalData.dockerVec){
@@ -272,13 +301,10 @@ void vekAppPanel::objInitDock(){
         }
     }
     if(dState){
-        dState=vekMesg("发现相同容器如继续执行将重置该容器,是否覆盖容器创建?");
+        dState=pObject::vekMesg("发现相同容器如继续执行将重置该容器,是否覆盖容器创建?");
         if(!dState){
             return;
         }
-    }
-    if(!dState){
-       addGroupSlot(&baseDockerData);
     }
     baseDockerData.DockerVer=dockBit;
     baseDockerData.DockerPath=QDir::currentPath()+"/vekDock";
@@ -287,6 +313,9 @@ void vekAppPanel::objInitDock(){
     baseDockerData.GeckoState=true;
     objNewDock->newDock();
     objNewDock=nullptr;
+    if(!dState){
+        addGroupSlot(&baseDockerData);
+    }
 }
 void vekAppPanel::objectRunApp(){
     if(m_pListMap!=nullptr){
@@ -359,4 +388,22 @@ void vekAppPanel::addGroupSlot(BaseDockData* dcokData)
         vekAppListView* pList = it->second;
         pList->setListMap(m_pListMap,m_pBox);
     }
+}
+void vekAppPanel::deleteGroupSlot(bool del_static){
+    QAction *pEven = qobject_cast<QAction *>(this->sender());
+    QString strDockerName=pEven->objectName();
+    BaseDockData tDocker=pObject::getDockerData(strDockerName);
+    m_pBox->removeTab(cindex);
+    qInfo()<<cindex;
+    if(tDocker.DockerPath!=nullptr&&strDockerName!=nullptr){
+        qInfo()<<tDocker.DockerPath;
+        QDir dockPath(tDocker.DockerPath+"/"+strDockerName);
+        if(dockPath.exists()){
+            dockPath.removeRecursively();
+        }
+    }
+    g_vekLocalData.dockerVec.erase(strDockerName);
+    objectJson _oJson;
+    _oJson.deleteDockerNodeData(strDockerName);
+    m_pListMap->erase(strDockerName);
 }

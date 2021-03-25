@@ -1,12 +1,16 @@
 #include "pObject.h"
 #include "objectJson.h"
-void vekTip(QString tipInfo){
+
+void pObject::oLogs(QString str){
+    qInfo()<<str;
+}
+void pObject::vekTip(QString tipInfo){
     QMessageBox::warning(nullptr,"TIP",tipInfo);
 }
-void vekError(QString tipInfo){
+void pObject::vekError(QString tipInfo){
     QMessageBox::warning(nullptr,"ERROR",tipInfo);
 }
-bool vekMesg(QString tipText){
+bool pObject::vekMesg(QString tipText){
     QMessageBox msgBox;
     msgBox.setInformativeText(tipText);
     msgBox.setStandardButtons(QMessageBox::Ok|QMessageBox::Cancel);
@@ -22,26 +26,26 @@ bool vekMesg(QString tipText){
     return false;
 }
 //保存Docker数据
-void SaveDockerDataToJson(BaseDockData dockData,QString dockName){
+void pObject::saveDockerDataToJson(BaseDockData dockData,QString dockName){
     objectJson _objectJson;
     _objectJson.updateDockerNodeData(dockData,dockName);
 }
 //保存Docker数据
-void AddAppDataToJson(BaseDockData dockData,BaseAppData appData){
+void pObject::addAppDataToJson(BaseDockData dockData,BaseAppData appData){
     objectJson _objectJson;
     _objectJson.addAppNodeData(dockData,appData);
 }
 //保存App数据
-void SaveAppDataToJson(BaseDockData dockData,BaseAppData appData){
+void pObject::saveAppDataToJson(BaseDockData dockData,BaseAppData appData){
     objectJson _objectJson;
     _objectJson.updateAppNodeData(dockData,appData);
 }
 //删除wine
-void DeleteWineDataToJson(QString wineName){
+void pObject::deleteWineDataToJson(QString wineName){
     objectJson _objectJson;
     _objectJson.deleteWineNodeData(wineName);
 }
-BaseDockData GetDockerData(QString dockName){
+BaseDockData pObject::getDockerData(QString dockName){
     BaseDockData tempDockData={};
     if(!g_vekLocalData.dockerVec.empty()){
         for(auto a:g_vekLocalData.dockerVec){
@@ -53,7 +57,7 @@ BaseDockData GetDockerData(QString dockName){
     }
     return tempDockData;
 }
-BaseAppData GetAppData(BaseDockData dockData,QString appCID){
+BaseAppData pObject::getAppData(BaseDockData dockData,QString appCID){
     BaseAppData tempAppData={};
     for(auto a:dockData.dData){
         if(a.first==appCID){
@@ -63,7 +67,7 @@ BaseAppData GetAppData(BaseDockData dockData,QString appCID){
     }
     return tempAppData;
 }
-QString getFileStr(QString filePath){
+QString pObject::getFileStr(QString filePath){
     QFile file(filePath);
     if(!file.exists())
     {
@@ -74,21 +78,21 @@ QString getFileStr(QString filePath){
     file.close();
     return temp;
 }
-void saveStrToFile(QString strFile,QString filePath){
+void pObject::saveStrToFile(QString strFile,QString filePath){
     QFile file(filePath);
     file.open(QIODevice::ReadWrite | QIODevice::Text);
     QTextStream out(&file);
     out << strFile;
     file.close();
 }
-QString StrPathNullToStr(QString str){
+QString pObject::pathNullToStr(QString str){
     if(str.contains(" ",Qt::CaseSensitive)){
         str="\""+str+"\"";
     }
     return str;
 }
 //综合注册表操作
-QStringList DockRegeditStr(QString rObj,QString rPath,QString rKey,QString rTValue,QString rValue){
+QStringList pObject::dockerRegeditStr(QString rObj,QString rPath,QString rKey,QString rTValue,QString rValue){
     QStringList argsList;
     //处理注册表路径空格
     if(rPath.contains(" ",Qt::CaseSensitive)){
@@ -125,7 +129,7 @@ QStringList DockRegeditStr(QString rObj,QString rPath,QString rKey,QString rTVal
     return argsList;
 }
 
-void qwidgetGeometry(QWidget* qwidget){
+void pObject::qwidgetGeometry(QWidget* qwidget){
     QDesktopWidget *deskdop = QApplication::desktop();
     qwidget->move((deskdop->width() - qwidget->width())/2, (deskdop->height() - qwidget->height())/2);
 }
