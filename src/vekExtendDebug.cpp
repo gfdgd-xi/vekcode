@@ -85,7 +85,12 @@ void vekExtendDebug::startDebug(){
 }
 //运行环境变量设置
 void vekExtendDebug::executeArgsEnv(){
-    qputenv("WINE", (dockData.WinePath+"/wine/bin/"+dockData.WineVersion).toStdString().c_str());
+    qInfo()<<dockData.DockerSystemVersion;
+    qInfo()<<dockData.WineVersion;
+    qInfo()<<dockData.WinePath;
+    qInfo()<<dockData.DockerVer;
+    qInfo()<<dockData.DockerWineVersion;
+    qputenv("WINE", (dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion).toStdString().c_str());
     //设置容器目录
     qputenv("WINEPREFIX", (dockData.DockerPath+"/"+dockData.DockerName).toStdString().c_str());
     qputenv("WINEARCH", dockData.DockerVer.toStdString().c_str());
@@ -98,7 +103,7 @@ void vekExtendDebug::executeArgsEnv(){
         }
     }
     for(auto _env:m_cmd->systemEnvironment()){
-        qDebug()<<_env;
+        qInfo()<<_env;
     }
 }
 //执行游戏
@@ -147,11 +152,11 @@ void vekExtendDebug::ExtendApp(){
     m_cmd->write(codez.toLocal8Bit()+'\n');
     QString codes=codeDebug+" "+dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion+" "+codeArgs.join(" ");
     m_cmd->write(codes.toLocal8Bit()+'\n');
-    qDebug()<<"|++++++++++++++++++++++++++++|";
-    qDebug()<<"writeCode:"+codes;
-    qDebug()<<"workPath:"+appData.WorkPath;
-    qDebug()<<"WineArgs:"+codeArgs.join(" ");
-    qDebug()<<"|++++++++++++++++++++++++++++|";
+    qInfo()<<"|++++++++++++++++++++++++++++|";
+    qInfo()<<"writeCode:"+codes;
+    qInfo()<<"workPath:"+appData.WorkPath;
+    qInfo()<<"WineArgs:"+codeArgs.join(" ");
+    qInfo()<<"|++++++++++++++++++++++++++++|";
 }
 void vekExtendDebug::exitDebug(){
     std::vector<QStringList> _codeAgrs;

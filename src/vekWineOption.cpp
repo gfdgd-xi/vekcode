@@ -106,7 +106,7 @@ void vekWineOption::getWineGitInfo(){
             ui->comboBox_wineSrc->addItem(d.first);
         }
     }
-    ui->lineEdit_InstallPath->setText(QDir::currentPath());
+    ui->lineEdit_InstallPath->setText(QApplication::applicationDirPath());
 }
 void vekWineOption::wineVersionComoboBox(){
     QString nowWineSrc=ui->comboBox_wineSrc->currentText();

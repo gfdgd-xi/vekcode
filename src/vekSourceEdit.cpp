@@ -98,7 +98,7 @@ void vekSourceEdit::clicked_rightMenu(const QPoint &pos)
 void vekSourceEdit::onTaskBoxContextMenuEvent()
 {
     QAction *pEven = qobject_cast<QAction *>(this->sender());
-    qDebug()<<pEven->objectName();
+    qInfo()<<pEven->objectName();
     int iType = pEven->data().toInt();
     QTableView* _tempQTableView;
     if(pEven->objectName()=="tableView_WineSrcList"){
@@ -129,7 +129,7 @@ void vekSourceEdit::objectAddSrc(QTableView* qTableView){
 void vekSourceEdit::objectDeleteSrc(QTableView* qTableView){
     int curRow=qTableView->currentIndex().row();
     int curRows = qTableView->model()->rowCount();
-    qDebug()<<curRows-1;
+    qInfo()<<curRows-1;
     if(curRows-1<=0){
        pObject::vekTip("不能删除唯一源");
        return;

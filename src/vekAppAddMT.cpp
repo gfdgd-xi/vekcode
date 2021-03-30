@@ -107,7 +107,7 @@ void vekAppAddMT::initAppAndDockData(BaseDockData* _data,QString _appCID){
     //_data nullptr =add
     if(_data->DockerPath==nullptr){
         tempDockData=new BaseDockData;
-        tempDockData->DockerPath=QDir::currentPath()+"/vekDock";
+        tempDockData->DockerPath=QApplication::applicationDirPath()+"/vekDock";
     }else{
         *tempDockData=pObject::getDockerData(_data->DockerName);
         if(_appCID!=nullptr){
@@ -316,7 +316,7 @@ bool vekAppAddMT::vekAppConfigObj(){
     if(ui->lineEdit_RunDockPath->text()!=nullptr){
         tempDockData->DockerPath=ui->lineEdit_RunDockPath->text();
     }else{
-        tempDockData->DockerPath=QDir::currentPath()+"/vekDock";
+        tempDockData->DockerPath=QApplication::applicationDirPath()+"/vekDock";
     }
     if(ui->comboBox_DockName->currentText()!=nullptr){
         tempDockData->DockerName=ui->comboBox_DockName->currentText();
@@ -371,7 +371,7 @@ bool vekAppAddMT::vekAppConfigObj(){
         QAbstractItemModel *modelProc = ui->tableView_ProcList->model();
         for(int i=0;i<=procCurRow-1;i++){
             QString dataTempC = modelProc->data(modelProc->index(i,0)).value<QString>();
-            qDebug()<<dataTempC;
+            qInfo()<<dataTempC;
             if(dataTempC!=nullptr){
                 tempAppData->AttachProc.push_back(dataTempC);
             }
@@ -395,18 +395,16 @@ bool vekAppAddMT::vekAppConfigObj(){
 }
 //检查所有必备参数
 bool vekAppAddMT::checkAllOption(){
-    bool allOptionState=true;
     if(!checkAppOption()){
-        allOptionState=false;
+        return false;
     }
     if(!checkDocerOption()){
-        allOptionState=false;
+        return false;
     }
     if(!checkDxvkOption()){
-        allOptionState=false;
+        return false;
     }
-    qDebug()<<"所有参数"<<allOptionState;
-    return allOptionState;
+    return true;
 }
 //检查dxvk参数
 bool vekAppAddMT::checkDxvkOption(){
@@ -417,62 +415,58 @@ bool vekAppAddMT::checkDxvkOption(){
             dxvkState=false;
         }
     }
-    qDebug()<<"dxvk参数"<<dxvkState;
+    qInfo()<<"dxvk参数"<<dxvkState;
     return dxvkState;
 }
 //检查App参数
 bool vekAppAddMT::checkAppOption(){
-    bool optionAppState=true;
     if(tempAppData->AppName==nullptr)
     {
         pObject::vekError("请填写游戏名");
-        optionAppState=false;
+        return false;
     }
     if(tempAppData->AppExe==nullptr)
     {
         pObject::vekError("请设置游戏执行文件");
-        optionAppState=false;
+        return false;
     }
     if(tempAppData->WorkPath==nullptr)
     {
         pObject::vekError("请设置游戏工作目录");
-        optionAppState=false;
+        return false;
     }
 
     if(tempAppData->MainPrcoName==nullptr){
         pObject::vekError("主进程名不能为空");
-        optionAppState=false;
+        return false;
     }
-    qDebug()<<"app参数"<<optionAppState;
-    return optionAppState;
+    return true;
 }
 //检查docker参数
 //2021-3-18增加对deepin-wine5在64位容器的隔离
 bool vekAppAddMT::checkDocerOption(){
-    bool optionDockState=true;  
     if(tempDockData->WineVersion==nullptr){
         pObject::vekError("请先安装wine");
-        optionDockState=false;
+        return false;
     }
     if(tempDockData->WineVersion.contains("deepin",Qt::CaseSensitive)&tempDockData->DockerVer=="win64"){
         pObject::vekError("Deepin-Wine5不支持64位容器");
-        optionDockState=false;
+        return false;
     }
     if(tempDockData->DockerPath==nullptr)
     {
         pObject::vekError("请设置wine运行容器路径");
-        optionDockState=false;
+        return false;
     }
     if(tempDockData->DockerName==nullptr){
         pObject::vekError("请设置容器名字");
-        optionDockState=false;
+        return false;
     }
     if(tempDockData->WinePath==nullptr){
         pObject::vekError("请先安装wine");
-        optionDockState=false;
+        return false;
     }
-    qDebug()<<"Docker参数"<<optionDockState;
-    return optionDockState;
+    return true;
 }
 //按钮事件集中处理
 void vekAppAddMT::objectButton(){

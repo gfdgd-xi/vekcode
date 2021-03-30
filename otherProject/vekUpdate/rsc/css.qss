@@ -1,0 +1,74 @@
+/*主界面*/
+QWidget
+{
+  background-color: rgb(49, 54, 59);
+}
+/*版本特性*/
+#lable_head
+{
+font: 75 12pt "微软雅黑";
+color:#fba414;
+}
+/*logo图标*/
+#label_Logo
+{
+image: url(:/qss/rsc/png/vek.ico);
+}
+/*版本号*/
+#lable_version
+{
+font: 75 12pt "微软雅黑";
+color:#fba414;
+}
+/*进度条*/
+QProgressBar{
+color:#fba414;
+}
+/*更新按钮*/
+QPushButton{
+background-color: rgb(35, 35, 35);
+font: 75 9pt "微软雅黑";
+color:#fba414;
+border: 1px solid #76797C;
+margin: 2px;
+}
+/*鼠标移动到按钮上*/
+QPushButton:hover{
+background-color: rgb(35, 35, 35);
+border: 1px solid #76797C80;
+margin: 2px;
+}
+/*鼠标按下按钮*/
+QPushButton:pressed{
+background-color: rgb(50, 50, 60);
+border: 1px solid #76796C70;
+margin: 2px;
+}
+/*update logs内容*/
+#lable_logs
+{
+background-color: rgb(35, 35, 35);
+color:#fba414;
+border: 1px solid #76797C;
+margin: 2px;
+color: #eff0f1;
+font: 75 9pt "微软雅黑";
+}
+/*软件名字*/
+#lable_Name{
+font: 48 28pt "微软雅黑";
+font-weight: bold;
+color:#fba414;
+}
+/*软件版权声明*/
+#label_Copyright
+{
+font: 75 9pt "微软雅黑";
+color:#fba414;
+}
+/*软件子标题*/
+#label_Info
+{
+font: 75 9pt "微软雅黑";
+color:#fba414;
+}

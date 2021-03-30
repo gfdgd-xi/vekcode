@@ -26,7 +26,7 @@ QVariant vekModelAT::data( const QModelIndex & index, int role ) const
         case Qt::DecorationRole:
         {
             QString icoPath=m_ItemDataVec[index.row()]->appIco;
-            QString icoCache=QDir::currentPath()+"/vekCache/"+icoPath;
+            QString icoCache=QApplication::applicationDirPath()+"/vekCache/"+icoPath;
             if(!QFile(icoCache).exists()){
                 icoPath=":/res/img/vek.ico";
             }else if(QFileInfo(icoCache).size()<=0){

@@ -151,7 +151,7 @@ bool objectJson::unDataSerializeLocalData(){
     //解析srt为json
     try
     {
-        QString jsonPath=QDir::currentPath()+"/data.json";
+        QString jsonPath=QApplication::applicationDirPath()+"/data.json";
         QFile file(jsonPath);
         if(!file.exists())
         {
@@ -535,7 +535,7 @@ json objectJson::exportJson(BaseDockData xData,QString AppCID){
 //×××××××××××数据文件操作××××××××××//
 //写入全局文件
 void objectJson::WriteLocalData(){
-    QString localDataFilePath=QDir::currentPath()+"/data.json";
+    QString localDataFilePath=QApplication::applicationDirPath()+"/data.json";
     json jsonData=nullptr;
     jsonData=DataSerialize(jsonData,g_vekLocalData);
     WriteJsonToFile(localDataFilePath,jsonData);
@@ -616,7 +616,7 @@ QString objectJson::GetRandomCID()
         int ir = qrand()%tmp.length();
         str[i] = tmp.at(ir);
     }
-    qDebug()<<str;
+    qInfo()<<str;
     return str;
 }
 

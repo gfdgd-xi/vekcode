@@ -17,7 +17,7 @@ QString objectProcManage::objGetProcList(procInfo pInfo){
     m_cmd->write(pCodes.toLocal8Bit()+'\n');
     m_cmd->waitForFinished(500);
     QString procData=m_cmd->readAll();
-    qDebug()<<procData;
+    qInfo()<<procData;
     m_cmd->write("\x03");
     m_cmd->close();
     m_cmd->kill();
@@ -59,7 +59,7 @@ void objectProcManage::delAttachProc(procInfo pInfo){
                 list.clear();
                 list= b.second.split("\n");
                 QString kPid;
-                qDebug()<<kPid;
+                qInfo()<<kPid;
                 for(auto e:list){
                     if(e.contains(c,Qt::CaseSensitive)){
                         bool ok;

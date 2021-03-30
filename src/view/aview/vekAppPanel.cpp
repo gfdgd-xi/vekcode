@@ -201,7 +201,7 @@ void vekAppPanel::objAppInstall(){
         }else{
             return;
         }
-        baseDockerData.DockerPath=QDir::currentPath()+"/vekDock";
+        baseDockerData.DockerPath=QApplication::applicationDirPath()+"/vekDock";
         baseDockerData.DockerName=dockName;
         baseDockerData.MonoState=true;
         baseDockerData.GeckoState=true;
@@ -307,7 +307,7 @@ void vekAppPanel::objInitDock(){
         }
     }
     baseDockerData.DockerVer=dockBit;
-    baseDockerData.DockerPath=QDir::currentPath()+"/vekDock";
+    baseDockerData.DockerPath=QApplication::applicationDirPath()+"/vekDock";
     baseDockerData.DockerName=dockName;
     baseDockerData.MonoState=true;
     baseDockerData.GeckoState=true;

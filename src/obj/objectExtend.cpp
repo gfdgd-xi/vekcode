@@ -19,10 +19,10 @@ void objectExtend::setDockOptionObjectData(BaseDockData _dockData,QString _appCI
 }
 //运行环境变量设置
 void objectExtend::executeArgsEnv(){
-    qDebug()<<"wine执行版本:"<<dockData.DockerWineVersion;
-    qDebug()<<"容器版本系统版本:"<<dockData.DockerSystemVersion;
-    qDebug()<<"Wine版本号:"<<dockData.WineVersion;
-    qDebug()<<"容器系统位数版本:"<<dockData.DockerVer;
+    qInfo()<<"wine执行版本:"<<dockData.DockerWineVersion;
+    qInfo()<<"容器版本系统版本:"<<dockData.DockerSystemVersion;
+    qInfo()<<"Wine版本号:"<<dockData.WineVersion;
+    qInfo()<<"容器系统位数版本:"<<dockData.DockerVer;
     qputenv("WINE", (dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion).toStdString().c_str());
     qputenv("WINEPREFIX", (dockData.DockerPath+"/"+dockData.DockerName).toStdString().c_str());
     qputenv("WINEARCH", dockData.DockerVer.toStdString().c_str());
@@ -41,7 +41,7 @@ void objectExtend::executeArgsEnv(){
         }
     }
     for(auto _env:m_cmd->systemEnvironment()){
-        qDebug()<<_env;
+        qInfo()<<_env;
     }
 }
 void objectExtend::executeWineBoot(objectWineBoot objWineBootType){
@@ -82,7 +82,7 @@ void objectExtend::executeWineBoot(objectWineBoot objWineBootType){
         //break;
     }
     m_cmd->start(wineboot.join(""),QIODevice::ReadWrite);
-    qDebug()<<"wineboot:"<<wineboot.join("");
+    qInfo()<<"wineboot:"<<wineboot.join("");
     m_cmd->waitForFinished(-1);
     waitObjectDone(true);
 }
@@ -108,7 +108,7 @@ void objectExtend::executeWineServer(objectWineServer objWineServer){
         //break;
     }
     m_cmd->start(wineserver.join(""),QIODevice::ReadWrite);
-    qDebug()<<"wineServer:"<<wineserver.join("");
+    qInfo()<<"wineServer:"<<wineserver.join("");
     m_cmd->waitForFinished(-1);
     waitObjectDone(true);
 }
@@ -144,7 +144,7 @@ void objectExtend::executeWinetricks_cmd_libs(QStringList cArgs){
 void objectExtend::ExtendWinetricksCode(QStringList cArgs,bool wType){
     QString mdCode = cArgs.join(" ");
     m_cmd->start(mdCode,QIODevice::ReadWrite);
-    qDebug()<<"WineTricks:"<<cArgs.join(" ");
+    qInfo()<<"WineTricks:"<<cArgs.join(" ");
     m_cmd->waitForFinished(-1);
     if(dockData.WineVersion.contains("deepin",Qt::CaseSensitive)){
         switchSysVersion(DOCKER,DEEPIN);
@@ -166,11 +166,11 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
     m_cmd->closeReadChannel(QProcess::StandardError);
     m_cmd->setWorkingDirectory(appData.WorkPath);
     m_cmd->start(wcode,codeArgs);
-    qDebug()<<"|++++++++++++++++++++++++++++|";
-    qDebug()<<"writeCode:"+wcode;
-    qDebug()<<"workPath:"+appData.WorkPath;
-    qDebug()<<"WineArgs:"+codeArgs.join(" ");
-    qDebug()<<"|++++++++++++++++++++++++++++|";
+    qInfo()<<"|++++++++++++++++++++++++++++|";
+    qInfo()<<"writeCode:"+wcode;
+    qInfo()<<"workPath:"+appData.WorkPath;
+    qInfo()<<"WineArgs:"+codeArgs.join(" ");
+    qInfo()<<"|++++++++++++++++++++++++++++|";
     m_cmd->waitForFinished(-1);
     monitorProc();
     waitObjectDone(true);
@@ -233,7 +233,7 @@ void objectExtend::deepinSwitchSysVerion(SWITCH_SYSTEM_VERSION ssv){
     codeArgs.append(dockData.DockerSystemVersion);
     QString mdCode = codeArgs.join(" ");
     m_cmd->start(mdCode,QIODevice::ReadWrite);
-    qDebug()<<"WineTricks:"<<codeArgs.join(" ");
+    qInfo()<<"WineTricks:"<<codeArgs.join(" ");
     m_cmd->waitForFinished(-1);
 }
 

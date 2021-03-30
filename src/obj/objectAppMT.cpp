@@ -298,9 +298,9 @@ void objectAppMT::DisableAss(std::map<QString,std::map<QString,QString>> regStr)
     ExecuteObj(object_regobject,object_wineboot_default,object_wineserver_default);
 }
 void objectAppMT::outAppIco(){
-    QString icoCacheDir=QDir::currentPath()+"/vekCache/";
+    QString icoCacheDir=QApplication::applicationDirPath()+"/vekCache/";
     if(!QDir(icoCacheDir).exists()){
-        QDir(QDir::currentPath()).mkdir("vekCache");
+        QDir(QApplication::applicationDirPath()).mkdir("vekCache");
     }
     QString exeName=QFileInfo(appData->AppExe).baseName();
     QString exePath=pObject::pathNullToStr(appData->AppExe);

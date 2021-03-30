@@ -76,10 +76,10 @@ bool objectAppAT::objDockerData(){
         baseDockData.DockerVer=_baseAutoSetJson->Docker.at(toStr(DockerVersion));
         baseDockData.DockerWineVersion=_baseAutoSetJson->Docker.at(toStr(DockerWineVersion));
         baseDockData.DockerSystemVersion=_baseAutoSetJson->Docker.at(toStr(DockerSysVersion));
-        qDebug()<<"如果容器不存在"<<baseDockData.WinePath;
+        qInfo()<<"如果容器不存在"<<baseDockData.WinePath;
     }else{
         //如果容器存在
-        qDebug()<<"如果容器存在";
+        qInfo()<<"如果容器存在";
         if(baseDockData.DockerVer!=_baseAutoSetJson->Docker.at(toStr(DockerVersion))){
             pObject::vekError("当前容器版本为:"+baseDockData.DockerVer+"配置文件容器版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerVersion)));
             return false;

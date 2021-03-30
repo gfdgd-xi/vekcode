@@ -39,7 +39,7 @@ void vekAppAddAT::connectDockObject(){
     }else{
         ui->comboBox_DockName->setCurrentText("vekON1");
     }
-    ui->lineEdit_DockPath->setText(QDir::currentPath()+"/vekDock");
+    ui->lineEdit_DockPath->setText(QApplication::applicationDirPath()+"/vekDock");
 }
 void vekAppAddAT::SetObject(){
     QObject *object = QObject::sender();

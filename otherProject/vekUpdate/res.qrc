@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/qss">
+        <file>rsc/ico/update.ico</file>
+        <file>rsc/css.qss</file>
+        <file>rsc/png/vek.ico</file>
+    </qresource>
+</RCC>

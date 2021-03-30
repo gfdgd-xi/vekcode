@@ -35,7 +35,7 @@ void objectSource::updateSrcDataObject(){
     }
 }
 void objectSource::loadAllData(){
-    QString jsonPath=QDir::currentPath()+"/data.json";
+    QString jsonPath=QApplication::applicationDirPath()+"/data.json";
     objectJson _objectJson;
     g_vekLocalData.appJsonList.clear();
     g_vekLocalData.wineJsonList.clear();
