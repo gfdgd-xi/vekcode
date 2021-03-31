@@ -9,8 +9,8 @@
 #include "../../obj/objectTray.h"
 
 typedef enum{
-    INIT_INSTALL,
-    INIT_DOCKER
+    INSTALLAPP,
+    INITDOCKER
 }INITTYPE;
 class vekAppPanel : public QWidget
 {
@@ -20,8 +20,8 @@ public:
     ~vekAppPanel();   
 public slots:
     void addAppSlot();
-    void addGroupSlot(DockData*);
-    void addAppObject(DockData*,AppData*);
+    void addGroupSlot(BaseDockData* dcokData);
+    void addAppObject(BaseDockData* dcokData,BaseAppData* appData);
     void upTabIco();
     void objectRunApp();
     void objInitDocker(INITTYPE);

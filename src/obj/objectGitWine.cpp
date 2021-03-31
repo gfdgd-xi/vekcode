@@ -3,7 +3,7 @@
 
 objectGitWine *objectGitWine::objGitWine = nullptr;
 
-objectGitWine::objectGitWine(WineData wineData)
+objectGitWine::objectGitWine(BaseWineData wineData)
 {
     objGitWine=this;
     wData={};
@@ -34,6 +34,7 @@ void objectGitWine::output_progress(progress_data *pd)
             "   chk:   "+std::to_string(checkout_percent)+"%"+"("+std::to_string(pd->completed_steps)+"/"+std::to_string(pd->total_steps)+")"+
             "   Resolving deltas:   "+"("+std::to_string(pd->fetch_progress.indexed_deltas)+"/"+std::to_string(pd->fetch_progress.total_deltas)+")";
     emit objGitWine->SigDeliverMessStatic(prlog);
+    //outputPrgressSlots(prlog);
 }
 int i=0;
 void objectGitWine::SlotDeliverMessStatic(string str_log)
@@ -95,11 +96,11 @@ void objectGitWine::downWine(){
     clone_opts.fetch_opts.callbacks.certificate_check = ssl_cert;
     clone_opts.fetch_opts.callbacks.payload = &pd;
     QByteArray b2,b3;
-    b2.append(wData.iWinePath);
+    b2.append(wData.IwinePath);
     const char *path = b2.data();
-    b3.append(wData.iWineUrl);
+    b3.append(wData.IwineUrl);
     const char *url = b3.data();
-    emit toPrgStr("clone:"+wData.iWineName);
+    emit toPrgStr("clone:"+wData.IwineName);
     git_clone(&cloned_repo, url, path, &clone_opts);
     git_repository_free(cloned_repo);
     git_libgit2_shutdown();
@@ -107,21 +108,21 @@ void objectGitWine::downWine(){
 }
 void objectGitWine::gitWine(){
     try{
-        if(wData.iWinePath==nullptr){
+        if(wData.IwinePath==nullptr){
             return;
         }
-        QDir dir(wData.iWinePath);
+        QDir dir(wData.IwinePath);
         if(dir.exists()){
             dir.removeRecursively();
         }
         downWine();
-        dir.mkdir(wData.iWinePath+"/plugs");
+        dir.mkdir(wData.IwinePath+"/plugs");
         emit toPrgStr("开始下载组件请稍等!");
         objectGetCurl* objGetCurl=new objectGetCurl;
         connect(objGetCurl,SIGNAL(curlPrgressSignals(string)),this,SIGNAL(SigDeliverMessStatic(string)));
-        objGetCurl->DoewloadPlugs(wData.iWineMono,wData.iWinePath+"/plugs/Mono.msi");
-        objGetCurl->DoewloadPlugs(wData.iWineGeckoX86,wData.iWinePath+"/plugs/GeckoX86.msi");
-        objGetCurl->DoewloadPlugs(wData.iWineGeckoX86_64,wData.iWinePath+"/plugs/GeckoX86_64.msi");
+        objGetCurl->DoewloadPlugs(wData.IwineMono,wData.IwinePath+"/plugs/Mono.msi");
+        objGetCurl->DoewloadPlugs(wData.IwineGeckoX86,wData.IwinePath+"/plugs/GeckoX86.msi");
+        objGetCurl->DoewloadPlugs(wData.IwineGeckoX86_64,wData.IwinePath+"/plugs/GeckoX86_64.msi");
         emit toPrgStr("组件下载完毕!");
         objectJson* _objectJson=new objectJson() ;
         _objectJson->updateWineNodeData(wData);

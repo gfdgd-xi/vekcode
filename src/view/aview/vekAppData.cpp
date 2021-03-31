@@ -23,12 +23,12 @@ QVariant vekAppData::data( const QModelIndex & index, int role ) const
        {
        case Qt::DisplayRole:
            {
-               return m_ItemDataVec[index.row()]->app_Name;
+               return m_ItemDataVec[index.row()]->AppName;
            }
         break;
        case Qt::DecorationRole:
            {
-               QString icoPath=m_ItemDataVec[index.row()]->app_ICO;
+               QString icoPath=m_ItemDataVec[index.row()]->AppIco;
                if(!QFile(icoPath).exists()){
                    icoPath=":/res/img/vek.ico";
                }else if(QFileInfo(icoPath).size()<=0){
@@ -57,11 +57,11 @@ int vekAppData::rowCount( const QModelIndex & parent /*= QModelIndex() */ ) cons
 
 void vekAppData::deleteItem( int index )
 {
-    std::vector<AppData*>::iterator it = m_ItemDataVec.begin();
+    std::vector<BaseAppData*>::iterator it = m_ItemDataVec.begin();
     m_ItemDataVec.erase(it + index);
 }
 
-void vekAppData::addItem( AppData *pItem )
+void vekAppData::addItem( BaseAppData *pItem )
 {
     if (pItem)
     {
@@ -72,7 +72,7 @@ void vekAppData::addItem( AppData *pItem )
 
 }
 
-AppData* vekAppData::getItem( int index )
+BaseAppData* vekAppData::getItem( int index )
 {
     int pindex=m_ItemDataVec.size();
     if (index > -1 && index < pindex)

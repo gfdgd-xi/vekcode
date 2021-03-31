@@ -7,7 +7,7 @@ objectProcManage::objectProcManage(QObject *parent) : QThread(parent)
 objectProcManage::~objectProcManage(){
 
 }
-QString objectProcManage::objGetProcList(ProcInfo pInfo){
+QString objectProcManage::objGetProcList(procInfo pInfo){
     m_cmd=new QProcess();
     //设置通道模式error和out合并
     m_cmd->setProcessChannelMode(QProcess::MergedChannels);
@@ -25,7 +25,7 @@ QString objectProcManage::objGetProcList(ProcInfo pInfo){
     m_cmd=nullptr;
     return procData;
 }
-void objectProcManage::objDelProc(QString prPid,ProcInfo _pInfo){
+void objectProcManage::objDelProc(QString prPid,procInfo _pInfo){
     prc=new QProcess();
     prc->setProcessChannelMode(QProcess::MergedChannels);
     prc->setReadChannel(QProcess::StandardOutput);
@@ -51,7 +51,7 @@ void objectProcManage::objDelProc(QString prPid,ProcInfo _pInfo){
     delete prc;
     prc=nullptr;
 }
-void objectProcManage::delAttachProc(ProcInfo pInfo){
+void objectProcManage::delAttachProc(procInfo pInfo){
     for(auto b:procAllInfoStr){
         for(auto c:pInfo.pAttachProc){
             if(b.second.contains(c,Qt::CaseSensitive)){

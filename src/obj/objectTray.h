@@ -8,7 +8,7 @@ class objectTray:public QThread
 public:
     explicit objectTray(QObject *parent = nullptr);
     ~objectTray();
-    WineData _baseWineData;
+    BaseWineData _baseWineData;
     void exitTray();
 private:
    QProcess* m_cmd=nullptr;

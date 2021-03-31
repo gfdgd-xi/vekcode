@@ -47,7 +47,7 @@ QVariant vekModelAT::data( const QModelIndex & index, int role ) const
     return QVariant();
 }
 
-void vekModelAT::addItem( AppJson *pItem )
+void vekModelAT::addItem( BaseAppJson *pItem )
 {
     if (pItem)
     {
@@ -64,7 +64,7 @@ int vekModelAT::rowCount( const QModelIndex & parent ) const
     return m_ItemDataVec.size();
 }
 
-AppJson* vekModelAT::getItem( int index )
+BaseAppJson* vekModelAT::getItem( int index )
 {
     int pIndex=m_ItemDataVec.size();
     if (index > -1 && index < pIndex)

@@ -14,11 +14,11 @@ void vekViewAT::mouseDoubleClickEvent(QMouseEvent *event){
     UNUSED(event);
     int rindex = this->currentIndex().row();
     if(rindex>-1){
-        AppJson bAppJson=*m_pModel->getItem(rindex);
+        BaseAppJson bAppJson=*m_pModel->getItem(rindex);
         emit outAppData(bAppJson);
     }
 }
-void vekViewAT::addItem(AppJson *pItem )
+void vekViewAT::addItem(BaseAppJson *pItem )
 {
     m_pModel->addItem(pItem);
 }

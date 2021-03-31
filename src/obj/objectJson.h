@@ -15,23 +15,23 @@ class objectJson
 public:
     objectJson();
     ~objectJson();
-    void updateWineNodeData(WineData);
-    void updateDockerNodeData(DockData dockData,QString dockName);
+    void updateWineNodeData(BaseWineData);
+    void updateDockerNodeData(BaseDockData dockData,QString dockName);
     void deleteDockerNodeData(QString dockName);
-    void addAppNodeData(DockData,AppData);
-    void deleteAppNodeData(DockData,QString);
-    void updateAppNodeData(DockData,AppData);
+    void addAppNodeData(BaseDockData,BaseAppData);
+    void deleteAppNodeData(BaseDockData,QString);
+    void updateAppNodeData(BaseDockData,BaseAppData);
     void deleteWineNodeData(QString nwineName);
     bool unDataSerializeLocalData();
     bool unSerializeLocalWineApp(QString,QString urlData,UNJSONTYPE jsonType);
     void WriteLocalData();
     bool RemoteWineGitInfo(string info);
-    AutoJson* unDataSerializeScriptData(AutoJson*,QString);
+    BaseAutoSetJson* unDataSerializeScriptData(BaseAutoSetJson*,QString);
     QString GetRandomCID();
     void unSerializeBlackList(QString);
-    json exportJson(DockData,QString);
+    json exportJson(BaseDockData,QString);
 private:
-    json DataSerialize(json jsonData,const LocalData);
+    json DataSerialize(json jsonData,const BaseLocalData);
     void WriteJsonToFile(QString filePath,json jsonData);
     QString readJsonDataToStr(QString);
 };

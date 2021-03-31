@@ -18,18 +18,18 @@ public:
     void connectDockObject();
 private:
     Ui::vekAppAddAT *ui;
-    AppData* autoAppData=nullptr;
-    DockData* autoDockData=nullptr;
+    BaseAppData* autoAppData=nullptr;
+    BaseDockData* autoDockData=nullptr;
     void SetObject();
     void addAutoApp();
     void controlState(bool pState);
 signals:
     void _unAutoDock();
-    void autoObjDock(DockData *,AppData *);
+    void autoObjDock(BaseDockData*,BaseAppData*);
 private slots:
     void TipText(QString TipInfo);
     void ErrorText(QString ErrorInfo,bool cState);
-    void ObjDone(DockData*,AppData*);
+    void ObjDone(BaseDockData*,BaseAppData*);
 
 };
 

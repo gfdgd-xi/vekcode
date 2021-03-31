@@ -15,21 +15,21 @@ class vekAppAddMT : public QWidget
     Q_OBJECT
 public:
     explicit vekAppAddMT(QWidget *parent = nullptr);
-    void vekAppAddConnectObject(DockData*,QString,OBJAPP);
+    void vekAppAddConnectObject(BaseDockData*,QString,objectTypeView);
     ~vekAppAddMT();
 public:
     Ui::vekAppAddMT *ui;
 private:
-    AppData* tempAppData=new AppData();
-    DockData* tempDockData=new DockData();
-    OBJAPP objType;
+    BaseAppData* tempAppData=new BaseAppData();
+    BaseDockData* tempDockData=new BaseDockData();
+    objectTypeView objType;
     vector<QString> _dockSystemVersion={"win10","win7","win81","win8","winxp","winxp64"};
     vector<QString> _dockVer={"win32","win64"};
     vector<QString> _dockWineVer={"wine","wine64"};
-    void initAppAndDockData(DockData* _data,QString _appCID);
+    void initAppAndDockData(BaseDockData* _data,QString _appCID);
     bool vekAppAddObj(bool _forceState);
     bool vekAppConfigObj();
-    void loadTableView(QTableView* qtv,AppData*);
+    void loadTableView(QTableView* qtv,BaseAppData*);
     void setTableView(QTableView*);
     QStandardItemModel* tableModel;
     void objectAdd(QTableView*);
@@ -41,10 +41,10 @@ private:
     bool checkDxvkOption();
     bool checkAllOption();
 signals:
-    void doneAddApp(DockData*,AppData*);
-    void toObjectArgs(AppData);
+    void doneAddApp(BaseDockData*,BaseAppData*);
+    void toObjectArgs(BaseAppData);
     void _unDiyAppAdd();
-    void _upData(DockData,AppData*,OBJAPP);
+    void _upData(BaseDockData,BaseAppData*,objectTypeView);
 private slots:
     void objectButton();
     void plugsLoad();
