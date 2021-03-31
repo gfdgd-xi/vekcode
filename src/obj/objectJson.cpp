@@ -8,7 +8,7 @@ objectJson::~objectJson()
 {
 }
 //增加游戏
-json objectJson::DataSerialize(json jsonData,const BaseLocalData _baseLocalData){
+json objectJson::DataSerialize(json jsonData,const SlocalGloablData _baseLocalData){
     //序列化容器列表
     //ax.first->容器名
     if(_baseLocalData.dockerVec.size()>0){
@@ -58,17 +58,17 @@ json objectJson::DataSerialize(json jsonData,const BaseLocalData _baseLocalData)
                     }else{
                         jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(DockerLibs)]=json({});
                     }
-                    if(!by.DockerRegs.empty()){
+                    if(!by.stdDockerRegs.empty()){
                         int i=-1;
-                        for(auto a:by.DockerRegs){
+                        for(auto a:by.stdDockerRegs){
                             i+=1;
-                            jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(DockerRegs)][i][toStr(rPath)]=a.rPath.toStdString();
-                            jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(DockerRegs)][i][toStr(rKey)]=a.rKey.toStdString();
-                            jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(DockerRegs)][i][toStr(rTValue)]=a.rTValue.toStdString();
-                            jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(DockerRegs)][i][toStr(rValue)]=a.rValue.toStdString();
+                            jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(SRegs)][i][toStr(rPath)]=a.rPath.toStdString();
+                            jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(SRegs)][i][toStr(rKey)]=a.rKey.toStdString();
+                            jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(SRegs)][i][toStr(rTValue)]=a.rTValue.toStdString();
+                            jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(SRegs)][i][toStr(rValue)]=a.rValue.toStdString();
                         }
                     }else{
-                        jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(DockerRegs)]=json::array();
+                        jsonData["Docker"][ax.first.toStdString()][by.AppCID.toStdString()][toStr(SRegs)]=json::array();
                     }
                     if(!by.AttachProc.empty()){
                         for(auto rs:by.AttachProc){
@@ -141,8 +141,8 @@ json objectJson::DataSerialize(json jsonData,const BaseLocalData _baseLocalData)
             }
         }
     }
-    jsonData["Options"]["vekStyle"]=_baseLocalData.vekOptions.vekStyle.toStdString();
-    jsonData["Options"]["vekLang"]=_baseLocalData.vekOptions.vekLang.toStdString();
+    jsonData["SvekOptions"]["vekStyle"]=_baseLocalData.vekOptions.vekStyle.toStdString();
+    jsonData["SvekOptions"]["vekLang"]=_baseLocalData.vekOptions.vekLang.toStdString();
     return jsonData;
 }
 
@@ -171,7 +171,7 @@ bool objectJson::unDataSerializeLocalData(){
             if(k=="Docker"){
                 //ax->容器名 bx->容器下的游戏列表
                 for(auto [ax,bx]:v.items()){
-                    BaseDockData baseDockData={};
+                    SdockerData baseDockData={};
                     auto it = bx.begin();
                     for(it=bx.begin();it!=bx.end();++it)
                     {
@@ -192,7 +192,7 @@ bool objectJson::unDataSerializeLocalData(){
                         {
                             for(auto x:it.value())
                             {
-                                BaseAppData _base_app_data={};
+                                SappData _base_app_data={};
                                 _base_app_data.AppCID=QString::fromStdString(it.value().at("AppCID"));
                                 _base_app_data.AppName=QString::fromStdString(it.value().at("AppName"));
                                 _base_app_data.AppExe=QString::fromStdString(it.value().at("AppExe"));
@@ -224,15 +224,15 @@ bool objectJson::unDataSerializeLocalData(){
                                         _base_app_data.DockerEnv[QString::fromStdString(vx)]=QString::fromStdString(vy);
                                     }
                                 }
-                                _base_app_data.DockerRegs.clear();
-                                if(it.value().at("DockerRegs")!=NULL){
-                                    for(auto&wy:it.value().at("DockerRegs")){
-                                        BaseDockRegs _rbaseRegs;
+                                _base_app_data.stdDockerRegs.clear();
+                                if(it.value().at("SRegs")!=NULL){
+                                    for(auto&wy:it.value().at("SRegs")){
+                                        SRegs _rbaseRegs;
                                         _rbaseRegs.rPath=QString::fromStdString(wy.at("rPath"));
                                         _rbaseRegs.rKey=QString::fromStdString(wy.at("rKey"));
                                         _rbaseRegs.rTValue=QString::fromStdString(wy.at("rTValue"));
                                         _rbaseRegs.rValue=QString::fromStdString(wy.at("rValue"));
-                                        _base_app_data.DockerRegs.push_back(_rbaseRegs);
+                                        _base_app_data.stdDockerRegs.push_back(_rbaseRegs);
                                     }
                                 }
                                 baseDockData.dData[_base_app_data.AppCID]=_base_app_data;
@@ -244,7 +244,7 @@ bool objectJson::unDataSerializeLocalData(){
                 //禁止修改
             }
             else if(k=="Wine"){
-                BaseWineData _base_wine_data={};
+                SwineData _base_wine_data={};
                 for(auto& [x,y]: v.items()){
                     _base_wine_data.IwineName=QString::fromStdString(y.at("IwineName"));
                     _base_wine_data.IwinePath=QString::fromStdString(y.at("IwinePath"));
@@ -273,19 +273,19 @@ bool objectJson::unDataSerializeLocalData(){
 
                             for(auto&[u,i]:j.items()){
                                 //u 源名字
-                                std::map<QString,std::map<QString,BaseAppJson>> appTypeList;
+                                std::map<QString,std::map<QString,SappDeployInfo>> appTypeList;
                                 for(auto [di,du]:i.items()){
                                     //di app分类名字
                                     //du 分类app列表
-                                    std::map<QString,BaseAppJson> appList;
+                                    std::map<QString,SappDeployInfo> appList;
                                     for(auto [dv,dw]:du.items()){
                                         //dv app名字
                                         //dw app数据
-                                        BaseAppJson baseAppJson;
+                                        SappDeployInfo baseAppJson;
                                         baseAppJson.appName=QString::fromStdString(dw.at(toStr(appName)));
                                         baseAppJson.appIco=QString::fromStdString(dw.at(toStr(appIco)));
                                         baseAppJson.appJson=QString::fromStdString(dw.at(toStr(appJson)));
-                                        appList.insert(pair<QString,BaseAppJson>(QString::fromStdString(dv),baseAppJson));
+                                        appList.insert(pair<QString,SappDeployInfo>(QString::fromStdString(dv),baseAppJson));
                                     }
                                     appTypeList[QString::fromStdString(di)]=appList;
                                 }
@@ -331,9 +331,9 @@ bool objectJson::unDataSerializeLocalData(){
                     }
                 }
             }
-            else if(k=="Options"){
-                g_vekLocalData.vekOptions.vekStyle=QString::fromStdString(j3.at("Options").at("vekStyle"));
-                g_vekLocalData.vekOptions.vekLang=QString::fromStdString(j3.at("Options").at("vekLang"));
+            else if(k=="SvekOptions"){
+                g_vekLocalData.vekOptions.vekStyle=QString::fromStdString(j3.at("SvekOptions").at("vekStyle"));
+                g_vekLocalData.vekOptions.vekLang=QString::fromStdString(j3.at("SvekOptions").at("vekLang"));
             }
         }
         return true;
@@ -346,7 +346,7 @@ bool objectJson::unDataSerializeLocalData(){
 }
 
 //脚本反序列化
-BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAutoSetJson,const QString autoJsonData){
+SappDeployData* objectJson::unDataSerializeScriptData(SappDeployData* _baseAutoSetJson,const QString autoJsonData){
     try {
         json js3=json::parse(autoJsonData.toStdString());
         for(auto&[k,j]:js3.items()){
@@ -389,7 +389,7 @@ BaseAutoSetJson* objectJson::unDataSerializeScriptData(BaseAutoSetJson* _baseAut
             if(QString::fromStdString(k)=="Regs"){
                 if(!j.empty()){
                     for(auto ad:j.items()){
-                        BaseDockRegs rbaseRegs;
+                        SRegs rbaseRegs;
                         rbaseRegs.rPath=QString::fromStdString(ad.value().at("rPath"));
                         rbaseRegs.rKey=QString::fromStdString(ad.value().at("rKey"));
                         rbaseRegs.rTValue=QString::fromStdString(ad.value().at("rTValue"));
@@ -451,7 +451,7 @@ bool objectJson::unSerializeLocalWineApp(QString key,const QString urlData,UNJSO
     }
     return true;
 }
-json objectJson::exportJson(BaseDockData xData,QString AppCID){
+json objectJson::exportJson(SdockerData xData,QString AppCID){
     json eJson=nullptr;
     for(auto b:xData.dData){
         if(b.second.AppCID==AppCID){
@@ -514,9 +514,9 @@ json objectJson::exportJson(BaseDockData xData,QString AppCID){
             }else{
                 eJson[toStr(Libs)]=json::array();
             }
-            if(!b.second.DockerRegs.empty()){
+            if(!b.second.stdDockerRegs.empty()){
                 int i=0;
-                for(auto a:b.second.DockerRegs){
+                for(auto a:b.second.stdDockerRegs){
                     i+=1;
                     eJson[toStr(Regs)][i][toStr(rPath)]=a.rPath.toStdString();
                     eJson[toStr(Regs)][i][toStr(rKey)]=a.rKey.toStdString();
@@ -558,19 +558,19 @@ void objectJson::deleteDockerNodeData(QString dockName){
     WriteLocalData();
 }
 //更新容器节点信息
-void objectJson::updateDockerNodeData(BaseDockData dockData,QString dockName){
+void objectJson::updateDockerNodeData(SdockerData dockData,QString dockName){
     g_vekLocalData.dockerVec[dockName]=dockData;
     WriteLocalData();
 }
 //××××××××××××APP信息操作×××××××××××//
 //增加app节点
-void objectJson::addAppNodeData(BaseDockData dockData,BaseAppData appData){
+void objectJson::addAppNodeData(SdockerData dockData,SappData appData){
     g_vekLocalData.dockerVec[dockData.DockerName]=dockData;
     g_vekLocalData.dockerVec[dockData.DockerName].dData[appData.AppCID]=appData;
     WriteLocalData();
 }
 //删除APP节点
-void objectJson::deleteAppNodeData(BaseDockData dockData, QString appCID){
+void objectJson::deleteAppNodeData(SdockerData dockData, QString appCID){
     for(auto& h:g_vekLocalData.dockerVec)
     {
         if(h.first.count(dockData.DockerName)>0){
@@ -583,7 +583,7 @@ void objectJson::deleteAppNodeData(BaseDockData dockData, QString appCID){
     WriteLocalData();
 }
 //更新APP节点信息
-void objectJson::updateAppNodeData(BaseDockData dockData,BaseAppData appData){
+void objectJson::updateAppNodeData(SdockerData dockData,SappData appData){
     addAppNodeData(dockData,appData);
 }
 //××××××××××××××××Wine信息操作×××××××××××××××××//
@@ -596,7 +596,7 @@ void objectJson::deleteWineNodeData(QString nWineName){
 }
 
 //更新Wine节点
-void objectJson::updateWineNodeData(BaseWineData _base_wine_data){
+void objectJson::updateWineNodeData(SwineData _base_wine_data){
     if(_base_wine_data.IwineName!=nullptr){
         deleteWineNodeData(_base_wine_data.IwineName);
     }

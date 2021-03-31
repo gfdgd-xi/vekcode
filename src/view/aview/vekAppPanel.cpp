@@ -20,8 +20,8 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
     gridLayout->setContentsMargins(0,0,0,0);
     m_pBox->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
     m_pListMap = new std::map<QString,vekAppListView*>();
-    std::map<QString,BaseDockData>::iterator it;
-    std::map<QString,BaseAppData>::reverse_iterator its;
+    std::map<QString,SdockerData>::iterator it;
+    std::map<QString,SappData>::reverse_iterator its;
     for(it=g_vekLocalData.dockerVec.begin();it!=g_vekLocalData.dockerVec.end();it++){
         vekAppListView *pListView = new vekAppListView();
         pListView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
@@ -40,7 +40,7 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
         }
         if(!it->second.dData.empty()){
             for(its=it->second.dData.rbegin();its!=it->second.dData.rend();its++){
-                BaseAppData *LID=new BaseAppData();
+                SappData *LID=new SappData();
                 *LID=its->second;
                 connect(pListView, SIGNAL(_startTray()), this->parentWidget()->parentWidget(), SLOT(startTray()));
                 pListView->addItem(LID);
@@ -77,7 +77,7 @@ void vekAppPanel::vekLoadJsonData(){
             for(auto z:y.second.dData){
                 vekAppListView* pList= new vekAppListView();
                 QString nowTabName=y.first;
-                BaseAppData *LID=new BaseAppData();
+                SappData *LID=new SappData();
                 *LID=z.second;
                 for(std::map<QString,vekAppListView*>::iterator it = m_pListMap->begin();it!=m_pListMap->end();it++)
                 {
@@ -112,11 +112,11 @@ void vekAppPanel::addAppDiy(){
         vek_app_add->setAttribute(Qt::WA_DeleteOnClose,true);
         vek_app_add->setWindowFlags(Qt::WindowStaysOnTopHint);
         vek_app_add->setWindowTitle("Vek软件增加");
-        BaseDockData tmpData=pObject::getDockerData(m_pBox->tabText(m_pBox->currentIndex()));
+        SdockerData tmpData=pObject::getDockerData(m_pBox->tabText(m_pBox->currentIndex()));
         vek_app_add->vekAppAddConnectObject(&tmpData,nullptr,object_addApp);
         vek_app_add->show();
         connect(vek_app_add,&vekAppAddMT::_unDiyAppAdd,this,&vekAppPanel::unDiyAppAdd);
-        connect(vek_app_add,SIGNAL(doneAddApp(BaseDockData*,BaseAppData*)), this, SLOT(addAppObject(BaseDockData*,BaseAppData*)));
+        connect(vek_app_add,SIGNAL(doneAddApp(SdockerData*,SappData*)), this, SLOT(addAppObject(SdockerData*,SappData*)));
     }
 }
 void vekAppPanel::addAppAuto(){
@@ -128,7 +128,7 @@ void vekAppPanel::addAppAuto(){
         vek_app_add_auto->connectDockObject();
         vek_app_add_auto->show();
         connect(vek_app_add_auto,&vekAppAddAT::_unAutoDock,this,&vekAppPanel::unAutoDock);
-        connect(vek_app_add_auto,SIGNAL(autoObjDock(BaseDockData*,BaseAppData*)),this,SLOT(addAppObject(BaseDockData*,BaseAppData*)));
+        connect(vek_app_add_auto,SIGNAL(autoObjDock(SdockerData*,SappData*)),this,SLOT(addAppObject(SdockerData*,SappData*)));
     }
 }
 void vekAppPanel::objInitDocker(INITTYPE iType){
@@ -137,9 +137,9 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
         return;
     }
     bool dState=false;
-    BaseDockData tempDockerData;
-    BaseAppData  tempAppData;
-    objectType _objType=object_default;
+    SdockerData tempDockerData;
+    SappData  tempAppData;
+    ExtendType _objType=object_default;
     objectAppMT* objNewDock=new objectAppMT(&tempAppData,&tempDockerData);
     tempAppData.DefaultFonts=true;
     QString dockName="vekON1";
@@ -290,7 +290,7 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
         }
         objectExtend* _objectExtend=new objectExtend();
         std::vector<QStringList> _codeAgrs;
-        _objectExtend->setDockOptionObjectData(tempDockerData,tempAppData.AppCID,_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default);
+        _objectExtend->setDockOptionObjectData(tempDockerData,tempAppData.AppCID,_codeAgrs,_objType,ExtendBootType::object_wineboot_default,ExtendServerType::object_wineserver_default);
         _objectExtend->start();
     }
     delete objNewDock;
@@ -310,9 +310,9 @@ void vekAppPanel::unMultAppAdd(){
 void vekAppPanel::unDiyAppAdd(){
     vek_app_add=nullptr;
 }
-void vekAppPanel::addAppObject(BaseDockData* dcokData,BaseAppData* appData){
+void vekAppPanel::addAppObject(SdockerData* dcokData,SappData* appData){
     vekAppListView* pList=new vekAppListView();
-    BaseAppData* _tempBaseData=new BaseAppData;
+    SappData* _tempBaseData=new SappData;
     _tempBaseData=appData;
     QString nowTabName=dcokData->DockerName;
     bool tabState=false;
@@ -348,7 +348,7 @@ void vekAppPanel::upTabIco(){
         }
     }
 }
-void vekAppPanel::addGroupSlot(BaseDockData* dcokData)
+void vekAppPanel::addGroupSlot(SdockerData* dcokData)
 {
     if (!dcokData->DockerName.isEmpty())
     {
@@ -371,7 +371,7 @@ void vekAppPanel::addGroupSlot(BaseDockData* dcokData)
 void vekAppPanel::deleteGroupSlot(bool del_static){
     QAction *pEven = qobject_cast<QAction *>(this->sender());
     QString strDockerName=pEven->objectName();
-    BaseDockData tDocker=pObject::getDockerData(strDockerName);
+    SdockerData tDocker=pObject::getDockerData(strDockerName);
     m_pBox->removeTab(cindex);
     qInfo()<<cindex;
     if(tDocker.DockerPath!=nullptr&&strDockerName!=nullptr){

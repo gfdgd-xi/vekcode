@@ -11,7 +11,7 @@ typedef struct{
     QString rKey=nullptr;
     QString rTValue=nullptr;
     QString rValue=nullptr;
-}BaseDockRegs;
+}SRegs;
 
 typedef struct {
     QString AppCID=nullptr;
@@ -36,8 +36,8 @@ typedef struct {
     std::vector<QString> AttachProc={};
     std::map<QString,QString> DockerEnv={};
     std::vector<QString> DockerLibs={};
-    std::vector<BaseDockRegs> DockerRegs={};
-}BaseAppData;
+    std::vector<SRegs> stdDockerRegs={};
+}SappData;
 
 //本地安装wine数据结构
 typedef struct{
@@ -50,7 +50,7 @@ typedef struct{
     QString IwineGeckoX86=nullptr;
     QString IwineGeckoX86_64=nullptr;
     std::vector<QString> IwineDxvk={};
-}BaseWineData;
+}SwineData;
 
 //远程wine数据结构
 typedef struct {
@@ -61,7 +61,7 @@ typedef struct {
     QString GeckoX86=nullptr;
     QString GeckoX86_64=nullptr;
     std::vector<QString> WineDxvk={};
-}BaseWineGit;
+}SwineRemoteData;
 
 typedef struct {
     QString pDockPath=nullptr;
@@ -69,7 +69,7 @@ typedef struct {
     QString pWinePath=nullptr;
     QString pMainProc=nullptr;
     std::vector<QString> pAttachProc={};
-}procInfo;
+}SappProcData;
 
 typedef struct {
     std::map<QString,QString> Option={};
@@ -78,18 +78,18 @@ typedef struct {
     std::map<QString,QString> Env={};
     std::vector<QString> Libs={};
     std::map<QString,QString> Dxvk={};
-    std::vector<BaseDockRegs> Regs={};
+    std::vector<SRegs> Regs={};
     QString Args=nullptr;
-}BaseAutoSetJson;
+}SappDeployData;
 
 typedef struct{
     QString appName=nullptr;
     QString appJson=nullptr;
     QString appIco=":/res/img/vek.ico";
-}BaseAppJson;
+}SappDeployInfo;
 
 typedef struct{
-    std::map<QString,BaseAppData> dData;
+    std::map<QString,SappData> dData;
     QString WinePath=nullptr;
     QString WineVersion=nullptr;
     QString DockerPath=nullptr;
@@ -99,22 +99,22 @@ typedef struct{
     QString DockerVer="win32";
     bool MonoState=false;
     bool GeckoState=false;
-}BaseDockData;
+}SdockerData;
 
 typedef struct{
     QString vekStyle="styleDefault";
     QString vekLang="langChinese";
-}Options;
+}SvekOptions;
 
 typedef struct {
-    std::map<QString,BaseDockData> dockerVec={};
-    std::map<QString,BaseWineData> wineVec={};
+    std::map<QString,SdockerData> dockerVec={};
+    std::map<QString,SwineData> wineVec={};
     std::map<QString,QString> appScrSource={};
-    std::map<QString,std::map<QString,std::map<QString,BaseAppJson>>> appJsonList={};
+    std::map<QString,std::map<QString,std::map<QString,SappDeployInfo>>> appJsonList={};
     std::map<QString,QString> wineSource={};
-    std::map<QString,std::map<QString,BaseWineGit>> wineJsonList={};
-    Options vekOptions={};
-}BaseLocalData;
+    std::map<QString,std::map<QString,SwineRemoteData>> wineJsonList={};
+    SvekOptions vekOptions={};
+}SlocalGloablData;
 
 typedef struct{
     std::map<QString,QString> wtServer={};
@@ -141,7 +141,7 @@ typedef enum{
     object_disable,
     object_plugs,
     object_default
-}objectType;
+}ExtendType;
 typedef enum{
     object_wineboot_e,
     object_wineboot_f,
@@ -151,19 +151,19 @@ typedef enum{
     object_wineboot_s,
     object_wineboot_u,
     object_wineboot_default
-}objectWineBoot;
+}ExtendBootType;
 typedef enum{
     object_wineserver_k,
     object_wineserver_p,
     object_wineserver_w,
     object_wineserver_default
-}objectWineServer;
+}ExtendServerType;
 typedef enum{
     object_delApp,
     object_setApp,
     object_addApp
-}objectTypeView;
-extern BaseLocalData g_vekLocalData;
+}EADEType;
+extern SlocalGloablData g_vekLocalData;
 extern std::map<QString,std::map<QString,QString>> fontRes;
 extern std::map<QString,std::map<QString,QString>> dxvkResCof;
 extern std::map<QString,std::map<QString,QString>> dxvkResHUD;

@@ -8,19 +8,19 @@ class objectAppMT :public QObject
 {
     Q_OBJECT
 public:
-    objectAppMT(BaseAppData*,BaseDockData*);
+    objectAppMT(SappData*,SdockerData*);
     ~objectAppMT();
     QString GetRandomCID();
     bool InitDockObj(bool);
     std::vector<QStringList> argsList;
     void DockLibsInstall();
-    void ExecuteObj(objectType,objectWineBoot,objectWineServer);
+    void ExecuteObj(ExtendType,ExtendBootType,ExtendServerType);
     void newDock();
     void optionRegs();
     void sObjectInstall();
 private:
-    BaseAppData* appData=new BaseAppData;
-    BaseDockData* dockData=new BaseDockData;
+    SappData* appData=new SappData;
+    SdockerData* dockData=new SdockerData;
     void InitDockDir(bool foceState,QDir _dockPath,QDir _dockDir);
     QStringList GetDxvkFileList(QString basedxvkDir);
     void DxvkFileInstall();

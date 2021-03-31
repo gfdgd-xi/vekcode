@@ -14,7 +14,7 @@ vekAppAddMT::~vekAppAddMT()
     emit _unDiyAppAdd();
 }
 //绑定槽
-void vekAppAddMT::vekAppAddConnectObject(BaseDockData* _data,QString _appCID,objectTypeView _objType){
+void vekAppAddMT::vekAppAddConnectObject(SdockerData* _data,QString _appCID,EADEType _objType){
     objType=_objType;
     //检测增加游戏必要的设置
     connect(ui->pushButton_Set,&QPushButton::clicked,this,&vekAppAddMT::objectButton);
@@ -103,10 +103,10 @@ void vekAppAddMT::vekAppAddConnectObject(BaseDockData* _data,QString _appCID,obj
     loadTableView(ui->tableView_RegsList,tempAppData);
     plugsLoad();
 }
-void vekAppAddMT::initAppAndDockData(BaseDockData* _data,QString _appCID){
+void vekAppAddMT::initAppAndDockData(SdockerData* _data,QString _appCID){
     //_data nullptr =add
     if(_data->DockerPath==nullptr){
-        tempDockData=new BaseDockData;
+        tempDockData=new SdockerData;
         tempDockData->DockerPath=QApplication::applicationDirPath()+"/vekDock";
     }else{
         *tempDockData=pObject::getDockerData(_data->DockerName);
@@ -185,7 +185,7 @@ void vekAppAddMT::setTableView(QTableView* qtv){
 
 }
 //loadTable
-void vekAppAddMT::loadTableView(QTableView* qtv,BaseAppData* ePdata){
+void vekAppAddMT::loadTableView(QTableView* qtv,SappData* ePdata){
     tableModel=new QStandardItemModel();
     // set columns
     int i=0;
@@ -218,8 +218,8 @@ void vekAppAddMT::loadTableView(QTableView* qtv,BaseAppData* ePdata){
     if(qtv==ui->tableView_RegsList){
         columnTitles<<"注册表路径"<<"注册表键"<<"值类型"<<"注册表值";
         if(ePdata!=nullptr){
-            if(!ePdata->DockerRegs.empty()){
-                for(auto j:ePdata->DockerRegs){
+            if(!ePdata->stdDockerRegs.empty()){
+                for(auto j:ePdata->stdDockerRegs){
                     int x=i++;
                     tableModel->setItem(x,0,new QStandardItem(j.rPath));
                     tableModel->setItem(x,1,new QStandardItem(j.rKey));
@@ -378,8 +378,8 @@ bool vekAppAddMT::vekAppConfigObj(){
         }
     }
     if(regsCurRow>0){
-        tempAppData->DockerRegs.clear();
-        BaseDockRegs _tRegs;
+        tempAppData->stdDockerRegs.clear();
+        SRegs _tRegs;
         QAbstractItemModel *modelRegs = ui->tableView_RegsList->model();
         for(int i=0;i<=regsCurRow-1;i++){
             _tRegs.rPath = modelRegs->data(modelRegs->index(i,0)).value<QString>();
@@ -387,7 +387,7 @@ bool vekAppAddMT::vekAppConfigObj(){
             _tRegs.rTValue= modelRegs->data(modelRegs->index(i,2)).value<QString>();
             _tRegs.rValue = modelRegs->data(modelRegs->index(i,3)).value<QString>();
             if(_tRegs.rPath!=nullptr&&_tRegs.rKey!=nullptr&&_tRegs.rTValue!=nullptr){
-                tempAppData->DockerRegs.push_back(_tRegs);
+                tempAppData->stdDockerRegs.push_back(_tRegs);
             }
         }
     }

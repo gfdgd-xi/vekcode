@@ -47,7 +47,7 @@ QVariant vekModelAT::data( const QModelIndex & index, int role ) const
     return QVariant();
 }
 
-void vekModelAT::addItem( BaseAppJson *pItem )
+void vekModelAT::addItem( SappDeployInfo *pItem )
 {
     if (pItem)
     {
@@ -64,7 +64,7 @@ int vekModelAT::rowCount( const QModelIndex & parent ) const
     return m_ItemDataVec.size();
 }
 
-BaseAppJson* vekModelAT::getItem( int index )
+SappDeployInfo* vekModelAT::getItem( int index )
 {
     int pIndex=m_ItemDataVec.size();
     if (index > -1 && index < pIndex)

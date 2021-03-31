@@ -124,7 +124,7 @@ void vekWineOption::installWine(QString wineName)
     }
     QString selPath=ui->lineEdit_InstallPath->text();
     QString selSrc=ui->comboBox_wineSrc->currentText();
-    BaseWineData isWData={};
+    SwineData isWData={};
     for(auto [d,p] :g_vekLocalData.wineJsonList){
         if(d==selSrc){
             for(auto dx:p){

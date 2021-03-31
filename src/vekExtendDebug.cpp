@@ -161,8 +161,8 @@ void vekExtendDebug::ExtendApp(){
 void vekExtendDebug::exitDebug(){
     std::vector<QStringList> _codeAgrs;
     objectExtend* _objectExtend=new objectExtend();
-    objectType _objType=object_forcekill;
-    _objectExtend->setDockOptionObjectData(dockData,appData.AppCID,_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default);
+    ExtendType _objType=object_forcekill;
+    _objectExtend->setDockOptionObjectData(dockData,appData.AppCID,_codeAgrs,_objType,ExtendBootType::object_wineboot_default,ExtendServerType::object_wineserver_default);
     _objectExtend->start();
     _objectExtend->wait();
     delete _objectExtend;

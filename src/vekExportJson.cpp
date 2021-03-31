@@ -14,7 +14,7 @@ vekExportJson::~vekExportJson()
     emit _unExportJson();
     delete ui;
 }
-void vekExportJson::ExportJson(BaseDockData _bDockData,QString _bAppCID){
+void vekExportJson::ExportJson(SdockerData _bDockData,QString _bAppCID){
    objectJson* oJson=new objectJson;
    QString tJson=QString::fromStdString(oJson->exportJson(_bDockData,_bAppCID).dump(4));
    ui->textEdit_OutPutStr->setText(tJson);

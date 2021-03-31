@@ -10,14 +10,14 @@ class vekViewAT:public QListView
 public:
     vekViewAT(QWidget *parent = NULL);
    ~vekViewAT();
-    void addItem(BaseAppJson *pItem );
+    void addItem(SappDeployInfo *pItem );
 protected:
         void mouseDoubleClickEvent(QMouseEvent* event);
 private:
     int  m_hitIndex;
     vekModelAT* m_pModel;
 signals:
-    void outAppData(BaseAppJson);
+    void outAppData(SappDeployInfo);
 };
 
 #endif // VEKATJSONVIEW_H

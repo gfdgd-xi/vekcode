@@ -1,6 +1,6 @@
 #include "objectAppMT.h"
 
-objectAppMT::objectAppMT(BaseAppData* _appData,BaseDockData* _dockData)
+objectAppMT::objectAppMT(SappData* _appData,SdockerData* _dockData)
 {
     appData=_appData;
     dockData=_dockData;
@@ -242,7 +242,7 @@ void objectAppMT::installGeckoPlugs(){
 }
 void objectAppMT::optionRegs(){
     argsList.clear();
-    for(auto d:appData->DockerRegs)
+    for(auto d:appData->stdDockerRegs)
     {
         argsList.push_back(pObject::dockerRegeditStr("add",d.rPath,d.rKey,d.rTValue,d.rValue));
     }
@@ -330,7 +330,7 @@ bool objectAppMT::InitDockObj(bool _forceState){
         if(dockData->GeckoState){
             installGeckoPlugs();
         }
-        if(!appData->DockerRegs.empty()){
+        if(!appData->stdDockerRegs.empty()){
             optionRegs();
         }
         outAppIco();
@@ -348,7 +348,7 @@ void objectAppMT::WaitObjectDone(objectExtend* _waitObject){
     _waitObject=nullptr;
 }
 //执行
-void objectAppMT::ExecuteObj(objectType _objType,objectWineBoot _objWineBootType,objectWineServer _objWineServer){
+void objectAppMT::ExecuteObj(ExtendType _objType,ExtendBootType _objWineBootType,ExtendServerType _objWineServer){
     objectExtend* objExtend = new objectExtend();
     if(dockData->DockerPath==nullptr||dockData->DockerName==nullptr){return;}
     objExtend->setDockOptionObjectData(*dockData,appData->AppCID,argsList,_objType,_objWineBootType,_objWineServer);

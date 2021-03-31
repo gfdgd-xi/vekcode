@@ -13,7 +13,7 @@ objectAppAT::~objectAppAT(){
  * _appData app参数
  * _appJsonData 自动刷配置参数
  */
-void objectAppAT::connectDockAutoData(BaseDockData _dockData,BaseAppData _appData,BaseAppJson _appJsonData){
+void objectAppAT::connectDockAutoData(SdockerData _dockData,SappData _appData,SappDeployInfo _appJsonData){
     baseDockData=_dockData;
     baseAppData=_appData;
     appJsonData=_appJsonData;
@@ -52,7 +52,7 @@ QString objectAppAT::jsonFileToStr(QString jsonFilePath){
     file.close();
     return jFileStr;
 }
-bool objectAppAT::jsonUnserialize(BaseAppJson jAppData,JSONTYPE jType){
+bool objectAppAT::jsonUnserialize(SappDeployInfo jAppData,JSONTYPE jType){
     QString jsonData=nullptr;
     if(jType==jNet){
         jsonData=jsonNetToStr(jAppData.appJson);
@@ -61,7 +61,7 @@ bool objectAppAT::jsonUnserialize(BaseAppJson jAppData,JSONTYPE jType){
     }
     if(jsonData!=nullptr){
         objectJson _objectJson;
-        _baseAutoSetJson=new BaseAutoSetJson;
+        _baseAutoSetJson=new SappDeployData;
         if(_objectJson.unDataSerializeScriptData(_baseAutoSetJson,jsonData)==nullptr){
             return false;
         }
@@ -144,7 +144,7 @@ void objectAppAT::objAppData(){
             }
         }
     }
-    baseAppData.DockerRegs=_baseAutoSetJson->Regs;
+    baseAppData.stdDockerRegs=_baseAutoSetJson->Regs;
     baseAppData.DockerLibs=_baseAutoSetJson->Libs;
     baseAppData.DockerEnv=_baseAutoSetJson->Env;
     baseAppData.AppOtherAgrs=_baseAutoSetJson->Args;
@@ -171,7 +171,7 @@ void objectAppAT::objectAutoObj(){
     objDiyAddApp=nullptr;
 }
 void objectAppAT::run(){
-    _baseAutoSetJson=new BaseAutoSetJson();
+    _baseAutoSetJson=new SappDeployData();
     JSONTYPE jtype=JsonType();
     if(jtype==jDefault){
         emit Error("配置文件出错!",true);

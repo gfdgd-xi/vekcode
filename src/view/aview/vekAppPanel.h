@@ -20,8 +20,8 @@ public:
     ~vekAppPanel();   
 public slots:
     void addAppSlot();
-    void addGroupSlot(BaseDockData* dcokData);
-    void addAppObject(BaseDockData* dcokData,BaseAppData* appData);
+    void addGroupSlot(SdockerData* dcokData);
+    void addAppObject(SdockerData* dcokData,SappData* appData);
     void upTabIco();
     void objectRunApp();
     void objInitDocker(INITTYPE);

@@ -88,9 +88,9 @@ void vekAppAddAT::addAutoApp(){
         pObject::vekTip("请设置游戏运行exe文件路径");
         return;
     }
-    BaseAppData* autoAppData=new BaseAppData;
-    BaseDockData* autoDockData=new BaseDockData;
-    BaseDockData btmp=pObject::getDockerData(ui->comboBox_DockName->currentText());
+    SappData* autoAppData=new SappData;
+    SdockerData* autoDockData=new SdockerData;
+    SdockerData btmp=pObject::getDockerData(ui->comboBox_DockName->currentText());
     if(btmp.DockerPath==nullptr){
         autoDockData->DockerName=ui->comboBox_DockName->currentText();
         autoDockData->DockerPath=ui->lineEdit_DockPath->text();
@@ -98,7 +98,7 @@ void vekAppAddAT::addAutoApp(){
     }else{
         *autoDockData=btmp;
     }
-    BaseAppJson pAppJsonData=ui->comboBox_JsonUrl->oData;
+    SappDeployInfo pAppJsonData=ui->comboBox_JsonUrl->oData;
     if(pAppJsonData.appName==nullptr){
         pAppJsonData.appJson=ui->comboBox_JsonUrl->currentText();
     }
@@ -107,7 +107,7 @@ void vekAppAddAT::addAutoApp(){
     objAutoAddApp->connectDockAutoData(*autoDockData,*autoAppData,pAppJsonData);
     connect(objAutoAddApp,SIGNAL(Tips(QString)),this,SLOT(TipText(QString)));
     connect(objAutoAddApp,SIGNAL(Error(QString,bool)),this,SLOT(ErrorText(QString,bool)));
-    connect(objAutoAddApp,SIGNAL(Done(BaseDockData*,BaseAppData*)),this,SLOT(ObjDone(BaseDockData*,BaseAppData*)));
+    connect(objAutoAddApp,SIGNAL(Done(SdockerData*,SappData*)),this,SLOT(ObjDone(SdockerData*,SappData*)));
     objAutoAddApp->start();
     controlState(false);
 }
@@ -131,7 +131,7 @@ void vekAppAddAT::ErrorText(QString ErrorInfo,bool cState){
     ui->label_ProgText->setText(ErrorInfo);
     controlState(cState);
 }
-void vekAppAddAT::ObjDone(BaseDockData* _aDockData,BaseAppData* aAppData){
+void vekAppAddAT::ObjDone(SdockerData* _aDockData,SappData* aAppData){
     pObject::addAppDataToJson(*_aDockData,*aAppData);
     emit autoObjDock(_aDockData,aAppData);
     this->close();

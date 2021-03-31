@@ -57,11 +57,11 @@ int vekAppData::rowCount( const QModelIndex & parent /*= QModelIndex() */ ) cons
 
 void vekAppData::deleteItem( int index )
 {
-    std::vector<BaseAppData*>::iterator it = m_ItemDataVec.begin();
+    std::vector<SappData*>::iterator it = m_ItemDataVec.begin();
     m_ItemDataVec.erase(it + index);
 }
 
-void vekAppData::addItem( BaseAppData *pItem )
+void vekAppData::addItem( SappData *pItem )
 {
     if (pItem)
     {
@@ -72,7 +72,7 @@ void vekAppData::addItem( BaseAppData *pItem )
 
 }
 
-BaseAppData* vekAppData::getItem( int index )
+SappData* vekAppData::getItem( int index )
 {
     int pindex=m_ItemDataVec.size();
     if (index > -1 && index < pindex)

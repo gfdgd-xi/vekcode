@@ -15,7 +15,7 @@ class vekExportJson : public QWidget
 public:
     explicit vekExportJson(QWidget *parent = nullptr);
     ~vekExportJson();
-    void ExportJson(BaseDockData,QString);
+    void ExportJson(SdockerData,QString);
 private:
     Ui::vekExportJson *ui;
 private slots:

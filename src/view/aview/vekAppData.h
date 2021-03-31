@@ -11,13 +11,13 @@ class vekAppData:public QAbstractListModel
 public:
     vekAppData(QObject *parent = NULL);
     ~vekAppData();
-    void addItem(BaseAppData *pItem);
+    void addItem(SappData *pItem);
     QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const ;
     int	rowCount ( const QModelIndex & parent = QModelIndex() ) const;
     void deleteItem(int index);
-    BaseAppData* getItem(int index );
+    SappData* getItem(int index );
 private:
-    std::vector<BaseAppData*> m_ItemDataVec;
+    std::vector<SappData*> m_ItemDataVec;
 };
 
 #endif // vekAppData_H

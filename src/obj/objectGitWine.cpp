@@ -3,7 +3,7 @@
 
 objectGitWine *objectGitWine::objGitWine = nullptr;
 
-objectGitWine::objectGitWine(BaseWineData wineData)
+objectGitWine::objectGitWine(SwineData wineData)
 {
     objGitWine=this;
     wData={};

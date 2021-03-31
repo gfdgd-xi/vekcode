@@ -8,7 +8,7 @@ objectExtend::~objectExtend(){
     delete m_cmd;
     m_cmd=nullptr;
 }
-void objectExtend::setDockOptionObjectData(BaseDockData _dockData,QString _appCID,std::vector<QStringList> _agrsList,objectType _objType,objectWineBoot _objWineBootType,objectWineServer _objWineServer){
+void objectExtend::setDockOptionObjectData(SdockerData _dockData,QString _appCID,std::vector<QStringList> _agrsList,ExtendType _objType,ExtendBootType _objWineBootType,ExtendServerType _objWineServer){
     appData=pObject::getAppData(_dockData,_appCID);
     dockData=_dockData;
     argsList=_agrsList;
@@ -44,7 +44,7 @@ void objectExtend::executeArgsEnv(){
         qInfo()<<_env;
     }
 }
-void objectExtend::executeWineBoot(objectWineBoot objWineBootType){
+void objectExtend::executeWineBoot(ExtendBootType objWineBootType){
     QStringList wineboot;
     wineboot.clear();
     wineboot.append(dockData.WinePath+"/wine/bin/");
@@ -86,7 +86,7 @@ void objectExtend::executeWineBoot(objectWineBoot objWineBootType){
     m_cmd->waitForFinished(-1);
     waitObjectDone(true);
 }
-void objectExtend::executeWineServer(objectWineServer objWineServer){
+void objectExtend::executeWineServer(ExtendServerType objWineServer){
     QStringList wineserver;
     wineserver.clear();
     wineserver.append(dockData.WinePath+"/wine/bin/");
@@ -112,7 +112,7 @@ void objectExtend::executeWineServer(objectWineServer objWineServer){
     m_cmd->waitForFinished(-1);
     waitObjectDone(true);
 }
-void objectExtend::executeWinetricks(objectType _wType){
+void objectExtend::executeWinetricks(ExtendType _wType){
     executeWineBoot(object_wineboot_r);
     QStringList codeArgs;
     qputenv("WINE", (dockData.WinePath+"/wine/bin/wine").toStdString().c_str());
@@ -314,7 +314,7 @@ void objectExtend::extendPlugs(){
     }
 }
 void objectExtend::monitorProc(){
-    procInfo pi;
+    SappProcData pi;
     if(!appData.AttachProc.empty()){
         objectProcManage* objProcMangs=new objectProcManage();
         pi.pDockName=dockData.DockerName;
@@ -331,7 +331,7 @@ void objectExtend::monitorProc(){
     }
 }
 void objectExtend::forcekill(){
-    procInfo pi;
+    SappProcData pi;
     objectProcManage* objProcMangs=new objectProcManage();
     pi.pDockName=dockData.DockerName;
     pi.pDockPath=dockData.DockerPath;

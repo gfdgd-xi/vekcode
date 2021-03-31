@@ -8,12 +8,12 @@ class vekModelAT: public QAbstractListModel
 public:
     explicit vekModelAT(QObject *parent = nullptr);
     ~vekModelAT();
-    void addItem(BaseAppJson *pItem);
+    void addItem(SappDeployInfo *pItem);
     QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const ;
     int	rowCount ( const QModelIndex & parent = QModelIndex() ) const;
-    BaseAppJson* getItem(int index );
+    SappDeployInfo* getItem(int index );
 private:
-    std::vector<BaseAppJson*> m_ItemDataVec;
+    std::vector<SappDeployInfo*> m_ItemDataVec;
 };
 
 #endif // VEKGAMEADDATJSONTABLEMODEL_H
