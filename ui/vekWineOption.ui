@@ -42,6 +42,10 @@
   <property name="windowTitle">
    <string>Wine安装</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../vek_res.qrc">
+    <normaloff>:/res/img/vek.ico</normaloff>:/res/img/vek.ico</iconset>
+  </property>
   <property name="windowOpacity">
    <double>1.000000000000000</double>
   </property>
@@ -292,6 +296,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../vek_res.qrc"/>
+ </resources>
  <connections/>
 </ui>

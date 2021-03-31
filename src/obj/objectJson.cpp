@@ -15,7 +15,7 @@ json objectJson::DataSerialize(json jsonData,const LocalData _baseLocalData){
         for(auto ax:_baseLocalData.local_DockerData){
             //bx.first->游戏CID
             jsonData["Docker"][ax.first.toStdString()][toStr(WineVersion)]=ax.second.docker_WineVersion.toStdString();
-            jsonData["Docker"][ax.first.toStdString()][toStr(WinePath)]=ax.second.docker_Path.toStdString();
+            jsonData["Docker"][ax.first.toStdString()][toStr(WinePath)]=ax.second.docker_WinePath.toStdString();
             jsonData["Docker"][ax.first.toStdString()][toStr(DockerSystemVersion)]=ax.second.docker_SystemVersion.toStdString();
             jsonData["Docker"][ax.first.toStdString()][toStr(DockerVer)]=ax.second.docker_SystemBitVersion.toStdString();
             jsonData["Docker"][ax.first.toStdString()][toStr(DockerPath)]=ax.second.docker_Path.toStdString();
@@ -182,7 +182,7 @@ bool objectJson::unDataSerializeLocalData(){
                             baseDockData.docker_Name=QString::fromStdString(bx.at(toStr(DockerName)));
                             baseDockData.docker_SystemVersion=QString::fromStdString(bx.at(toStr(DockerSystemVersion)));
                             baseDockData.docker_SystemBitVersion=QString::fromStdString(bx.at(toStr(DockerVer)));
-                            baseDockData.docker_WineVersion=QString::fromStdString(bx.at(toStr(DockerWineVersion)));
+                            baseDockData.docker_WineExeVersion=QString::fromStdString(bx.at(toStr(DockerWineVersion)));
                         }
                         if(it.value().is_boolean()){
                             baseDockData.docker_MonoState=bx.at(toStr(MonoState)).get<bool>();

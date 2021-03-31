@@ -328,7 +328,7 @@ bool vekAppAddMT::vekAppConfigObj(){
     tempDockData->docker_WinePath=it->second.iWinePath;
     tempDockData->docker_SystemVersion=ui->comboBox_dockSystemVersion->currentText();
     tempDockData->docker_SystemBitVersion=ui->comboBox_dockbit->currentText();
-    tempDockData->docker_WineVersion=ui->comboBox_winebit->currentText();
+    tempDockData->docker_WineExeVersion=ui->comboBox_winebit->currentText();
     tempDockData->docker_MonoState=ui->checkBox_Mono->checkState();
     tempDockData->docker_GeckoState=ui->checkBox_Gecko->checkState();
     tempAppData->app_DisableAss=ui->checkBox_Ass->checkState();

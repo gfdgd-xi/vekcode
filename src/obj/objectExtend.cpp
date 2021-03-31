@@ -21,7 +21,7 @@ void objectExtend::setDockOptionObjectData(DockData _dockData,QString _appCID,st
 void objectExtend::executeArgsEnv(){
     qInfo()<<"wine执行版本:"<<dockData.docker_WineVersion;
     qInfo()<<"容器版本系统版本:"<<dockData.docker_SystemVersion;
-    qInfo()<<"Wine版本号:"<<dockData.docker_WineVersion;
+    qInfo()<<"Wine版本号:"<<dockData.docker_WineExeVersion;
     qInfo()<<"容器系统位数版本:"<<dockData.docker_SystemBitVersion;
     qputenv("WINE", (dockData.docker_WinePath+"/wine/bin/"+dockData.docker_WineVersion).toStdString().c_str());
     qputenv("WINEPREFIX", (dockData.docker_Path+"/"+dockData.docker_Name).toStdString().c_str());
@@ -187,6 +187,8 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
 void objectExtend::baseExecuteWineCode(QString code,QStringList codeArgs){
     QString mdCode;
     m_cmd->setReadChannel(QProcess::StandardOutput);
+    qInfo()<<"this:"<<code;
+    qInfo()<<"this:"<<codeArgs;
     m_cmd->start(code,codeArgs,QIODevice::ReadWrite);
     m_cmd->waitForFinished(-1);
     waitObjectDone(true);

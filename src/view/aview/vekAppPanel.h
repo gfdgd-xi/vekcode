@@ -7,6 +7,11 @@
 #include "../../vekAppAddAT.h"
 #include "../../obj/common.h"
 #include "../../obj/objectTray.h"
+
+typedef enum{
+    INIT_INSTALL,
+    INIT_DOCKER
+}INITTYPE;
 class vekAppPanel : public QWidget
 {
     Q_OBJECT
@@ -15,12 +20,11 @@ public:
     ~vekAppPanel();   
 public slots:
     void addAppSlot();
-    void addGroupSlot(DockData* dcokData);
-    void addAppObject(DockData* dcokData,AppData* appData);
+    void addGroupSlot(DockData*);
+    void addAppObject(DockData*,AppData*);
     void upTabIco();
     void objectRunApp();
-    void objAppInstall();
-    void objInitDock();
+    void objInitDocker(INITTYPE);
 private:
     QTabWidget *m_pBox;
     vekAppAddMT* vek_app_add=nullptr;

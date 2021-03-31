@@ -7,6 +7,7 @@ typedef struct{
     QString version;
     QString urlLogsStr;
     QString urlFileStr;
+    QString urlFilePassword;
 }verInfo;
 verInfo verData;
 void unVerData(string vData){
@@ -20,6 +21,9 @@ void unVerData(string vData){
         }
         if(x.key()=="uLogsStr"){
             verData.urlLogsStr=QString::fromStdString(x.value());
+        }
+        if(x.key()=="urlFilePassword"){
+            verData.urlFilePassword=QString::fromStdString(x.value());
         }
     }
 }
@@ -56,7 +60,7 @@ int main(int argc, char *argv[])
                                   QFile::ExeGroup);
             QProcess* m_cmd=new QProcess();
             m_cmd->setWorkingDirectory(QDir::currentPath());
-            m_cmd->startDetached(QDir::currentPath()+"/vUpdate "+verData.version+" "+verData.urlLogsStr+" "+verData.urlFileStr);
+            m_cmd->startDetached(QDir::currentPath()+"/vUpdate "+verData.version+" "+verData.urlLogsStr+" "+verData.urlFileStr+" "+verData.urlFilePassword);
             m_cmd->kill();
             a.exit();
             return 0;

@@ -34,7 +34,6 @@ void objectGitWine::output_progress(progress_data *pd)
             "   chk:   "+std::to_string(checkout_percent)+"%"+"("+std::to_string(pd->completed_steps)+"/"+std::to_string(pd->total_steps)+")"+
             "   Resolving deltas:   "+"("+std::to_string(pd->fetch_progress.indexed_deltas)+"/"+std::to_string(pd->fetch_progress.total_deltas)+")";
     emit objGitWine->SigDeliverMessStatic(prlog);
-    //outputPrgressSlots(prlog);
 }
 int i=0;
 void objectGitWine::SlotDeliverMessStatic(string str_log)

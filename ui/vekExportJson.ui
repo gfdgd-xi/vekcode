@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>配置文件</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../vek_res.qrc">
+    <normaloff>:/res/img/vek.ico</normaloff>:/res/img/vek.ico</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="spacing">
     <number>3</number>
@@ -94,6 +98,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../vek_res.qrc"/>
+ </resources>
  <connections/>
 </ui>

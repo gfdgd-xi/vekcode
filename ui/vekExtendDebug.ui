@@ -28,6 +28,10 @@
   <property name="windowTitle">
    <string>vek调试工具</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../vek_res.qrc">
+    <normaloff>:/res/img/vek.ico</normaloff>:/res/img/vek.ico</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_3" stretch="80,20">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout" stretch="50">
@@ -197,6 +201,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../vek_res.qrc"/>
+ </resources>
  <connections/>
 </ui>

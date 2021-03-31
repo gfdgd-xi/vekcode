@@ -107,7 +107,7 @@ void vekAppAddAT::addAutoApp(){
     objAutoAddApp->connectDockAutoData(*autoDockData,*autoAppData,pAppJsonData);
     connect(objAutoAddApp,SIGNAL(Tips(QString)),this,SLOT(TipText(QString)));
     connect(objAutoAddApp,SIGNAL(Error(QString,bool)),this,SLOT(ErrorText(QString,bool)));
-    connect(objAutoAddApp,SIGNAL(Done(BaseDockData*,BaseAppData*)),this,SLOT(ObjDone(BaseDockData*,BaseAppData*)));
+    connect(objAutoAddApp,SIGNAL(Done(DockData*,AppData*)),this,SLOT(ObjDone(DockData*,AppData*)));
     objAutoAddApp->start();
     controlState(false);
 }

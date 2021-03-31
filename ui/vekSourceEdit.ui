@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>源修改</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../vek_res.qrc">
+    <normaloff>:/res/img/vek.ico</normaloff>:/res/img/vek.ico</iconset>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout_3" stretch="50,5">
@@ -142,6 +146,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../vek_res.qrc"/>
+ </resources>
  <connections/>
 </ui>

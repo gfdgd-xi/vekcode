@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
     w.lableVersionShow(argv[1]);
     w.vUrlLogStr=argv[2];
     w.vUrlFileStr=argv[3];
+    w.vUrlPassWord=argv[4];
     w.GetVerInfo();
     w.connectOBject();
     return a.exec();

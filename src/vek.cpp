@@ -91,10 +91,10 @@ void vek::exitTray(bool trayState){
     objTray=nullptr;
 }
 void vek::installApp(){
-    ui->tabWidget->objAppInstall();
+    ui->tabWidget->objInitDocker(INIT_INSTALL);
 }
 void vek::addInitDocker(){
-    ui->tabWidget->objInitDock();
+    ui->tabWidget->objInitDocker(INIT_DOCKER);
 }
 void vek::on_action_EditSource_triggered(){
     if(_vek_source_esit==nullptr){

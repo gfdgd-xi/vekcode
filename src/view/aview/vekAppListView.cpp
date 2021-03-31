@@ -207,7 +207,7 @@ void vekAppListView::setItemSlot(){
             _vek_App_Add->setWindowFlags(Qt::WindowStaysOnTopHint);
             _vek_App_Add->show();
             connect(_vek_App_Add,&vekAppAddMT::_unDiyAppAdd,this,&vekAppListView::unAppAdd);
-            connect(_vek_App_Add,SIGNAL(_upData(BaseDockData,BaseAppData*,objectTypeView)),this,SLOT(setUpDelData(BaseDockData,BaseAppData*,objectTypeView)));
+            connect(_vek_App_Add,SIGNAL(_upData(DockData,AppData*,objectTypeView)),this,SLOT(setUpDelData(DockData,AppData*,objectTypeView)));
         }
     }
 }
@@ -245,7 +245,7 @@ void vekAppListView::setUpDelData(DockData dockData,AppData* appData,OBJAPP objT
                 //在新的容器中执行
                 _objectJson.deleteAppNodeData(pObject::getDockerData(currentTabText),appData->app_CID);
                 _objectJson.updateAppNodeData(dockData,*appData);     
-                connect(this,SIGNAL(setUpDelDataSignal(BaseDockData*,BaseAppData*)),pObjectVek,SLOT(addAppObject(BaseDockData*,BaseAppData*)));
+                connect(this,SIGNAL(setUpDelDataSignal(DockData*,AppData*)),pObjectVek,SLOT(addAppObject(DockData*,AppData*)));
                 emit setUpDelDataSignal(&dockData,appData);
             }  
         }

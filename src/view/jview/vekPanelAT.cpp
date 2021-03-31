@@ -46,7 +46,7 @@ void vekPanelAT::showPopup()
                     pListView->addItem(baj);
                 }
                 qTab->addTab(pListView,it->first);
-                connect(pListView,SIGNAL(outAppData(BaseAppJson)),this,SLOT(qComboBoxJsonSet(BaseAppJson)));
+                connect(pListView,SIGNAL(outAppData(AppJson)),this,SLOT(qComboBoxJsonSet(AppJson)));
             }
             break;
         }

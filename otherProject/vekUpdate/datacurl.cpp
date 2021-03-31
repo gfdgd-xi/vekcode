@@ -1,8 +1,14 @@
 #include "datacurl.h"
-static datacurl *dThis;
-datacurl::datacurl(QObject *parent) : QThread(parent)
-{
 
+
+datacurl *datacurl::dcurl = nullptr;
+
+datacurl::datacurl(QString fUrl,QString fPath)
+{
+    fileUrl=fUrl;
+    filePath=fPath;
+    dcurl=this;
+    connect(this,SIGNAL(SigDeliverMessStatic(long,long,int)),this,SLOT(SlotDeliverMessStatic(long,long,int)));
 }
 datacurl::~datacurl()
 {
@@ -43,7 +49,7 @@ std::string datacurl::vekGetData(QString url){
     curl_easy_cleanup(curl);
     return strRsp;
 }
-static size_t DownloadCallback(void* pBuffer, size_t nSize, size_t nMemByte, void* pParam)
+size_t datacurl::DownloadCallback(void* pBuffer, size_t nSize, size_t nMemByte, void* pParam)
 {
     FILE* fp = (FILE*)pParam;
     size_t nWrite = fwrite(pBuffer, nSize, nMemByte, fp);
@@ -51,7 +57,7 @@ static size_t DownloadCallback(void* pBuffer, size_t nSize, size_t nMemByte, voi
     return nWrite;
 }
 
-static int ProgressCallback(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow)
+int datacurl::ProgressCallback(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow)
 {
     datacurl* dd = (datacurl*)clientp;
 
@@ -60,60 +66,54 @@ static int ProgressCallback(void *clientp, double dltotal, double dlnow, double 
         return 0;
     }
     int nPos = (int) ( (dlnow/dltotal)*100 );
-    dThis->outLogText(dlnow,dltotal,nPos);
+    emit dcurl->SigDeliverMessStatic(dlnow,dltotal,nPos);
     return 0;
 }
-void datacurl::outLogText(long dlnow,long dltotal,int xPos){
-    emit curlPrgressSignals(dlnow,dltotal,xPos);
+void datacurl::SlotDeliverMessStatic(long dlnow,long dltotal,int xPos){
+    emit toPrgStr(dlnow,dltotal,xPos);
 }
-bool datacurl::DownloadFile(std::string URLADDR,std::string path)
-{
-    CURL *curl;
-    CURLcode curl_res;
+bool datacurl::DownloadFile(std::string URLADDR)
+{ 
     curl_global_init(CURL_GLOBAL_ALL);
-    curl = curl_easy_init();
     if(curl){
-        std::string strTmpStr;
-        FILE* file= fopen(path.c_str(), "ab+");
         curl_easy_setopt(curl, CURLOPT_URL, URLADDR.c_str());
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
-        curl_easy_setopt(curl, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)");
+        //curl_easy_setopt(curl, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)");
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, DownloadCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA,file);
         curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 5);
         curl_easy_setopt(curl, CURLOPT_NOPROGRESS, false);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &strTmpStr);
         curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, ProgressCallback);
         curl_easy_setopt(curl, CURLOPT_PROGRESSDATA,this);
         curl_res = curl_easy_perform(curl);
         /* Check for errors */
-        if(curl_res != CURLE_OK){
+        if(curl_res == CURLE_OK){
+            if(CURLE_OK == curl_res)
+            {
+                char *url;
+                curl_res = curl_easy_getinfo(curl, CURLINFO_EFFECTIVE_URL, &url);
+                if((CURLE_OK == curl_res) && url)
+                    printf("重定向后的url: %s\n", url);
+            }
+        }else{
             fprintf(stderr, "curl_easy_perform() failed: %s\n",curl_easy_strerror(curl_res));
         }
-        if(CURLE_OK == curl_res)
-        {
-            char *url;
-            curl_res = curl_easy_getinfo(curl, CURLINFO_EFFECTIVE_URL, &url);
-            if((CURLE_OK == curl_res) && url)
-                printf("重定向后的url: %s\n", url);
-        }
-        /* always cleanup */
         fclose(file);
         curl_easy_cleanup(curl);
-        /* we're done with libcurl, so clean it up */
         curl_global_cleanup();
+    }
+    if(curl_res != CURLE_OK){
+        return false;
     }
     return !curl_res;
 }
-void datacurl::SetUrlPath(QString _fileUrl,QString _filePath)
-{
-     fileUrl=_fileUrl;
-     filePath=_filePath;
-}
-void datacurl::run(){
-    dThis=this;
-    curl= curl_easy_init();
-    DownloadFile(fileUrl.toStdString(),filePath.toStdString());
-    curl_easy_cleanup(curl);
-    emit doneDown();
+void datacurl::vUp(){
+    QFile uFile(filePath);
+    if(uFile.exists()){
+        uFile.remove();
+    }
+    file= fopen(filePath.toStdString().c_str(), "ab+");
+    curl = curl_easy_init();
+    bool dState=DownloadFile(fileUrl.toStdString());
+    emit doneDown(true,dState);
 }

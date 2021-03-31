@@ -2,13 +2,12 @@
 #include "ui_vupdate.h"
 #include <QMouseEvent>
 #include <QMessageBox>
-#include "datacurl.h"
+
 vUpdate::vUpdate(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::vUpdate)
 {
     ui->setupUi(this);
-    //this->setWindowFlags(Qt::FramelessWindowHint);
     this->loadStyleSheet(":/qss/rsc/css.qss");  
 }
 
@@ -55,15 +54,15 @@ void vUpdate::on_ButtonClicked()
     }
 }
 void vUpdate::GetVerInfo(){
-    datacurl* _datacurl=new datacurl;
-    QString vUStr=QString::fromStdString(_datacurl->vekGetData(vUrlLogStr));
+    dcurl=new datacurl(vUrlLogStr,nullptr);
+    QString vUStr=QString::fromStdString(dcurl->vekGetData(vUrlLogStr));
     if(vUStr.contains("error",Qt::CaseSensitive)|vUStr.contains("403",Qt::CaseSensitive)|vUStr.contains("404",Qt::CaseSensitive)|vUStr.contains("505",Qt::CaseSensitive)){
        lableLogShow("网络错误!");
    }else{
        lableLogShow(vUStr);
    }
-    delete _datacurl;
-    _datacurl=nullptr;
+    delete dcurl;
+    dcurl=nullptr;
 }
 //显示log
 void vUpdate::lableLogShow(QString str){
@@ -73,39 +72,61 @@ void vUpdate::lableVersionShow(QString str){
     ui->lable_version->setText("版本号:"+str);
 }
 void vUpdate::downloadFile(){
-    datacurl* _datacurl=new datacurl;
-    _datacurl->SetUrlPath(vUrlFileStr,QDir::currentPath()+"/tempVek");
     ui->task_ProgressBar->show();
-    connect(_datacurl,SIGNAL(curlPrgressSignals(long,long,int)),this,SLOT(task_ProgressBarShow(long,long,int)));
-    connect(_datacurl,SIGNAL(doneDown()),this,SLOT(runVek()));
-    _datacurl->start();
+    obj_Thread= new QThread;
+    dcurl = new datacurl(vUrlFileStr,QApplication::applicationDirPath()+"/tempVek");
+    //绑定下载
+    connect(this,SIGNAL(ToThread()),dcurl,SLOT(vUp()));
+    //绑定进度条
+    connect(dcurl,SIGNAL(toPrgStr(long,long,int)),this,SLOT(task_ProgressBarShow(long,long,int)));
+    //绑定线程结束后解包动作
+    connect(dcurl,SIGNAL(doneDown(bool,bool)),this,SLOT(overThread(bool,bool)));
+    //move To Thread
+    dcurl->moveToThread(obj_Thread);
+    obj_Thread->start();
+    emit ToThread();
+    controlSatae(false);
 }
-void vUpdate::runVek(){
-    QString vekNewFile=QDir::currentPath()+"/tempVek";
-    QString vekOldFile=QDir::currentPath()+"/vek";
-    QFile newFile(vekNewFile);
-    QFile oldFile(vekOldFile);
-    if(newFile.exists()){
-        if(oldFile.exists()){
-            oldFile.remove();
-        }
-        QFile::rename(vekNewFile,QDir::currentPath()+"/vek");
-
-        QFile::setPermissions(QDir::currentPath()+"/vek",
-                              QFile::ReadOther|
-                              QFile::WriteOther|
-                              QFile::ReadOwner|
-                              QFile::WriteOwner|
-                              QFile::ReadGroup|
-                              QFile::ExeOther|
-                              QFile::ExeUser|
-                              QFile::ExeGroup);
-
-        QProcess* m_cmd=new QProcess();
-        m_cmd->setWorkingDirectory(QDir::currentPath());
-        m_cmd->startDetached(QDir::currentPath()+"/vek");
-        this->close();
+void vUpdate::overThread(bool tState,bool objTip){
+   if(!objTip){
+        QMessageBox::warning(nullptr,"TIP","网络出错请重试!");
+   }else{
+       upVek();
+   }
+   controlSatae(tState);
+}
+void vUpdate::controlSatae(bool dState){
+    ui->pushButton_UpdateNow->setEnabled(dState);
+    ui->pushButton_UpdateNo->setEnabled(dState);
+}
+void vUpdate::upVek(){
+    QString uFilePath=QApplication::applicationDirPath()+"/tempVek";
+    char* uFile=("unzip -P "+vUrlPassWord+" "+uFilePath).toLocal8Bit().data();
+    system(uFile);
+    QFileInfo fileInfo(vUrlFileStr);
+    QString fName=fileInfo.baseName();
+    uFilePath=QApplication::applicationDirPath()+"/"+fName+"/vek";
+    qInfo()<<fName;
+    qInfo()<<uFilePath;
+    char* uCP=("cp -r -p "+uFilePath+" "+QApplication::applicationDirPath()+"/vek").toLocal8Bit().data();
+    system(uCP);
+    QDir uDir=QApplication::applicationDirPath()+"/"+fName;
+    if(uDir.exists()){
+        uDir.removeRecursively();
     }
+    QFile::setPermissions(QApplication::applicationDirPath()+"/vek",
+                          QFile::ReadOther|
+                          QFile::WriteOther|
+                          QFile::ReadOwner|
+                          QFile::WriteOwner|
+                          QFile::ReadGroup|
+                          QFile::ExeOther|
+                          QFile::ExeUser|
+                          QFile::ExeGroup);
+    QProcess* m_cmd=new QProcess();
+    m_cmd->setWorkingDirectory(QApplication::applicationDirPath());
+    m_cmd->startDetached(QApplication::applicationDirPath()+"/vek");
+    this->close();
 }
 void vUpdate::task_ProgressBarShow(long dlnow,long dltd,int dlPos){
     if(dlPos!=nPos){
