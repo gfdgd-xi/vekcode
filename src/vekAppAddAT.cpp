@@ -18,9 +18,9 @@ void vekAppAddAT::connectDockObject(){
     connect(ui->pushButton_AutoJson,&QPushButton::clicked,this,&vekAppAddAT::SetObject);
     connect(ui->pushButton_AutoDockPath,&QPushButton::clicked,this,&vekAppAddAT::SetObject);
     connect(ui->pushButton_SetExePath,&QPushButton::clicked,this,&vekAppAddAT::SetObject);
-    if(!g_vekLocalData.wineVec.empty())
+    if(!g_vekLocalData.local_WineData.empty())
     {
-        for(auto & x :g_vekLocalData.wineVec)
+        for(auto & x :g_vekLocalData.local_WineData)
         {
             ui->comboBox_WinVersion->addItem(x.first);
         }
@@ -29,11 +29,11 @@ void vekAppAddAT::connectDockObject(){
         this->close();
     }
 
-    for(auto & d:g_vekLocalData.appScrSource){
+    for(auto & d:g_vekLocalData.local_AppSrcData){
         ui->comboBox_SrcApp->addItem(d.first);
     }
-    if(!g_vekLocalData.dockerVec.empty()){
-        for(auto &a:g_vekLocalData.dockerVec){
+    if(!g_vekLocalData.local_DockerData.empty()){
+        for(auto &a:g_vekLocalData.local_DockerData){
             ui->comboBox_DockName->addItem(a.first);
         }
     }else{
@@ -88,21 +88,21 @@ void vekAppAddAT::addAutoApp(){
         pObject::vekTip("请设置游戏运行exe文件路径");
         return;
     }
-    BaseAppData* autoAppData=new BaseAppData;
-    BaseDockData* autoDockData=new BaseDockData;
-    BaseDockData btmp=pObject::getDockerData(ui->comboBox_DockName->currentText());
-    if(btmp.DockerPath==nullptr){
-        autoDockData->DockerName=ui->comboBox_DockName->currentText();
-        autoDockData->DockerPath=ui->lineEdit_DockPath->text();
-        autoDockData->WineVersion=ui->comboBox_WinVersion->currentText();
+    AppData* autoAppData=new AppData;
+    DockData* autoDockData=new DockData;
+    DockData btmp=pObject::getDockerData(ui->comboBox_DockName->currentText());
+    if(btmp.docker_Path==nullptr){
+        autoDockData->docker_Name=ui->comboBox_DockName->currentText();
+        autoDockData->docker_Path=ui->lineEdit_DockPath->text();
+        autoDockData->docker_WineVersion=ui->comboBox_WinVersion->currentText();
     }else{
         *autoDockData=btmp;
     }
-    BaseAppJson pAppJsonData=ui->comboBox_JsonUrl->oData;
+    AppJson pAppJsonData=ui->comboBox_JsonUrl->oData;
     if(pAppJsonData.appName==nullptr){
         pAppJsonData.appJson=ui->comboBox_JsonUrl->currentText();
     }
-    autoAppData->AppExe=ui->lineEdit_AppExePath->text();
+    autoAppData->app_Exe=ui->lineEdit_AppExePath->text();
     objectAppAT* objAutoAddApp=new objectAppAT();
     objAutoAddApp->connectDockAutoData(*autoDockData,*autoAppData,pAppJsonData);
     connect(objAutoAddApp,SIGNAL(Tips(QString)),this,SLOT(TipText(QString)));
@@ -131,7 +131,7 @@ void vekAppAddAT::ErrorText(QString ErrorInfo,bool cState){
     ui->label_ProgText->setText(ErrorInfo);
     controlState(cState);
 }
-void vekAppAddAT::ObjDone(BaseDockData* _aDockData,BaseAppData* aAppData){
+void vekAppAddAT::ObjDone(DockData* _aDockData,AppData* aAppData){
     pObject::addAppDataToJson(*_aDockData,*aAppData);
     emit autoObjDock(_aDockData,aAppData);
     this->close();

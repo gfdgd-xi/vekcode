@@ -52,7 +52,7 @@ void vekAppListView::mouseDoubleClickEvent(QMouseEvent * event){
     UNUSED(event);
     int index = this->currentIndex().row();
     if(index>-1){
-        startApp(object_start);
+        startApp(START);
     }
 }
 void vekAppListView::ObjectRun(){
@@ -61,63 +61,63 @@ void vekAppListView::ObjectRun(){
     {
         QObject *object = QObject::sender();
         QAction *action_obnject = qobject_cast<QAction *>(object);
-        int object_int=object_start;
+        int object_int=START;
         if(action_obnject!=nullptr){
             object_int= action_obnject->objectName().toInt();
         }
         objectExtend* _objectExtend=new objectExtend();
-        objectType _objType=object_default;
+        OBJTYPE _objType=DEFAULT;
         std::vector<QStringList> _codeAgrs;
         switch(object_int)
         {
-        case object_winecfg:
-            _objType=object_winecfg;
+        case WINECFG:
+            _objType=WINECFG;
             break;
-        case object_regedit:
-            _objType=object_regedit;
+        case REGEDIT:
+            _objType=REGEDIT;
             break;
-        case object_control:
-            _objType=object_control;
+        case CONTROL:
+            _objType=CONTROL;
             break;
-        case object_uninstall:
-            _objType=object_uninstall;
+        case REMOVE:
+            _objType=REMOVE;
             break;
-        case object_winetricks_gui:
-            _objType=object_winetricks_gui;
+        case WINETRICKSGUI:
+            _objType=WINETRICKSGUI;
             break;
-        case object_winetricks_cmd_libs:
-            _objType=object_winetricks_cmd_libs;
+        case WINETRICKSLIBS:
+            _objType=WINETRICKSLIBS;
             _codeAgrs=vekWinetricks_cArgs();
             if(_codeAgrs.empty()){
                 return;
             }
             break;
-        case object_start:
-            _objType=object_start;
+        case START:
+            _objType=START;
             break;
-        case object_forcekill:
-            _objType=object_forcekill;
+        case FORCEKILL:
+            _objType=FORCEKILL;
             break;
-        case object_debugstart:
+        case DEBUG:
             objectExtendApp();
             return;
-        case object_setgame:
+        case SETAPP:
             setItemSlot();
             return;
-        case object_deletegame:
-            setUpDelData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),m_pModel->getItem(index),object_delApp);
+        case DELETEAPP:
+            setUpDelData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),m_pModel->getItem(index),DELETE);
             return;
-        case object_exportJson:
+        case EXPORTJSON:
             ExportJson();
             return;
-        case object_packageDeb:
+        case PACKAGEDEB:
             pObject::vekTip("功能开发中!");
             return;
         }       
-        if(_objType==object_start){
-            startApp(object_start);
+        if(_objType==START){
+            startApp(START);
         }else{
-            _objectExtend->setDockOptionObjectData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),m_pModel->getItem(index)->AppCID,_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default);
+            _objectExtend->setDockOptionObjectData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),m_pModel->getItem(index)->app_CID,_codeAgrs,_objType,BOOTTYPE::BOOTDEFAULT,SERVERTYPE::SERVERDEFAULT);
             _objectExtend->start();
         }
     }
@@ -137,27 +137,27 @@ std::vector<QStringList> vekAppListView::vekWinetricks_cArgs(){
         }
         return args;
 }
-void vekAppListView::startApp(objectType _objType){
+void vekAppListView::startApp(OBJTYPE _objType){
     std::vector<QStringList> _codeAgrs;
     int index = this->currentIndex().row();
     if(index>-1){
-        BaseDockData dockData=pObject::getDockerData(mBox->tabText(mBox->currentIndex()));
-        BaseAppData* appData=m_pModel->getItem(index);
-        if(!QDir(dockData.WinePath).exists()){
+        DockData dockData=pObject::getDockerData(mBox->tabText(mBox->currentIndex()));
+        AppData* appData=m_pModel->getItem(index);
+        if(!QDir(dockData.docker_WinePath).exists()){
             pObject::vekTip("Wine路径丢失!");
             return;
         }
-        QString pDock=dockData.DockerPath+"/"+dockData.DockerName;
+        QString pDock=dockData.docker_Path+"/"+dockData.docker_Name;
         if(!QDir(pDock).exists()){
             pObject::vekTip("容器路径丢失!");
             return;
         }
-        if(!QFile(appData->AppExe).exists()){
-            pObject::vekTip(appData->AppName+"应用执行程序不存在!"+"路径:"+appData->AppExe);
+        if(!QFile(appData->app_Exe).exists()){
+            pObject::vekTip(appData->app_Name+"应用执行程序不存在!"+"路径:"+appData->app_Exe);
             return;
         }
         objectExtend* _objectExtend=new objectExtend();
-        taskList.push_back(appData->MainPrcoName);
+        taskList.push_back(appData->app_MainProcName);
         auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
         connect(_objectExtend, SIGNAL(objexitTray(bool)), pObjectVek, SLOT(exitTray(bool)));
         emit _startTray();
@@ -165,7 +165,7 @@ void vekAppListView::startApp(objectType _objType){
         oAMT->sObjectInstall();
         delete oAMT;
         oAMT=nullptr;
-        _objectExtend->setDockOptionObjectData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),appData->AppCID,_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default);
+        _objectExtend->setDockOptionObjectData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),appData->app_CID,_codeAgrs,_objType,BOOTTYPE::BOOTDEFAULT,SERVERTYPE::SERVERDEFAULT);
         _objectExtend->start();
     }
 
@@ -173,12 +173,12 @@ void vekAppListView::startApp(objectType _objType){
 void vekAppListView::ExportJson(){
     int index = this->currentIndex().row();
     if(_vExportJson==nullptr){
-        BaseAppData bGameData=*m_pModel->getItem(index);
+        AppData bGameData=*m_pModel->getItem(index);
         _vExportJson=new vekExportJson();
         _vExportJson->setAttribute(Qt::WA_DeleteOnClose,true);
         _vExportJson->show();
         connect(_vExportJson,&vekExportJson::_unExportJson,this,&vekAppListView::unExportJson);
-        _vExportJson->ExportJson(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),bGameData.AppCID);
+        _vExportJson->ExportJson(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),bGameData.app_CID);
     }
 }
 void vekAppListView::objectExtendApp(){
@@ -186,7 +186,7 @@ void vekAppListView::objectExtendApp(){
         _vExtendDebug=new vekExtendDebug();
         _vExtendDebug->setAttribute(Qt::WA_DeleteOnClose,true);
         QString currentTabText =mBox->tabText(mBox->currentIndex());
-        QString currentAppCID=m_pModel->getItem(this->currentIndex().row())->AppCID;
+        QString currentAppCID=m_pModel->getItem(this->currentIndex().row())->app_CID;
         _vExtendDebug->ConnectDebugObject(currentTabText,currentAppCID);
         connect(_vExtendDebug,&vekExtendDebug::_unVekDebug,this,&vekAppListView::unDebugApp);
         _vExtendDebug->show();
@@ -202,8 +202,8 @@ void vekAppListView::setItemSlot(){
             _vek_App_Add=new vekAppAddMT();
             _vek_App_Add->setAttribute(Qt::WA_DeleteOnClose,true);
             _vek_App_Add->setWindowTitle("Vek软件设置");
-            QString currentAppCID=m_pModel->getItem(this->currentIndex().row())->AppCID;
-            _vek_App_Add->vekAppAddConnectObject(&g_vekLocalData.dockerVec.at(mBox->tabText(mBox->currentIndex())),currentAppCID,object_setApp);
+            QString currentAppCID=m_pModel->getItem(this->currentIndex().row())->app_CID;
+            _vek_App_Add->vekAppAddConnectObject(&g_vekLocalData.local_DockerData.at(mBox->tabText(mBox->currentIndex())),currentAppCID,SEETING);
             _vek_App_Add->setWindowFlags(Qt::WindowStaysOnTopHint);
             _vek_App_Add->show();
             connect(_vek_App_Add,&vekAppAddMT::_unDiyAppAdd,this,&vekAppListView::unAppAdd);
@@ -211,15 +211,15 @@ void vekAppListView::setItemSlot(){
         }
     }
 }
-void vekAppListView::setUpDelData(BaseDockData dockData,BaseAppData* appData,objectTypeView objTypeView){
+void vekAppListView::setUpDelData(DockData dockData,AppData* appData,OBJAPP objTypeView){
     int index = this->currentIndex().row();
     if(index>-1){
-        QString deleteCID=m_pModel->getItem(index)->AppCID;
-        QString dockPathStr=dockData.DockerPath+"/";
-        QString dockNameStr=dockData.DockerName;
+        QString deleteCID=m_pModel->getItem(index)->app_CID;
+        QString dockPathStr=dockData.docker_Path+"/";
+        QString dockNameStr=dockData.docker_Name;
         objectJson _objectJson;
         bool dState=false;
-        if(objTypeView==object_delApp){
+        if(objTypeView==DELETE){
             if(m_pModel->rowCount()<=1){
                  dState=pObject::vekMesg("提示:这是"+dockNameStr+"最后一个程序,若是执意删除则Vek将删除"+dockNameStr+"容器");
             }
@@ -227,23 +227,23 @@ void vekAppListView::setUpDelData(BaseDockData dockData,BaseAppData* appData,obj
             _objectJson.deleteAppNodeData(dockData,deleteCID);
             if(dState){
                 deleteDockerTab(dockPathStr,dockNameStr);
-                _objectJson.deleteDockerNodeData(dockData.DockerName);
+                _objectJson.deleteDockerNodeData(dockData.docker_Name);
             }
         }
         //修改设置
-        if(objTypeView==object_setApp){
+        if(objTypeView==SEETING){
             QString currentTabText =mBox->tabText(mBox->currentIndex());
             m_pModel->deleteItem(index);
             auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget();
             //判断设置后的dockName和当前是否相同，该功能是利用设置修改容器名
-            if(currentTabText==dockData.DockerName){
+            if(currentTabText==dockData.docker_Name){
                 m_pModel->addItem(appData);
                 _objectJson.updateAppNodeData(dockData,*appData);
                 connect(this,SIGNAL(setUpGroupTabIcoSignal()),pObjectVek,SLOT(upTabIco()));
                 emit setUpGroupTabIcoSignal();
             }else{
                 //在新的容器中执行
-                _objectJson.deleteAppNodeData(pObject::getDockerData(currentTabText),appData->AppCID);
+                _objectJson.deleteAppNodeData(pObject::getDockerData(currentTabText),appData->app_CID);
                 _objectJson.updateAppNodeData(dockData,*appData);     
                 connect(this,SIGNAL(setUpDelDataSignal(BaseDockData*,BaseAppData*)),pObjectVek,SLOT(addAppObject(BaseDockData*,BaseAppData*)));
                 emit setUpDelDataSignal(&dockData,appData);
@@ -259,7 +259,7 @@ void vekAppListView::deleteDockerTab(QString dockPathStr,QString dockNameStr){
             dockPath.removeRecursively();
         }
     }
-    g_vekLocalData.dockerVec.erase(dockNameStr);
+    g_vekLocalData.local_DockerData.erase(dockNameStr);
     objectJson _oJson;
     _oJson.deleteDockerNodeData(dockNameStr);
     m_pListMap->erase(dockNameStr);
@@ -280,7 +280,7 @@ void vekAppListView::setListMap( std::map<QString,vekAppListView*> *pListMap,QTa
     mBox=pBox;
 }
 
-void vekAppListView::addItem(BaseAppData *pItem )
+void vekAppListView::addItem(AppData *pItem )
 {
     m_pModel->addItem(pItem);
 }
@@ -295,14 +295,14 @@ void vekAppListView::moveSlot()
         vekAppListView *pList = m_ActionMap.find(pSender)->second;
         if (pList)
         {
-            BaseAppData *pItem = m_pModel->getItem(index);
+            AppData *pItem = m_pModel->getItem(index);
             pList->setViewMode(QListView::IconMode);
             pList->setFlow(QListView::LeftToRight);
             pList->addItem(pItem);
             m_pModel->deleteItem(index);
             QString dockName=m_ActionMap.find(pSender)->first->text();
             objectJson _objectJson;
-            _objectJson.deleteAppNodeData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),pItem->AppCID);
+            _objectJson.deleteAppNodeData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),pItem->app_CID);
             _objectJson.addAppNodeData(pObject::getDockerData(dockName),*pItem);
         }
     }

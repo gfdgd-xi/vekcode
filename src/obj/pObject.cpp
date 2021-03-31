@@ -26,17 +26,17 @@ bool pObject::vekMesg(QString tipText){
     return false;
 }
 //保存Docker数据
-void pObject::saveDockerDataToJson(BaseDockData dockData,QString dockName){
+void pObject::saveDockerDataToJson(DockData dockData,QString dockName){
     objectJson _objectJson;
     _objectJson.updateDockerNodeData(dockData,dockName);
 }
 //保存Docker数据
-void pObject::addAppDataToJson(BaseDockData dockData,BaseAppData appData){
+void pObject::addAppDataToJson(DockData dockData,AppData appData){
     objectJson _objectJson;
     _objectJson.addAppNodeData(dockData,appData);
 }
 //保存App数据
-void pObject::saveAppDataToJson(BaseDockData dockData,BaseAppData appData){
+void pObject::saveAppDataToJson(DockData dockData,AppData appData){
     objectJson _objectJson;
     _objectJson.updateAppNodeData(dockData,appData);
 }
@@ -45,10 +45,10 @@ void pObject::deleteWineDataToJson(QString wineName){
     objectJson _objectJson;
     _objectJson.deleteWineNodeData(wineName);
 }
-BaseDockData pObject::getDockerData(QString dockName){
-    BaseDockData tempDockData={};
-    if(!g_vekLocalData.dockerVec.empty()){
-        for(auto a:g_vekLocalData.dockerVec){
+DockData pObject::getDockerData(QString dockName){
+    DockData tempDockData={};
+    if(!g_vekLocalData.local_DockerData.empty()){
+        for(auto a:g_vekLocalData.local_DockerData){
             if(a.first==dockName){
                 tempDockData=a.second;
                 break;
@@ -57,9 +57,9 @@ BaseDockData pObject::getDockerData(QString dockName){
     }
     return tempDockData;
 }
-BaseAppData pObject::getAppData(BaseDockData dockData,QString appCID){
-    BaseAppData tempAppData={};
-    for(auto a:dockData.dData){
+AppData pObject::getAppData(DockData dockData,QString appCID){
+    AppData tempAppData={};
+    for(auto a:dockData.docker_Data){
         if(a.first==appCID){
             tempAppData=a.second;
             break;

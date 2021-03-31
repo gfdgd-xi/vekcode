@@ -41,7 +41,7 @@ void vekSourceEdit::loadSrcDataTableView(QTableView* qTableView)
     if(qTableView==ui->tableView_WineSrcList){
         columnTitles << "Wine源名" << "源地址";
         int i=0;
-        for(auto &[k,j]:g_vekLocalData.wineSource){
+        for(auto &[k,j]:g_vekLocalData.local_WineSrcData){
             int x=i++;
             tableModel->setItem(x,0,new QStandardItem(k));
             tableModel->setItem(x,1,new QStandardItem(j));
@@ -49,7 +49,7 @@ void vekSourceEdit::loadSrcDataTableView(QTableView* qTableView)
     }else{
         columnTitles << "Game源名" << "源地址";
         int i=0;
-        for(auto &[k,j]:g_vekLocalData.appScrSource){
+        for(auto &[k,j]:g_vekLocalData.local_AppSrcData){
             int x=i++;
             tableModel->setItem(x,0,new QStandardItem(k));
             tableModel->setItem(x,1,new QStandardItem(j));
@@ -139,16 +139,16 @@ void vekSourceEdit::objectDeleteSrc(QTableView* qTableView){
         QModelIndex indextemp = modessl->index(curRow,0);
         QString datatemp = modessl->data(indextemp).value<QString>();
         if(qTableView->objectName()=="tableView_WineSrcList"){
-            for(auto[a,b]:g_vekLocalData.wineSource){
+            for(auto[a,b]:g_vekLocalData.local_WineSrcData){
                 if(a==datatemp){
-                    g_vekLocalData.wineSource.erase(a);
+                    g_vekLocalData.local_WineSrcData.erase(a);
                     break;
                 }
             }
         }else{
-            for(auto[a,b]:g_vekLocalData.appScrSource){
+            for(auto[a,b]:g_vekLocalData.local_AppSrcData){
                 if(a==datatemp){
-                    g_vekLocalData.appScrSource.erase(a);
+                    g_vekLocalData.local_AppSrcData.erase(a);
                     break;
                 }
             }
@@ -166,11 +166,11 @@ void vekSourceEdit::saveAllData(){
 void vekSourceEdit::objectUpdateSrc(QTableView* qTableView){
     int curRow=qTableView->model()->rowCount();
     if(qTableView->objectName()=="tableView_WineSrcList"){
-         g_vekLocalData.wineSource.clear();
-         g_vekLocalData.wineJsonList.clear();
+         g_vekLocalData.local_WineSrcData.clear();
+         g_vekLocalData.local_WineJsonData.clear();
     }else{
-        g_vekLocalData.appScrSource.clear();
-        g_vekLocalData.appJsonList.clear();
+        g_vekLocalData.local_AppSrcData.clear();
+        g_vekLocalData.local_AppJsonData.clear();
     }
     if(curRow>-1){
         QAbstractItemModel *modessl = qTableView->model();
@@ -178,9 +178,9 @@ void vekSourceEdit::objectUpdateSrc(QTableView* qTableView){
             QString dataTempA = modessl->data(modessl->index(i,0)).value<QString>();
             QString dataTempB = modessl->data(modessl->index(i,1)).value<QString>();
             if(qTableView->objectName()=="tableView_WineSrcList"){
-                g_vekLocalData.wineSource.insert(pair<QString,QString>(dataTempA,dataTempB));
+                g_vekLocalData.local_WineSrcData.insert(pair<QString,QString>(dataTempA,dataTempB));
             }else{
-                g_vekLocalData.appScrSource.insert(pair<QString,QString>(dataTempA,dataTempB));
+                g_vekLocalData.local_AppSrcData.insert(pair<QString,QString>(dataTempA,dataTempB));
             }
         }
         objectSource* objSrc=new objectSource;

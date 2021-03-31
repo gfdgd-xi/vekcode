@@ -2,7 +2,7 @@
 #define BASERES_H
 #include "common.h"
 //全局数据结构
-BaseLocalData g_vekLocalData={};
+LocalData g_vekLocalData={};
 std::vector<QString> taskList={};
 
 QStringList vekStyles={"Windows", "WindowsXP", "WindowsVista", "Fusion"};

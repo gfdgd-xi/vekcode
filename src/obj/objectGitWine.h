@@ -18,12 +18,12 @@ class objectGitWine : public QObject
 {
     Q_OBJECT
 public:
-    objectGitWine(BaseWineData);
+    objectGitWine(WineData);
     ~objectGitWine();
 private slots:
     void gitWine();
 private:
-    BaseWineData wData;
+    WineData wData;
     QTextEdit* qTextEdit;
     static objectGitWine *objGitWine;
     void downWine();

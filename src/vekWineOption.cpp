@@ -26,20 +26,20 @@ void vekWineOption::loadWineList(QTableView* qTableView){
     ItemModelWine = new QStandardItemModel();
     if(qTableView==ui->tableView_winen){
         columnTitles << "当前源提供Wine版本列表";
-        if(!g_vekLocalData.wineJsonList.empty()){
-            for(auto &d : g_vekLocalData.wineJsonList){
+        if(!g_vekLocalData.local_WineJsonData.empty()){
+            for(auto &d : g_vekLocalData.local_WineJsonData){
                 if(d.first==ui->comboBox_wineSrc->currentText()){
                     for(auto &x:d.second){
-                        ItemModelWine->appendRow(new QStandardItem(x.second.WineName));
+                        ItemModelWine->appendRow(new QStandardItem(x.second.rWineName));
                     }
                 }
             }
         }
     }else{
         columnTitles << "已安装Wine版本列表";
-        if(!g_vekLocalData.wineVec.empty()){
-            for(auto &d : g_vekLocalData.wineVec){
-                ItemModelWine->appendRow(new QStandardItem(d.second.IwineName));
+        if(!g_vekLocalData.local_WineData.empty()){
+            for(auto &d : g_vekLocalData.local_WineData){
+                ItemModelWine->appendRow(new QStandardItem(d.second.iWineName));
             }
         }
     }
@@ -101,8 +101,8 @@ void vekWineOption::onTaskBoxContextMenuEvent()
 }
 //获取远程仓库wine版本信息
 void vekWineOption::getWineGitInfo(){
-    if(!g_vekLocalData.wineSource.empty()){
-        for(auto &d:g_vekLocalData.wineSource){
+    if(!g_vekLocalData.local_WineSrcData.empty()){
+        for(auto &d:g_vekLocalData.local_WineSrcData){
             ui->comboBox_wineSrc->addItem(d.first);
         }
     }
@@ -124,20 +124,20 @@ void vekWineOption::installWine(QString wineName)
     }
     QString selPath=ui->lineEdit_InstallPath->text();
     QString selSrc=ui->comboBox_wineSrc->currentText();
-    BaseWineData isWData={};
-    for(auto [d,p] :g_vekLocalData.wineJsonList){
+    WineData isWData={};
+    for(auto [d,p] :g_vekLocalData.local_WineJsonData){
         if(d==selSrc){
             for(auto dx:p){
                 if(dx.first==wineName){
-                    isWData.IwineSrc=selSrc;
-                    isWData.IwineName=dx.second.WineName;
-                    isWData.IwineVer=dx.second.WineVersion;
-                    isWData.IwineUrl=dx.second.WineGit;
-                    isWData.IwinePath=selPath+"/vekWine/"+dx.second.WineName;
-                    isWData.IwineMono=dx.second.Mono;
-                    isWData.IwineGeckoX86=dx.second.GeckoX86;
-                    isWData.IwineGeckoX86_64=dx.second.GeckoX86_64;
-                    for(auto v:dx.second.WineDxvk){
+                    isWData.iWineSrc=selSrc;
+                    isWData.iWineName=dx.second.rWineName;
+                    isWData.iWineVer=dx.second.rWineVersion;
+                    isWData.iWineUrl=dx.second.rWineGit;
+                    isWData.iWinePath=selPath+"/vekWine/"+dx.second.rWineName;
+                    isWData.iWineMono=dx.second.rMono;
+                    isWData.iWineGeckoX86=dx.second.rGeckoX86;
+                    isWData.iWineGeckoX86_64=dx.second.rGeckoX86_64;
+                    for(auto v:dx.second.rWineDxvk){
                         isWData.IwineDxvk.insert(isWData.IwineDxvk.end(),v);
                     }
                     break;
@@ -163,9 +163,9 @@ void vekWineOption::deleteWine(QString wineName){
     }
     if(sDelWine){
         QString winePath=nullptr;
-        for(auto a:g_vekLocalData.wineVec){
+        for(auto a:g_vekLocalData.local_WineData){
             if(a.first==wineName){
-                winePath=a.second.IwinePath;
+                winePath=a.second.iWinePath;
                 break;
             }
         }
@@ -174,7 +174,7 @@ void vekWineOption::deleteWine(QString wineName){
                 QDir wineInstallDir(winePath);
                 if(wineInstallDir.exists()){
                     wineInstallDir.removeRecursively();
-                    g_vekLocalData.wineVec.erase(wineName);
+                    g_vekLocalData.local_WineData.erase(wineName);
                     pObject::deleteWineDataToJson(wineName);
                     loadWineData();
                     pObject::vekTip("删除成功!");

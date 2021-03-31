@@ -3,7 +3,7 @@
 
 objectGitWine *objectGitWine::objGitWine = nullptr;
 
-objectGitWine::objectGitWine(BaseWineData wineData)
+objectGitWine::objectGitWine(WineData wineData)
 {
     objGitWine=this;
     wData={};
@@ -96,11 +96,11 @@ void objectGitWine::downWine(){
     clone_opts.fetch_opts.callbacks.certificate_check = ssl_cert;
     clone_opts.fetch_opts.callbacks.payload = &pd;
     QByteArray b2,b3;
-    b2.append(wData.IwinePath);
+    b2.append(wData.iWinePath);
     const char *path = b2.data();
-    b3.append(wData.IwineUrl);
+    b3.append(wData.iWineUrl);
     const char *url = b3.data();
-    emit toPrgStr("clone:"+wData.IwineName);
+    emit toPrgStr("clone:"+wData.iWineName);
     git_clone(&cloned_repo, url, path, &clone_opts);
     git_repository_free(cloned_repo);
     git_libgit2_shutdown();
@@ -108,21 +108,21 @@ void objectGitWine::downWine(){
 }
 void objectGitWine::gitWine(){
     try{
-        if(wData.IwinePath==nullptr){
+        if(wData.iWinePath==nullptr){
             return;
         }
-        QDir dir(wData.IwinePath);
+        QDir dir(wData.iWinePath);
         if(dir.exists()){
             dir.removeRecursively();
         }
         downWine();
-        dir.mkdir(wData.IwinePath+"/plugs");
+        dir.mkdir(wData.iWinePath+"/plugs");
         emit toPrgStr("开始下载组件请稍等!");
         objectGetCurl* objGetCurl=new objectGetCurl;
         connect(objGetCurl,SIGNAL(curlPrgressSignals(string)),this,SIGNAL(SigDeliverMessStatic(string)));
-        objGetCurl->DoewloadPlugs(wData.IwineMono,wData.IwinePath+"/plugs/Mono.msi");
-        objGetCurl->DoewloadPlugs(wData.IwineGeckoX86,wData.IwinePath+"/plugs/GeckoX86.msi");
-        objGetCurl->DoewloadPlugs(wData.IwineGeckoX86_64,wData.IwinePath+"/plugs/GeckoX86_64.msi");
+        objGetCurl->DoewloadPlugs(wData.iWineMono,wData.iWinePath+"/plugs/Mono.msi");
+        objGetCurl->DoewloadPlugs(wData.iWineGeckoX86,wData.iWinePath+"/plugs/GeckoX86.msi");
+        objGetCurl->DoewloadPlugs(wData.iWineGeckoX86_64,wData.iWinePath+"/plugs/GeckoX86_64.msi");
         emit toPrgStr("组件下载完毕!");
         objectJson* _objectJson=new objectJson() ;
         _objectJson->updateWineNodeData(wData);

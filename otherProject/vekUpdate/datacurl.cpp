@@ -73,6 +73,7 @@ bool datacurl::DownloadFile(std::string URLADDR,std::string path)
     curl_global_init(CURL_GLOBAL_ALL);
     curl = curl_easy_init();
     if(curl){
+        std::string strTmpStr;
         FILE* file= fopen(path.c_str(), "ab+");
         curl_easy_setopt(curl, CURLOPT_URL, URLADDR.c_str());
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
@@ -81,6 +82,7 @@ bool datacurl::DownloadFile(std::string URLADDR,std::string path)
         curl_easy_setopt(curl, CURLOPT_WRITEDATA,file);
         curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 5);
         curl_easy_setopt(curl, CURLOPT_NOPROGRESS, false);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &strTmpStr);
         curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, ProgressCallback);
         curl_easy_setopt(curl, CURLOPT_PROGRESSDATA,this);
         curl_res = curl_easy_perform(curl);
@@ -92,7 +94,6 @@ bool datacurl::DownloadFile(std::string URLADDR,std::string path)
         {
             char *url;
             curl_res = curl_easy_getinfo(curl, CURLINFO_EFFECTIVE_URL, &url);
-
             if((CURLE_OK == curl_res) && url)
                 printf("重定向后的url: %s\n", url);
         }

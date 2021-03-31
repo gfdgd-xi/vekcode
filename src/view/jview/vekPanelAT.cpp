@@ -29,10 +29,10 @@ void vekPanelAT::showPopup()
     popup->setMinimumHeight(500);
     popup->setLayout(layout);
     popup->show();
-    std::map<QString,std::map<QString,BaseAppJson>>::reverse_iterator it;
-    std::map<QString,BaseAppJson>::iterator its;
+    std::map<QString,std::map<QString,AppJson>>::reverse_iterator it;
+    std::map<QString,AppJson>::iterator its;
     QString srcText=this->parent()->parent()->findChild<QComboBox*>("comboBox_SrcApp")->currentText();
-    for(auto a:g_vekLocalData.appJsonList){
+    for(auto a:g_vekLocalData.local_AppJsonData){
         if(a.first==srcText){
             for(it = a.second.rbegin(); it != a.second.rend(); it++){
                 vekViewAT *pListView=new vekViewAT();
@@ -41,7 +41,7 @@ void vekPanelAT::showPopup()
                 pListView->setFlow(QListView::LeftToRight);
                 pListView->setResizeMode(QListView::Adjust);
                 for(its=it->second.begin();its!=it->second.end();its++){
-                    BaseAppJson* baj=new BaseAppJson;
+                    AppJson* baj=new AppJson;
                     *baj=its->second;
                     pListView->addItem(baj);
                 }
@@ -53,7 +53,7 @@ void vekPanelAT::showPopup()
     }
     popup->move(popup->x(), popup->y() + 1);
 }
-void vekPanelAT::qComboBoxJsonSet(BaseAppJson data){
+void vekPanelAT::qComboBoxJsonSet(AppJson data){
     this->clear();
     this->addItem(data.appName);
     oData=data;

@@ -19,8 +19,8 @@ private:
     Ui::vekExtendDebug *ui;   
     QStringList DebugDllStr;
     QProcess *m_cmd=nullptr;
-    BaseAppData appData;
-    BaseDockData dockData;
+    AppData appData;
+    DockData dockData;
     bool checkStatic;
     void upDllStr();
     std::vector<QString> dllList={"accel","adpcm","advapi","animate","aspi",

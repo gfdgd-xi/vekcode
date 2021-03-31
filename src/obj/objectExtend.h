@@ -22,16 +22,16 @@ public:
     explicit objectExtend(QObject *parent = nullptr);
     ~objectExtend();
     QProcess *m_cmd=nullptr;
-    void setDockOptionObjectData(BaseDockData,QString,std::vector<QStringList>,objectType,objectWineBoot,objectWineServer);
+    void setDockOptionObjectData(DockData,QString,std::vector<QStringList>,OBJTYPE,BOOTTYPE,SERVERTYPE);
 protected:
     void run();
 private:
-    BaseAppData appData;
-    BaseDockData dockData;
+    AppData appData;
+    DockData dockData;
     std::vector<QStringList> argsList;
-    objectType objType;
-    objectWineBoot objWineBootType;
-    objectWineServer objWineServer;
+    OBJTYPE objType;
+    BOOTTYPE objWineBootType;
+    SERVERTYPE objWineServer;
     QString startArgs;
     void optionExtend();
     void extendApp();
@@ -39,9 +39,9 @@ private:
     void baseExecuteWineCode(QString,QStringList);
     void baseExecuteAppCode(QString,QStringList);
     void extendWineRegeditCode(QString);
-    void executeWineBoot(objectWineBoot);
-    void executeWineServer(objectWineServer);
-    void executeWinetricks(objectType);
+    void executeWineBoot(BOOTTYPE);
+    void executeWineServer(SERVERTYPE);
+    void executeWinetricks(OBJTYPE);
     void executeWinetricks_gui(QStringList);
     void executeWinetricks_cmd_libs(QStringList);
     void ExtendWinetricksCode(QStringList,bool);

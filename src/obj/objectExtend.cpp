@@ -8,34 +8,34 @@ objectExtend::~objectExtend(){
     delete m_cmd;
     m_cmd=nullptr;
 }
-void objectExtend::setDockOptionObjectData(BaseDockData _dockData,QString _appCID,std::vector<QStringList> _agrsList,objectType _objType,objectWineBoot _objWineBootType,objectWineServer _objWineServer){
+void objectExtend::setDockOptionObjectData(DockData _dockData,QString _appCID,std::vector<QStringList> _agrsList,OBJTYPE _objType,BOOTTYPE _objWineBootType,SERVERTYPE _objWineServer){
     appData=pObject::getAppData(_dockData,_appCID);
     dockData=_dockData;
     argsList=_agrsList;
     objType=_objType;
     objWineBootType=_objWineBootType;
     objWineServer=_objWineServer;
-    startArgs=dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion;
+    startArgs=dockData.docker_WinePath+"/wine/bin/"+dockData.docker_WineVersion;
 }
 //运行环境变量设置
 void objectExtend::executeArgsEnv(){
-    qInfo()<<"wine执行版本:"<<dockData.DockerWineVersion;
-    qInfo()<<"容器版本系统版本:"<<dockData.DockerSystemVersion;
-    qInfo()<<"Wine版本号:"<<dockData.WineVersion;
-    qInfo()<<"容器系统位数版本:"<<dockData.DockerVer;
-    qputenv("WINE", (dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion).toStdString().c_str());
-    qputenv("WINEPREFIX", (dockData.DockerPath+"/"+dockData.DockerName).toStdString().c_str());
-    qputenv("WINEARCH", dockData.DockerVer.toStdString().c_str());
+    qInfo()<<"wine执行版本:"<<dockData.docker_WineVersion;
+    qInfo()<<"容器版本系统版本:"<<dockData.docker_SystemVersion;
+    qInfo()<<"Wine版本号:"<<dockData.docker_WineVersion;
+    qInfo()<<"容器系统位数版本:"<<dockData.docker_SystemBitVersion;
+    qputenv("WINE", (dockData.docker_WinePath+"/wine/bin/"+dockData.docker_WineVersion).toStdString().c_str());
+    qputenv("WINEPREFIX", (dockData.docker_Path+"/"+dockData.docker_Name).toStdString().c_str());
+    qputenv("WINEARCH", dockData.docker_SystemBitVersion.toStdString().c_str());
     qputenv("WINETRICKS_DOWNLOADER", "aria2c");
 
-    if(appData.WorkPath!=nullptr){
+    if(appData.app_WorkPath!=nullptr){
         //设置工作目录
-        qputenv("PWD", appData.WorkPath.toStdString().c_str());
-        if(appData.TaskLog){
+        qputenv("PWD", appData.app_WorkPath.toStdString().c_str());
+        if(appData.app_TaskLog){
             qputenv("WINEDEBUG", "-all");
         }
-        if(!appData.DockerEnv.empty()){
-            for(auto& [a,u]:appData.DockerEnv){
+        if(!appData.app_DockerEnv.empty()){
+            for(auto& [a,u]:appData.app_DockerEnv){
                 qputenv(a.toStdString().c_str(),u.toStdString().c_str());
             }
         }
@@ -44,36 +44,36 @@ void objectExtend::executeArgsEnv(){
         qInfo()<<_env;
     }
 }
-void objectExtend::executeWineBoot(objectWineBoot objWineBootType){
+void objectExtend::executeWineBoot(BOOTTYPE objWineBootType){
     QStringList wineboot;
     wineboot.clear();
-    wineboot.append(dockData.WinePath+"/wine/bin/");
+    wineboot.append(dockData.docker_WinePath+"/wine/bin/");
     switch (objWineBootType) {
-    case object_wineboot_e:
+    case BOOTE:
         //结束会话
         wineboot.append("wineboot -e");
         break;
-    case object_wineboot_f:
+    case BOOTF:
         //强制关闭假死进程
         wineboot.append("wineboot -f");
         break;
-    case object_wineboot_i:
+    case BOOTI:
         //初始化wine实例
         wineboot.append("wineboot -i");
         break;
-    case object_wineboot_k:
+    case BOOTK:
         //立即关闭进程
         wineboot.append("wineboot -k");
         break;
-    case object_wineboot_r:
+    case BOOTR:
         //重启dock
         wineboot.append("wineboot -r");
         break;
-    case object_wineboot_s:
+    case BOOTS:
         //关闭dock
         wineboot.append("wineboot -s");
         break;
-    case object_wineboot_u:
+    case BOOTU:
         //更新dock
         wineboot.append("wineboot -u");
         break;
@@ -86,20 +86,20 @@ void objectExtend::executeWineBoot(objectWineBoot objWineBootType){
     m_cmd->waitForFinished(-1);
     waitObjectDone(true);
 }
-void objectExtend::executeWineServer(objectWineServer objWineServer){
+void objectExtend::executeWineServer(SERVERTYPE objWineServer){
     QStringList wineserver;
     wineserver.clear();
-    wineserver.append(dockData.WinePath+"/wine/bin/");
+    wineserver.append(dockData.docker_WinePath+"/wine/bin/");
     switch (objWineServer) {
-    case object_wineserver_k:
+    case SERVERK:
         //结束会话
         wineserver.append("wineserver -k");
         break;
-    case object_wineserver_p:
+    case SERVERP:
         //强制关闭假死进程
         wineserver.append("wineserver -p");
         break;
-    case object_wineserver_w:
+    case SERVERW:
         //初始化wine实例
         wineserver.append("wineserver -w");
         break;
@@ -112,16 +112,16 @@ void objectExtend::executeWineServer(objectWineServer objWineServer){
     m_cmd->waitForFinished(-1);
     waitObjectDone(true);
 }
-void objectExtend::executeWinetricks(objectType _wType){
-    executeWineBoot(object_wineboot_r);
+void objectExtend::executeWinetricks(OBJTYPE _wType){
+    executeWineBoot(BOOTR);
     QStringList codeArgs;
-    qputenv("WINE", (dockData.WinePath+"/wine/bin/wine").toStdString().c_str());
-    codeArgs.append(dockData.WinePath+"/wine/bin/winetricks");
+    qputenv("WINE", (dockData.docker_WinePath+"/wine/bin/wine").toStdString().c_str());
+    codeArgs.append(dockData.docker_WinePath+"/wine/bin/winetricks");
     switch (_wType) {
-      case object_winetricks_gui:
+      case WINETRICKSGUI:
         executeWinetricks_gui(codeArgs);
         break;
-    case object_winetricks_cmd_libs:
+    case WINETRICKSLIBS:
         executeWinetricks_cmd_libs(codeArgs);
         break;
     }
@@ -146,7 +146,7 @@ void objectExtend::ExtendWinetricksCode(QStringList cArgs,bool wType){
     m_cmd->start(mdCode,QIODevice::ReadWrite);
     qInfo()<<"WineTricks:"<<cArgs.join(" ");
     m_cmd->waitForFinished(-1);
-    if(dockData.WineVersion.contains("deepin",Qt::CaseSensitive)){
+    if(dockData.docker_WineVersion.contains("deepin",Qt::CaseSensitive)){
         switchSysVersion(DOCKER,DEEPIN);
     }else{
         switchSysVersion(DOCKER,WINEHQ);
@@ -155,20 +155,20 @@ void objectExtend::ExtendWinetricksCode(QStringList cArgs,bool wType){
 }
 //执行游戏
 void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
-    executeWineBoot(object_wineboot_r);
+    executeWineBoot(BOOTR);
     monitorProc();
-    if(dockData.WineVersion.contains("deepin",Qt::CaseSensitive)){
+    if(dockData.docker_WineVersion.contains("deepin",Qt::CaseSensitive)){
         switchSysVersion(DOCKER,DEEPIN);
     }else{
         switchSysVersion(DOCKER,WINEHQ);
     }
     m_cmd->closeReadChannel(QProcess::StandardOutput);
     m_cmd->closeReadChannel(QProcess::StandardError);
-    m_cmd->setWorkingDirectory(appData.WorkPath);
+    m_cmd->setWorkingDirectory(appData.app_WorkPath);
     m_cmd->start(wcode,codeArgs);
     qInfo()<<"|++++++++++++++++++++++++++++|";
     qInfo()<<"writeCode:"+wcode;
-    qInfo()<<"workPath:"+appData.WorkPath;
+    qInfo()<<"workPath:"+appData.app_WorkPath;
     qInfo()<<"WineArgs:"+codeArgs.join(" ");
     qInfo()<<"|++++++++++++++++++++++++++++|";
     m_cmd->waitForFinished(-1);
@@ -177,7 +177,7 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
     vector<QString>::iterator it;
     for(it=taskList.begin();it!=taskList.end();)
     {
-        if(it->toStdString()==appData.MainPrcoName.toStdString())
+        if(it->toStdString()==appData.app_MainProcName.toStdString())
         {
            taskList.erase(it);
            break;
@@ -216,21 +216,21 @@ void objectExtend::hqSwitchSysVersion(SWITCH_SYSTEM_VERSION ssv){
    codeArgs.append("winecfg");
    codeArgs.append("/v");
    if(ssv==APP){
-       codeArgs.append(appData.DockSysVersion);
+       codeArgs.append(appData.app_SystemVersion);
    }
-   codeArgs.append(dockData.DockerSystemVersion);
+   codeArgs.append(dockData.docker_SystemVersion);
    baseExecuteWineCode(startArgs,codeArgs);
 }
 //deepin-wine5容器系统版本切换
 void objectExtend::deepinSwitchSysVerion(SWITCH_SYSTEM_VERSION ssv){
-    executeWineBoot(object_wineboot_r);
+    executeWineBoot(BOOTR);
     QStringList codeArgs;
-    qputenv("WINE", (dockData.WinePath+"/wine/bin/wine").toStdString().c_str());
-    codeArgs.append(dockData.WinePath+"/wine/bin/winetricks");
+    qputenv("WINE", (dockData.docker_WinePath+"/wine/bin/wine").toStdString().c_str());
+    codeArgs.append(dockData.docker_WinePath+"/wine/bin/winetricks");
     if(ssv==APP){
-        codeArgs.append(appData.DockSysVersion);
+        codeArgs.append(appData.app_SystemVersion);
     }
-    codeArgs.append(dockData.DockerSystemVersion);
+    codeArgs.append(dockData.docker_SystemVersion);
     QString mdCode = codeArgs.join(" ");
     m_cmd->start(mdCode,QIODevice::ReadWrite);
     qInfo()<<"WineTricks:"<<codeArgs.join(" ");
@@ -248,40 +248,40 @@ void objectExtend::waitObjectDone(bool objState){
 }
 void objectExtend::optionExtend(){
     QStringList codeArgs;
-    if(objType==object_winecfg){
+    if(objType==WINECFG){
         codeArgs.append("winecfg");
     }
-    if(objType==object_regedit){
+    if(objType==REGEDIT){
         codeArgs.append("regedit");
     }
-    if(objType==object_control){
+    if(objType==CONTROL){
         codeArgs.append("control");
     }
-    if(objType==object_uninstall){
+    if(objType==REMOVE){
         codeArgs.append("uninstaller");
     }
     baseExecuteWineCode(startArgs,codeArgs);
 }
 void objectExtend::extendApp(){
     QStringList codeArgs;
-    QString gameExe=appData.AppExe;
+    QString gameExe=appData.app_Exe;
     /*
     if(gameExe.contains(" ",Qt::CaseSensitive)){
         gameExe="\""+gameExe+"\"";
     }
     */
     codeArgs.append(gameExe);
-    if(appData.SharedMemory){
+    if(appData.app_SharedMemory){
         codeArgs.append("STAGING_SHARED_MEMORY=1");
     }
-    if(appData.RtServer){
+    if(appData.app_RtServer){
         codeArgs.append("STAGING_RT_PRIORITY_SERVER=60");
     }
-    if(appData.WriteCopy){
+    if(appData.app_WriteCopy){
         codeArgs.append("STAGING_WRITECOPY=1");
     }
-    if(appData.AppOtherAgrs!=nullptr){
-        codeArgs.append(appData.AppOtherAgrs);
+    if(appData.app_AgrsCode!=nullptr){
+        codeArgs.append(appData.app_AgrsCode);
     }
     dyncDxvkRegs(dxvkResCache);
     dyncDxvkRegs(dxvkResLog);
@@ -293,7 +293,7 @@ void objectExtend::dyncDxvkRegs(std::map<QString,std::map<QString,QString>> dxvk
     for(auto a:dxvkResStr){
         for(auto b:a.second){
          argsList.clear();
-         argsList.push_back(pObject::dockerRegeditStr("add",a.first,b.first,"REG_SZ",appData.WorkPath));
+         argsList.push_back(pObject::dockerRegeditStr("add",a.first,b.first,"REG_SZ",appData.app_WorkPath));
         }
     }
     extendWineRegeditCode(startArgs);
@@ -311,14 +311,14 @@ void objectExtend::extendPlugs(){
     }
 }
 void objectExtend::monitorProc(){
-    procInfo pi;
-    if(!appData.AttachProc.empty()){
+    ProcInfo pi;
+    if(!appData.app_Attachproc.empty()){
         objectProcManage* objProcMangs=new objectProcManage();
-        pi.pDockName=dockData.DockerName;
-        pi.pDockPath=dockData.DockerPath;
-        pi.pWinePath=dockData.WinePath;
-        pi.pAttachProc=appData.AttachProc;
-        pi.pAttachProc.push_back(appData.MainPrcoName);
+        pi.pDockName=dockData.docker_Name;
+        pi.pDockPath=dockData.docker_Path;
+        pi.pWinePath=dockData.docker_WinePath;
+        pi.pAttachProc=appData.app_Attachproc;
+        pi.pAttachProc.push_back(appData.app_MainProcName);
         objProcMangs->iprocInfo=pi;
         objProcMangs->start();
         objProcMangs->wait();
@@ -328,14 +328,14 @@ void objectExtend::monitorProc(){
     }
 }
 void objectExtend::forcekill(){
-    procInfo pi;
+    ProcInfo pi;
     objectProcManage* objProcMangs=new objectProcManage();
-    pi.pDockName=dockData.DockerName;
-    pi.pDockPath=dockData.DockerPath;
-    pi.pWinePath=dockData.WinePath;
-    pi.pAttachProc=appData.AttachProc;
-    if(objType==object_forcekill){
-        pi.pAttachProc.push_back(appData.MainPrcoName);
+    pi.pDockName=dockData.docker_Name;
+    pi.pDockPath=dockData.docker_Path;
+    pi.pWinePath=dockData.docker_WinePath;
+    pi.pAttachProc=appData.app_Attachproc;
+    if(objType==FORCEKILL){
+        pi.pAttachProc.push_back(appData.app_MainProcName);
     }
     objProcMangs->iprocInfo=pi;
     objProcMangs->start();
@@ -347,29 +347,29 @@ void objectExtend::forcekill(){
 void objectExtend::run(){
     m_cmd=new QProcess();
     executeArgsEnv();
-    if(objType==object_winecfg||objType==object_regedit||objType==object_control||objType==object_uninstall)
+    if(objType==WINECFG||objType==REGEDIT||objType==CONTROL||objType==REMOVE)
     {
         optionExtend();
-    }else if(objType==object_start){
+    }else if(objType==START){
         extendApp();
-    }else if(objType==object_winetricks_gui||objType==object_winetricks_cmd_libs){
+    }else if(objType==WINETRICKSGUI||objType==WINETRICKSLIBS){
         executeWinetricks(objType);
-    }else if(objType==object_regobject){
+    }else if(objType==REGOBJ){
         extendWineRegeditCode(startArgs);
-    }else if(objType==object_dockSysver){
-        if(dockData.WineVersion.contains("deepin",Qt::CaseSensitive)){
+    }else if(objType==DOCKSYSVER){
+        if(dockData.docker_WineVersion.contains("deepin",Qt::CaseSensitive)){
             switchSysVersion(DOCKER,DEEPIN);
         }else{
             switchSysVersion(DOCKER,WINEHQ);
         }
-    }else if(objType==object_wineboot){
+    }else if(objType==BOOT){
         executeWineBoot(objWineBootType);
-    }else if(objType==object_wineserver){
+    }else if(objType==SERVER){
         executeWineServer(objWineServer);
-    }else if(objType==object_plugs){
+    }else if(objType==PLUGS){
         extendPlugs();
-    }else if(objType==object_forcekill){
+    }else if(objType==FORCEKILL){
         forcekill();
     }
-    executeWineBoot(object_wineboot_r);
+    executeWineBoot(BOOTR);
 }

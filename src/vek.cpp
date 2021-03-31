@@ -48,7 +48,7 @@ void vek::setAppSize(){
     //a 源
     //b 源下分类
     //c 分类下app
-    for(auto a:g_vekLocalData.appJsonList){
+    for(auto a:g_vekLocalData.local_AppJsonData){
         for(auto b:a.second){
             for(auto c:b.second){
                 approw+=1;
@@ -61,8 +61,8 @@ void vek::setProcRow(){
     ui->label_procRow->setText(QString::number(taskList.size()));
 }
 void vek::startTray(){
-    if(!g_vekLocalData.wineVec.empty()){
-        for(auto a:g_vekLocalData.wineVec){
+    if(!g_vekLocalData.local_WineData.empty()){
+        for(auto a:g_vekLocalData.local_WineData){
             if(objTray==nullptr){
                 objTray=new objectTray();
                 objTray->_baseWineData=a.second;
@@ -161,7 +161,7 @@ void vek::unSourceEdit(){
 //切换Language
 void vek::vekLanguage(){
     QObject *object = QObject::sender();
-    QString objName=g_vekLocalData.vekOptions.vekLang;
+    QString objName=g_vekLocalData.local_VekOptions.vekLang;
     QString strLang;
     if(object){
         QAction *action_obnject = qobject_cast<QAction *>(object);
@@ -180,7 +180,7 @@ void vek::vekLanguage(){
         m_translator->load(langFilePath);
         vekThis->installTranslator(m_translator);
     }
-    g_vekLocalData.vekOptions.vekLang=objName;
+    g_vekLocalData.local_VekOptions.vekLang=objName;
     objectJson oj;
     oj.WriteLocalData();
 }
@@ -188,7 +188,7 @@ void vek::vekLanguage(){
 void vek::vekStyle()
 {
     QObject *object = QObject::sender();
-    QString objName=g_vekLocalData.vekOptions.vekStyle;
+    QString objName=g_vekLocalData.local_VekOptions.vekStyle;
     QString strStyle;
     if(object){
         QAction *action_obnject = qobject_cast<QAction *>(object);
@@ -212,7 +212,7 @@ void vek::vekStyle()
         vekThis->setStyleSheet(styleSheet);
         file.close();
     }
-    g_vekLocalData.vekOptions.vekStyle=objName;
+    g_vekLocalData.local_VekOptions.vekStyle=objName;
     objectJson oj;
     oj.WriteLocalData();
 }

@@ -15,8 +15,8 @@ public:
     ~vekAppPanel();   
 public slots:
     void addAppSlot();
-    void addGroupSlot(BaseDockData* dcokData);
-    void addAppObject(BaseDockData* dcokData,BaseAppData* appData);
+    void addGroupSlot(DockData* dcokData);
+    void addAppObject(DockData* dcokData,AppData* appData);
     void upTabIco();
     void objectRunApp();
     void objAppInstall();

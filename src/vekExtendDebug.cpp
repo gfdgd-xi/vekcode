@@ -22,10 +22,10 @@ void vekExtendDebug::ConnectDebugObject(QString dockName,QString appCID){
     for(auto xz:dllList){
         ui->comboBox_DebugDllList->addItem(xz);
     }
-    for(auto a:g_vekLocalData.dockerVec){
+    for(auto a:g_vekLocalData.local_DockerData){
         if(a.first==dockName){
-            for(auto b:a.second.dData){
-                if(b.second.AppCID==appCID){
+            for(auto b:a.second.docker_Data){
+                if(b.second.app_CID==appCID){
                     appData=b.second;
                     dockData=a.second;
                     break;
@@ -85,20 +85,20 @@ void vekExtendDebug::startDebug(){
 }
 //运行环境变量设置
 void vekExtendDebug::executeArgsEnv(){
-    qInfo()<<dockData.DockerSystemVersion;
-    qInfo()<<dockData.WineVersion;
-    qInfo()<<dockData.WinePath;
-    qInfo()<<dockData.DockerVer;
-    qInfo()<<dockData.DockerWineVersion;
-    qputenv("WINE", (dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion).toStdString().c_str());
+    qInfo()<<dockData.docker_SystemVersion;
+    qInfo()<<dockData.docker_WineVersion;
+    qInfo()<<dockData.docker_WinePath;
+    qInfo()<<dockData.docker_SystemBitVersion;
+    qInfo()<<dockData.docker_WineVersion;
+    qputenv("WINE", (dockData.docker_WinePath+"/wine/bin/"+dockData.docker_WineVersion).toStdString().c_str());
     //设置容器目录
-    qputenv("WINEPREFIX", (dockData.DockerPath+"/"+dockData.DockerName).toStdString().c_str());
-    qputenv("WINEARCH", dockData.DockerVer.toStdString().c_str());
+    qputenv("WINEPREFIX", (dockData.docker_Path+"/"+dockData.docker_Name).toStdString().c_str());
+    qputenv("WINEARCH", dockData.docker_SystemBitVersion.toStdString().c_str());
     //设置工作目录
-    qputenv("PWD", appData.WorkPath.toStdString().c_str());
+    qputenv("PWD", appData.app_WorkPath.toStdString().c_str());
     qputenv("WINETRICKS_DOWNLOADER", "aria2c");
-    if(!appData.DockerEnv.empty()){
-        for(auto& [a,u]:appData.DockerEnv){
+    if(!appData.app_DockerEnv.empty()){
+        for(auto& [a,u]:appData.app_DockerEnv){
             qputenv(a.toStdString().c_str(),u.toStdString().c_str());
         }
     }
@@ -119,50 +119,50 @@ void vekExtendDebug::ExtendApp(){
     if(!DebugDllStr.empty()){
         codeDebug="WINEDEBUG="+ui->lineEdit_DebugDllStr->text();
     }
-    QString gameExe=appData.AppExe;
+    QString gameExe=appData.app_Exe;
     if(gameExe.contains(" ",Qt::CaseSensitive)){
         gameExe="\""+gameExe+"\"";
     }
     codeArgs.append(gameExe);
-    if(appData.SharedMemory){
+    if(appData.app_SharedMemory){
         codeArgs.append("STAGING_SHARED_MEMORY=1");
     }
-    if(appData.RtServer){
+    if(appData.app_RtServer){
         codeArgs.append("STAGING_RT_PRIORITY_SERVER=60");
     }
-    if(appData.WriteCopy){
+    if(appData.app_WriteCopy){
         codeArgs.append("STAGING_WRITECOPY=1");
     }
-    if(appData.AppOtherAgrs!=nullptr){
-        codeArgs.append(appData.AppOtherAgrs);
+    if(appData.app_AgrsCode!=nullptr){
+        codeArgs.append(appData.app_AgrsCode);
     }
     m_cmd->setProcessChannelMode(QProcess::MergedChannels);
     m_cmd->setReadChannel(QProcess::StandardOutput);
-    m_cmd->setWorkingDirectory(appData.WorkPath);
+    m_cmd->setWorkingDirectory(appData.app_WorkPath);
     m_cmd->start("bash");
     connect(m_cmd,SIGNAL(readyReadStandardOutput()),this,SLOT(onReadyRead()));
     QString codez;
     //deepin-wine5不支持winecfg /v winxp方式切换容器系统版本。顾采用wine winetricks winxp切换容器系统版本
-    if(dockData.WineVersion.contains("deepin",Qt::CaseSensitive)){
-        codez=dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion+" "+dockData.WinePath+"/wine/bin/winetricks "+appData.DockSysVersion;
+    if(dockData.docker_WineVersion.contains("deepin",Qt::CaseSensitive)){
+        codez=dockData.docker_WinePath+"/wine/bin/"+dockData.docker_WineVersion+" "+dockData.docker_WinePath+"/wine/bin/winetricks "+appData.app_SystemVersion;
     }else{
-        codez=dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion+" "+"winecfg /v "+appData.DockSysVersion;
+        codez=dockData.docker_WinePath+"/wine/bin/"+dockData.docker_WineVersion+" "+"winecfg /v "+appData.app_SystemVersion;
     }
 
     m_cmd->write(codez.toLocal8Bit()+'\n');
-    QString codes=codeDebug+" "+dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion+" "+codeArgs.join(" ");
+    QString codes=codeDebug+" "+dockData.docker_WinePath+"/wine/bin/"+dockData.docker_WineVersion+" "+codeArgs.join(" ");
     m_cmd->write(codes.toLocal8Bit()+'\n');
     qInfo()<<"|++++++++++++++++++++++++++++|";
     qInfo()<<"writeCode:"+codes;
-    qInfo()<<"workPath:"+appData.WorkPath;
+    qInfo()<<"workPath:"+appData.app_WorkPath;
     qInfo()<<"WineArgs:"+codeArgs.join(" ");
     qInfo()<<"|++++++++++++++++++++++++++++|";
 }
 void vekExtendDebug::exitDebug(){
     std::vector<QStringList> _codeAgrs;
     objectExtend* _objectExtend=new objectExtend();
-    objectType _objType=object_forcekill;
-    _objectExtend->setDockOptionObjectData(dockData,appData.AppCID,_codeAgrs,_objType,objectWineBoot::object_wineboot_default,objectWineServer::object_wineserver_default);
+    OBJTYPE _objType=FORCEKILL;
+    _objectExtend->setDockOptionObjectData(dockData,appData.app_CID,_codeAgrs,_objType,BOOTTYPE::BOOTDEFAULT,SERVERTYPE::SERVERDEFAULT);
     _objectExtend->start();
     _objectExtend->wait();
     delete _objectExtend;

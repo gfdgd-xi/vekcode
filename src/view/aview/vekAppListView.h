@@ -15,7 +15,7 @@ public:
         vekAppListView(QWidget *parent = NULL);
         ~vekAppListView();
         void setListMap(std::map<QString,vekAppListView*> *pListMap,QTabWidget*);
-        void addItem(BaseAppData*);
+        void addItem(AppData*);
         void objectExtendApp();
 protected:
         void contextMenuEvent ( QContextMenuEvent * event );
@@ -24,16 +24,16 @@ private slots:
         void moveSlot();
         void setItemSlot();
         void unAppAdd();
-        void setUpDelData(BaseDockData,BaseAppData*,objectTypeView);     
+        void setUpDelData(DockData,AppData*,OBJAPP);     
         void unExportJson();
         void unDebugApp();
 public slots:
         void ObjectRun();
 signals:
-        void toObjectArgs_ptr(BaseAppData*,objectTypeView);
-        void toObjectArgs_cl(BaseAppData);
+        void toObjectArgs_ptr(AppData*,OBJAPP);
+        void toObjectArgs_cl(AppData);
         void _startTray();
-        void setUpDelDataSignal(BaseDockData*,BaseAppData*);
+        void setUpDelDataSignal(DockData*,AppData*);
         void setUpGroupTabIcoSignal();
 private:
         vekAppAddMT *_vek_App_Add=nullptr;
@@ -50,7 +50,7 @@ private:
         void vekReadJsonData(QString jsonPath);
         void vekInitJsonData();
         void ExportJson();
-        void startApp(objectType);
+        void startApp(OBJTYPE);
         void deleteDockerTab(QString,QString);
         std::vector<QStringList> vekWinetricks_cArgs();
         std::vector<QString> objectTypeStr={"容器设置",

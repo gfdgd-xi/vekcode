@@ -9,7 +9,7 @@ class objectProcManage:public QThread
     Q_OBJECT
 public:
    explicit objectProcManage(QObject *parent = nullptr);
-    procInfo iprocInfo;
+    ProcInfo iprocInfo;
     ~objectProcManage();    
 protected:
     void run();
@@ -19,10 +19,10 @@ private:
     //所有当前运行的程序容器的进程列表的表
     std::map<QString,QString> procAllInfoStr;
     void getAllProc();
-    QString objGetProcList(procInfo);
-    void objDelProc(QString,procInfo);
+    QString objGetProcList(ProcInfo);
+    void objDelProc(QString,ProcInfo);
     void objKillProc(QString prPid);
-    void delAttachProc(procInfo pInfo);
+    void delAttachProc(ProcInfo pInfo);
 };
 
 #endif // OBJECTPROCMANAGE_H

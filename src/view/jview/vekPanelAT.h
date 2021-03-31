@@ -11,7 +11,7 @@ class vekPanelAT: public QComboBox
 public:
      vekPanelAT(QWidget *parent = 0);
     ~vekPanelAT();   
-     BaseAppJson oData;
+     AppJson oData;
 private:
     QTabWidget *qTab=nullptr;
     bool LoadAppListData();
@@ -20,7 +20,7 @@ private:
 protected:
     void showPopup();
 public slots:
-    void qComboBoxJsonSet(BaseAppJson data);
+    void qComboBoxJsonSet(AppJson data);
 signals:
     void sigPopup();
 };
