@@ -141,7 +141,7 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
     SappData  tempAppData;
     ExtendType _objType=object_default;
     objectAppMT* objNewDock=new objectAppMT(&tempAppData,&tempDockerData);
-    tempAppData.DefaultFonts=true;
+    tempAppData.b_default_fonts=true;
     QString dockName="vekON1";
     QString dockBit="win32";
     if(iType==INITDOCKER){
@@ -290,7 +290,7 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
         }
         objectExtend* _objectExtend=new objectExtend();
         std::vector<QStringList> _codeAgrs;
-        _objectExtend->setDockOptionObjectData(tempDockerData,tempAppData.AppCID,_codeAgrs,_objType,ExtendBootType::object_wineboot_default,ExtendServerType::object_wineserver_default);
+        _objectExtend->setDockOptionObjectData(tempDockerData,tempAppData.s_uid,_codeAgrs,_objType,ExtendBootType::object_wineboot_default,ExtendServerType::object_wineserver_default);
         _objectExtend->start();
     }
     delete objNewDock;

@@ -14,29 +14,29 @@ typedef struct{
 }SRegs;
 
 typedef struct {
-    QString AppCID=nullptr;
-    QString AppName=nullptr;
-    QString AppIco=":/res/img/vek.ico";
-    QString AppExe=nullptr;
-    QString AppOtherAgrs=nullptr;
-    QString WorkPath=nullptr;
-    QString DxvkVerson=nullptr;
-    QString DxvkConfigFile=nullptr;
-    QString MainPrcoName=nullptr;
-    QString DockSysVersion=nullptr;
-    bool DxvkState=false;
-    bool DxvkHUD=false;
-    bool DxvkConfigFileState=false;
-    bool TaskLog=false;
-    bool WriteCopy=false;
-    bool SharedMemory=false;
-    bool RtServer=false;
-    bool DefaultFonts=false;
-    bool DisableAss=false;
-    std::vector<QString> AttachProc={};
-    std::map<QString,QString> DockerEnv={};
-    std::vector<QString> DockerLibs={};
-    std::vector<SRegs> stdDockerRegs={};
+    QString s_uid=nullptr;
+    QString s_name=nullptr;
+    QString s_ico=":/res/img/vek.ico";
+    QString s_exe=nullptr;
+    QString s_agrs_code=nullptr;
+    QString s_work_path=nullptr;
+    QString s_dxvk_version=nullptr;
+    QString s_dxvk_config_file=nullptr;
+    QString s_main_proc_name=nullptr;
+    QString s_dock_system_version=nullptr;
+    bool b_dxvk_state=false;
+    bool b_dxvk_hud=false;
+    bool b_dxvk_config_file_state=false;
+    bool b_task_log=false;
+    bool b_writecopy=false;
+    bool b_sharedmemory=false;
+    bool b_rtserver=false;
+    bool b_default_fonts=false;
+    bool b_disable_ass=false;
+    std::vector<QString> vec_attach_proc={};
+    std::map<QString,QString> map_docker_regs={};
+    std::vector<QString> vec_docker_libs={};
+    std::vector<SRegs> vec_docker_regs={};
 }SappData;
 
 //本地安装wine数据结构
@@ -74,7 +74,7 @@ typedef struct {
 typedef struct {
     std::map<QString,QString> Option={};
     std::map<QString,QString> Docker={};
-    std::vector<QString> AttachProc={};
+    std::vector<QString> vec_attach_proc={};
     std::map<QString,QString> Env={};
     std::vector<QString> Libs={};
     std::map<QString,QString> Dxvk={};

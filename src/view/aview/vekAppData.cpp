@@ -23,12 +23,12 @@ QVariant vekAppData::data( const QModelIndex & index, int role ) const
        {
        case Qt::DisplayRole:
            {
-               return m_ItemDataVec[index.row()]->AppName;
+               return m_ItemDataVec[index.row()]->s_name;
            }
         break;
        case Qt::DecorationRole:
            {
-               QString icoPath=m_ItemDataVec[index.row()]->AppIco;
+               QString icoPath=m_ItemDataVec[index.row()]->s_ico;
                if(!QFile(icoPath).exists()){
                    icoPath=":/res/img/vek.ico";
                }else if(QFileInfo(icoPath).size()<=0){

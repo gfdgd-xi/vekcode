@@ -102,7 +102,7 @@ void vekAppAddAT::addAutoApp(){
     if(pAppJsonData.appName==nullptr){
         pAppJsonData.appJson=ui->comboBox_JsonUrl->currentText();
     }
-    autoAppData->AppExe=ui->lineEdit_AppExePath->text();
+    autoAppData->s_exe=ui->lineEdit_AppExePath->text();
     objectAppAT* objAutoAddApp=new objectAppAT();
     objAutoAddApp->connectDockAutoData(*autoDockData,*autoAppData,pAppJsonData);
     connect(objAutoAddApp,SIGNAL(Tips(QString)),this,SLOT(TipText(QString)));

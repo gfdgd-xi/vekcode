@@ -103,60 +103,60 @@ bool objectAppAT::objDockerData(){
 void objectAppAT::objAppData(){
     if(!_baseAutoSetJson->Option.empty()){
         for(auto [a,b]:_baseAutoSetJson->Option){
-            if(a=="AppName"){
-                baseAppData.AppName=b;
+            if(a=="s_name"){
+                baseAppData.s_name=b;
             }
             if(a=="DefaultFont"){
                 QVariant defaultFontValue=b;
-                baseAppData.DefaultFonts=(defaultFontValue).toBool();
+                baseAppData.b_default_fonts=(defaultFontValue).toBool();
             }
-            if(a=="SharedMemory"){
+            if(a=="b_sharedmemory"){
                 QVariant sharedMemoryValue=b;
-                baseAppData.SharedMemory=(sharedMemoryValue).toBool();
+                baseAppData.b_sharedmemory=(sharedMemoryValue).toBool();
             }
-            if(a=="WriteCopy"){
+            if(a=="b_writecopy"){
                 QVariant writeCopyValue=b;
-                baseAppData.WriteCopy=(writeCopyValue).toBool();
+                baseAppData.b_writecopy=(writeCopyValue).toBool();
             }
-            if(a=="RtServer"){
+            if(a=="b_rtserver"){
                 QVariant rtServerValue=b;
-                baseAppData.RtServer=(rtServerValue).toBool();
+                baseAppData.b_rtserver=(rtServerValue).toBool();
             }
 
-            if(a=="MainPrcoName"){
-                baseAppData.MainPrcoName=b;
+            if(a=="s_main_proc_name"){
+                baseAppData.s_main_proc_name=b;
             }
-            baseAppData.DockSysVersion=_baseAutoSetJson->Docker.at(toStr(DockerSysVersion));
+            baseAppData.s_dock_system_version=_baseAutoSetJson->Docker.at(toStr(DockerSysVersion));
         }
     }
     if(!_baseAutoSetJson->Dxvk.empty()){
         for(auto a:_baseAutoSetJson->Dxvk){
             if(a.first=="DxvkVersion"){
-                baseAppData.DxvkVerson=a.second;
+                baseAppData.s_dxvk_version=a.second;
             }
-            if(a.first=="DxvkState"){
+            if(a.first=="b_dxvk_state"){
                 QVariant dxvkStateValue=a.second;
-                baseAppData.DxvkState=(dxvkStateValue).toBool();
+                baseAppData.b_dxvk_state=(dxvkStateValue).toBool();
             }
-            if(a.first=="DxvkHUD"){
+            if(a.first=="b_dxvk_hud"){
                 QVariant dxvkHUDValue=a.second;
-                baseAppData.DxvkHUD=(dxvkHUDValue).toBool();
+                baseAppData.b_dxvk_hud=(dxvkHUDValue).toBool();
             }
         }
     }
-    baseAppData.stdDockerRegs=_baseAutoSetJson->Regs;
-    baseAppData.DockerLibs=_baseAutoSetJson->Libs;
-    baseAppData.DockerEnv=_baseAutoSetJson->Env;
-    baseAppData.AppOtherAgrs=_baseAutoSetJson->Args;
-    baseAppData.AttachProc=_baseAutoSetJson->AttachProc;
+    baseAppData.vec_docker_regs=_baseAutoSetJson->Regs;
+    baseAppData.vec_docker_libs=_baseAutoSetJson->Libs;
+    baseAppData.map_docker_regs=_baseAutoSetJson->Env;
+    baseAppData.s_agrs_code=_baseAutoSetJson->Args;
+    baseAppData.vec_attach_proc=_baseAutoSetJson->vec_attach_proc;
 
-    QFileInfo fi = QFileInfo(baseAppData.AppExe);
-    baseAppData.WorkPath=fi.path();
+    QFileInfo fi = QFileInfo(baseAppData.s_exe);
+    baseAppData.s_work_path=fi.path();
     objectJson* _objectJson=new objectJson();
-    baseAppData.AppCID=_objectJson->GetRandomCID();
+    baseAppData.s_uid=_objectJson->GetRandomCID();
     delete _objectJson;
     _objectJson=nullptr;
-    //baseAppData.AppIco=jsonIco;
+    //baseAppData.s_ico=jsonIco;
 }
 void objectAppAT::objectAutoObj(){
     if(objDiyAddApp!=nullptr){

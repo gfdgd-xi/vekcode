@@ -26,7 +26,7 @@ private:
     void DxvkFileInstall();
     void DxvkRegedit(QStringList dxvkFileList);
     void DxvkHUDRegs();
-    void DxvkConfigFile();
+    void s_dxvk_config_file();
     void DefaultFontsFileInstall();
     void DefaultFontsRegs();
     void WaitObjectDone(objectExtend*);  
@@ -35,7 +35,7 @@ private:
     void installMonoPlugs();
     void installGeckoPlugs();
     void outAppIco();
-    void DisableAss(std::map<QString,std::map<QString,QString>>);
+    void b_disable_ass(std::map<QString,std::map<QString,QString>>);
 };
 
 #endif // VEKGAMEADDOBJECT_H
