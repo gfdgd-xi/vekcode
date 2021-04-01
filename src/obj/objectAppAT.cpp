@@ -76,16 +76,21 @@ bool objectAppAT::objDockerData(){
         baseDockData.s_dockers_bit_version=_baseAutoSetJson->map_deploy_docker.at(toStr(DockerVersion));
         baseDockData.s_dockers_wine_version=_baseAutoSetJson->map_deploy_docker.at(toStr(s_dockers_wine_version));
         baseDockData.s_dockers_system_version=_baseAutoSetJson->map_deploy_docker.at(toStr(DockerSysVersion));
-        qInfo()<<"如果容器不存在"<<baseDockData.s_dockers_wine_path;
     }else{
         //如果容器存在
-        qInfo()<<"如果容器存在";
+        //bit_version为小系统版本分win32 win64
+        //wine_exe_version为本地执行wine执行程序版本分wine和wine64
+        //wine_version为wine的版本分别为deepin-wine5和win6.5之类为wine的名字
+        //-----------------------------
+        //于自动脚本区别在于
+        //toStr(DockerVersion)为容器版本win32和win64
+        //toStr(DockerWineVersion)为wine执行程序版本wine和wine64
         if(baseDockData.s_dockers_bit_version!=_baseAutoSetJson->map_deploy_docker.at(toStr(DockerVersion))){
             pObject::vekError("当前容器版本为:"+baseDockData.s_dockers_bit_version+"配置文件容器版本为:"+_baseAutoSetJson->map_deploy_docker.at(toStr(DockerVersion)));
             return false;
         }
-        if(baseDockData.s_dockers_wine_version!=_baseAutoSetJson->map_deploy_docker.at(toStr(s_dockers_wine_version))){
-            pObject::vekError("当前容器Wine版本为:"+baseDockData.s_dockers_wine_version+"配置文件容器Wine版本为:"+_baseAutoSetJson->map_deploy_docker.at(toStr(s_dockers_wine_version)));
+        if(baseDockData.s_dockers_wine_exe_version!=_baseAutoSetJson->map_deploy_docker.at(toStr(DockerWineVersion))){
+            pObject::vekError("当前容器Wine版本为:"+baseDockData.s_dockers_wine_exe_version+"配置文件容器Wine版本为:"+_baseAutoSetJson->map_deploy_docker.at(toStr(DockerWineVersion)));
             return false;
         }
         if(baseDockData.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)&_baseAutoSetJson->map_deploy_docker.at(toStr(DockerVersion))=="win64"){
@@ -94,36 +99,36 @@ bool objectAppAT::objDockerData(){
         }
     }
     baseDockData.s_dockers_wine_path=g_vekLocalData.map_wine_list.at(baseDockData.s_dockers_wine_version).s_local_wine_path;
-    QVariant monoState=_baseAutoSetJson->map_deploy_docker.at(toStr(s_dockers_mono_state));
+    QVariant monoState=_baseAutoSetJson->map_deploy_docker.at(toStr(MonoState));
     baseDockData.s_dockers_mono_state=(monoState).toBool();
-    QVariant geckoState=_baseAutoSetJson->map_deploy_docker.at(toStr(s_dockers_gecko_state));
+    QVariant geckoState=_baseAutoSetJson->map_deploy_docker.at(toStr(GeckoState));
     baseDockData.s_dockers_gecko_state=(geckoState).toBool();
     return true;
 }
 void objectAppAT::objAppData(){
     if(!_baseAutoSetJson->map_deploy_option.empty()){
         for(auto [a,b]:_baseAutoSetJson->map_deploy_option){
-            if(a=="s_name"){
+            if(a=="AppName"){
                 baseAppData.s_name=b;
             }
             if(a=="DefaultFont"){
                 QVariant defaultFontValue=b;
                 baseAppData.b_default_fonts=(defaultFontValue).toBool();
             }
-            if(a=="b_sharedmemory"){
+            if(a=="SharedMemory"){
                 QVariant sharedMemoryValue=b;
                 baseAppData.b_sharedmemory=(sharedMemoryValue).toBool();
             }
-            if(a=="b_writecopy"){
+            if(a=="WriteCopy"){
                 QVariant writeCopyValue=b;
                 baseAppData.b_writecopy=(writeCopyValue).toBool();
             }
-            if(a=="b_rtserver"){
+            if(a=="RtServer"){
                 QVariant rtServerValue=b;
                 baseAppData.b_rtserver=(rtServerValue).toBool();
             }
 
-            if(a=="s_main_proc_name"){
+            if(a=="MainPrcoName"){
                 baseAppData.s_main_proc_name=b;
             }
             baseAppData.s_dock_system_version=_baseAutoSetJson->map_deploy_docker.at(toStr(DockerSysVersion));
@@ -134,11 +139,11 @@ void objectAppAT::objAppData(){
             if(a.first=="DxvkVersion"){
                 baseAppData.s_dxvk_version=a.second;
             }
-            if(a.first=="b_dxvk_state"){
+            if(a.first=="DxvkState"){
                 QVariant dxvkStateValue=a.second;
                 baseAppData.b_dxvk_state=(dxvkStateValue).toBool();
             }
-            if(a.first=="b_dxvk_hud"){
+            if(a.first=="DxvkHUD"){
                 QVariant dxvkHUDValue=a.second;
                 baseAppData.b_dxvk_hud=(dxvkHUDValue).toBool();
             }
