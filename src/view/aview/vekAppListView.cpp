@@ -143,11 +143,11 @@ void vekAppListView::startApp(ExtendType _objType){
     if(index>-1){
         SdockerData dockData=pObject::getDockerData(mBox->tabText(mBox->currentIndex()));
         SappData* appData=m_pModel->getItem(index);
-        if(!QDir(dockData.WinePath).exists()){
+        if(!QDir(dockData.s_dockers_wine_path).exists()){
             pObject::vekTip("Wine路径丢失!");
             return;
         }
-        QString pDock=dockData.DockerPath+"/"+dockData.DockerName;
+        QString pDock=dockData.s_dockers_path+"/"+dockData.s_dockers_name;
         if(!QDir(pDock).exists()){
             pObject::vekTip("容器路径丢失!");
             return;
@@ -203,7 +203,7 @@ void vekAppListView::setItemSlot(){
             _vek_App_Add->setAttribute(Qt::WA_DeleteOnClose,true);
             _vek_App_Add->setWindowTitle("Vek软件设置");
             QString currentAppCID=m_pModel->getItem(this->currentIndex().row())->s_uid;
-            _vek_App_Add->vekAppAddConnectObject(&g_vekLocalData.dockerVec.at(mBox->tabText(mBox->currentIndex())),currentAppCID,object_setApp);
+            _vek_App_Add->vekAppAddConnectObject(&g_vekLocalData.map_docker_list.at(mBox->tabText(mBox->currentIndex())),currentAppCID,object_setApp);
             _vek_App_Add->setWindowFlags(Qt::WindowStaysOnTopHint);
             _vek_App_Add->show();
             connect(_vek_App_Add,&vekAppAddMT::_unDiyAppAdd,this,&vekAppListView::unAppAdd);
@@ -215,8 +215,8 @@ void vekAppListView::setUpDelData(SdockerData dockData,SappData* appData,EADETyp
     int index = this->currentIndex().row();
     if(index>-1){
         QString deleteCID=m_pModel->getItem(index)->s_uid;
-        QString dockPathStr=dockData.DockerPath+"/";
-        QString dockNameStr=dockData.DockerName;
+        QString dockPathStr=dockData.s_dockers_path+"/";
+        QString dockNameStr=dockData.s_dockers_name;
         objectJson _objectJson;
         bool dState=false;
         if(objTypeView==object_delApp){
@@ -227,7 +227,7 @@ void vekAppListView::setUpDelData(SdockerData dockData,SappData* appData,EADETyp
             _objectJson.deleteAppNodeData(dockData,deleteCID);
             if(dState){
                 deleteDockerTab(dockPathStr,dockNameStr);
-                _objectJson.deleteDockerNodeData(dockData.DockerName);
+                _objectJson.deleteDockerNodeData(dockData.s_dockers_name);
             }
         }
         //修改设置
@@ -236,7 +236,7 @@ void vekAppListView::setUpDelData(SdockerData dockData,SappData* appData,EADETyp
             m_pModel->deleteItem(index);
             auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget();
             //判断设置后的dockName和当前是否相同，该功能是利用设置修改容器名
-            if(currentTabText==dockData.DockerName){
+            if(currentTabText==dockData.s_dockers_name){
                 m_pModel->addItem(appData);
                 _objectJson.updateAppNodeData(dockData,*appData);
                 connect(this,SIGNAL(setUpGroupTabIcoSignal()),pObjectVek,SLOT(upTabIco()));
@@ -259,7 +259,7 @@ void vekAppListView::deleteDockerTab(QString dockPathStr,QString dockNameStr){
             dockPath.removeRecursively();
         }
     }
-    g_vekLocalData.dockerVec.erase(dockNameStr);
+    g_vekLocalData.map_docker_list.erase(dockNameStr);
     objectJson _oJson;
     _oJson.deleteDockerNodeData(dockNameStr);
     m_pListMap->erase(dockNameStr);

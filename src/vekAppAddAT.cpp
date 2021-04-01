@@ -18,9 +18,9 @@ void vekAppAddAT::connectDockObject(){
     connect(ui->pushButton_AutoJson,&QPushButton::clicked,this,&vekAppAddAT::SetObject);
     connect(ui->pushButton_AutoDockPath,&QPushButton::clicked,this,&vekAppAddAT::SetObject);
     connect(ui->pushButton_SetExePath,&QPushButton::clicked,this,&vekAppAddAT::SetObject);
-    if(!g_vekLocalData.wineVec.empty())
+    if(!g_vekLocalData.map_wine_list.empty())
     {
-        for(auto & x :g_vekLocalData.wineVec)
+        for(auto & x :g_vekLocalData.map_wine_list)
         {
             ui->comboBox_WinVersion->addItem(x.first);
         }
@@ -29,11 +29,11 @@ void vekAppAddAT::connectDockObject(){
         this->close();
     }
 
-    for(auto & d:g_vekLocalData.appScrSource){
+    for(auto & d:g_vekLocalData.map_app_src_list){
         ui->comboBox_SrcApp->addItem(d.first);
     }
-    if(!g_vekLocalData.dockerVec.empty()){
-        for(auto &a:g_vekLocalData.dockerVec){
+    if(!g_vekLocalData.map_docker_list.empty()){
+        for(auto &a:g_vekLocalData.map_docker_list){
             ui->comboBox_DockName->addItem(a.first);
         }
     }else{
@@ -91,16 +91,16 @@ void vekAppAddAT::addAutoApp(){
     SappData* autoAppData=new SappData;
     SdockerData* autoDockData=new SdockerData;
     SdockerData btmp=pObject::getDockerData(ui->comboBox_DockName->currentText());
-    if(btmp.DockerPath==nullptr){
-        autoDockData->DockerName=ui->comboBox_DockName->currentText();
-        autoDockData->DockerPath=ui->lineEdit_DockPath->text();
-        autoDockData->WineVersion=ui->comboBox_WinVersion->currentText();
+    if(btmp.s_dockers_path==nullptr){
+        autoDockData->s_dockers_name=ui->comboBox_DockName->currentText();
+        autoDockData->s_dockers_path=ui->lineEdit_DockPath->text();
+        autoDockData->s_dockers_wine_version=ui->comboBox_WinVersion->currentText();
     }else{
         *autoDockData=btmp;
     }
     SappDeployInfo pAppJsonData=ui->comboBox_JsonUrl->oData;
-    if(pAppJsonData.appName==nullptr){
-        pAppJsonData.appJson=ui->comboBox_JsonUrl->currentText();
+    if(pAppJsonData.s_deploy_app_name==nullptr){
+        pAppJsonData.s_deploy_app_json=ui->comboBox_JsonUrl->currentText();
     }
     autoAppData->s_exe=ui->lineEdit_AppExePath->text();
     objectAppAT* objAutoAddApp=new objectAppAT();

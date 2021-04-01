@@ -32,7 +32,7 @@ void vekPanelAT::showPopup()
     std::map<QString,std::map<QString,SappDeployInfo>>::reverse_iterator it;
     std::map<QString,SappDeployInfo>::iterator its;
     QString srcText=this->parent()->parent()->findChild<QComboBox*>("comboBox_SrcApp")->currentText();
-    for(auto a:g_vekLocalData.appJsonList){
+    for(auto a:g_vekLocalData.map_app_json_list){
         if(a.first==srcText){
             for(it = a.second.rbegin(); it != a.second.rend(); it++){
                 vekViewAT *pListView=new vekViewAT();
@@ -55,7 +55,7 @@ void vekPanelAT::showPopup()
 }
 void vekPanelAT::qComboBoxJsonSet(SappDeployInfo data){
     this->clear();
-    this->addItem(data.appName);
+    this->addItem(data.s_deploy_app_name);
     oData=data;
     this->hidePopup();
 }

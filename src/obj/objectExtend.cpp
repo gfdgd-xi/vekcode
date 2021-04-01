@@ -15,17 +15,21 @@ void objectExtend::setDockOptionObjectData(SdockerData _dockData,QString _appCID
     objType=_objType;
     objWineBootType=_objWineBootType;
     objWineServer=_objWineServer;
-    startArgs=dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion;
+    startArgs=dockData.s_dockers_wine_path+"/wine/bin/"+dockData.s_dockers_wine_exe_version;
 }
 //运行环境变量设置
 void objectExtend::executeArgsEnv(){
-    qInfo()<<"wine执行版本:"<<dockData.DockerWineVersion;
-    qInfo()<<"容器版本系统版本:"<<dockData.DockerSystemVersion;
-    qInfo()<<"Wine版本号:"<<dockData.WineVersion;
-    qInfo()<<"容器系统位数版本:"<<dockData.DockerVer;
-    qputenv("WINE", (dockData.WinePath+"/wine/bin/"+dockData.DockerWineVersion).toStdString().c_str());
-    qputenv("WINEPREFIX", (dockData.DockerPath+"/"+dockData.DockerName).toStdString().c_str());
-    qputenv("WINEARCH", dockData.DockerVer.toStdString().c_str());
+    //wine执行版本: "wine"
+    //容器系统版本: "win7"
+    //Wine版本号: "deepin-wine5"
+    //容器系统位数版本: "win32"
+    qInfo()<<"wine执行版本:"<<dockData.s_dockers_wine_exe_version;
+    qInfo()<<"容器系统版本:"<<dockData.s_dockers_system_version;
+    qInfo()<<"Wine版本号:"<<dockData.s_dockers_wine_version;
+    qInfo()<<"容器系统位数版本:"<<dockData.s_dockers_bit_version;
+    qputenv("WINE", (dockData.s_dockers_wine_path+"/wine/bin/"+dockData.s_dockers_wine_exe_version).toStdString().c_str());
+    qputenv("WINEPREFIX", (dockData.s_dockers_path+"/"+dockData.s_dockers_name).toStdString().c_str());
+    qputenv("WINEARCH", dockData.s_dockers_bit_version.toStdString().c_str());
     qputenv("WINETRICKS_DOWNLOADER", "aria2c");
 
     if(appData.s_work_path!=nullptr){
@@ -47,7 +51,7 @@ void objectExtend::executeArgsEnv(){
 void objectExtend::executeWineBoot(ExtendBootType objWineBootType){
     QStringList wineboot;
     wineboot.clear();
-    wineboot.append(dockData.WinePath+"/wine/bin/");
+    wineboot.append(dockData.s_dockers_wine_path+"/wine/bin/");
     switch (objWineBootType) {
     case object_wineboot_e:
         //结束会话
@@ -89,7 +93,7 @@ void objectExtend::executeWineBoot(ExtendBootType objWineBootType){
 void objectExtend::executeWineServer(ExtendServerType objWineServer){
     QStringList wineserver;
     wineserver.clear();
-    wineserver.append(dockData.WinePath+"/wine/bin/");
+    wineserver.append(dockData.s_dockers_wine_path+"/wine/bin/");
     switch (objWineServer) {
     case object_wineserver_k:
         //结束会话
@@ -115,8 +119,8 @@ void objectExtend::executeWineServer(ExtendServerType objWineServer){
 void objectExtend::executeWinetricks(ExtendType _wType){
     executeWineBoot(object_wineboot_r);
     QStringList codeArgs;
-    qputenv("WINE", (dockData.WinePath+"/wine/bin/wine").toStdString().c_str());
-    codeArgs.append(dockData.WinePath+"/wine/bin/winetricks");
+    qputenv("WINE", (dockData.s_dockers_wine_path+"/wine/bin/wine").toStdString().c_str());
+    codeArgs.append(dockData.s_dockers_wine_path+"/wine/bin/winetricks");
     switch (_wType) {
       case object_winetricks_gui:
         executeWinetricks_gui(codeArgs);
@@ -146,7 +150,7 @@ void objectExtend::ExtendWinetricksCode(QStringList cArgs,bool wType){
     m_cmd->start(mdCode,QIODevice::ReadWrite);
     qInfo()<<"WineTricks:"<<cArgs.join(" ");
     m_cmd->waitForFinished(-1);
-    if(dockData.WineVersion.contains("deepin",Qt::CaseSensitive)){
+    if(dockData.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
         switchSysVersion(DOCKER,DEEPIN);
     }else{
         switchSysVersion(DOCKER,WINEHQ);
@@ -157,7 +161,7 @@ void objectExtend::ExtendWinetricksCode(QStringList cArgs,bool wType){
 void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
     executeWineBoot(object_wineboot_r);
     monitorProc();
-    if(dockData.WineVersion.contains("deepin",Qt::CaseSensitive)){
+    if(dockData.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
         switchSysVersion(DOCKER,DEEPIN);
     }else{
         switchSysVersion(DOCKER,WINEHQ);
@@ -218,7 +222,7 @@ void objectExtend::hqSwitchSysVersion(SWITCH_SYSTEM_VERSION ssv){
    if(ssv==APP){
        codeArgs.append(appData.s_dock_system_version);
    }else{
-       codeArgs.append(dockData.DockerSystemVersion);
+       codeArgs.append(dockData.s_dockers_system_version);
    }
 
    baseExecuteWineCode(startArgs,codeArgs);
@@ -227,12 +231,12 @@ void objectExtend::hqSwitchSysVersion(SWITCH_SYSTEM_VERSION ssv){
 void objectExtend::deepinSwitchSysVerion(SWITCH_SYSTEM_VERSION ssv){
     executeWineBoot(object_wineboot_r);
     QStringList codeArgs;
-    qputenv("WINE", (dockData.WinePath+"/wine/bin/wine").toStdString().c_str());
-    codeArgs.append(dockData.WinePath+"/wine/bin/winetricks");
+    qputenv("WINE", (dockData.s_dockers_wine_path+"/wine/bin/wine").toStdString().c_str());
+    codeArgs.append(dockData.s_dockers_wine_path+"/wine/bin/winetricks");
     if(ssv==APP){
         codeArgs.append(appData.s_dock_system_version);
     }else{
-        codeArgs.append(dockData.DockerSystemVersion);
+        codeArgs.append(dockData.s_dockers_system_version);
     }
     QString mdCode = codeArgs.join(" ");
     m_cmd->start(mdCode,QIODevice::ReadWrite);
@@ -315,13 +319,13 @@ void objectExtend::extendPlugs(){
 }
 void objectExtend::monitorProc(){
     SappProcData pi;
-    if(!appData.vec_attach_proc.empty()){
+    if(!appData.vec_proc_attach_list.empty()){
         objectProcManage* objProcMangs=new objectProcManage();
-        pi.pDockName=dockData.DockerName;
-        pi.pDockPath=dockData.DockerPath;
-        pi.pWinePath=dockData.WinePath;
-        pi.pAttachProc=appData.vec_attach_proc;
-        pi.pAttachProc.push_back(appData.s_main_proc_name);
+        pi.s_proc_docker_name=dockData.s_dockers_name;
+        pi.s_proc_docker_path=dockData.s_dockers_path;
+        pi.s_proc_wine_path=dockData.s_dockers_wine_path;
+        pi.vec_proc_attach_list=appData.vec_proc_attach_list;
+        pi.vec_proc_attach_list.push_back(appData.s_main_proc_name);
         objProcMangs->iprocInfo=pi;
         objProcMangs->start();
         objProcMangs->wait();
@@ -333,12 +337,12 @@ void objectExtend::monitorProc(){
 void objectExtend::forcekill(){
     SappProcData pi;
     objectProcManage* objProcMangs=new objectProcManage();
-    pi.pDockName=dockData.DockerName;
-    pi.pDockPath=dockData.DockerPath;
-    pi.pWinePath=dockData.WinePath;
-    pi.pAttachProc=appData.vec_attach_proc;
+    pi.s_proc_docker_name=dockData.s_dockers_name;
+    pi.s_proc_docker_path=dockData.s_dockers_path;
+    pi.s_proc_wine_path=dockData.s_dockers_wine_path;
+    pi.vec_proc_attach_list=appData.vec_proc_attach_list;
     if(objType==object_forcekill){
-        pi.pAttachProc.push_back(appData.s_main_proc_name);
+        pi.vec_proc_attach_list.push_back(appData.s_main_proc_name);
     }
     objProcMangs->iprocInfo=pi;
     objProcMangs->start();
@@ -360,7 +364,7 @@ void objectExtend::run(){
     }else if(objType==object_regobject){
         extendWineRegeditCode(startArgs);
     }else if(objType==object_dockSysver){
-        if(dockData.WineVersion.contains("deepin",Qt::CaseSensitive)){
+        if(dockData.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
             switchSysVersion(DOCKER,DEEPIN);
         }else{
             switchSysVersion(DOCKER,WINEHQ);

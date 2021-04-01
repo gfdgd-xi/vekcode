@@ -33,7 +33,7 @@ typedef struct {
     bool b_rtserver=false;
     bool b_default_fonts=false;
     bool b_disable_ass=false;
-    std::vector<QString> vec_attach_proc={};
+    std::vector<QString> vec_proc_attach_list={};
     std::map<QString,QString> map_docker_regs={};
     std::vector<QString> vec_docker_libs={};
     std::vector<SRegs> vec_docker_regs={};
@@ -41,15 +41,15 @@ typedef struct {
 
 //本地安装wine数据结构
 typedef struct{
-    QString s_wine_name=nullptr;
-    QString s_wine_version=nullptr;
-    QString s_wine_path=nullptr;
-    QString s_wine_url=nullptr;
-    QString s_wine_src=nullptr;
-    QString s_wine_mono=nullptr;
-    QString s_wine_gecko_86=nullptr;
-    QString s_wine_gecko_8664=nullptr;
-    std::vector<QString> s_wine_dxvk={};
+    QString s_local_wine_name=nullptr;
+    QString s_local_wine_version=nullptr;
+    QString s_local_wine_path=nullptr;
+    QString s_local_wine_url=nullptr;
+    QString s_local_wine_src=nullptr;
+    QString s_local_wine_mono=nullptr;
+    QString s_local_wine_gecko_86=nullptr;
+    QString s_local_wine_gecko_8664=nullptr;
+    std::vector<QString> s_local_wine_dxvk={};
 }SwineData;
 
 //远程wine数据结构
@@ -60,45 +60,45 @@ typedef struct {
     QString s_remote_wine_mono=nullptr;
     QString s_remote_wine_gecko_86=nullptr;
     QString s_remote_wine_gecko_8664=nullptr;
-    std::vector<QString> s_remote_wine_dxvk={};
+    std::vector<QString> vec_remote_wine_dxvk={};
 }SwineRemoteData;
 
 typedef struct {
-    QString pDockPath=nullptr;
-    QString pDockName=nullptr;
-    QString pWinePath=nullptr;
-    QString pMainProc=nullptr;
-    std::vector<QString> pAttachProc={};
+    QString s_proc_docker_path=nullptr;
+    QString s_proc_docker_name=nullptr;
+    QString s_proc_wine_path=nullptr;
+    QString s_proc_main_name=nullptr;
+    std::vector<QString> vec_proc_attach_list={};
 }SappProcData;
 
 typedef struct {
-    std::map<QString,QString> Option={};
-    std::map<QString,QString> Docker={};
-    std::vector<QString> vec_attach_proc={};
-    std::map<QString,QString> Env={};
-    std::vector<QString> Libs={};
-    std::map<QString,QString> Dxvk={};
-    std::vector<SRegs> Regs={};
-    QString Args=nullptr;
+    std::map<QString,QString> map_deploy_option={};
+    std::map<QString,QString> map_deploy_docker={};
+    std::vector<QString> vec_deploy_attach_proc={};
+    std::map<QString,QString> map_deploy_env={};
+    std::vector<QString> vec_deploy_libs={};
+    std::map<QString,QString> map_deploy_dxvk={};
+    std::vector<SRegs> vec_deploy_regs={};
+    QString map_deploy_args=nullptr;
 }SappDeployData;
 
 typedef struct{
-    QString appName=nullptr;
-    QString appJson=nullptr;
-    QString appIco=":/res/img/vek.ico";
+    QString s_deploy_app_name=nullptr;
+    QString s_deploy_app_json=nullptr;
+    QString s_deploy_app_ico=":/res/img/vek.ico";
 }SappDeployInfo;
 
 typedef struct{
-    std::map<QString,SappData> dData;
-    QString WinePath=nullptr;
-    QString WineVersion=nullptr;
-    QString DockerPath=nullptr;
-    QString DockerName="vekON1";
-    QString DockerSystemVersion="win7";
-    QString DockerWineVersion="wine";
-    QString DockerVer="win32";
-    bool MonoState=false;
-    bool GeckoState=false;
+    std::map<QString,SappData> map_dockers_data;
+    QString s_dockers_wine_path=nullptr;
+    QString s_dockers_wine_version=nullptr;
+    QString s_dockers_path=nullptr;
+    QString s_dockers_name="vekON1";
+    QString s_dockers_system_version="win7";
+    QString s_dockers_wine_exe_version="wine";
+    QString s_dockers_bit_version="win32";
+    bool s_dockers_mono_state=false;
+    bool s_dockers_gecko_state=false;
 }SdockerData;
 
 typedef struct{
@@ -107,12 +107,12 @@ typedef struct{
 }SvekOptions;
 
 typedef struct {
-    std::map<QString,SdockerData> dockerVec={};
-    std::map<QString,SwineData> wineVec={};
-    std::map<QString,QString> appScrSource={};
-    std::map<QString,std::map<QString,std::map<QString,SappDeployInfo>>> appJsonList={};
-    std::map<QString,QString> wineSource={};
-    std::map<QString,std::map<QString,SwineRemoteData>> wineJsonList={};
+    std::map<QString,SdockerData> map_docker_list={};
+    std::map<QString,SwineData> map_wine_list={};
+    std::map<QString,QString> map_wine_src_list={};
+    std::map<QString,QString> map_app_src_list={};
+    std::map<QString,std::map<QString,std::map<QString,SappDeployInfo>>> map_app_json_list={};
+    std::map<QString,std::map<QString,SwineRemoteData>> map_wine_json_list={};
     SvekOptions vekOptions={};
 }SlocalGloablData;
 

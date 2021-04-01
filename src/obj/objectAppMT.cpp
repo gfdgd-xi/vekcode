@@ -28,7 +28,7 @@ QStringList objectAppMT::GetDxvkFileList(QString basedxvkDir){
 //安装dxvk
 void objectAppMT::DxvkFileInstall(){
     //wine下的dxvk目录
-    QString baseDxvkDir=dockData->WinePath+"/dxvk";
+    QString baseDxvkDir=dockData->s_dockers_wine_path+"/dxvk";
     pObject::oLogs(baseDxvkDir);
     //获取dxvk目录下的文件列表
     QStringList dxvkFileList=GetDxvkFileList(baseDxvkDir);
@@ -40,9 +40,9 @@ void objectAppMT::DxvkFileInstall(){
     QString dxvkTargetFile=nullptr;
     for(auto c:dockSystemDir){
         QString dxvkSourceFile=baseDxvkDir+"/"+appData->s_dxvk_version+"/"+c+"/";
-        dxvkTargetFile=dockData->DockerPath+"/"+dockData->DockerName+"/drive_c/windows/syswow64/";
-        if(dockData->DockerVer=="win32"){
-           dxvkTargetFile=dockData->DockerPath+"/"+dockData->DockerName+"/drive_c/windows/system32/";
+        dxvkTargetFile=dockData->s_dockers_path+"/"+dockData->s_dockers_name+"/drive_c/windows/syswow64/";
+        if(dockData->s_dockers_bit_version=="win32"){
+           dxvkTargetFile=dockData->s_dockers_path+"/"+dockData->s_dockers_name+"/drive_c/windows/system32/";
         }
         if(QDir(dxvkTargetFile).exists()){
             for(auto d:dxvkFileList){
@@ -143,7 +143,7 @@ void objectAppMT::s_dxvk_config_file(){
 
 //default fonts
 void objectAppMT::DefaultFontsFileInstall(){
-    QString fontsDirStr=dockData->WinePath+"/fonts";
+    QString fontsDirStr=dockData->s_dockers_wine_path+"/fonts";
     QStringList fontsList;
     fontsList.clear();
     QDir _fontsDir(fontsDirStr);
@@ -154,8 +154,8 @@ void objectAppMT::DefaultFontsFileInstall(){
         if(QFile(fontsDirStr).exists()){
             for(auto f:fontsList){
                 pObject::oLogs(fontsDirStr+"/"+f);
-                pObject::oLogs(dockData->DockerPath+"/"+dockData->DockerName+"/drive_c/windows/Fonts/"+f);
-                QFile::copy(fontsDirStr+"/"+f, dockData->DockerPath+"/"+dockData->DockerName+"/drive_c/windows/Fonts/"+f);
+                pObject::oLogs(dockData->s_dockers_path+"/"+dockData->s_dockers_name+"/drive_c/windows/Fonts/"+f);
+                QFile::copy(fontsDirStr+"/"+f, dockData->s_dockers_path+"/"+dockData->s_dockers_name+"/drive_c/windows/Fonts/"+f);
             }
         }
     }
@@ -180,7 +180,7 @@ void objectAppMT::DefaultFontsRegs(){
 
 void objectAppMT::InitDockDir(bool foceState,QDir _dockPath,QDir _dockDir){
     if(!_dockPath.exists()){
-        _dockDir.mkdir(dockData->DockerPath);
+        _dockDir.mkdir(dockData->s_dockers_path);
     }
     if(_dockDir.exists())
     {
@@ -221,7 +221,7 @@ void objectAppMT::DockLibsInstall(){
 void objectAppMT::installMonoPlugs(){
     argsList.clear();
     QStringList _tempPlugsList;
-    QString fileMono=dockData->WinePath+"/plugs/Mono.msi";
+    QString fileMono=dockData->s_dockers_wine_path+"/plugs/Mono.msi";
     if(QFile(fileMono).exists()){
         _tempPlugsList.append(fileMono);
         argsList.push_back(_tempPlugsList);
@@ -231,8 +231,8 @@ void objectAppMT::installMonoPlugs(){
 void objectAppMT::installGeckoPlugs(){
     argsList.clear();
     QStringList _tempPlugsList;
-    QString fileGeckoX86_64=dockData->WinePath+"/plugs/GeckoX86_64.msi";
-    QString fileGeckoX86=dockData->WinePath+"/plugs/GeckoX86.msi";
+    QString fileGeckoX86_64=dockData->s_dockers_wine_path+"/plugs/GeckoX86_64.msi";
+    QString fileGeckoX86=dockData->s_dockers_wine_path+"/plugs/GeckoX86.msi";
     if(QFile(fileGeckoX86_64).exists()&QFile(fileGeckoX86).exists()){
         _tempPlugsList.append(fileGeckoX86_64);
         _tempPlugsList.append(fileGeckoX86);
@@ -249,27 +249,27 @@ void objectAppMT::optionRegs(){
     ExecuteObj(object_regobject,object_wineboot_default,object_wineserver_default);
 }
 void objectAppMT::newDock(){
-    QDir dockPath(dockData->DockerPath);
-    QDir dockDir(dockData->DockerPath+"/"+dockData->DockerName);
-    pObject::oLogs(dockData->DockerPath);
-    pObject::oLogs(dockData->DockerName);
+    QDir dockPath(dockData->s_dockers_path);
+    QDir dockDir(dockData->s_dockers_path+"/"+dockData->s_dockers_name);
+    pObject::oLogs(dockData->s_dockers_path);
+    pObject::oLogs(dockData->s_dockers_name);
     argsList.clear();
-    if(dockData->DockerPath==nullptr&&dockData->DockerName==nullptr){
+    if(dockData->s_dockers_path==nullptr&&dockData->s_dockers_name==nullptr){
         return;
     }
     InitDockDir(true,dockPath,dockDir);
     if(appData->b_default_fonts){
         DefaultFontsFileInstall();
     }
-    if(dockData->MonoState){
+    if(dockData->s_dockers_mono_state){
         installMonoPlugs();
     }
-    if(dockData->GeckoState){
+    if(dockData->s_dockers_gecko_state){
         installGeckoPlugs();
     }
     b_disable_ass(winebuilder);
     b_disable_ass(winemine);
-    pObject::saveDockerDataToJson(*dockData,dockData->DockerName);
+    pObject::saveDockerDataToJson(*dockData,dockData->s_dockers_name);
 }
 void objectAppMT::sObjectInstall(){
     DxvkFileInstall();
@@ -311,9 +311,9 @@ void objectAppMT::outAppIco(){
     }
 }
 bool objectAppMT::InitDockObj(bool _forceState){
-    QDir dockPath(dockData->DockerPath);
-    QDir dockDir(dockData->DockerPath+"/"+dockData->DockerName);
-    if(dockData->DockerPath==nullptr&&dockData->DockerName==nullptr){
+    QDir dockPath(dockData->s_dockers_path);
+    QDir dockDir(dockData->s_dockers_path+"/"+dockData->s_dockers_name);
+    if(dockData->s_dockers_path==nullptr&&dockData->s_dockers_name==nullptr){
         return false;
     }
     try {
@@ -324,10 +324,10 @@ bool objectAppMT::InitDockObj(bool _forceState){
         if(appData->b_default_fonts){
             DefaultFontsFileInstall();
         }
-        if(dockData->MonoState){
+        if(dockData->s_dockers_mono_state){
             installMonoPlugs();
         }
-        if(dockData->GeckoState){
+        if(dockData->s_dockers_gecko_state){
             installGeckoPlugs();
         }
         if(!appData->vec_docker_regs.empty()){
@@ -350,7 +350,7 @@ void objectAppMT::WaitObjectDone(objectExtend* _waitObject){
 //执行
 void objectAppMT::ExecuteObj(ExtendType _objType,ExtendBootType _objWineBootType,ExtendServerType _objWineServer){
     objectExtend* objExtend = new objectExtend();
-    if(dockData->DockerPath==nullptr||dockData->DockerName==nullptr){return;}
+    if(dockData->s_dockers_path==nullptr||dockData->s_dockers_name==nullptr){return;}
     objExtend->setDockOptionObjectData(*dockData,appData->s_uid,argsList,_objType,_objWineBootType,_objWineServer);
     WaitObjectDone(objExtend);
 }

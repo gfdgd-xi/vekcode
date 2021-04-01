@@ -33,14 +33,14 @@ void vekAppAddMT::vekAppAddConnectObject(SdockerData* _data,QString _appCID,EADE
     connect(ui->checkBox_stateDxvk,&QCheckBox::stateChanged,this,&vekAppAddMT::dxvkOptionLoad);
     //显示当前安装wine
     ui->comboBox_RunWine->clear();
-    if(!g_vekLocalData.wineVec.empty())
+    if(!g_vekLocalData.map_wine_list.empty())
     {
-        for(auto & x :g_vekLocalData.wineVec)
+        for(auto & x :g_vekLocalData.map_wine_list)
         {
             ui->comboBox_RunWine->addItem(x.first);
         }
-        for(auto& d:g_vekLocalData.wineVec){
-            for(auto& dx:d.second.s_wine_dxvk){
+        for(auto& d:g_vekLocalData.map_wine_list){
+            for(auto& dx:d.second.s_local_wine_dxvk){
                 ui->comboBox_dxvkversion->addItem(dx);
             }
         }
@@ -57,8 +57,8 @@ void vekAppAddMT::vekAppAddConnectObject(SdockerData* _data,QString _appCID,EADE
     for(auto m:_dockWineVer){
         ui->comboBox_winebit->addItem(m);
     }
-    if(!g_vekLocalData.dockerVec.empty()){
-        for(auto &a:g_vekLocalData.dockerVec){
+    if(!g_vekLocalData.map_docker_list.empty()){
+        for(auto &a:g_vekLocalData.map_docker_list){
             ui->comboBox_DockName->addItem(a.first);
         }
     }
@@ -66,13 +66,13 @@ void vekAppAddMT::vekAppAddConnectObject(SdockerData* _data,QString _appCID,EADE
     //控件缺省设置
     ui->pushButton_setIco->setIconSize(QSize(80,80));
     ui->pushButton_setIco->setIcon(QIcon(tempAppData->s_ico));
-    ui->lineEdit_RunDockPath->setText(tempDockData->DockerPath);
-    ui->comboBox_DockName->setCurrentText(tempDockData->DockerName);
-    ui->comboBox_RunWine->setCurrentText(tempDockData->WineVersion);  
-    ui->checkBox_Mono->setChecked(tempDockData->MonoState);
-    ui->checkBox_Gecko->setChecked(tempDockData->GeckoState);
-    ui->comboBox_dockbit->setCurrentText(tempDockData->DockerVer);
-    ui->comboBox_winebit->setCurrentText(tempDockData->DockerWineVersion);
+    ui->lineEdit_RunDockPath->setText(tempDockData->s_dockers_path);
+    ui->comboBox_DockName->setCurrentText(tempDockData->s_dockers_name);
+    ui->comboBox_RunWine->setCurrentText(tempDockData->s_dockers_wine_version);  
+    ui->checkBox_Mono->setChecked(tempDockData->s_dockers_mono_state);
+    ui->checkBox_Gecko->setChecked(tempDockData->s_dockers_gecko_state);
+    ui->comboBox_dockbit->setCurrentText(tempDockData->s_dockers_bit_version);
+    ui->comboBox_winebit->setCurrentText(tempDockData->s_dockers_wine_exe_version);
     ui->comboBox_dockSystemVersion->setCurrentText(tempAppData->s_dock_system_version);
     ui->checkBox_Ass->setChecked(tempAppData->b_disable_ass);
     ui->lineEdit_AppName->setText(tempAppData->s_name);
@@ -91,7 +91,7 @@ void vekAppAddMT::vekAppAddConnectObject(SdockerData* _data,QString _appCID,EADE
     ui->lineEdit_MainProcName->setText(tempAppData->s_main_proc_name);
     ui->checkBox_dxvkConfigState->setChecked(tempAppData->b_dxvk_config_file_state);
     if(objType==object_setApp){
-        if(tempDockData->DockerPath!=nullptr){
+        if(tempDockData->s_dockers_path!=nullptr){
             ui->comboBox_dockbit->setEnabled(false);
             ui->comboBox_DockName->setEnabled(false);
             ui->comboBox_dockSystemVersion->setEnabled(false);
@@ -105,27 +105,27 @@ void vekAppAddMT::vekAppAddConnectObject(SdockerData* _data,QString _appCID,EADE
 }
 void vekAppAddMT::initAppAndDockData(SdockerData* _data,QString _appCID){
     //_data nullptr =add
-    if(_data->DockerPath==nullptr){
+    if(_data->s_dockers_path==nullptr){
         tempDockData=new SdockerData;
-        tempDockData->DockerPath=QApplication::applicationDirPath()+"/vekDock";
+        tempDockData->s_dockers_path=QApplication::applicationDirPath()+"/vekDock";
     }else{
-        *tempDockData=pObject::getDockerData(_data->DockerName);
+        *tempDockData=pObject::getDockerData(_data->s_dockers_name);
         if(_appCID!=nullptr){
-            auto it =tempDockData->dData.find(_appCID);
+            auto it =tempDockData->map_dockers_data.find(_appCID);
             *tempAppData=it->second;
         }
     }
 }
 void vekAppAddMT::plugsLoad(){
-    for(auto a:g_vekLocalData.wineVec){
+    for(auto a:g_vekLocalData.map_wine_list){
         if(a.first==ui->comboBox_RunWine->currentText()){
-            if(!QFile(a.second.s_wine_path+"/plugs/Mono.msi").exists()){
+            if(!QFile(a.second.s_local_wine_path+"/plugs/Mono.msi").exists()){
                 ui->checkBox_Mono->setEnabled(false);
             }
-            if(!QFile(a.second.s_wine_path+"/plugs/GeckoX86.msi").exists()&&!QFile(a.second.s_wine_path+"/plugs/GeckoX86_64.msi").exists()){
+            if(!QFile(a.second.s_local_wine_path+"/plugs/GeckoX86.msi").exists()&&!QFile(a.second.s_local_wine_path+"/plugs/GeckoX86_64.msi").exists()){
                 ui->checkBox_Gecko->setEnabled(false);
             }
-            if(a.second.s_wine_dxvk.empty()){
+            if(a.second.s_local_wine_dxvk.empty()){
                 ui->checkBox_stateDxvk->setEnabled(false);
                 ui->comboBox_dxvkversion->setEnabled(false);
                 ui->checkBox_statedxvkhud->setEnabled(false);
@@ -156,8 +156,8 @@ void vekAppAddMT::dxvkOptionLoad(){
             }
             else
             {
-                auto it=g_vekLocalData.wineVec.find(ui->comboBox_RunWine->currentText());
-                dxvkPath=it->second.s_wine_path+"/dxvk/dxvk.conf";
+                auto it=g_vekLocalData.map_wine_list.find(ui->comboBox_RunWine->currentText());
+                dxvkPath=it->second.s_local_wine_path+"/dxvk/dxvk.conf";
                 ui->lineEdit_dxvkConfigFIle->setText(dxvkPath);
             }
             ui->textEdit_dxvkConfigFileData->setText(pObject::getFileStr(dxvkPath));
@@ -207,8 +207,8 @@ void vekAppAddMT::loadTableView(QTableView* qtv,SappData* ePdata){
         columnTitles <<"附加进程名";
         if(ePdata!=nullptr)
         {
-            if(!ePdata->vec_attach_proc.empty()){
-                for(auto j:ePdata->vec_attach_proc){
+            if(!ePdata->vec_proc_attach_list.empty()){
+                for(auto j:ePdata->vec_proc_attach_list){
                     int x=i++;
                     tableModel->setItem(x,0,new QStandardItem(j));
                 }
@@ -314,23 +314,23 @@ bool vekAppAddMT::vekAppConfigObj(){
     //Docker默认参数
 
     if(ui->lineEdit_RunDockPath->text()!=nullptr){
-        tempDockData->DockerPath=ui->lineEdit_RunDockPath->text();
+        tempDockData->s_dockers_path=ui->lineEdit_RunDockPath->text();
     }else{
-        tempDockData->DockerPath=QApplication::applicationDirPath()+"/vekDock";
+        tempDockData->s_dockers_path=QApplication::applicationDirPath()+"/vekDock";
     }
     if(ui->comboBox_DockName->currentText()!=nullptr){
-        tempDockData->DockerName=ui->comboBox_DockName->currentText();
+        tempDockData->s_dockers_name=ui->comboBox_DockName->currentText();
     }else{
-        tempDockData->DockerName="vekON1";
+        tempDockData->s_dockers_name="vekON1";
     }
-    tempDockData->WineVersion=ui->comboBox_RunWine->currentText();
-    auto it=g_vekLocalData.wineVec.find(ui->comboBox_RunWine->currentText());
-    tempDockData->WinePath=it->second.s_wine_path;
-    tempDockData->DockerSystemVersion=ui->comboBox_dockSystemVersion->currentText();
-    tempDockData->DockerVer=ui->comboBox_dockbit->currentText();
-    tempDockData->DockerWineVersion=ui->comboBox_winebit->currentText();
-    tempDockData->MonoState=ui->checkBox_Mono->checkState();
-    tempDockData->GeckoState=ui->checkBox_Gecko->checkState();
+    tempDockData->s_dockers_wine_version=ui->comboBox_RunWine->currentText();
+    auto it=g_vekLocalData.map_wine_list.find(ui->comboBox_RunWine->currentText());
+    tempDockData->s_dockers_wine_path=it->second.s_local_wine_path;
+    tempDockData->s_dockers_system_version=ui->comboBox_dockSystemVersion->currentText();
+    tempDockData->s_dockers_bit_version=ui->comboBox_dockbit->currentText();
+    tempDockData->s_dockers_wine_exe_version=ui->comboBox_winebit->currentText();
+    tempDockData->s_dockers_mono_state=ui->checkBox_Mono->checkState();
+    tempDockData->s_dockers_gecko_state=ui->checkBox_Gecko->checkState();
     tempAppData->b_disable_ass=ui->checkBox_Ass->checkState();
     if(ui->lineEdit_dxvkConfigFIle->text()!=nullptr){
         tempAppData->s_dxvk_config_file=ui->lineEdit_dxvkConfigFIle->text();
@@ -367,13 +367,13 @@ bool vekAppAddMT::vekAppConfigObj(){
         }
     }
     if(procCurRow>0){
-        tempAppData->vec_attach_proc.clear();
+        tempAppData->vec_proc_attach_list.clear();
         QAbstractItemModel *modelProc = ui->tableView_ProcList->model();
         for(int i=0;i<=procCurRow-1;i++){
             QString dataTempC = modelProc->data(modelProc->index(i,0)).value<QString>();
             qInfo()<<dataTempC;
             if(dataTempC!=nullptr){
-                tempAppData->vec_attach_proc.push_back(dataTempC);
+                tempAppData->vec_proc_attach_list.push_back(dataTempC);
             }
         }
     }
@@ -445,24 +445,24 @@ bool vekAppAddMT::checkAppOption(){
 //检查docker参数
 //2021-3-18增加对deepin-wine5在64位容器的隔离
 bool vekAppAddMT::checkDocerOption(){
-    if(tempDockData->WineVersion==nullptr){
+    if(tempDockData->s_dockers_wine_version==nullptr){
         pObject::vekError("请先安装wine");
         return false;
     }
-    if(tempDockData->WineVersion.contains("deepin",Qt::CaseSensitive)&tempDockData->DockerVer=="win64"){
+    if(tempDockData->s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)&tempDockData->s_dockers_bit_version=="win64"){
         pObject::vekError("Deepin-Wine5不支持64位容器");
         return false;
     }
-    if(tempDockData->DockerPath==nullptr)
+    if(tempDockData->s_dockers_path==nullptr)
     {
         pObject::vekError("请设置wine运行容器路径");
         return false;
     }
-    if(tempDockData->DockerName==nullptr){
+    if(tempDockData->s_dockers_name==nullptr){
         pObject::vekError("请设置容器名字");
         return false;
     }
-    if(tempDockData->WinePath==nullptr){
+    if(tempDockData->s_dockers_wine_path==nullptr){
         pObject::vekError("请先安装wine");
         return false;
     }

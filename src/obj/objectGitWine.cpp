@@ -96,11 +96,11 @@ void objectGitWine::downWine(){
     clone_opts.fetch_opts.callbacks.certificate_check = ssl_cert;
     clone_opts.fetch_opts.callbacks.payload = &pd;
     QByteArray b2,b3;
-    b2.append(wData.s_wine_path);
+    b2.append(wData.s_local_wine_path);
     const char *path = b2.data();
-    b3.append(wData.s_wine_url);
+    b3.append(wData.s_local_wine_url);
     const char *url = b3.data();
-    emit toPrgStr("clone:"+wData.s_wine_name);
+    emit toPrgStr("clone:"+wData.s_local_wine_name);
     git_clone(&cloned_repo, url, path, &clone_opts);
     git_repository_free(cloned_repo);
     git_libgit2_shutdown();
@@ -108,21 +108,21 @@ void objectGitWine::downWine(){
 }
 void objectGitWine::gitWine(){
     try{
-        if(wData.s_wine_path==nullptr){
+        if(wData.s_local_wine_path==nullptr){
             return;
         }
-        QDir dir(wData.s_wine_path);
+        QDir dir(wData.s_local_wine_path);
         if(dir.exists()){
             dir.removeRecursively();
         }
         downWine();
-        dir.mkdir(wData.s_wine_path+"/plugs");
+        dir.mkdir(wData.s_local_wine_path+"/plugs");
         emit toPrgStr("开始下载组件请稍等!");
         objectGetCurl* objGetCurl=new objectGetCurl;
         connect(objGetCurl,SIGNAL(curlPrgressSignals(string)),this,SIGNAL(SigDeliverMessStatic(string)));
-        objGetCurl->DoewloadPlugs(wData.s_wine_mono,wData.s_wine_path+"/plugs/Mono.msi");
-        objGetCurl->DoewloadPlugs(wData.s_wine_gecko_86,wData.s_wine_path+"/plugs/GeckoX86.msi");
-        objGetCurl->DoewloadPlugs(wData.s_wine_gecko_8664,wData.s_wine_path+"/plugs/GeckoX86_64.msi");
+        objGetCurl->DoewloadPlugs(wData.s_local_wine_mono,wData.s_local_wine_path+"/plugs/Mono.msi");
+        objGetCurl->DoewloadPlugs(wData.s_local_wine_gecko_86,wData.s_local_wine_path+"/plugs/GeckoX86.msi");
+        objGetCurl->DoewloadPlugs(wData.s_local_wine_gecko_8664,wData.s_local_wine_path+"/plugs/GeckoX86_64.msi");
         emit toPrgStr("组件下载完毕!");
         objectJson* _objectJson=new objectJson() ;
         _objectJson->updateWineNodeData(wData);

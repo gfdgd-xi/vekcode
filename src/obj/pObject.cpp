@@ -47,8 +47,8 @@ void pObject::deleteWineDataToJson(QString wineName){
 }
 SdockerData pObject::getDockerData(QString dockName){
     SdockerData tempDockData={};
-    if(!g_vekLocalData.dockerVec.empty()){
-        for(auto a:g_vekLocalData.dockerVec){
+    if(!g_vekLocalData.map_docker_list.empty()){
+        for(auto a:g_vekLocalData.map_docker_list){
             if(a.first==dockName){
                 tempDockData=a.second;
                 break;
@@ -59,7 +59,7 @@ SdockerData pObject::getDockerData(QString dockName){
 }
 SappData pObject::getAppData(SdockerData dockData,QString appCID){
     SappData tempAppData={};
-    for(auto a:dockData.dData){
+    for(auto a:dockData.map_dockers_data){
         if(a.first==appCID){
             tempAppData=a.second;
             break;

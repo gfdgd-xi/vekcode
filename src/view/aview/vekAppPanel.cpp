@@ -22,14 +22,14 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
     m_pListMap = new std::map<QString,vekAppListView*>();
     std::map<QString,SdockerData>::iterator it;
     std::map<QString,SappData>::reverse_iterator its;
-    for(it=g_vekLocalData.dockerVec.begin();it!=g_vekLocalData.dockerVec.end();it++){
+    for(it=g_vekLocalData.map_docker_list.begin();it!=g_vekLocalData.map_docker_list.end();it++){
         vekAppListView *pListView = new vekAppListView();
         pListView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
         pListView->setViewMode(QListView::IconMode);
         pListView->setFlow(QListView::LeftToRight);
         pListView->setResizeMode(QListView::Adjust);
         m_pBox->addTab(pListView,it->first);
-        if(it->second.DockerVer=="win32"){
+        if(it->second.s_dockers_bit_version=="win32"){
             QIcon icon(":/res/img/32.png");
             m_pBox->setTabIcon(cTab,icon);
             cTab+=1;
@@ -38,8 +38,8 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
             m_pBox->setTabIcon(cTab,icon);
             cTab+=1;
         }
-        if(!it->second.dData.empty()){
-            for(its=it->second.dData.rbegin();its!=it->second.dData.rend();its++){
+        if(!it->second.map_dockers_data.empty()){
+            for(its=it->second.map_dockers_data.rbegin();its!=it->second.map_dockers_data.rend();its++){
                 SappData *LID=new SappData();
                 *LID=its->second;
                 connect(pListView, SIGNAL(_startTray()), this->parentWidget()->parentWidget(), SLOT(startTray()));
@@ -70,11 +70,11 @@ void vekAppPanel::contextMenuEvent( QContextMenuEvent * event )
 
 //读取数据to容器列表
 void vekAppPanel::vekLoadJsonData(){
-    if(g_vekLocalData.dockerVec.empty()){
+    if(g_vekLocalData.map_docker_list.empty()){
         return;
     }else{
-        for(auto& y:g_vekLocalData.dockerVec){
-            for(auto z:y.second.dData){
+        for(auto& y:g_vekLocalData.map_docker_list){
+            for(auto z:y.second.map_dockers_data){
                 vekAppListView* pList= new vekAppListView();
                 QString nowTabName=y.first;
                 SappData *LID=new SappData();
@@ -132,7 +132,7 @@ void vekAppPanel::addAppAuto(){
     }
 }
 void vekAppPanel::objInitDocker(INITTYPE iType){
-    if(g_vekLocalData.wineVec.empty()){
+    if(g_vekLocalData.map_wine_list.empty()){
         pObject::vekTip("未发现您的电脑上装有wine请安装wine后重试");
         return;
     }
@@ -149,8 +149,8 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
         QStringList items;
         QStringList itemsbit;
         //选择wine版本
-        for(auto wName:g_vekLocalData.wineVec){
-            items<<wName.second.s_wine_name;
+        for(auto wName:g_vekLocalData.map_wine_list){
+            items<<wName.second.s_local_wine_name;
         }
         QString wTitle="选择Wine版本";
         QString wLabel="当前Wine版本列表";
@@ -186,9 +186,10 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
         if(!dn_ok){
             return;
         }
-        for(auto wName:g_vekLocalData.wineVec){
-            if(wName.second.s_wine_name==swVer){
-                tempDockerData.WinePath=g_vekLocalData.wineVec[swVer].s_wine_path;
+        for(auto wName:g_vekLocalData.map_wine_list){
+            if(wName.second.s_local_wine_name==swVer){
+                tempDockerData.s_dockers_wine_path=g_vekLocalData.map_wine_list[swVer].s_local_wine_path;
+                tempDockerData.s_dockers_wine_version=g_vekLocalData.map_wine_list[swVer].s_local_wine_name;
                 break;
             }
         }
@@ -196,26 +197,26 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
             pObject::vekTip("容器名不能为空!");
             return;
         }
-        if(tempDockerData.WinePath==nullptr){
+        if(tempDockerData.s_dockers_wine_path==nullptr){
             pObject::vekTip("找不到选用对应Wine");
             return;
         }
-        for(auto a:g_vekLocalData.dockerVec){
+        for(auto a:g_vekLocalData.map_docker_list){
             if(a.first==dockName){
                 pObject::vekMesg("已存在相同名容器,无法创建容器!");
                 return;
             }
         }
-        tempDockerData.WineVersion="wine";
-        tempDockerData.DockerVer=dockBit;
-        tempDockerData.DockerPath=QApplication::applicationDirPath()+"/vekDock";
-        tempDockerData.DockerName=dockName;
-        tempDockerData.MonoState=true;
-        tempDockerData.GeckoState=true;
+        tempDockerData.s_dockers_wine_exe_version="wine";
+        tempDockerData.s_dockers_bit_version=dockBit;
+        tempDockerData.s_dockers_path=QApplication::applicationDirPath()+"/vekDock";
+        tempDockerData.s_dockers_name=dockName;
+        tempDockerData.s_dockers_mono_state=true;
+        tempDockerData.s_dockers_gecko_state=true;
         objNewDock->newDock();
         addGroupSlot(&tempDockerData);
     }else{
-        if(g_vekLocalData.dockerVec.empty()){
+        if(g_vekLocalData.map_docker_list.empty()){
             dState=pObject::vekMesg("您的电脑上未发现容器无法安装软件,是否初始化一个容器用于软件安装");
             if(!dState){
                 return;
@@ -234,8 +235,8 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
             //涉及一个问题：当容器列表为0
             QString sName;
             QStringList items;
-            for(auto wName:g_vekLocalData.wineVec){
-                items<<wName.second.s_wine_name;
+            for(auto wName:g_vekLocalData.map_wine_list){
+                items<<wName.second.s_local_wine_name;
             }
             QString dlgTitle="Wine版本选择";
             QString txtLabel="当前Wine版本列表";
@@ -246,9 +247,10 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
             if(!ok){
                 return;
             }
-            for(auto wName:g_vekLocalData.wineVec){
-                if(wName.second.s_wine_name==sName){
-                    tempDockerData.WinePath=g_vekLocalData.wineVec[sName].s_wine_path;
+            for(auto wName:g_vekLocalData.map_wine_list){
+                if(wName.second.s_local_wine_name==sName){
+                    tempDockerData.s_dockers_wine_path=g_vekLocalData.map_wine_list[sName].s_local_wine_path;
+                    tempDockerData.s_dockers_wine_version=g_vekLocalData.map_wine_list[sName].s_local_wine_name;
                 }
             }
             QStringList itemsbit;
@@ -267,25 +269,25 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
             if(!d_ok){
                 return;
             }
-            tempDockerData.WineVersion="wine";
-            tempDockerData.DockerPath=QApplication::applicationDirPath()+"/vekDock";
-            tempDockerData.DockerName=dockName;
-            tempDockerData.DockerVer=dockBit;
-            tempDockerData.MonoState=true;
-            tempDockerData.GeckoState=true;
+            tempDockerData.s_dockers_wine_exe_version="wine";
+            tempDockerData.s_dockers_path=QApplication::applicationDirPath()+"/vekDock";
+            tempDockerData.s_dockers_name=dockName;
+            tempDockerData.s_dockers_bit_version=dockBit;
+            tempDockerData.s_dockers_mono_state=true;
+            tempDockerData.s_dockers_gecko_state=true;
             objNewDock->newDock();
             addGroupSlot(&tempDockerData);
         }
         else//否则从全局本地配置文件提取容器参数
         {
-            if(g_vekLocalData.wineVec.empty()){
+            if(g_vekLocalData.map_wine_list.empty()){
                 return;
             }else{
                 //通过容器名定位当前容器名对应调用当前容器相应功能包含安装软件界面等。
-                tempDockerData=g_vekLocalData.dockerVec.at(dockName);
+                tempDockerData=g_vekLocalData.map_docker_list.at(dockName);
             }
         }
-        if(tempDockerData.WineVersion.contains("deepin",Qt::CaseSensitive)){
+        if(tempDockerData.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
             pObject::vekError("deepin-wine5不支持64位容器,可能部分64位软件安装程序无法运行!");
         }
         objectExtend* _objectExtend=new objectExtend();
@@ -314,7 +316,7 @@ void vekAppPanel::addAppObject(SdockerData* dcokData,SappData* appData){
     vekAppListView* pList=new vekAppListView();
     SappData* _tempBaseData=new SappData;
     _tempBaseData=appData;
-    QString nowTabName=dcokData->DockerName;
+    QString nowTabName=dcokData->s_dockers_name;
     bool tabState=false;
     if(m_pListMap->count(nowTabName)>0){
         tabState=true;
@@ -336,8 +338,8 @@ void vekAppPanel::addAppObject(SdockerData* dcokData,SappData* appData){
 }
 void vekAppPanel::upTabIco(){
     cTab=0;
-    for(auto a:g_vekLocalData.dockerVec){
-        if(a.second.DockerVer=="win32"){
+    for(auto a:g_vekLocalData.map_docker_list){
+        if(a.second.s_dockers_bit_version=="win32"){
             QIcon icon(":/res/img/32.png");
             m_pBox->setTabIcon(cTab,icon);
             cTab+=1;
@@ -350,13 +352,13 @@ void vekAppPanel::upTabIco(){
 }
 void vekAppPanel::addGroupSlot(SdockerData* dcokData)
 {
-    if (!dcokData->DockerName.isEmpty())
+    if (!dcokData->s_dockers_name.isEmpty())
     {
         vekAppListView *pListView1 = new vekAppListView(this);
         pListView1->setViewMode(QListView::IconMode);
         pListView1->setFlow(QListView::LeftToRight);
-        m_pBox->addTab(pListView1,dcokData->DockerName);
-        m_pListMap->insert(std::pair<QString,vekAppListView*>(dcokData->DockerName,pListView1));
+        m_pBox->addTab(pListView1,dcokData->s_dockers_name);
+        m_pListMap->insert(std::pair<QString,vekAppListView*>(dcokData->s_dockers_name,pListView1));
     }
     upTabIco();
     //要确保每个MyListView钟的m_pListMap都是一致的，不然就会有错了。
@@ -374,14 +376,14 @@ void vekAppPanel::deleteGroupSlot(bool del_static){
     SdockerData tDocker=pObject::getDockerData(strDockerName);
     m_pBox->removeTab(cindex);
     qInfo()<<cindex;
-    if(tDocker.DockerPath!=nullptr&&strDockerName!=nullptr){
-        qInfo()<<tDocker.DockerPath;
-        QDir dockPath(tDocker.DockerPath+"/"+strDockerName);
+    if(tDocker.s_dockers_path!=nullptr&&strDockerName!=nullptr){
+        qInfo()<<tDocker.s_dockers_path;
+        QDir dockPath(tDocker.s_dockers_path+"/"+strDockerName);
         if(dockPath.exists()){
             dockPath.removeRecursively();
         }
     }
-    g_vekLocalData.dockerVec.erase(strDockerName);
+    g_vekLocalData.map_docker_list.erase(strDockerName);
     objectJson _oJson;
     _oJson.deleteDockerNodeData(strDockerName);
     m_pListMap->erase(strDockerName);

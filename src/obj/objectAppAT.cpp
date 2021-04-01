@@ -20,10 +20,10 @@ void objectAppAT::connectDockAutoData(SdockerData _dockData,SappData _appData,Sa
 }
 //分析json类型，一共两种：网络 本地
 JSONTYPE objectAppAT::JsonType(){
-    if(appJsonData.appJson.startsWith("http",Qt::CaseSensitive)||appJsonData.appJson.startsWith("https",Qt::CaseSensitive)){
+    if(appJsonData.s_deploy_app_json.startsWith("http",Qt::CaseSensitive)||appJsonData.s_deploy_app_json.startsWith("https",Qt::CaseSensitive)){
         return jNet;
     }
-    if(appJsonData.appJson.endsWith("json",Qt::CaseSensitive)){
+    if(appJsonData.s_deploy_app_json.endsWith("json",Qt::CaseSensitive)){
         return jFile;
     }
     return jDefault;
@@ -55,9 +55,9 @@ QString objectAppAT::jsonFileToStr(QString jsonFilePath){
 bool objectAppAT::jsonUnserialize(SappDeployInfo jAppData,JSONTYPE jType){
     QString jsonData=nullptr;
     if(jType==jNet){
-        jsonData=jsonNetToStr(jAppData.appJson);
+        jsonData=jsonNetToStr(jAppData.s_deploy_app_json);
     }else if(jType==jFile){
-        jsonData=jsonFileToStr(jAppData.appJson);
+        jsonData=jsonFileToStr(jAppData.s_deploy_app_json);
     }
     if(jsonData!=nullptr){
         objectJson _objectJson;
@@ -71,38 +71,38 @@ bool objectAppAT::jsonUnserialize(SappDeployInfo jAppData,JSONTYPE jType){
 //三个操作，第一 容器不存在则初始化，第二容器存在则检测容器选项，
 bool objectAppAT::objDockerData(){
     //没有容器则按照下面配置设定
-    if(!QDir(baseDockData.DockerPath+"/"+baseDockData.DockerName).exists())
+    if(!QDir(baseDockData.s_dockers_path+"/"+baseDockData.s_dockers_name).exists())
     {
-        baseDockData.DockerVer=_baseAutoSetJson->Docker.at(toStr(DockerVersion));
-        baseDockData.DockerWineVersion=_baseAutoSetJson->Docker.at(toStr(DockerWineVersion));
-        baseDockData.DockerSystemVersion=_baseAutoSetJson->Docker.at(toStr(DockerSysVersion));
-        qInfo()<<"如果容器不存在"<<baseDockData.WinePath;
+        baseDockData.s_dockers_bit_version=_baseAutoSetJson->map_deploy_docker.at(toStr(DockerVersion));
+        baseDockData.s_dockers_wine_version=_baseAutoSetJson->map_deploy_docker.at(toStr(s_dockers_wine_version));
+        baseDockData.s_dockers_system_version=_baseAutoSetJson->map_deploy_docker.at(toStr(DockerSysVersion));
+        qInfo()<<"如果容器不存在"<<baseDockData.s_dockers_wine_path;
     }else{
         //如果容器存在
         qInfo()<<"如果容器存在";
-        if(baseDockData.DockerVer!=_baseAutoSetJson->Docker.at(toStr(DockerVersion))){
-            pObject::vekError("当前容器版本为:"+baseDockData.DockerVer+"配置文件容器版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerVersion)));
+        if(baseDockData.s_dockers_bit_version!=_baseAutoSetJson->map_deploy_docker.at(toStr(DockerVersion))){
+            pObject::vekError("当前容器版本为:"+baseDockData.s_dockers_bit_version+"配置文件容器版本为:"+_baseAutoSetJson->map_deploy_docker.at(toStr(DockerVersion)));
             return false;
         }
-        if(baseDockData.DockerWineVersion!=_baseAutoSetJson->Docker.at(toStr(DockerWineVersion))){
-            pObject::vekError("当前容器Wine版本为:"+baseDockData.DockerWineVersion+"配置文件容器Wine版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerWineVersion)));
+        if(baseDockData.s_dockers_wine_version!=_baseAutoSetJson->map_deploy_docker.at(toStr(s_dockers_wine_version))){
+            pObject::vekError("当前容器Wine版本为:"+baseDockData.s_dockers_wine_version+"配置文件容器Wine版本为:"+_baseAutoSetJson->map_deploy_docker.at(toStr(s_dockers_wine_version)));
             return false;
         }
-        if(baseDockData.WineVersion.contains("deepin",Qt::CaseSensitive)&_baseAutoSetJson->Docker.at(toStr(DockerVersion))=="win64"){
-            pObject::vekError("当前容器Wine版本为:"+baseDockData.WineVersion+"配置文件容器版本为:"+_baseAutoSetJson->Docker.at(toStr(DockerVersion))+"\n"+"deepin-wine5不支持64位容器!");
+        if(baseDockData.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)&_baseAutoSetJson->map_deploy_docker.at(toStr(DockerVersion))=="win64"){
+            pObject::vekError("当前容器Wine版本为:"+baseDockData.s_dockers_wine_version+"配置文件容器版本为:"+_baseAutoSetJson->map_deploy_docker.at(toStr(DockerVersion))+"\n"+"deepin-wine5不支持64位容器!");
             return false;
         }
     }
-    baseDockData.WinePath=g_vekLocalData.wineVec.at(baseDockData.WineVersion).s_wine_path;
-    QVariant monoState=_baseAutoSetJson->Docker.at(toStr(MonoState));
-    baseDockData.MonoState=(monoState).toBool();
-    QVariant geckoState=_baseAutoSetJson->Docker.at(toStr(GeckoState));
-    baseDockData.GeckoState=(geckoState).toBool();
+    baseDockData.s_dockers_wine_path=g_vekLocalData.map_wine_list.at(baseDockData.s_dockers_wine_version).s_local_wine_path;
+    QVariant monoState=_baseAutoSetJson->map_deploy_docker.at(toStr(s_dockers_mono_state));
+    baseDockData.s_dockers_mono_state=(monoState).toBool();
+    QVariant geckoState=_baseAutoSetJson->map_deploy_docker.at(toStr(s_dockers_gecko_state));
+    baseDockData.s_dockers_gecko_state=(geckoState).toBool();
     return true;
 }
 void objectAppAT::objAppData(){
-    if(!_baseAutoSetJson->Option.empty()){
-        for(auto [a,b]:_baseAutoSetJson->Option){
+    if(!_baseAutoSetJson->map_deploy_option.empty()){
+        for(auto [a,b]:_baseAutoSetJson->map_deploy_option){
             if(a=="s_name"){
                 baseAppData.s_name=b;
             }
@@ -126,11 +126,11 @@ void objectAppAT::objAppData(){
             if(a=="s_main_proc_name"){
                 baseAppData.s_main_proc_name=b;
             }
-            baseAppData.s_dock_system_version=_baseAutoSetJson->Docker.at(toStr(DockerSysVersion));
+            baseAppData.s_dock_system_version=_baseAutoSetJson->map_deploy_docker.at(toStr(DockerSysVersion));
         }
     }
-    if(!_baseAutoSetJson->Dxvk.empty()){
-        for(auto a:_baseAutoSetJson->Dxvk){
+    if(!_baseAutoSetJson->map_deploy_dxvk.empty()){
+        for(auto a:_baseAutoSetJson->map_deploy_dxvk){
             if(a.first=="DxvkVersion"){
                 baseAppData.s_dxvk_version=a.second;
             }
@@ -144,11 +144,11 @@ void objectAppAT::objAppData(){
             }
         }
     }
-    baseAppData.vec_docker_regs=_baseAutoSetJson->Regs;
-    baseAppData.vec_docker_libs=_baseAutoSetJson->Libs;
-    baseAppData.map_docker_regs=_baseAutoSetJson->Env;
-    baseAppData.s_agrs_code=_baseAutoSetJson->Args;
-    baseAppData.vec_attach_proc=_baseAutoSetJson->vec_attach_proc;
+    baseAppData.vec_docker_regs=_baseAutoSetJson->vec_deploy_regs;
+    baseAppData.vec_docker_libs=_baseAutoSetJson->vec_deploy_libs;
+    baseAppData.map_docker_regs=_baseAutoSetJson->map_deploy_env;
+    baseAppData.s_agrs_code=_baseAutoSetJson->map_deploy_args;
+    baseAppData.vec_proc_attach_list=_baseAutoSetJson->vec_deploy_attach_proc;
 
     QFileInfo fi = QFileInfo(baseAppData.s_exe);
     baseAppData.s_work_path=fi.path();
@@ -177,7 +177,7 @@ void objectAppAT::run(){
         emit Error("配置文件出错!",true);
         return;
     }
-    pObject::oLogs("配置文件:"+appJsonData.appJson);
+    pObject::oLogs("配置文件:"+appJsonData.s_deploy_app_json);
 
     if(!jsonUnserialize(appJsonData,jtype)){
         emit Error("配置容器出错!",true);

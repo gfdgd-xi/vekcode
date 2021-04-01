@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.13.1, 2021-04-01T12:55:24. -->
+<!-- Written by QtCreator 4.13.1, 2021-04-01T15:09:25. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -335,7 +335,7 @@
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
     <value type="QString" key="RunConfiguration.WorkingDirectory"></value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/jacklee/vek/build-vek-QT5_12_2_static_build-Release</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/jacklee/vek/vekcode/build</value>
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>

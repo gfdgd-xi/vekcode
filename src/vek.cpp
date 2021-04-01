@@ -48,7 +48,7 @@ void vek::setAppSize(){
     //a 源
     //b 源下分类
     //c 分类下app
-    for(auto a:g_vekLocalData.appJsonList){
+    for(auto a:g_vekLocalData.map_app_json_list){
         for(auto b:a.second){
             for(auto c:b.second){
                 approw+=1;
@@ -61,8 +61,8 @@ void vek::setProcRow(){
     ui->label_procRow->setText(QString::number(taskList.size()));
 }
 void vek::startTray(){
-    if(!g_vekLocalData.wineVec.empty()){
-        for(auto a:g_vekLocalData.wineVec){
+    if(!g_vekLocalData.map_wine_list.empty()){
+        for(auto a:g_vekLocalData.map_wine_list){
             if(objTray==nullptr){
                 objTray=new objectTray();
                 objTray->_baseWineData=a.second;
