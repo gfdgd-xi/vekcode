@@ -50,7 +50,6 @@ private:
     void hqSwitchSysVersion(SWITCH_SYSTEM_VERSION ssv);
     void deepinSwitchSysVerion(SWITCH_SYSTEM_VERSION ssv);
     void extendPlugs();
-    void monitorProc();
     void forcekill();
     void dyncDxvkRegs(std::map<QString,std::map<QString,QString>>);
 signals:

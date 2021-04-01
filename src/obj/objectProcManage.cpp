@@ -19,10 +19,12 @@ QString objectProcManage::objGetProcList(SappProcData pInfo){
     QString procData=m_cmd->readAll();
     qInfo()<<procData;
     m_cmd->write("\x03");
-    m_cmd->close();
-    m_cmd->kill();
-    delete m_cmd;
-    m_cmd=nullptr;
+    if(m_cmd){
+        m_cmd->close();
+        m_cmd->kill();
+        delete m_cmd;
+        m_cmd=nullptr;
+    }
     return procData;
 }
 void objectProcManage::objDelProc(QString prPid,SappProcData _pInfo){
@@ -45,11 +47,12 @@ void objectProcManage::objDelProc(QString prPid,SappProcData _pInfo){
     prc->write(dCodes.toLocal8Bit()+'\n');
     //关闭并kill QProcess;
     prc->write("\x03");
-    prc->waitForFinished(500);
-    prc->close();
-    prc->kill();
-    delete prc;
-    prc=nullptr;
+    if(prc){
+        prc->close();
+        prc->kill();
+        delete prc;
+        prc=nullptr;
+    }
 }
 void objectProcManage::delAttachProc(SappProcData pInfo){
     for(auto b:procAllInfoStr){

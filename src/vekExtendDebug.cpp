@@ -11,6 +11,11 @@ vekExtendDebug::vekExtendDebug(QWidget *parent) :
 vekExtendDebug::~vekExtendDebug()
 {
     exitDebug();
+    if(m_cmd!=nullptr){
+        m_cmd->close();
+        delete m_cmd;
+        m_cmd=nullptr;
+    }
     emit _unVekDebug();
     delete ui;
 }
@@ -109,11 +114,13 @@ void vekExtendDebug::executeArgsEnv(){
 //执行游戏
 void vekExtendDebug::ExtendApp(){
     if(m_cmd!=nullptr){
+        m_cmd->close();
         delete m_cmd;
         m_cmd=nullptr;
     }
     m_cmd=new QProcess();
     executeArgsEnv();
+    exitDebug();
     QStringList codeArgs;
     QString codeDebug;
     if(!DebugDllStr.empty()){
@@ -167,10 +174,6 @@ void vekExtendDebug::exitDebug(){
     _objectExtend->wait();
     delete _objectExtend;
     _objectExtend=nullptr;
-    if(m_cmd!=nullptr){
-        delete m_cmd;
-        m_cmd=nullptr;
-    }
 }
 void vekExtendDebug::upDllStr(){
     ui->lineEdit_DebugDllStr->setText(DebugDllStr.join(""));

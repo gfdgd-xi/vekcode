@@ -5,9 +5,13 @@ objectExtend::objectExtend(QObject *parent) : QThread(parent)
     parent=nullptr;
 }
 objectExtend::~objectExtend(){
-    delete m_cmd;
-    m_cmd=nullptr;
+    if(m_cmd){
+        m_cmd->close();
+        delete m_cmd;
+        m_cmd=nullptr;
+    }
 }
+//传入容器和APP运行参数
 void objectExtend::setDockOptionObjectData(SdockerData _dockData,QString _appCID,std::vector<QStringList> _agrsList,ExtendType _objType,ExtendBootType _objWineBootType,ExtendServerType _objWineServer){
     appData=pObject::getAppData(_dockData,_appCID);
     dockData=_dockData;
@@ -17,7 +21,7 @@ void objectExtend::setDockOptionObjectData(SdockerData _dockData,QString _appCID
     objWineServer=_objWineServer;
     startArgs=dockData.s_dockers_wine_path+"/wine/bin/"+dockData.s_dockers_wine_exe_version;
 }
-//运行环境变量设置
+//设置运行环境变量
 void objectExtend::executeArgsEnv(){
     //wine执行版本: "wine"
     //容器系统版本: "win7"
@@ -27,7 +31,7 @@ void objectExtend::executeArgsEnv(){
     qInfo()<<"容器系统版本:"<<dockData.s_dockers_system_version;
     qInfo()<<"Wine版本号:"<<dockData.s_dockers_wine_version;
     qInfo()<<"容器系统位数版本:"<<dockData.s_dockers_bit_version;
-    qputenv("WINE", (dockData.s_dockers_wine_path+"/wine/bin/"+dockData.s_dockers_wine_exe_version).toStdString().c_str());
+    qputenv("WINE", (startArgs).toStdString().c_str());
     qputenv("WINEPREFIX", (dockData.s_dockers_path+"/"+dockData.s_dockers_name).toStdString().c_str());
     qputenv("WINEARCH", dockData.s_dockers_bit_version.toStdString().c_str());
     qputenv("WINETRICKS_DOWNLOADER", "aria2c");
@@ -48,6 +52,7 @@ void objectExtend::executeArgsEnv(){
         qInfo()<<_env;
     }
 }
+//针对boot的操作
 void objectExtend::executeWineBoot(ExtendBootType objWineBootType){
     QStringList wineboot;
     wineboot.clear();
@@ -90,6 +95,7 @@ void objectExtend::executeWineBoot(ExtendBootType objWineBootType){
     m_cmd->waitForFinished(-1);
     waitObjectDone(true);
 }
+//针对Server操作
 void objectExtend::executeWineServer(ExtendServerType objWineServer){
     QStringList wineserver;
     wineserver.clear();
@@ -116,6 +122,7 @@ void objectExtend::executeWineServer(ExtendServerType objWineServer){
     m_cmd->waitForFinished(-1);
     waitObjectDone(true);
 }
+//针对winetricks的执行
 void objectExtend::executeWinetricks(ExtendType _wType){
     executeWineBoot(object_wineboot_r);
     QStringList codeArgs;
@@ -157,10 +164,10 @@ void objectExtend::ExtendWinetricksCode(QStringList cArgs,bool wType){
     }
     waitObjectDone(wType);
 }
-//执行游戏
+//执行运行APP
 void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
     executeWineBoot(object_wineboot_r);
-    monitorProc();
+    forcekill();
     if(dockData.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
         switchSysVersion(DOCKER,DEEPIN);
     }else{
@@ -176,7 +183,7 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
     qInfo()<<"WineArgs:"+codeArgs.join(" ");
     qInfo()<<"|++++++++++++++++++++++++++++|";
     m_cmd->waitForFinished(-1);
-    monitorProc();
+    forcekill();
     waitObjectDone(true);
     vector<QString>::iterator it;
     for(it=taskList.begin();it!=taskList.end();)
@@ -188,6 +195,7 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
         }
     }
 }
+//wintricks和常规命令执行
 void objectExtend::baseExecuteWineCode(QString code,QStringList codeArgs){
     QString mdCode;
     m_cmd->setReadChannel(QProcess::StandardOutput);
@@ -195,7 +203,7 @@ void objectExtend::baseExecuteWineCode(QString code,QStringList codeArgs){
     m_cmd->waitForFinished(-1);
     waitObjectDone(true);
 }
-//wineRegedit
+//执行注册表
 void objectExtend::extendWineRegeditCode(QString code){
     for(auto regStr:argsList){
         QString mdCode=code+" "+regStr.join(" ");
@@ -253,6 +261,7 @@ void objectExtend::waitObjectDone(bool objState){
         m_cmd->kill();
     }
 }
+//容器基本功能
 void objectExtend::optionExtend(){
     QStringList codeArgs;
     if(objType==object_winecfg){
@@ -269,6 +278,7 @@ void objectExtend::optionExtend(){
     }
     baseExecuteWineCode(startArgs,codeArgs);
 }
+//APP运行差异化参数
 void objectExtend::extendApp(){
     QStringList codeArgs;
     QString gameExe=appData.s_exe;
@@ -295,7 +305,7 @@ void objectExtend::extendApp(){
     baseExecuteAppCode(startArgs,codeArgs);
     emit objexitTray(false);
 }
-
+//同步dxvk
 void objectExtend::dyncDxvkRegs(std::map<QString,std::map<QString,QString>> dxvkResStr){
     for(auto a:dxvkResStr){
         for(auto b:a.second){
@@ -305,6 +315,7 @@ void objectExtend::dyncDxvkRegs(std::map<QString,std::map<QString,QString>> dxvk
     }
     extendWineRegeditCode(startArgs);
 }
+//执行gecko和mono组件
 void objectExtend::extendPlugs(){
     QStringList codeArgs;
     for(auto a:argsList){
@@ -317,7 +328,8 @@ void objectExtend::extendPlugs(){
         }
     }
 }
-void objectExtend::monitorProc(){
+//主进程和附加进程自动退出
+void objectExtend::forcekill(){
     SappProcData pi;
     if(!appData.vec_proc_attach_list.empty()){
         objectProcManage* objProcMangs=new objectProcManage();
@@ -333,23 +345,6 @@ void objectExtend::monitorProc(){
         delete objProcMangs;
         objProcMangs=nullptr;
     }
-}
-void objectExtend::forcekill(){
-    SappProcData pi;
-    objectProcManage* objProcMangs=new objectProcManage();
-    pi.s_proc_docker_name=dockData.s_dockers_name;
-    pi.s_proc_docker_path=dockData.s_dockers_path;
-    pi.s_proc_wine_path=dockData.s_dockers_wine_path;
-    pi.vec_proc_attach_list=appData.vec_proc_attach_list;
-    if(objType==object_forcekill){
-        pi.vec_proc_attach_list.push_back(appData.s_main_proc_name);
-    }
-    objProcMangs->iprocInfo=pi;
-    objProcMangs->start();
-    objProcMangs->wait();
-    objProcMangs->exit();
-    delete objProcMangs;
-    objProcMangs=nullptr;
 }
 void objectExtend::run(){
     m_cmd=new QProcess();
