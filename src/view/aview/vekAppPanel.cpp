@@ -150,7 +150,7 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
         QStringList itemsbit;
         //选择wine版本
         for(auto wName:g_vekLocalData.wineVec){
-            items<<wName.second.IwineName;
+            items<<wName.second.s_wine_name;
         }
         QString wTitle="选择Wine版本";
         QString wLabel="当前Wine版本列表";
@@ -187,8 +187,8 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
             return;
         }
         for(auto wName:g_vekLocalData.wineVec){
-            if(wName.second.IwineName==swVer){
-                tempDockerData.WinePath=g_vekLocalData.wineVec[swVer].IwinePath;
+            if(wName.second.s_wine_name==swVer){
+                tempDockerData.WinePath=g_vekLocalData.wineVec[swVer].s_wine_path;
                 break;
             }
         }
@@ -235,7 +235,7 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
             QString sName;
             QStringList items;
             for(auto wName:g_vekLocalData.wineVec){
-                items<<wName.second.IwineName;
+                items<<wName.second.s_wine_name;
             }
             QString dlgTitle="Wine版本选择";
             QString txtLabel="当前Wine版本列表";
@@ -247,8 +247,8 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
                 return;
             }
             for(auto wName:g_vekLocalData.wineVec){
-                if(wName.second.IwineName==sName){
-                    tempDockerData.WinePath=g_vekLocalData.wineVec[sName].IwinePath;
+                if(wName.second.s_wine_name==sName){
+                    tempDockerData.WinePath=g_vekLocalData.wineVec[sName].s_wine_path;
                 }
             }
             QStringList itemsbit;

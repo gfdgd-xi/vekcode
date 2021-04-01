@@ -40,7 +40,7 @@ void vekAppAddMT::vekAppAddConnectObject(SdockerData* _data,QString _appCID,EADE
             ui->comboBox_RunWine->addItem(x.first);
         }
         for(auto& d:g_vekLocalData.wineVec){
-            for(auto& dx:d.second.IwineDxvk){
+            for(auto& dx:d.second.s_wine_dxvk){
                 ui->comboBox_dxvkversion->addItem(dx);
             }
         }
@@ -119,13 +119,13 @@ void vekAppAddMT::initAppAndDockData(SdockerData* _data,QString _appCID){
 void vekAppAddMT::plugsLoad(){
     for(auto a:g_vekLocalData.wineVec){
         if(a.first==ui->comboBox_RunWine->currentText()){
-            if(!QFile(a.second.IwinePath+"/plugs/Mono.msi").exists()){
+            if(!QFile(a.second.s_wine_path+"/plugs/Mono.msi").exists()){
                 ui->checkBox_Mono->setEnabled(false);
             }
-            if(!QFile(a.second.IwinePath+"/plugs/GeckoX86.msi").exists()&&!QFile(a.second.IwinePath+"/plugs/GeckoX86_64.msi").exists()){
+            if(!QFile(a.second.s_wine_path+"/plugs/GeckoX86.msi").exists()&&!QFile(a.second.s_wine_path+"/plugs/GeckoX86_64.msi").exists()){
                 ui->checkBox_Gecko->setEnabled(false);
             }
-            if(a.second.IwineDxvk.empty()){
+            if(a.second.s_wine_dxvk.empty()){
                 ui->checkBox_stateDxvk->setEnabled(false);
                 ui->comboBox_dxvkversion->setEnabled(false);
                 ui->checkBox_statedxvkhud->setEnabled(false);
@@ -157,7 +157,7 @@ void vekAppAddMT::dxvkOptionLoad(){
             else
             {
                 auto it=g_vekLocalData.wineVec.find(ui->comboBox_RunWine->currentText());
-                dxvkPath=it->second.IwinePath+"/dxvk/dxvk.conf";
+                dxvkPath=it->second.s_wine_path+"/dxvk/dxvk.conf";
                 ui->lineEdit_dxvkConfigFIle->setText(dxvkPath);
             }
             ui->textEdit_dxvkConfigFileData->setText(pObject::getFileStr(dxvkPath));
@@ -325,7 +325,7 @@ bool vekAppAddMT::vekAppConfigObj(){
     }
     tempDockData->WineVersion=ui->comboBox_RunWine->currentText();
     auto it=g_vekLocalData.wineVec.find(ui->comboBox_RunWine->currentText());
-    tempDockData->WinePath=it->second.IwinePath;
+    tempDockData->WinePath=it->second.s_wine_path;
     tempDockData->DockerSystemVersion=ui->comboBox_dockSystemVersion->currentText();
     tempDockData->DockerVer=ui->comboBox_dockbit->currentText();
     tempDockData->DockerWineVersion=ui->comboBox_winebit->currentText();

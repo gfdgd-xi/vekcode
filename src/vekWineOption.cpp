@@ -30,7 +30,7 @@ void vekWineOption::loadWineList(QTableView* qTableView){
             for(auto &d : g_vekLocalData.wineJsonList){
                 if(d.first==ui->comboBox_wineSrc->currentText()){
                     for(auto &x:d.second){
-                        ItemModelWine->appendRow(new QStandardItem(x.second.WineName));
+                        ItemModelWine->appendRow(new QStandardItem(x.second.s_remote_wine_name));
                     }
                 }
             }
@@ -39,7 +39,7 @@ void vekWineOption::loadWineList(QTableView* qTableView){
         columnTitles << "已安装Wine版本列表";
         if(!g_vekLocalData.wineVec.empty()){
             for(auto &d : g_vekLocalData.wineVec){
-                ItemModelWine->appendRow(new QStandardItem(d.second.IwineName));
+                ItemModelWine->appendRow(new QStandardItem(d.second.s_wine_name));
             }
         }
     }
@@ -129,16 +129,16 @@ void vekWineOption::installWine(QString wineName)
         if(d==selSrc){
             for(auto dx:p){
                 if(dx.first==wineName){
-                    isWData.IwineSrc=selSrc;
-                    isWData.IwineName=dx.second.WineName;
-                    isWData.IwineVer=dx.second.WineVersion;
-                    isWData.IwineUrl=dx.second.WineGit;
-                    isWData.IwinePath=selPath+"/vekWine/"+dx.second.WineName;
-                    isWData.IwineMono=dx.second.Mono;
-                    isWData.IwineGeckoX86=dx.second.GeckoX86;
-                    isWData.IwineGeckoX86_64=dx.second.GeckoX86_64;
-                    for(auto v:dx.second.WineDxvk){
-                        isWData.IwineDxvk.insert(isWData.IwineDxvk.end(),v);
+                    isWData.s_wine_src=selSrc;
+                    isWData.s_wine_name=dx.second.s_remote_wine_name;
+                    isWData.s_wine_version=dx.second.s_remote_wine_version;
+                    isWData.s_wine_url=dx.second.s_remote_wine_git;
+                    isWData.s_wine_path=selPath+"/vekWine/"+dx.second.s_remote_wine_name;
+                    isWData.s_wine_mono=dx.second.s_remote_wine_mono;
+                    isWData.s_wine_gecko_86=dx.second.s_remote_wine_gecko_86;
+                    isWData.s_wine_gecko_8664=dx.second.s_remote_wine_gecko_8664;
+                    for(auto v:dx.second.s_remote_wine_dxvk){
+                        isWData.s_wine_dxvk.insert(isWData.s_wine_dxvk.end(),v);
                     }
                     break;
                 }
@@ -165,7 +165,7 @@ void vekWineOption::deleteWine(QString wineName){
         QString winePath=nullptr;
         for(auto a:g_vekLocalData.wineVec){
             if(a.first==wineName){
-                winePath=a.second.IwinePath;
+                winePath=a.second.s_wine_path;
                 break;
             }
         }

@@ -41,26 +41,26 @@ typedef struct {
 
 //本地安装wine数据结构
 typedef struct{
-    QString IwineName=nullptr;
-    QString IwineVer=nullptr;
-    QString IwinePath=nullptr;
-    QString IwineUrl=nullptr;
-    QString IwineSrc=nullptr;
-    QString IwineMono=nullptr;
-    QString IwineGeckoX86=nullptr;
-    QString IwineGeckoX86_64=nullptr;
-    std::vector<QString> IwineDxvk={};
+    QString s_wine_name=nullptr;
+    QString s_wine_version=nullptr;
+    QString s_wine_path=nullptr;
+    QString s_wine_url=nullptr;
+    QString s_wine_src=nullptr;
+    QString s_wine_mono=nullptr;
+    QString s_wine_gecko_86=nullptr;
+    QString s_wine_gecko_8664=nullptr;
+    std::vector<QString> s_wine_dxvk={};
 }SwineData;
 
 //远程wine数据结构
 typedef struct {
-    QString WineName=nullptr;
-    QString WineVersion=nullptr;
-    QString WineGit=nullptr;
-    QString Mono=nullptr;
-    QString GeckoX86=nullptr;
-    QString GeckoX86_64=nullptr;
-    std::vector<QString> WineDxvk={};
+    QString s_remote_wine_name=nullptr;
+    QString s_remote_wine_version=nullptr;
+    QString s_remote_wine_git=nullptr;
+    QString s_remote_wine_mono=nullptr;
+    QString s_remote_wine_gecko_86=nullptr;
+    QString s_remote_wine_gecko_8664=nullptr;
+    std::vector<QString> s_remote_wine_dxvk={};
 }SwineRemoteData;
 
 typedef struct {

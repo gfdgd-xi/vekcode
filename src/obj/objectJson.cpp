@@ -84,16 +84,16 @@ json objectJson::DataSerialize(json jsonData,const SlocalGloablData _baseLocalDa
 
     //禁止修改
     for(auto &k : _baseLocalData.wineVec){
-        jsonData["Wine"][k.second.IwineName.toStdString()][toStr(IwineName)]=k.second.IwineName.toStdString();
-        jsonData["Wine"][k.second.IwineName.toStdString()][toStr(IwinePath)]=k.second.IwinePath.toStdString();
-        jsonData["Wine"][k.second.IwineName.toStdString()][toStr(IwineVer)]=k.second.IwineVer.toStdString();
-        jsonData["Wine"][k.second.IwineName.toStdString()][toStr(IwineUrl)]=k.second.IwineUrl.toStdString();
-        jsonData["Wine"][k.second.IwineName.toStdString()][toStr(IwineSrc)]=k.second.IwineSrc.toStdString();
-        jsonData["Wine"][k.second.IwineName.toStdString()][toStr(IwineMono)]=k.second.IwineMono.toStdString();
-        jsonData["Wine"][k.second.IwineName.toStdString()][toStr(IwineGeckoX86)]=k.second.IwineGeckoX86.toStdString();
-        jsonData["Wine"][k.second.IwineName.toStdString()][toStr(IwineGeckoX86_64)]=k.second.IwineGeckoX86_64.toStdString();
-        for(auto dx:k.second.IwineDxvk){
-            jsonData["Wine"][k.second.IwineName.toStdString()][toStr(IwineDxvk)].push_back(dx.toStdString());
+        jsonData["Wine"][k.second.s_wine_name.toStdString()][toStr(IwineName)]=k.second.s_wine_name.toStdString();
+        jsonData["Wine"][k.second.s_wine_name.toStdString()][toStr(IwinePath)]=k.second.s_wine_path.toStdString();
+        jsonData["Wine"][k.second.s_wine_name.toStdString()][toStr(IwineVer)]=k.second.s_wine_version.toStdString();
+        jsonData["Wine"][k.second.s_wine_name.toStdString()][toStr(IwineUrl)]=k.second.s_wine_url.toStdString();
+        jsonData["Wine"][k.second.s_wine_name.toStdString()][toStr(IwineSrc)]=k.second.s_wine_src.toStdString();
+        jsonData["Wine"][k.second.s_wine_name.toStdString()][toStr(IwineMono)]=k.second.s_wine_mono.toStdString();
+        jsonData["Wine"][k.second.s_wine_name.toStdString()][toStr(IwineGeckoX86)]=k.second.s_wine_gecko_86.toStdString();
+        jsonData["Wine"][k.second.s_wine_name.toStdString()][toStr(IwineGeckoX86_64)]=k.second.s_wine_gecko_8664.toStdString();
+        for(auto dx:k.second.s_wine_dxvk){
+            jsonData["Wine"][k.second.s_wine_name.toStdString()][toStr(IwineDxvk)].push_back(dx.toStdString());
         }
     }
     //序列化数据源数据
@@ -128,14 +128,14 @@ json objectJson::DataSerialize(json jsonData,const SlocalGloablData _baseLocalDa
         for(auto&[a,b]:_baseLocalData.wineJsonList){
             if(a==x){
                 for(auto& [d,e]:b){
-                    jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(WineName)]=e.WineName.toStdString();
-                    jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(WineVersion)]=e.WineVersion.toStdString();
-                    jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(WineGit)]=e.WineGit.toStdString();
-                    jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(Mono)]=e.Mono.toStdString();
-                    jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(GeckoX86)]=e.GeckoX86.toStdString();
-                    jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(GeckoX86_64)]=e.GeckoX86_64.toStdString();
-                    for(auto dy:e.WineDxvk){
-                        jsonData["WineJsonList"][x.toStdString()][e.WineName.toStdString()][toStr(WineDxvk)].push_back(dy.toStdString());
+                    jsonData["WineJsonList"][x.toStdString()][e.s_remote_wine_name.toStdString()][toStr(WineName)]=e.s_remote_wine_name.toStdString();
+                    jsonData["WineJsonList"][x.toStdString()][e.s_remote_wine_name.toStdString()][toStr(WineVersion)]=e.s_remote_wine_version.toStdString();
+                    jsonData["WineJsonList"][x.toStdString()][e.s_remote_wine_name.toStdString()][toStr(WineGit)]=e.s_remote_wine_git.toStdString();
+                    jsonData["WineJsonList"][x.toStdString()][e.s_remote_wine_name.toStdString()][toStr(Mono)]=e.s_remote_wine_mono.toStdString();
+                    jsonData["WineJsonList"][x.toStdString()][e.s_remote_wine_name.toStdString()][toStr(GeckoX86)]=e.s_remote_wine_gecko_86.toStdString();
+                    jsonData["WineJsonList"][x.toStdString()][e.s_remote_wine_name.toStdString()][toStr(GeckoX86_64)]=e.s_remote_wine_gecko_8664.toStdString();
+                    for(auto dy:e.s_remote_wine_dxvk){
+                        jsonData["WineJsonList"][x.toStdString()][e.s_remote_wine_name.toStdString()][toStr(WineDxvk)].push_back(dy.toStdString());
                     }
                 }
             }
@@ -246,19 +246,19 @@ bool objectJson::unDataSerializeLocalData(){
             else if(k=="Wine"){
                 SwineData _base_wine_data={};
                 for(auto& [x,y]: v.items()){
-                    _base_wine_data.IwineName=QString::fromStdString(y.at("IwineName"));
-                    _base_wine_data.IwinePath=QString::fromStdString(y.at("IwinePath"));
-                    _base_wine_data.IwineVer=QString::fromStdString(y.at("IwineVer"));
-                    _base_wine_data.IwineUrl=QString::fromStdString(y.at("IwineUrl"));
-                    _base_wine_data.IwineSrc=QString::fromStdString(y.at("IwineSrc"));
-                    _base_wine_data.IwineMono=QString::fromStdString(y.at("IwineMono"));
-                    _base_wine_data.IwineGeckoX86=QString::fromStdString(y.at("IwineGeckoX86"));
-                    _base_wine_data.IwineGeckoX86_64=QString::fromStdString(y.at("IwineGeckoX86_64"));
-                    _base_wine_data.IwineDxvk.clear();
+                    _base_wine_data.s_wine_name=QString::fromStdString(y.at("IwineName"));
+                    _base_wine_data.s_wine_path=QString::fromStdString(y.at("IwinePath"));
+                    _base_wine_data.s_wine_version=QString::fromStdString(y.at("IwineVer"));
+                    _base_wine_data.s_wine_url=QString::fromStdString(y.at("IwineUrl"));
+                    _base_wine_data.s_wine_src=QString::fromStdString(y.at("IwineSrc"));
+                    _base_wine_data.s_wine_mono=QString::fromStdString(y.at("IwineMono"));
+                    _base_wine_data.s_wine_gecko_86=QString::fromStdString(y.at("IwineGeckoX86"));
+                    _base_wine_data.s_wine_gecko_8664=QString::fromStdString(y.at("IwineGeckoX86_64"));
+                    _base_wine_data.s_wine_dxvk.clear();
                     for(auto yz:y.at("IwineDxvk")){
-                        _base_wine_data.IwineDxvk.push_back(QString::fromStdString(yz));
+                        _base_wine_data.s_wine_dxvk.push_back(QString::fromStdString(yz));
                     }
-                    g_vekLocalData.wineVec[_base_wine_data.IwineName]=_base_wine_data;
+                    g_vekLocalData.wineVec[_base_wine_data.s_wine_name]=_base_wine_data;
                 }
             }
             else if(k=="AppScrSource"){
@@ -313,16 +313,16 @@ bool objectJson::unDataSerializeLocalData(){
                                 if(u==b)
                                 {
                                     for(auto& kj:i){
-                                        g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].WineName=QString::fromStdString(kj.at("WineName"));
-                                        g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].WineVersion=QString::fromStdString(kj.at("WineVersion"));
-                                        g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].WineGit=QString::fromStdString(kj.at("WineGit"));
-                                        g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].Mono=QString::fromStdString(kj.at("Mono"));
-                                        g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].GeckoX86=QString::fromStdString(kj.at("GeckoX86"));
-                                        g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].GeckoX86_64=QString::fromStdString(kj.at("GeckoX86_64"));
-                                        g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].WineDxvk.clear();
+                                        g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].s_remote_wine_name=QString::fromStdString(kj.at("WineName"));
+                                        g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].s_remote_wine_version=QString::fromStdString(kj.at("WineVersion"));
+                                        g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].s_remote_wine_git=QString::fromStdString(kj.at("WineGit"));
+                                        g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].s_remote_wine_mono=QString::fromStdString(kj.at("Mono"));
+                                        g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].s_remote_wine_gecko_86=QString::fromStdString(kj.at("GeckoX86"));
+                                        g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].s_remote_wine_gecko_8664=QString::fromStdString(kj.at("GeckoX86_64"));
+                                        g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].s_remote_wine_dxvk.clear();
                                         for(auto ix:kj.at("WineDxvk"))
                                         {
-                                            g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].WineDxvk.push_back(QString::fromStdString(ix));
+                                            g_vekLocalData.wineJsonList[QString::fromStdString(u)][QString::fromStdString(kj.at("WineName"))].s_remote_wine_dxvk.push_back(QString::fromStdString(ix));
                                         }
                                     }
                                 }
@@ -419,15 +419,15 @@ bool objectJson::unSerializeLocalWineApp(QString key,const QString urlData,UNJSO
         case unJsonWineList:
             for(auto &[x, y] :jdata.items())
             {
-                g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].WineName=QString::fromStdString(y.at("WineName"));
-                g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].WineVersion=QString::fromStdString(y.at("WineVersion"));
-                g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].WineGit=QString::fromStdString(y.at("WineGit"));
-                g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].Mono=QString::fromStdString(y.at("Mono"));
-                g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].GeckoX86=QString::fromStdString(y.at("GeckoX86"));
-                g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].GeckoX86_64=QString::fromStdString(y.at("GeckoX86_64"));
-                g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].WineDxvk.clear();
+                g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].s_remote_wine_name=QString::fromStdString(y.at("WineName"));
+                g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].s_remote_wine_version=QString::fromStdString(y.at("WineVersion"));
+                g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].s_remote_wine_git=QString::fromStdString(y.at("WineGit"));
+                g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].s_remote_wine_mono=QString::fromStdString(y.at("Mono"));
+                g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].s_remote_wine_gecko_86=QString::fromStdString(y.at("GeckoX86"));
+                g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].s_remote_wine_gecko_8664=QString::fromStdString(y.at("GeckoX86_64"));
+                g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].s_remote_wine_dxvk.clear();
                 for(auto xz:y.at("WineDxvk")){
-                    g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].WineDxvk.push_back(QString::fromStdString(xz));
+                    g_vekLocalData.wineJsonList[key][QString::fromStdString(y.at("WineName"))].s_remote_wine_dxvk.push_back(QString::fromStdString(xz));
                 }
             }
             break;
@@ -597,10 +597,10 @@ void objectJson::deleteWineNodeData(QString nWineName){
 
 //更新Wine节点
 void objectJson::updateWineNodeData(SwineData _base_wine_data){
-    if(_base_wine_data.IwineName!=nullptr){
-        deleteWineNodeData(_base_wine_data.IwineName);
+    if(_base_wine_data.s_wine_name!=nullptr){
+        deleteWineNodeData(_base_wine_data.s_wine_name);
     }
-    g_vekLocalData.wineVec[_base_wine_data.IwineName]=_base_wine_data;
+    g_vekLocalData.wineVec[_base_wine_data.s_wine_name]=_base_wine_data;
     WriteLocalData();
 }
 //生成CID

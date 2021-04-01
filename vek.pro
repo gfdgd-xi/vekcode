@@ -8,7 +8,6 @@ CONFIG += release
 #          QT_NO_DEBUG_OUTPUT
 VERSION = 1.0.1.8
 DEFINES +=APP_VERSION=\\\"$$VERSION\\\"
-QMAKE_CXXFLAGS_RELEASE += -O3       # Release -O3
 # You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
@@ -95,7 +94,7 @@ FORMS += \
 
 #UPX
 #Release:QMAKE_POST_LINK += ./upx -9 $(DESTDIR_TARGET)
-#QMAKE_CXXFLAGS_RELEASE += -Ofast
+QMAKE_CXXFLAGS_RELEASE += -O3
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
