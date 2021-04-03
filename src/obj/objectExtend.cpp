@@ -328,23 +328,20 @@ void objectExtend::extendPlugs(){
         }
     }
 }
-//主进程和附加进程自动退出
 void objectExtend::forcekill(){
     SappProcData pi;
-    if(!appData.vec_proc_attach_list.empty()){
-        objectProcManage* objProcMangs=new objectProcManage();
-        pi.s_proc_docker_name=dockData.s_dockers_name;
-        pi.s_proc_docker_path=dockData.s_dockers_path;
-        pi.s_proc_wine_path=dockData.s_dockers_wine_path;
-        pi.vec_proc_attach_list=appData.vec_proc_attach_list;
-        pi.vec_proc_attach_list.push_back(appData.s_main_proc_name);
-        objProcMangs->iprocInfo=pi;
-        objProcMangs->start();
-        objProcMangs->wait();
-        objProcMangs->exit();
-        delete objProcMangs;
-        objProcMangs=nullptr;
-    }
+    objectProcManage* objProcMangs=new objectProcManage();
+    pi.s_proc_docker_name=dockData.s_dockers_name;
+    pi.s_proc_docker_path=dockData.s_dockers_path;
+    pi.s_proc_wine_path=dockData.s_dockers_wine_path;
+    pi.vec_proc_attach_list=appData.vec_proc_attach_list;
+    pi.vec_proc_attach_list.push_back(appData.s_main_proc_name);
+    objProcMangs->iprocInfo=pi;
+    objProcMangs->start();
+    objProcMangs->wait();
+    objProcMangs->exit();
+    delete objProcMangs;
+    objProcMangs=nullptr;
 }
 void objectExtend::run(){
     m_cmd=new QProcess();

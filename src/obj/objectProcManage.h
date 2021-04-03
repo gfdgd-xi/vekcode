@@ -20,9 +20,10 @@ private:
     std::map<QString,QString> procAllInfoStr;
     void getAllProc();
     QString objGetProcList(SappProcData);
-    void objDelProc(QString,SappProcData);
+    void objWineHQKillProc(QString,SappProcData);
     void objKillProc(QString prPid);
     void delAttachProc(SappProcData pInfo);
+    void objDeepinKillProc(QString,SappProcData);
 };
 
 #endif // OBJECTPROCMANAGE_H

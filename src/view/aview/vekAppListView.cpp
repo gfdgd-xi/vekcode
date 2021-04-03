@@ -124,7 +124,7 @@ void vekAppListView::ObjectRun(){
 }
 std::vector<QStringList> vekAppListView::vekWinetricks_cArgs(){
         QString dlgTitle="winetricks命令框";
-        QString txtLabel="直接输入功能,多个库和功能空格隔开·例如:vcrun2012 vcrun2015";
+        QString txtLabel="直接输入功能,多个库和功能空格隔开\n例如:vcrun2012 vcrun2015\n命令:--self-update 可以在线更新winetricks";
         QString defaultInput;
         QLineEdit::EchoMode echoMode=QLineEdit::Normal;//正常文字输入
         bool ok=false;
