@@ -204,17 +204,17 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
             return;
         }
         bool font_stste=pObject::vekMesg("是否安装默认字体");
-        if（font_stste)
+        if(font_stste)
         {
         tempAppData.b_default_fonts=true;
         }
         bool mono_stste=pObject::vekMesg("是否安装Mono组件");
-        if（mono_stste)
+        if(mono_stste)
         {
         tempDockerData.s_dockers_mono_state=true;
         }
         bool gecko_stste=pObject::vekMesg("是否安装Gecko组件");
-        if（gecko_stste)
+        if(gecko_stste)
         {
         tempDockerData.s_dockers_gecko_state=true;
         }
@@ -285,17 +285,17 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
                 return;
             }
              bool font_stste=pObject::vekMesg("是否安装默认字体");
-        if（font_stste)
+        if(ont_stste)
         {
         tempAppData.b_default_fonts=true;
         }
         bool mono_stste=pObject::vekMesg("是否安装Mono组件");
-        if（mono_stste)
+        if(mono_stste)
         {
         tempDockerData.s_dockers_mono_state=true;
         }
         bool gecko_stste=pObject::vekMesg("是否安装Gecko组件");
-        if（gecko_stste)
+        if(gecko_stste)
         {
         tempDockerData.s_dockers_gecko_state=true;
         }
