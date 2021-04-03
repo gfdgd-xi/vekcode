@@ -141,7 +141,7 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
     SappData  tempAppData;
     ExtendType _objType=object_default;
     objectAppMT* objNewDock=new objectAppMT(&tempAppData,&tempDockerData);
-    tempAppData.b_default_fonts=true;
+    tempAppData.b_default_fonts=false;
     QString dockName="vekON1";
     QString dockBit="win32";
     if(iType==INITDOCKER){
@@ -371,6 +371,7 @@ void vekAppPanel::addGroupSlot(SdockerData* dcokData)
     }
 }
 void vekAppPanel::deleteGroupSlot(bool del_static){
+    UNUSED(del_static);
     QAction *pEven = qobject_cast<QAction *>(this->sender());
     QString strDockerName=pEven->objectName();
     SdockerData tDocker=pObject::getDockerData(strDockerName);
