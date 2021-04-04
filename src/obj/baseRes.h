@@ -8,6 +8,7 @@ std::vector<QString> taskList={};
 QStringList vekStyles={"Windows", "WindowsXP", "WindowsVista", "Fusion"};
 
 static QString vekUpInfo="https://gitee.com/JackLee02/vekGame/raw/master/vekUpdateInfo.json";
+std::map<QString,QString> winetricks_server_url_list={};
 std::map<QString,std::map<QString,QString>> winebuilder={
    {"HKEY_CURRENT_USER\\Software\\Wine\\DllOverrides",{{"winemenubuilder.exe"," "}}}
 };

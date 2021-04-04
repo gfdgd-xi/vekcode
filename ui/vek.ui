@@ -186,7 +186,7 @@
          <item>
           <widget class="QFrame" name="fram_wrserver">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="frameShape">
             <enum>QFrame::StyledPanel</enum>
@@ -218,7 +218,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="comboBox"/>
+             <widget class="QComboBox" name="comboBox_wServer"/>
             </item>
            </layout>
           </widget>

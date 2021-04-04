@@ -31,8 +31,28 @@ void vek::connectObject(){
     QString vStr="Vek-";
     vStr.append(APP_VERSION);
     this->setWindowTitle(vStr);
+    loadWinetricksServerJson();
     setAppSize();
     vekStyle();
+}
+void vek::loadWinetricksServerJson(){
+    objectGetCurl* _vekgetcurl=new objectGetCurl;
+    string verInfoStr=_vekgetcurl->vekGetData(vek_winetricks_server.toStdString());
+    if(verInfoStr!="error"){
+        json jx=json::parse(verInfoStr);
+        for(auto [x,y]:jx.items()){
+            winetricks_server_url_list.insert(pair<QString, QString> (QString::fromStdString(x), QString::fromStdString(y)));
+        }
+        QStringList sList;
+        for(const auto &name:winetricks_server_url_list){
+            qInfo()<<name.first;
+             sList<<name.first;
+        }
+        ui->comboBox_wServer->addItems(sList);
+    }else{
+        pObject::vekTip("获取winetricks上游服务器列表失败,winetricks将以默认服务器为你提供下载服务!");
+    }
+
 }
 void vek::option_Dev(){
     if(_vek_Package==nullptr){
@@ -43,6 +63,7 @@ void vek::option_Dev(){
         _vek_Package->show();
     }
 }
+
 void vek::setAppSize(){
     int approw=0;
     //a 源

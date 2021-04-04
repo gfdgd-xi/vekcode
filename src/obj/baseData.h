@@ -163,7 +163,9 @@ typedef enum{
     object_setApp,
     object_addApp
 }EADEType;
+
 extern SlocalGloablData g_vekLocalData;
+extern std::map<QString,QString> winetricks_server_url_list;
 extern std::map<QString,std::map<QString,QString>> fontRes;
 extern std::map<QString,std::map<QString,QString>> dxvkResCof;
 extern std::map<QString,std::map<QString,QString>> dxvkResHUD;

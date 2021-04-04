@@ -142,11 +142,8 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
     ExtendType _objType=object_default;
     objectAppMT* objNewDock=new objectAppMT(&tempAppData,&tempDockerData);
     tempAppData.b_default_fonts=false;
-<<<<<<< HEAD
-=======
     tempDockerData.s_dockers_mono_state=false;
     tempDockerData.s_dockers_gecko_state=false;
->>>>>>> 223ba723f0455092f1f5ff06926dc16c807b7cfe
     QString dockName="vekON1";
     QString dockBit="win32";
     if(iType==INITDOCKER){
@@ -209,17 +206,17 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
         bool font_stste=pObject::vekMesg("是否安装默认字体");
         if(font_stste)
         {
-        tempAppData.b_default_fonts=true;
+            tempAppData.b_default_fonts=true;
         }
         bool mono_stste=pObject::vekMesg("是否安装Mono组件");
         if(mono_stste)
         {
-        tempDockerData.s_dockers_mono_state=true;
+            tempDockerData.s_dockers_mono_state=true;
         }
         bool gecko_stste=pObject::vekMesg("是否安装Gecko组件");
         if(gecko_stste)
         {
-        tempDockerData.s_dockers_gecko_state=true;
+            tempDockerData.s_dockers_gecko_state=true;
         }
         for(auto a:g_vekLocalData.map_docker_list){
             if(a.first==dockName){
@@ -230,7 +227,7 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
         tempDockerData.s_dockers_wine_exe_version="wine";
         tempDockerData.s_dockers_bit_version=dockBit;
         tempDockerData.s_dockers_path=QApplication::applicationDirPath()+"/vekDock";
-        tempDockerData.s_dockers_name=dockName;   
+        tempDockerData.s_dockers_name=dockName;
         objNewDock->newDock();
         addGroupSlot(&tempDockerData);
     }else{
@@ -287,21 +284,21 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
             if(!d_ok){
                 return;
             }
-             bool font_stste=pObject::vekMesg("是否安装默认字体");
-        if(ont_stste)
-        {
-        tempAppData.b_default_fonts=true;
-        }
-        bool mono_stste=pObject::vekMesg("是否安装Mono组件");
-        if(mono_stste)
-        {
-        tempDockerData.s_dockers_mono_state=true;
-        }
-        bool gecko_stste=pObject::vekMesg("是否安装Gecko组件");
-        if(gecko_stste)
-        {
-        tempDockerData.s_dockers_gecko_state=true;
-        }
+            bool font_stste=pObject::vekMesg("是否安装默认字体");
+            if(font_stste)
+            {
+                tempAppData.b_default_fonts=true;
+            }
+            bool mono_stste=pObject::vekMesg("是否安装Mono组件");
+            if(mono_stste)
+            {
+                tempDockerData.s_dockers_mono_state=true;
+            }
+            bool gecko_stste=pObject::vekMesg("是否安装Gecko组件");
+            if(gecko_stste)
+            {
+                tempDockerData.s_dockers_gecko_state=true;
+            }
             tempDockerData.s_dockers_wine_exe_version="wine";
             tempDockerData.s_dockers_path=QApplication::applicationDirPath()+"/vekDock";
             tempDockerData.s_dockers_name=dockName;
