@@ -18,6 +18,8 @@ void vek::connectObject(){
     connect(ui->pushButton_vekRunApp,&QPushButton::clicked,this,&vek::vekRunApp);
     connect(ui->pushButton_InstallApp,&QPushButton::clicked,this,&vek::installApp);
     connect(ui->pushButton_initDocker,&QPushButton::clicked,this,&vek::addInitDocker);
+    connect(ui->pushButton_ServerTest,&QPushButton::clicked,this,&vek::wServerTest);
+    connect(ui->pushButton_SetHosts,&QPushButton::clicked,this,&vek::wSetHosts);
     //默认样式
     connect(ui->styleDefault,&QAction::triggered,this,&vek::vekStyle);
     connect(ui->styleDark,&QAction::triggered,this,&vek::vekStyle);
@@ -46,13 +48,45 @@ void vek::loadWinetricksServerJson(){
         QStringList sList;
         for(const auto &name:winetricks_server_url_list){
             qInfo()<<name.first;
-             sList<<name.first;
+            sList<<name.first;
         }
         ui->comboBox_wServer->addItems(sList);
     }else{
         pObject::vekTip("获取winetricks上游服务器列表失败,winetricks将以默认服务器为你提供下载服务!");
     }
 
+}
+void vek::wServerTest(){
+    QString wServerUrl=winetricks_server_url_list[ui->comboBox_wServer->currentText()];
+    pObject::vekTip("如果浏览器能打开:\n"+wServerUrl+"\n则无需测速和修改hosts当然修改后可能更加适合您的网络环境");
+    QStringList tUrl = wServerUrl.replace(QRegExp("http://|https://"),"").split("/");
+    qInfo()<<tUrl[0];
+    QDesktopServices::openUrl(QUrl("http://ping.pe/"+tUrl[0]));
+}
+void vek::wSetHosts(){
+    QString dnPd="输入系统sudo密码";
+    QString dnPdLabel="输入错误后果自负";
+    QString setHostsPd="";
+    QLineEdit::EchoMode echoMode=QLineEdit::Normal;
+    bool dn_ok=false;
+    setHostsPd = QInputDialog::getText(nullptr, dnPd,dnPdLabel, echoMode,setHostsPd, &dn_ok);
+    if(!dn_ok){
+        return;
+    }else{
+        QString dnTitle="输入Hosts IP";
+        QString dnLabel="输入错误后果自负";
+        QString setHostsIp="";
+        setHostsIp = QInputDialog::getText(nullptr, dnTitle,dnLabel, echoMode,setHostsIp, &dn_ok);
+        if(!dn_ok){
+            return;
+        }else{
+            QStringList tUrl = winetricks_server_url_list[ui->comboBox_wServer->currentText()].replace(QRegExp("http://|https://"),"").split("/");
+            QString agrs="echo "+setHostsPd+" | sudo -S "+setHostsIp+" "+tUrl[0]+">>/etc/hosts";
+            qInfo()<<agrs;
+            system(agrs.toLocal8Bit());
+            system(("echo "+setHostsPd+" | sudo -S /etc/init.d/networking restart").toLocal8Bit());
+        }
+    }
 }
 void vek::option_Dev(){
     if(_vek_Package==nullptr){
@@ -87,7 +121,7 @@ void vek::startTray(){
             if(objTray==nullptr){
                 objTray=new objectTray();
                 objTray->_baseWineData=a.second;
-                objTray->start(); 
+                objTray->start();
             }
             break;
         }
@@ -97,11 +131,11 @@ void vek::startTray(){
 void vek::exitTray(bool trayState){
     if(trayState){
         if(objTray!=nullptr){
-           objTray->exitTray();
+            objTray->exitTray();
         }
     }else{
         if(taskList.empty()){
-        objTray->exitTray();
+            objTray->exitTray();
         }else{return;}
     }
     if(objTray==nullptr){
@@ -129,7 +163,7 @@ void vek::on_action_EditSource_triggered(){
 }
 void vek::vekAddApp()
 {   
-     ui->tabWidget->addAppSlot();
+    ui->tabWidget->addAppSlot();
 }
 void vek::vekRunApp()
 {

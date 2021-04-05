@@ -11,6 +11,7 @@
 #include "obj/objectTray.h"
 #include "QTranslator"
 #include "vekPackage.h"
+#include <qdesktopservices.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -56,6 +57,8 @@ private slots:
     void vekLanguage();
     void option_Dev();
     void addInitDocker();
+    void wServerTest();
+    void wSetHosts();
 
 };
 #endif // VEK_H

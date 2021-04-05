@@ -97,7 +97,7 @@
         <property name="lineWidth">
          <number>1</number>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="5,5,5,50,5,5,5,5,5">
+        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="5,5,5,50,5,5,5,5">
          <property name="spacing">
           <number>1</number>
          </property>
@@ -224,7 +224,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_3">
+          <widget class="QPushButton" name="pushButton_ServerTest">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -237,20 +237,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>修改DNS</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_2">
+          <widget class="QPushButton" name="pushButton_SetHosts">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
              <horstretch>0</horstretch>
