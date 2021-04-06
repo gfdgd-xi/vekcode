@@ -36,6 +36,7 @@ private:
     objectTray* objTray=nullptr;
     QString vek_winetricks_server="https://gitee.com/JackLee02/vekGame/raw/master/vekWinetricksServer.json";
     void setProcRow(); 
+    bool getWinetricksServerJson();
     void loadWinetricksServerJson();
 public slots:
     void startTray();
@@ -59,6 +60,6 @@ private slots:
     void addInitDocker();
     void wServerTest();
     void wSetHosts();
-
+    void wCurrentUrl();
 };
 #endif // VEK_H

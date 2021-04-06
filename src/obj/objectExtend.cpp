@@ -153,10 +153,13 @@ void objectExtend::executeWinetricks_cmd_libs(QStringList cArgs){
 }
 //winetricks执行命令
 void objectExtend::ExtendWinetricksCode(QStringList cArgs,bool wType){
+    if(sWinetrickUrl!=nullptr){
+        cArgs.append("--Durl="+sWinetrickUrl);
+    }
     QString mdCode = cArgs.join(" ");
     m_cmd->start(mdCode,QIODevice::ReadWrite);
     qInfo()<<"WineTricks:"<<cArgs.join(" ");
-    m_cmd->waitForFinished(-1);
+    m_cmd->waitForFinished(-1);  
     if(dockData.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
         switchSysVersion(DOCKER,DEEPIN);
     }else{

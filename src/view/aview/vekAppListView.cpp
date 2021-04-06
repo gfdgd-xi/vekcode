@@ -181,6 +181,7 @@ void vekAppListView::ExportJson(){
         _vExportJson->ExportJson(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),bGameData.s_uid);
     }
 }
+//调试
 void vekAppListView::objectExtendApp(){
     if(_vExtendDebug==nullptr){
         _vExtendDebug=new vekExtendDebug();

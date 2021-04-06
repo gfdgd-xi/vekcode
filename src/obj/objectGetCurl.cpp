@@ -91,7 +91,7 @@ bool objectGetCurl::DownloadFile(std::string URLADDR,std::string path)
     CURLcode curl_res;
     curl_global_init(CURL_GLOBAL_ALL);
     curl = curl_easy_init();
-    if(curl){
+    {
         FILE* file= fopen(path.c_str(), "ab+");
         curl_easy_setopt(curl, CURLOPT_URL, URLADDR.c_str());
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);

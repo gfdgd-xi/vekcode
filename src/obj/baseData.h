@@ -166,6 +166,7 @@ typedef enum{
 
 extern SlocalGloablData g_vekLocalData;
 extern std::map<QString,QString> winetricks_server_url_list;
+extern QString sWinetrickUrl;
 extern std::map<QString,std::map<QString,QString>> fontRes;
 extern std::map<QString,std::map<QString,QString>> dxvkResCof;
 extern std::map<QString,std::map<QString,QString>> dxvkResHUD;

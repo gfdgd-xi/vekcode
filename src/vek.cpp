@@ -20,6 +20,7 @@ void vek::connectObject(){
     connect(ui->pushButton_initDocker,&QPushButton::clicked,this,&vek::addInitDocker);
     connect(ui->pushButton_ServerTest,&QPushButton::clicked,this,&vek::wServerTest);
     connect(ui->pushButton_SetHosts,&QPushButton::clicked,this,&vek::wSetHosts);
+    connect(ui->comboBox_wServer,&QComboBox::currentTextChanged,this,&vek::wCurrentUrl);
     //默认样式
     connect(ui->styleDefault,&QAction::triggered,this,&vek::vekStyle);
     connect(ui->styleDark,&QAction::triggered,this,&vek::vekStyle);
@@ -38,23 +39,43 @@ void vek::connectObject(){
     vekStyle();
 }
 void vek::loadWinetricksServerJson(){
-    objectGetCurl* _vekgetcurl=new objectGetCurl;
-    string verInfoStr=_vekgetcurl->vekGetData(vek_winetricks_server.toStdString());
-    if(verInfoStr!="error"){
-        json jx=json::parse(verInfoStr);
-        for(auto [x,y]:jx.items()){
-            winetricks_server_url_list.insert(pair<QString, QString> (QString::fromStdString(x), QString::fromStdString(y)));
-        }
-        QStringList sList;
-        for(const auto &name:winetricks_server_url_list){
-            qInfo()<<name.first;
-            sList<<name.first;
-        }
-        ui->comboBox_wServer->addItems(sList);
-    }else{
+    if(!getWinetricksServerJson()){
         pObject::vekTip("获取winetricks上游服务器列表失败,winetricks将以默认服务器为你提供下载服务!");
+        ui->pushButton_ServerTest->setEnabled(false);
+        ui->pushButton_SetHosts->setEnabled(false);
+        ui->comboBox_wServer->setEnabled(false);
+    }else{
+        wCurrentUrl();
     }
 
+}
+bool vek::getWinetricksServerJson(){
+    objectGetCurl* _vekgetcurl=new objectGetCurl;
+    string verInfoStr=_vekgetcurl->vekGetData(vek_winetricks_server.toStdString());
+    try {
+        if(verInfoStr!="error"){
+
+            json jx=json::parse(verInfoStr);
+            for(auto [x,y]:jx.items()){
+                winetricks_server_url_list.insert(pair<QString, QString> (QString::fromStdString(x), QString::fromStdString(y)));
+            }
+            QStringList sList;
+            for(const auto &name:winetricks_server_url_list){
+                qInfo()<<name.first;
+                sList<<name.first;
+            }
+            ui->comboBox_wServer->addItems(sList);
+        }else{
+            return false;
+        }
+    }  catch (...) {
+        return false;
+    }
+    return true;
+}
+void vek::wCurrentUrl(){
+    sWinetrickUrl=winetricks_server_url_list[ui->comboBox_wServer->currentText()];
+    qInfo()<<sWinetrickUrl;
 }
 void vek::wServerTest(){
     QString wServerUrl=winetricks_server_url_list[ui->comboBox_wServer->currentText()];
@@ -67,28 +88,39 @@ void vek::wSetHosts(){
     QString dnPd="输入系统sudo密码";
     QString dnPdLabel="输入错误后果自负";
     QString setHostsPd="";
-    QLineEdit::EchoMode echoMode=QLineEdit::Normal;
+    QLineEdit::EchoMode echoPass=QLineEdit::Password;
     bool dn_ok=false;
-    setHostsPd = QInputDialog::getText(nullptr, dnPd,dnPdLabel, echoMode,setHostsPd, &dn_ok);
+    setHostsPd = QInputDialog::getText(nullptr, dnPd,dnPdLabel, echoPass,setHostsPd, &dn_ok);
     if(!dn_ok){
         return;
     }else{
         QString dnTitle="输入Hosts IP";
         QString dnLabel="输入错误后果自负";
         QString setHostsIp="";
+        QLineEdit::EchoMode echoMode=QLineEdit::Normal;
         setHostsIp = QInputDialog::getText(nullptr, dnTitle,dnLabel, echoMode,setHostsIp, &dn_ok);
         if(!dn_ok){
             return;
         }else{
             QStringList tUrl = winetricks_server_url_list[ui->comboBox_wServer->currentText()].replace(QRegExp("http://|https://"),"").split("/");
-            QString agrs="echo "+setHostsPd+" | sudo -S "+setHostsIp+" "+tUrl[0]+">>/etc/hosts";
-            qInfo()<<agrs;
+            QString agrs="echo "+setHostsIp+" "+tUrl[0]+" >> /etc/hosts";
+            QString dAgrs="echo "+setHostsPd+" | sudo -S sed -i "+"'/"+tUrl[0]+"/d'" +" /etc/hosts";
+            //修改hosts权限
+            system(("echo "+setHostsPd+" | sudo -S chmod a+w /etc/hosts").toLocal8Bit());
+            //删除hosts含有当前url的行
+            system(dAgrs.toLocal8Bit());
+            //写入当前hosts
             system(agrs.toLocal8Bit());
+            //重启网络hosts生效
             system(("echo "+setHostsPd+" | sudo -S /etc/init.d/networking restart").toLocal8Bit());
+            //恢复hosts文件权限
+            system(("echo "+setHostsPd+" | sudo -S chmod 644 /etc/hosts").toLocal8Bit());
         }
     }
 }
 void vek::option_Dev(){
+    pObject::vekTip("开发中!");
+    /*
     if(_vek_Package==nullptr){
         _vek_Package=new vekPackage();
         _vek_Package->setAttribute(Qt::WA_DeleteOnClose,true);
@@ -96,6 +128,7 @@ void vek::option_Dev(){
         _vek_Package->setGeometry(this->geometry());
         _vek_Package->show();
     }
+    */
 }
 
 void vek::setAppSize(){

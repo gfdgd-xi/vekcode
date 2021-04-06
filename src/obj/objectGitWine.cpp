@@ -85,7 +85,7 @@ void objectGitWine::downWine(){
     progress_data pd;
     //初始化git_repository
     git_repository *cloned_repo=nullptr;
-    git_clone_options clone_opts =  GIT_CLONE_OPTIONS_INIT;
+    git_clone_options clone_opts = GIT_CLONE_OPTIONS_INIT;
     git_checkout_options checkout_opts = GIT_CHECKOUT_OPTIONS_INIT;
     checkout_opts.checkout_strategy = GIT_CHECKOUT_SAFE;
     checkout_opts.progress_cb = checkout_progress;
