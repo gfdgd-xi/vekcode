@@ -110,9 +110,6 @@ void vekAppListView::ObjectRun(){
         case object_exportJson:
             ExportJson();
             return;
-        case object_packageDeb:
-            pObject::vekTip("功能开发中!");
-            return;
         }       
         if(_objType==object_start){
             startApp(object_start);

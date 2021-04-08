@@ -259,6 +259,7 @@ void objectAppMT::newDock(){
     }
     InitDockDir(true,dockPath,dockDir);
     if(appData->b_default_fonts){
+        qInfo()<<"fonts:"<<appData->b_default_fonts;
         DefaultFontsFileInstall();
     }
     if(dockData->s_dockers_mono_state){
@@ -322,6 +323,7 @@ bool objectAppMT::InitDockObj(bool _forceState){
         b_disable_ass(winebuilder);
         b_disable_ass(winemine);
         if(appData->b_default_fonts){
+            qInfo()<<"fonts:"<<appData->b_default_fonts;
             DefaultFontsFileInstall();
         }
         if(dockData->s_dockers_mono_state){

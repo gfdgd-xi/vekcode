@@ -34,7 +34,6 @@ void objectGitWine::output_progress(progress_data *pd)
             "   chk:   "+std::to_string(checkout_percent)+"%"+"("+std::to_string(pd->completed_steps)+"/"+std::to_string(pd->total_steps)+")"+
             "   Resolving deltas:   "+"("+std::to_string(pd->fetch_progress.indexed_deltas)+"/"+std::to_string(pd->fetch_progress.total_deltas)+")";
     emit objGitWine->SigDeliverMessStatic(prlog);
-    //outputPrgressSlots(prlog);
 }
 int i=0;
 void objectGitWine::SlotDeliverMessStatic(string str_log)
@@ -117,15 +116,9 @@ void objectGitWine::gitWine(){
         }
         downWine();
         dir.mkdir(wData.s_local_wine_path+"/plugs");
-        emit toPrgStr("开始下载组件请稍等!");
-        objectGetCurl* objGetCurl=new objectGetCurl;
-        connect(objGetCurl,SIGNAL(curlPrgressSignals(string)),this,SIGNAL(SigDeliverMessStatic(string)));
-        objGetCurl->DoewloadPlugs(wData.s_local_wine_mono,wData.s_local_wine_path+"/plugs/Mono.msi");
-        objGetCurl->DoewloadPlugs(wData.s_local_wine_gecko_86,wData.s_local_wine_path+"/plugs/GeckoX86.msi");
-        objGetCurl->DoewloadPlugs(wData.s_local_wine_gecko_8664,wData.s_local_wine_path+"/plugs/GeckoX86_64.msi");
-        emit toPrgStr("组件下载完毕!");
         objectJson* _objectJson=new objectJson() ;
         _objectJson->updateWineNodeData(wData);
+        emit toPrgStr("wine安装完毕!");
         delete _objectJson;
         _objectJson=nullptr;
         emit overThreadSignals(true);
