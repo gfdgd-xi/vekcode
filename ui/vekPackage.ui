@@ -324,7 +324,10 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="verticalLayout_4" stretch="20,80">
+      <layout class="QHBoxLayout" name="verticalLayout_4" stretch="20,70,10">
+       <property name="spacing">
+        <number>1</number>
+       </property>
        <item>
         <widget class="QLabel" name="label_8">
          <property name="sizePolicy">
@@ -357,6 +360,13 @@
            <width>0</width>
            <height>28</height>
           </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_sel_exe_path">
+         <property name="text">
+          <string>选择程序</string>
          </property>
         </widget>
        </item>

@@ -80,7 +80,26 @@ void vekPackage::vSetDefalut(){
     connect(ui->pushButton_DELETEDOCKER,&QPushButton::clicked,this,&vekPackage::vDelDockerToDir);
     connect(ui->pushButton_InstallTool,&QPushButton::clicked,this,&vekPackage::vInstallPackageTool);
     connect(ui->pushButton_PackageDeb,&QPushButton::clicked,this,&vekPackage::vBuildDebPackage);
-
+    connect(ui->pushButton_sel_exe_path,&QPushButton::clicked,this,&vekPackage::vSelExePath);
+}
+void vekPackage::vSelExePath(){
+    QString exePath=QFileDialog::getOpenFileName(this,"选择执行程序","","exe Files(*.exe)");
+    if(exePath!=nullptr){
+        QFileInfo fi = QFileInfo(exePath);
+        ui->textEdit_AppMainName->setText(fi.fileName());
+        QString cArgs=dDockerData.s_dockers_path+"/"+dDockerData.s_dockers_name+"/dosdevices/";
+        QString dArgs=dDockerData.s_dockers_path+"/"+dDockerData.s_dockers_name+"/drive_c/";
+        qInfo()<<exePath;
+        if(exePath.contains(cArgs,Qt::CaseSensitive)){
+            exePath=exePath.replace(cArgs,"");
+            exePath=exePath.replace("/","\\");
+        }else if(exePath.contains(dArgs,Qt::CaseSensitive))
+        {
+            exePath=exePath.replace(dArgs,"c:\\");
+            exePath=exePath.replace("/","\\");
+        }
+        ui->textEdit_AppMainPath->setText(exePath);
+    }
 }
 bool vekPackage::vCheckOption(){
     QList<QLineEdit *> qLineList = this->findChildren<QLineEdit *>();

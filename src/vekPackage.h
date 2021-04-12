@@ -34,6 +34,7 @@ private slots:
     void vDelDockerToDir();
     void vInstallPackageTool();
     void vBuildDebPackage();
+    void vSelExePath();
     void outLogs(QString);
 signals:
     void _unPackage();
