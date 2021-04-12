@@ -71,13 +71,16 @@ void vekPackage::vSetDefalut(){
     ui->textEdit_AppDebNamePro->setText("deepin.com."+appNameEn.toLower());
     ui->textEdit_AppDebNamePro->setObjectName("专业版包名");
 
-    ui->textEdit_AppDebVersion->setText("deepin5");
+    ui->textEdit_AppDebVersion->setText("1.0.0.0deepin5");
     ui->textEdit_AppDebVersion->setObjectName("最终deb包版本号");
 
     ui->textEdit_AppOldDebName->setText("deepin.com."+appNameEn.toLower());
     ui->textEdit_AppDebVersion->setObjectName("旧包名");
     connect(ui->pushButton_MOVEDOCKER,&QPushButton::clicked,this,&vekPackage::vMoveDockerToDir);
     connect(ui->pushButton_DELETEDOCKER,&QPushButton::clicked,this,&vekPackage::vDelDockerToDir);
+    connect(ui->pushButton_InstallTool,&QPushButton::clicked,this,&vekPackage::vInstallPackageTool);
+    connect(ui->pushButton_PackageDeb,&QPushButton::clicked,this,&vekPackage::vBuildDebPackage);
+
 }
 bool vekPackage::vCheckOption(){
     QList<QLineEdit *> qLineList = this->findChildren<QLineEdit *>();
@@ -88,6 +91,19 @@ bool vekPackage::vCheckOption(){
             return false;
         }
     }
+    pPackageData={};
+    pPackageData.sDesrc=ui->textEdit_AppDescr->text();
+    pPackageData.sAppNameEN=ui->textEdit_AppNameEN->text();
+    pPackageData.sAppNameCN=ui->textEdit_AppNameCN->text();
+    pPackageData.sDockerName=ui->textEdit_DockerName->text();
+    pPackageData.sAppType=ui->textEdit_AppType->text();
+    pPackageData.sAppIco=ui->textEdit_AppIco->text();
+    pPackageData.sAppExeName=ui->textEdit_AppMainName->text();
+    pPackageData.sAppExePath=ui->textEdit_AppMainPath->text();
+    pPackageData.sAppDebName=ui->textEdit_AppDebName->text();
+    pPackageData.sAppDebNamePro=ui->textEdit_AppDebNamePro->text();
+    pPackageData.sAppDebVersion=ui->textEdit_AppDebVersion->text();
+    pPackageData.sAppOldDebName=ui->textEdit_AppOldDebName->text();
     return true;
 }
 QString vekPackage::sAppNameEN(QString m_path){
@@ -115,6 +131,7 @@ void vekPackage::vMoveDockerToDir(){
             }else{
                 QString agrs="echo "+movePassword+" | sudo -S cp -rfp "+ srcDock+" "+tagDock;
                 system(agrs.toLocal8Bit());
+                pObject::vekTip("容器迁移成功:"+tagDock);
             }
         }
     }
@@ -129,6 +146,41 @@ void vekPackage::vDelDockerToDir(){
             return;
         }else{
             QDir(tagDock).removeRecursively();
+            pObject::vekTip("删除打包容器成功"+tagDock);
         }
     }
+}
+
+void vekPackage::vInstallPackageTool(){
+    bool dn_ok=false;
+    QString dnTitle="输入安装密码";
+    QString dnLabel="输入错误后果自负";
+    QString installPassword="";
+    QLineEdit::EchoMode echoMode=QLineEdit::Normal;
+    installPassword = QInputDialog::getText(nullptr, dnTitle,dnLabel, echoMode,installPassword, &dn_ok);
+    if(!dn_ok){
+        return;
+    }else{
+        if(!obj_package){
+            delete obj_package;
+            obj_package=nullptr;
+        }
+        obj_package= new objectPackage(dDockerData,pPackageData,installPassword);
+        connect(obj_package,SIGNAL(outQStr(QString)),this,SLOT(outLogs(QString)));
+        obj_package->EXToolDeb();
+    }
+}
+void vekPackage::vBuildDebPackage(){
+    if(vCheckOption()){
+        if(!obj_package){
+            delete obj_package;
+            obj_package=nullptr;
+        }
+        obj_package= new objectPackage(dDockerData,pPackageData,nullptr);
+        connect(obj_package,SIGNAL(outQStr(QString)),this,SLOT(outLogs(QString)));
+        obj_package->EXPackage();
+    }
+}
+void vekPackage::outLogs(QString log){
+    ui->textEdit_Package_Log->append(log);
 }

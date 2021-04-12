@@ -147,7 +147,9 @@ void vekExtendDebug::ExtendApp(){
     m_cmd->setReadChannel(QProcess::StandardOutput);
     m_cmd->setWorkingDirectory(appData.s_work_path);
     m_cmd->start("bash");
-    connect(m_cmd,SIGNAL(readyReadStandardOutput()),this,SLOT(onReadyRead()));
+    connect(m_cmd,SIGNAL(readyRead()),this,SLOT(onReadyRead()));
+    connect(m_cmd,SIGNAL(errorOccurred(QProcess::ProcessError)),this,SLOT(onReadyRead()));
+    connect(m_cmd,SIGNAL(readyReadStandardOutput()),this,SLOT(onReadyRead()));    
     QString codez;
     //deepin-wine5不支持winecfg /v winxp方式切换容器系统版本。顾采用wine winetricks winxp切换容器系统版本
     if(dockData.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){

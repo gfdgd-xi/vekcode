@@ -10,13 +10,13 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>600</height>
+    <height>800</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>600</width>
-    <height>600</height>
+    <height>800</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -27,6 +27,10 @@
   </property>
   <property name="windowTitle">
    <string>vek打包工具</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../vek_res.qrc">
+    <normaloff>:/res/img/vek.ico</normaloff>:/res/img/vek.ico</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
@@ -42,7 +46,10 @@
     <number>9</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="1,1,1,1,1,1,1,1,1,1,1,1,15,1">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="1,1,1,1,1,1,1,1,1,1,1,1,15,1,0">
+     <property name="spacing">
+      <number>3</number>
+     </property>
      <item>
       <layout class="QHBoxLayout" name="verticalLayout_11" stretch="20,80">
        <item>
@@ -537,20 +544,6 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_4">
-         <property name="text">
-          <string>导入打包参数</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_5">
-         <property name="text">
-          <string>导出打包参数</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QPushButton" name="pushButton_MOVEDOCKER">
          <property name="toolTip">
           <string>迁移容器至打包目录并修改容器为部署时容器名</string>
@@ -561,21 +554,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_DELETEDOCKER">
-         <property name="text">
-          <string>删除容器</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_3">
-         <property name="text">
-          <string>打开容器目录</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="pushButton_PackageDeb">
          <property name="text">
           <string>自动打包</string>
          </property>
@@ -596,10 +575,37 @@
        </item>
       </layout>
      </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QPushButton" name="pushButton_InstallTool">
+         <property name="text">
+          <string>安装打包工具</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_3">
+         <property name="text">
+          <string>打开容器目录</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_DELETEDOCKER">
+         <property name="text">
+          <string>删除容器</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
     </layout>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../vek_res.qrc"/>
+ </resources>
  <connections/>
 </ui>
