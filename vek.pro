@@ -22,6 +22,7 @@ SOURCES += \
     src/obj/objectGitWine.cpp \
     src/obj/objectJson.cpp \
     src/obj/objectNet.cpp \
+    src/obj/objectPackage.cpp \
     src/obj/objectProcManage.cpp \
     src/obj/objectSource.cpp \
     src/obj/objectTray.cpp \
@@ -54,6 +55,7 @@ HEADERS += \
     src/obj/objectGitWine.h \
     src/obj/objectJson.h \
     src/obj/objectNet.h \
+    src/obj/objectPackage.h \
     src/obj/objectProcManage.h \
     src/obj/objectSource.h \
     src/obj/objectTray.h \

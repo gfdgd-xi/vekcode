@@ -117,6 +117,22 @@ typedef struct {
 }SlocalGloablData;
 
 typedef struct{
+    QString sDesrc;
+    QString sAppNameEN;
+    QString sAppNameCN;
+    QString sDockerName;
+    QString sAppType;
+    QString sAppIco;
+    QString sAppExeName;
+    QString sAppExePath;
+    QString sAppDebName;
+    QString sAppDebNamePro;
+    QString sAppDebVersion;
+    QString sAppOldDebName;
+}Spackage;
+
+
+typedef struct{
     std::map<QString,QString> wtServer={};
 }BaseWtServer;
 
@@ -131,6 +147,7 @@ typedef enum{
     object_debugstart,
     object_setgame,
     object_exportJson,
+    object_packageDeb,
     object_forcekill,
     object_deletegame,
     object_regobject,

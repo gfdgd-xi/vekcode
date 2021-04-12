@@ -25,8 +25,6 @@ void vek::connectObject(){
     connect(ui->styleDefault,&QAction::triggered,this,&vek::vekStyle);
     connect(ui->styleDark,&QAction::triggered,this,&vek::vekStyle);
     connect(ui->styleLight,&QAction::triggered,this,&vek::vekStyle);
-    //开发功能测试
-    connect(ui->action_Dev,&QAction::triggered,this,&vek::option_Dev);
     //语言切换
     //connect(ui->langChinese,&QAction::triggered,this,&vek::vekLanguage);
     //connect(ui->langEnglish,&QAction::triggered,this,&vek::vekLanguage);
@@ -118,19 +116,6 @@ void vek::wSetHosts(){
         }
     }
 }
-void vek::option_Dev(){
-    pObject::vekTip("开发中!");
-    /*
-    if(_vek_Package==nullptr){
-        _vek_Package=new vekPackage();
-        _vek_Package->setAttribute(Qt::WA_DeleteOnClose,true);
-        _vek_Package->setWindowFlags(Qt::WindowStaysOnTopHint);
-        _vek_Package->setGeometry(this->geometry());
-        _vek_Package->show();
-    }
-    */
-}
-
 void vek::setAppSize(){
     int approw=0;
     //a 源
@@ -151,7 +136,7 @@ void vek::setProcRow(){
 void vek::startTray(){
     if(!g_vekLocalData.map_wine_list.empty()){
         for(auto a:g_vekLocalData.map_wine_list){
-            if(objTray==nullptr){
+            if(!objTray){
                 objTray=new objectTray();
                 objTray->_baseWineData=a.second;
                 objTray->start();
@@ -163,7 +148,7 @@ void vek::startTray(){
 }
 void vek::exitTray(bool trayState){
     if(trayState){
-        if(objTray!=nullptr){
+        if(objTray){
             objTray->exitTray();
         }
     }else{
@@ -171,7 +156,7 @@ void vek::exitTray(bool trayState){
             objTray->exitTray();
         }else{return;}
     }
-    if(objTray==nullptr){
+    if(!objTray){
         return;
     }
     setProcRow();
@@ -185,7 +170,7 @@ void vek::addInitDocker(){
     ui->tabWidget->objInitDocker(INITDOCKER);
 }
 void vek::on_action_EditSource_triggered(){
-    if(_vek_source_esit==nullptr){
+    if(!_vek_source_esit){
         _vek_source_esit=new vekSourceEdit();
         _vek_source_esit->setAttribute(Qt::WA_DeleteOnClose,true);
         _vek_source_esit->setWindowFlags(Qt::WindowStaysOnTopHint);
@@ -209,7 +194,7 @@ void vek::on_action_AddApp_triggered()
 
 void vek::on_action_About_triggered()
 {
-    if(_vek_About==nullptr){
+    if(!_vek_About){
         _vek_About=new vekAbout();
         _vek_About->setAttribute(Qt::WA_DeleteOnClose,true);
         _vek_About->setWindowFlags(Qt::WindowStaysOnTopHint);
@@ -226,7 +211,7 @@ void vek::on_action_Exit_triggered()
 
 void vek::on_action_WineInstall_triggered()
 {
-    if(_vek_wine_option==nullptr){
+    if(!_vek_wine_option){
         _vek_wine_option=new vekWineOption();
         _vek_wine_option->setAttribute(Qt::WA_DeleteOnClose,true);
         _vek_wine_option->setGeometry(this->geometry());

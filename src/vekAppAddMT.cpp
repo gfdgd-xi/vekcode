@@ -449,9 +449,11 @@ bool vekAppAddMT::checkDocerOption(){
         pObject::vekError("请先安装wine");
         return false;
     }
-    if(tempDockData->s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)&tempDockData->s_dockers_bit_version=="win64"){
-        pObject::vekError("Deepin-Wine5不支持64位容器");
-        return false;
+    if(tempDockData->s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
+        if(tempDockData->s_dockers_bit_version=="win64"){
+            pObject::vekError("Deepin-Wine5不支持64位容器");
+            return false;
+        }
     }
     if(tempDockData->s_dockers_path==nullptr)
     {

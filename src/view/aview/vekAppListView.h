@@ -7,6 +7,7 @@
 #include "../../obj/pObject.h"
 #include "../../vekExtendDebug.h"
 #include "../../vekExportJson.h"
+#include "../../vekPackage.h"
 #include "../../obj/common.h"
 class vekAppListView:public QListView
 {
@@ -27,6 +28,7 @@ private slots:
         void setUpDelData(SdockerData,SappData*,EADEType);     
         void unExportJson();
         void unDebugApp();
+        void unPackage();
 public slots:
         void ObjectRun();
 signals:
@@ -39,6 +41,7 @@ private:
         vekAppAddMT *_vek_App_Add=nullptr;
         vekExtendDebug* _vExtendDebug=nullptr;
         vekExportJson* _vExportJson=nullptr;
+        vekPackage* _vPackage=nullptr;
         int  m_hitIndex;
         vekAppData* m_pModel;
         QTabWidget* mBox;
@@ -50,6 +53,7 @@ private:
         void vekReadJsonData(QString jsonPath);
         void vekInitJsonData();
         void ExportJson();
+        void PackageDeb();
         void startApp(ExtendType);
         void deleteDockerTab(QString,QString);
         std::vector<QStringList> vekWinetricks_cArgs();
@@ -57,12 +61,13 @@ private:
                                             "容器注册表",
                                             "容器控制面板",
                                             "容器软件删除|增加",
-                                            "winetricks gui-界面模式",
-                                            "winetricks cmd-命令模式",
+                                            "winetricks-gui",
+                                            "winetricks-cmd",
                                             "运行程序",
                                             "调试运行(测试功能)",
                                             "修改程序设置",
                                             "导出配置文件",
+                                            "导出deb安装包",
                                             "强行关闭本程序",
                                             "删除本程序"};
         QMenu *pMenu=nullptr;

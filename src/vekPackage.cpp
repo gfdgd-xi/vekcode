@@ -1,18 +1,134 @@
 ﻿#include "vekPackage.h"
 #include "ui_common.h"
 
-
-
 vekPackage::vekPackage(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::vekPackage)
 {
     ui->setupUi(this);
+    vSetDefalutTips();
 }
 vekPackage::~vekPackage()
 {
+    emit _unPackage();
     delete ui;
 }
-void vekPackage::initUI(){
+//传入打包参数
+void vekPackage::vAppData(SdockerData _data,QString _uid){
+    if(!_data.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
+        pObject::vekTip("不支持非Deepin-Wine容器打包");
+        return;
+    }else{
+        dDockerData=_data;
+        dAppUid=_uid;
+        vSetDefalut();
+    }
+}
+void vekPackage::vSetDefalutTips(){
+    ui->textEdit_AppDescr->setToolTip("例如:Tencent WeChat Client on Deepin Wine");
+    ui->textEdit_AppNameEN->setToolTip("例如:WeChat");
+    ui->textEdit_AppNameCN->setToolTip("例如:微信");
+    ui->textEdit_DockerName->setToolTip("例如:Deepin-WeChat");
+    ui->textEdit_AppType->setToolTip("例如:chat;");
+    ui->textEdit_AppIco->setToolTip("例如:deepin.com.wechat.svg");
+    ui->textEdit_AppMainName->setToolTip("例如:WeChat.exe");
+    ui->textEdit_AppMainPath->setToolTip("例如:c:\\Program Files\\Tencent\\WeChat\\WeChat.exe");
+    ui->textEdit_AppDebName->setToolTip("例如:com.qq.weixin.deepin");
+    ui->textEdit_AppDebNamePro->setToolTip("例如:deepin.com.wechat");
+    ui->textEdit_AppDebVersion->setToolTip("例如:2.9.5.41deepin4");
+    ui->textEdit_AppOldDebName->setToolTip("例如:deepin.com.wechat");
+}
+void vekPackage::vSetDefalut(){
+    QString appNameEn=sAppNameEN(dDockerData.map_dockers_data[dAppUid].s_main_proc_name);
 
+    ui->textEdit_AppDescr->setText(dDockerData.map_dockers_data[dAppUid].s_name+" Client on Deepin Wine");
+    ui->textEdit_AppDescr->setObjectName("应用描述");
+
+    ui->textEdit_AppNameEN->setText(appNameEn.toLower());
+    ui->textEdit_AppNameEN->setObjectName("应用名称(英文)");
+
+    ui->textEdit_AppNameCN->setText(dDockerData.map_dockers_data[dAppUid].s_name);
+    ui->textEdit_AppNameCN->setObjectName("应用名称(中文)");
+
+    ui->textEdit_DockerName->setText("Deepin-"+appNameEn.toUpper());
+    ui->textEdit_DockerName->setObjectName("部署容器名");
+
+    ui->textEdit_AppType->setText(nullptr);
+    ui->textEdit_AppType->setObjectName("应用分类");
+
+    ui->textEdit_AppIco->setText("deepin.com."+appNameEn.toLower()+".svg");
+    ui->textEdit_AppIco->setObjectName("应用ICO图标");
+
+    ui->textEdit_AppMainName->setText(appNameEn+".exe");
+    ui->textEdit_AppMainName->setObjectName("应用主程序名");
+
+    ui->textEdit_AppMainPath->setText(dDockerData.map_dockers_data[dAppUid].s_exe);
+    ui->textEdit_AppMainPath->setObjectName("应用主程序路径");
+
+    ui->textEdit_AppDebName->setText("com."+appNameEn.toLower()+".deepin");
+    ui->textEdit_AppDebName->setObjectName("最终deb包名");
+
+    ui->textEdit_AppDebNamePro->setText("deepin.com."+appNameEn.toLower());
+    ui->textEdit_AppDebNamePro->setObjectName("专业版包名");
+
+    ui->textEdit_AppDebVersion->setText("deepin5");
+    ui->textEdit_AppDebVersion->setObjectName("最终deb包版本号");
+
+    ui->textEdit_AppOldDebName->setText("deepin.com."+appNameEn.toLower());
+    ui->textEdit_AppDebVersion->setObjectName("旧包名");
+    connect(ui->pushButton_MOVEDOCKER,&QPushButton::clicked,this,&vekPackage::vMoveDockerToDir);
+    connect(ui->pushButton_DELETEDOCKER,&QPushButton::clicked,this,&vekPackage::vDelDockerToDir);
+}
+bool vekPackage::vCheckOption(){
+    QList<QLineEdit *> qLineList = this->findChildren<QLineEdit *>();
+    foreach(auto tlb,qLineList)
+    {
+        if(tlb->text()==nullptr){
+            pObject::vekTip(tlb->objectName()+"不能为空!");
+            return false;
+        }
+    }
+    return true;
+}
+QString vekPackage::sAppNameEN(QString m_path){
+    QFileInfo s_AppName(m_path);
+    return s_AppName.baseName();
+}
+void vekPackage::vMoveDockerToDir(){
+    if(!vCheckOption()){
+        return;
+    }else{
+        bool dn_ok=false;
+        QString dnTitle="输入迁移密码";
+        QString dnLabel="输入错误后果自负";
+        QString movePassword="";
+        QLineEdit::EchoMode echoMode=QLineEdit::Normal;
+        movePassword = QInputDialog::getText(nullptr, dnTitle,dnLabel, echoMode,movePassword, &dn_ok);
+        if(!dn_ok){
+            return;
+        }else{
+            QString srcDock=dDockerData.s_dockers_path+"/"+dDockerData.s_dockers_name;
+            QString tagDock=QDir::homePath()+"/.deepinwine/"+ui->textEdit_DockerName->text();
+            if(QDir(tagDock).exists()){
+                pObject::vekTip("打包容器已经存在:"+tagDock);
+                return;
+            }else{
+                QString agrs="echo "+movePassword+" | sudo -S cp -rfp "+ srcDock+" "+tagDock;
+                system(agrs.toLocal8Bit());
+            }
+        }
+    }
+}
+void vekPackage::vDelDockerToDir(){
+    if(!vCheckOption()){
+        return;
+    }else{
+        QString tagDock=QDir::homePath()+"/.deepinwine/"+ui->textEdit_DockerName->text();
+        if(!QDir(tagDock).exists()){
+            pObject::vekTip("打包容器不存在删除失败:"+tagDock);
+            return;
+        }else{
+            QDir(tagDock).removeRecursively();
+        }
+    }
 }

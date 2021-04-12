@@ -56,7 +56,6 @@ private slots:
     void setAppSize();
     void vekStyle();
     void vekLanguage();
-    void option_Dev();
     void addInitDocker();
     void wServerTest();
     void wSetHosts();

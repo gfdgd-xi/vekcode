@@ -11,7 +11,7 @@ vekExtendDebug::vekExtendDebug(QWidget *parent) :
 vekExtendDebug::~vekExtendDebug()
 {
     exitDebug();
-    if(m_cmd!=nullptr){
+    if(m_cmd){
         m_cmd->close();
         delete m_cmd;
         m_cmd=nullptr;
@@ -113,7 +113,7 @@ void vekExtendDebug::executeArgsEnv(){
 }
 //执行游戏
 void vekExtendDebug::ExtendApp(){
-    if(m_cmd!=nullptr){
+    if(m_cmd){
         m_cmd->close();
         delete m_cmd;
         m_cmd=nullptr;

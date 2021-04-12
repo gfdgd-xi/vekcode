@@ -17,7 +17,7 @@ void vekAppListView::contextMenuEvent( QContextMenuEvent * event )
 {
     int hitIndex = this->indexAt(event->pos()).row();
     if (hitIndex > -1)
-    {      
+    {
         QMenu *pSubMenu = NULL;
         pMenu = new QMenu(this);
         std::map<QString,vekAppListView*>::iterator it;
@@ -110,7 +110,10 @@ void vekAppListView::ObjectRun(){
         case object_exportJson:
             ExportJson();
             return;
-        }       
+        case object_packageDeb:
+            PackageDeb();
+            return;
+        }
         if(_objType==object_start){
             startApp(object_start);
         }else{
@@ -120,19 +123,19 @@ void vekAppListView::ObjectRun(){
     }
 }
 std::vector<QStringList> vekAppListView::vekWinetricks_cArgs(){
-        QString dlgTitle="winetricks命令框";
-        QString txtLabel="直接输入功能,多个库和功能空格隔开\n例如:vcrun2012 vcrun2015\n命令:--self-update 可以在线更新winetricks";
-        QString defaultInput;
-        QLineEdit::EchoMode echoMode=QLineEdit::Normal;//正常文字输入
-        bool ok=false;
-        QString arg = QInputDialog::getText(nullptr, dlgTitle,txtLabel, echoMode,defaultInput, &ok);
-        std::vector<QStringList> args;
-        if (ok && !arg.isEmpty())
-        {
-            QStringList _args=arg.split(" ");
-            args.push_back(_args);
-        }
-        return args;
+    QString dlgTitle="winetricks命令框";
+    QString txtLabel="直接输入功能,多个库和功能空格隔开\n例如:vcrun2012 vcrun2015\n命令:--self-update 可以在线更新winetricks";
+    QString defaultInput;
+    QLineEdit::EchoMode echoMode=QLineEdit::Normal;//正常文字输入
+    bool ok=false;
+    QString arg = QInputDialog::getText(nullptr, dlgTitle,txtLabel, echoMode,defaultInput, &ok);
+    std::vector<QStringList> args;
+    if (ok && !arg.isEmpty())
+    {
+        QStringList _args=arg.split(" ");
+        args.push_back(_args);
+    }
+    return args;
 }
 void vekAppListView::startApp(ExtendType _objType){
     std::vector<QStringList> _codeAgrs;
@@ -169,7 +172,7 @@ void vekAppListView::startApp(ExtendType _objType){
 }
 void vekAppListView::ExportJson(){
     int index = this->currentIndex().row();
-    if(_vExportJson==nullptr){
+    if(!_vExportJson){
         SappData bGameData=*m_pModel->getItem(index);
         _vExportJson=new vekExportJson();
         _vExportJson->setAttribute(Qt::WA_DeleteOnClose,true);
@@ -178,9 +181,22 @@ void vekAppListView::ExportJson(){
         _vExportJson->ExportJson(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),bGameData.s_uid);
     }
 }
+void vekAppListView::PackageDeb(){
+    int index = this->currentIndex().row();
+    if(!_vPackage){
+        SappData bGameData=*m_pModel->getItem(index);
+        _vPackage=new vekPackage();
+        _vPackage->setAttribute(Qt::WA_DeleteOnClose,true);
+        _vPackage->setWindowFlags(Qt::WindowStaysOnTopHint);
+        _vPackage->setGeometry(this->geometry());
+        _vPackage->vAppData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),bGameData.s_uid);
+        _vPackage->show();
+        connect(_vPackage,&vekPackage::_unPackage,this,&vekAppListView::unPackage);
+    }
+}
 //调试
 void vekAppListView::objectExtendApp(){
-    if(_vExtendDebug==nullptr){
+    if(!_vExtendDebug){
         _vExtendDebug=new vekExtendDebug();
         _vExtendDebug->setAttribute(Qt::WA_DeleteOnClose,true);
         QString currentTabText =mBox->tabText(mBox->currentIndex());
@@ -195,7 +211,7 @@ void vekAppListView::setItemSlot(){
     int index = this->currentIndex().row();
     if (index > -1)
     {
-        if(_vek_App_Add==nullptr){
+        if(!_vek_App_Add){
             //绑定传参槽
             _vek_App_Add=new vekAppAddMT();
             _vek_App_Add->setAttribute(Qt::WA_DeleteOnClose,true);
@@ -219,7 +235,7 @@ void vekAppListView::setUpDelData(SdockerData dockData,SappData* appData,EADETyp
         bool dState=false;
         if(objTypeView==object_delApp){
             if(m_pModel->rowCount()<=1){
-                 dState=pObject::vekMesg("提示:这是"+dockNameStr+"最后一个程序,若是执意删除则Vek将删除"+dockNameStr+"容器");
+                dState=pObject::vekMesg("提示:这是"+dockNameStr+"最后一个程序,若是执意删除则Vek将删除"+dockNameStr+"容器");
             }
             m_pModel->deleteItem(index);
             _objectJson.deleteAppNodeData(dockData,deleteCID);
@@ -242,10 +258,10 @@ void vekAppListView::setUpDelData(SdockerData dockData,SappData* appData,EADETyp
             }else{
                 //在新的容器中执行
                 _objectJson.deleteAppNodeData(pObject::getDockerData(currentTabText),appData->s_uid);
-                _objectJson.updateAppNodeData(dockData,*appData);     
+                _objectJson.updateAppNodeData(dockData,*appData);
                 connect(this,SIGNAL(setUpDelDataSignal(SdockerData*,SappData*)),pObjectVek,SLOT(addAppObject(SdockerData*,SappData*)));
                 emit setUpDelDataSignal(&dockData,appData);
-            }  
+            }
         }
     }
 }
@@ -261,6 +277,9 @@ void vekAppListView::deleteDockerTab(QString dockPathStr,QString dockNameStr){
     objectJson _oJson;
     _oJson.deleteDockerNodeData(dockNameStr);
     m_pListMap->erase(dockNameStr);
+}
+void vekAppListView::unPackage(){
+    _vPackage=nullptr;
 }
 void vekAppListView::unAppAdd(){
     _vek_App_Add=nullptr;

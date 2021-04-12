@@ -3,7 +3,6 @@
 
 #include "obj/common.h"
 
-
 namespace Ui {
 class vekPackage;
 
@@ -16,25 +15,28 @@ class vekPackage : public QDialog
 public:
     explicit vekPackage(QWidget *parent = nullptr);
     ~vekPackage();
+    void vAppData(SdockerData,QString);
 private:
     Ui::vekPackage *ui;
-    void initUI();
+    SdockerData dDockerData;
+    QString dAppUid;   
+    void vSetDefalut();
+    void vSetDefalutTips();
+    bool vCheckOption();
+    QString sAppNameEN(QString);
+    //导入打包参数
+    void vInPutBuildDebArgs();
+    //导出打包参数
+    void vOutPutBuildDebArgs();
+    //打开容器目录
+    void vOpenDockerToDir();
+    //自动打包
+    void vBuildDebPackage();
+private slots:
+    //迁移容器
+    void vMoveDockerToDir();
+    void vDelDockerToDir();
+signals:
+     void _unPackage();
 };
-static QString str_ui[]={"包描述:",
-                        "包名-英文",
-                        "包名-中文",
-                        "原始容器名",
-                        "目标容器名:",
-                        "应用分类:",
-                        "图标名",
-                        "启动程序名",
-                        "启动文件路径",
-                        "输出包名",
-                        "专业版包名",
-                        "包版本号",
-                        "旧包名",
-                        "Wine依赖：",
-                        "虚组件",
-                        "wine运行路径",
-                        "补丁加载路径"};
 #endif // VEKDEBUG_H
