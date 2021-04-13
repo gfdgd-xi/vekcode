@@ -98,7 +98,7 @@ void vekAppPanel::addAppSlot(){
     if(vek_app_multi_add==nullptr){
         vek_app_multi_add=new vekAppAddMulti();
         vek_app_multi_add->setAttribute(Qt::WA_DeleteOnClose,true);
-        vek_app_multi_add->setWindowFlags(Qt::WindowStaysOnTopHint);
+        //vek_app_multi_add->setWindowFlags(Qt::WindowStaysOnTopHint);
         vek_app_multi_add->setWindowTitle("Vek游戏增加方式选择");
         connect(vek_app_multi_add,&vekAppAddMulti::_unMultAppAdd,this,&vekAppPanel::unMultAppAdd);
         connect(vek_app_multi_add,&vekAppAddMulti::_MultiAppDiy,this,&vekAppPanel::addAppDiy);
@@ -110,7 +110,7 @@ void vekAppPanel::addAppDiy(){
     if(vek_app_add==nullptr){
         vek_app_add=new vekAppAddMT();
         vek_app_add->setAttribute(Qt::WA_DeleteOnClose,true);
-        vek_app_add->setWindowFlags(Qt::WindowStaysOnTopHint);
+        //vek_app_add->setWindowFlags(Qt::WindowStaysOnTopHint);
         vek_app_add->setWindowTitle("Vek软件增加");
         SdockerData tmpData=pObject::getDockerData(m_pBox->tabText(m_pBox->currentIndex()));
         vek_app_add->vekAppAddConnectObject(&tmpData,nullptr,object_addApp);
@@ -123,7 +123,7 @@ void vekAppPanel::addAppAuto(){
     if(vek_app_add_auto==nullptr){
         vek_app_add_auto=new vekAppAddAT();
         vek_app_add_auto->setAttribute(Qt::WA_DeleteOnClose,true);
-        vek_app_add_auto->setWindowFlags(Qt::WindowStaysOnTopHint);
+        //vek_app_add_auto->setWindowFlags(Qt::WindowStaysOnTopHint);
         vek_app_add_auto->setWindowTitle("自动配置容器");
         vek_app_add_auto->connectDockObject();
         vek_app_add_auto->show();

@@ -170,6 +170,7 @@ void vekAppListView::startApp(ExtendType _objType){
     }
 
 }
+//导出配置文件json
 void vekAppListView::ExportJson(){
     int index = this->currentIndex().row();
     if(!_vExportJson){
@@ -181,17 +182,28 @@ void vekAppListView::ExportJson(){
         _vExportJson->ExportJson(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),bGameData.s_uid);
     }
 }
+//导出Deb包
 void vekAppListView::PackageDeb(){
     int index = this->currentIndex().row();
     if(!_vPackage){
-        SappData bGameData=*m_pModel->getItem(index);
-        _vPackage=new vekPackage();
-        _vPackage->setAttribute(Qt::WA_DeleteOnClose,true);
-        _vPackage->setWindowFlags(Qt::WindowStaysOnTopHint);
-        _vPackage->setGeometry(this->geometry());
-        _vPackage->vAppData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),bGameData.s_uid);
-        _vPackage->show();
-        connect(_vPackage,&vekPackage::_unPackage,this,&vekAppListView::unPackage);
+        bool dn_ok=false;
+        QString dnTitle="功能解锁密码";
+        QString dnLabel="涉及版权问题 该功能为限制功能";
+        QString movePassword="";
+        QLineEdit::EchoMode echoMode=QLineEdit::Normal;
+        movePassword = QInputDialog::getText(nullptr, dnTitle,dnLabel, echoMode,movePassword, &dn_ok);
+        if(!dn_ok){
+            return;
+        }else if(movePassword=="413"){
+            SappData bGameData=*m_pModel->getItem(index);
+            _vPackage=new vekPackage();
+            _vPackage->setAttribute(Qt::WA_DeleteOnClose,true);
+            //_vPackage->setWindowFlags(Qt::WindowStaysOnTopHint);
+            _vPackage->setGeometry(this->geometry());
+            _vPackage->vAppData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),bGameData.s_uid);
+            _vPackage->show();
+            connect(_vPackage,&vekPackage::_unPackage,this,&vekAppListView::unPackage);
+        }
     }
 }
 //调试
@@ -218,7 +230,7 @@ void vekAppListView::setItemSlot(){
             _vek_App_Add->setWindowTitle("Vek软件设置");
             QString currentAppCID=m_pModel->getItem(this->currentIndex().row())->s_uid;
             _vek_App_Add->vekAppAddConnectObject(&g_vekLocalData.map_docker_list.at(mBox->tabText(mBox->currentIndex())),currentAppCID,object_setApp);
-            _vek_App_Add->setWindowFlags(Qt::WindowStaysOnTopHint);
+            //_vek_App_Add->setWindowFlags(Qt::WindowStaysOnTopHint);
             _vek_App_Add->show();
             connect(_vek_App_Add,&vekAppAddMT::_unDiyAppAdd,this,&vekAppListView::unAppAdd);
             connect(_vek_App_Add,SIGNAL(_upData(SdockerData,SappData*,EADEType)),this,SLOT(setUpDelData(SdockerData,SappData*,EADEType)));

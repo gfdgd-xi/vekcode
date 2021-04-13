@@ -173,7 +173,7 @@ void vek::on_action_EditSource_triggered(){
     if(!_vek_source_esit){
         _vek_source_esit=new vekSourceEdit();
         _vek_source_esit->setAttribute(Qt::WA_DeleteOnClose,true);
-        _vek_source_esit->setWindowFlags(Qt::WindowStaysOnTopHint);
+        //_vek_source_esit->setWindowFlags(Qt::WindowStaysOnTopHint);
         _vek_source_esit->setGeometry(this->geometry());
         _vek_source_esit->show();
         connect(_vek_source_esit,&vekSourceEdit::_unSourveEdit,this,&vek::unSourceEdit);
@@ -215,7 +215,7 @@ void vek::on_action_WineInstall_triggered()
         _vek_wine_option=new vekWineOption();
         _vek_wine_option->setAttribute(Qt::WA_DeleteOnClose,true);
         _vek_wine_option->setGeometry(this->geometry());
-        _vek_wine_option->setWindowFlags(Qt::WindowStaysOnTopHint);
+        //_vek_wine_option->setWindowFlags(Qt::WindowStaysOnTopHint);
         _vek_wine_option->show();
         _vek_wine_option->getWineGitInfo();
         _vek_wine_option->loadWineData();

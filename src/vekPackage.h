@@ -35,6 +35,8 @@ private slots:
     void vInstallPackageTool();
     void vBuildDebPackage();
     void vSelExePath();
+    void vDebDir();
+    void vChangedAppType();
     void outLogs(QString);
 signals:
     void _unPackage();

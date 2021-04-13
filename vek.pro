@@ -6,7 +6,7 @@ CONFIG += release
 #DEFINES += QT_DEPRECATED_WARNINGS\
 #           QT_NO_WARNING_OUTPUT
 #          QT_NO_DEBUG_OUTPUT
-VERSION = 1.0.2.0
+VERSION = 1.0.2.1
 DEFINES +=APP_VERSION=\\\"$$VERSION\\\"
 # You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.

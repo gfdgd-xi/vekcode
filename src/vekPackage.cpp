@@ -40,7 +40,9 @@ void vekPackage::vSetDefalutTips(){
 }
 void vekPackage::vSetDefalut(){
     QString appNameEn=sAppNameEN(dDockerData.map_dockers_data[dAppUid].s_main_proc_name);
-
+    QStringList _aType;
+    _aType<<"Chat;"<<"Music;"<<"Movie;"<<"Picture;"<<"Download;"<<"Networks;"<<"Other;";
+    ui->comboBox_AppType->addItems(_aType);
     ui->textEdit_AppDescr->setText(dDockerData.map_dockers_data[dAppUid].s_name+" Client on Deepin Wine");
     ui->textEdit_AppDescr->setObjectName("应用描述");
 
@@ -53,7 +55,7 @@ void vekPackage::vSetDefalut(){
     ui->textEdit_DockerName->setText("Deepin-"+appNameEn.toUpper());
     ui->textEdit_DockerName->setObjectName("部署容器名");
 
-    ui->textEdit_AppType->setText(nullptr);
+    ui->textEdit_AppType->setText(ui->comboBox_AppType->currentText());
     ui->textEdit_AppType->setObjectName("应用分类");
 
     ui->textEdit_AppIco->setText("deepin.com."+appNameEn.toLower()+".svg");
@@ -81,7 +83,17 @@ void vekPackage::vSetDefalut(){
     connect(ui->pushButton_InstallTool,&QPushButton::clicked,this,&vekPackage::vInstallPackageTool);
     connect(ui->pushButton_PackageDeb,&QPushButton::clicked,this,&vekPackage::vBuildDebPackage);
     connect(ui->pushButton_sel_exe_path,&QPushButton::clicked,this,&vekPackage::vSelExePath);
+    connect(ui->pushButton_DebDir,&QPushButton::clicked,this,&vekPackage::vDebDir);
+    connect(ui->comboBox_AppType,&QComboBox::currentTextChanged,this,&vekPackage::vChangedAppType);
 }
+void vekPackage::vChangedAppType(){
+    ui->textEdit_AppType->setText(ui->comboBox_AppType->currentText());
+    qInfo()<<ui->comboBox_AppType->currentText();
+}
+void vekPackage::vDebDir(){
+     QDesktopServices::openUrl(QUrl(dDockerData.s_dockers_wine_path+"/deepin-wine-tools/wine-package-script/package_save/uos", QUrl::TolerantMode));
+}
+
 void vekPackage::vSelExePath(){
     QString exePath=QFileDialog::getOpenFileName(this,"选择执行程序","","exe Files(*.exe)");
     if(exePath!=nullptr){
