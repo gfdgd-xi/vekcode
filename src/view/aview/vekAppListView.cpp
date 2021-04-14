@@ -143,30 +143,32 @@ void vekAppListView::startApp(ExtendType _objType){
     if(index>-1){
         SdockerData dockData=pObject::getDockerData(mBox->tabText(mBox->currentIndex()));
         SappData* appData=m_pModel->getItem(index);
-        if(!QDir(dockData.s_dockers_wine_path).exists()){
-            pObject::vekTip("Wine路径丢失!");
-            return;
+        if(appData!=nullptr){
+            if(!QDir(dockData.s_dockers_wine_path).exists()){
+                pObject::vekTip("Wine路径丢失!");
+                return;
+            }
+            QString pDock=dockData.s_dockers_path+"/"+dockData.s_dockers_name;
+            if(!QDir(pDock).exists()){
+                pObject::vekTip("容器路径丢失!");
+                return;
+            }
+            if(!QFile(appData->s_exe).exists()){
+                pObject::vekTip(appData->s_name+"应用执行程序不存在!"+"路径:"+appData->s_exe);
+                return;
+            }
+            objectExtend* _objectExtend=new objectExtend();
+            taskList.push_back(appData->s_main_proc_name);
+            auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
+            connect(_objectExtend, SIGNAL(objexitTray(bool)), pObjectVek, SLOT(exitTray(bool)));
+            emit _startTray();
+            objectAppMT* oAMT=new objectAppMT(appData,&dockData);
+            oAMT->sObjectInstall();
+            delete oAMT;
+            oAMT=nullptr;
+            _objectExtend->setDockOptionObjectData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),appData->s_uid,_codeAgrs,_objType,ExtendBootType::object_wineboot_default,ExtendServerType::object_wineserver_default);
+            _objectExtend->start();
         }
-        QString pDock=dockData.s_dockers_path+"/"+dockData.s_dockers_name;
-        if(!QDir(pDock).exists()){
-            pObject::vekTip("容器路径丢失!");
-            return;
-        }
-        if(!QFile(appData->s_exe).exists()){
-            pObject::vekTip(appData->s_name+"应用执行程序不存在!"+"路径:"+appData->s_exe);
-            return;
-        }
-        objectExtend* _objectExtend=new objectExtend();
-        taskList.push_back(appData->s_main_proc_name);
-        auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
-        connect(_objectExtend, SIGNAL(objexitTray(bool)), pObjectVek, SLOT(exitTray(bool)));
-        emit _startTray();
-        objectAppMT* oAMT=new objectAppMT(appData,&dockData);
-        oAMT->sObjectInstall();
-        delete oAMT;
-        oAMT=nullptr;
-        _objectExtend->setDockOptionObjectData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),appData->s_uid,_codeAgrs,_objType,ExtendBootType::object_wineboot_default,ExtendServerType::object_wineserver_default);
-        _objectExtend->start();
     }
 
 }

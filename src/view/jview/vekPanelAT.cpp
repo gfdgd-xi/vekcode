@@ -46,16 +46,18 @@ void vekPanelAT::showPopup()
                     pListView->addItem(baj);
                 }
                 qTab->addTab(pListView,it->first);
-                connect(pListView,SIGNAL(outAppData(SappDeployInfo)),this,SLOT(qComboBoxJsonSet(SappDeployInfo)));
+                connect(pListView,SIGNAL(outAppData(SappDeployInfo*)),this,SLOT(qComboBoxJsonSet(SappDeployInfo*)));
             }
             break;
         }
     }
     popup->move(popup->x(), popup->y() + 1);
 }
-void vekPanelAT::qComboBoxJsonSet(SappDeployInfo data){
-    this->clear();
-    this->addItem(data.s_deploy_app_name);
-    oData=data;
-    this->hidePopup();
+void vekPanelAT::qComboBoxJsonSet(SappDeployInfo* data){
+    if(data!=nullptr){
+        this->clear();
+        this->addItem(data->s_deploy_app_name);
+        oData=*data;
+        this->hidePopup();
+    }
 }

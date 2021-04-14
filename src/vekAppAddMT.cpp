@@ -31,6 +31,7 @@ void vekAppAddMT::vekAppAddConnectObject(SdockerData* _data,QString _appCID,EADE
     connect(ui->pushButton_SaveDxvkConfFile,&QPushButton::clicked,this,&vekAppAddMT::objectButton);
     connect(ui->checkBox_dxvkConfigState,&QCheckBox::stateChanged,this,&vekAppAddMT::dxvkOptionLoad);
     connect(ui->checkBox_stateDxvk,&QCheckBox::stateChanged,this,&vekAppAddMT::dxvkOptionLoad);
+    connect(ui->comboBox_RunWine,&QComboBox::currentTextChanged,this,&vekAppAddMT::wineChanged);
     //显示当前安装wine
     ui->comboBox_RunWine->clear();
     if(!g_vekLocalData.map_wine_list.empty())
@@ -39,8 +40,8 @@ void vekAppAddMT::vekAppAddConnectObject(SdockerData* _data,QString _appCID,EADE
         {
             ui->comboBox_RunWine->addItem(x.first);
         }
-        for(auto& d:g_vekLocalData.map_wine_list){
-            for(auto& dx:d.second.s_local_wine_dxvk){
+        if(!g_vekLocalData.map_wine_list[ui->comboBox_RunWine->currentText()].s_local_wine_dxvk.empty()){
+            for(auto& dx:g_vekLocalData.map_wine_list[ui->comboBox_RunWine->currentText()].s_local_wine_dxvk){
                 ui->comboBox_dxvkversion->addItem(dx);
             }
         }
@@ -51,12 +52,7 @@ void vekAppAddMT::vekAppAddConnectObject(SdockerData* _data,QString _appCID,EADE
     for(auto&y:_dockSystemVersion){
         ui->comboBox_dockSystemVersion->addItem(y);
     }
-    for(auto n:_dockVer){
-        ui->comboBox_dockbit->addItem(n);
-    }
-    for(auto m:_dockWineVer){
-        ui->comboBox_winebit->addItem(m);
-    }
+    wineChanged();
     if(!g_vekLocalData.map_docker_list.empty()){
         for(auto &a:g_vekLocalData.map_docker_list){
             ui->comboBox_DockName->addItem(a.first);
@@ -117,21 +113,26 @@ void vekAppAddMT::initAppAndDockData(SdockerData* _data,QString _appCID){
     }
 }
 void vekAppAddMT::plugsLoad(){
-    for(auto a:g_vekLocalData.map_wine_list){
-        if(a.first==ui->comboBox_RunWine->currentText()){
-            if(!QFile(a.second.s_local_wine_path+"/plugs/Mono.msi").exists()){
-                ui->checkBox_Mono->setEnabled(false);
-            }
-            if(!QFile(a.second.s_local_wine_path+"/plugs/GeckoX86.msi").exists()&&!QFile(a.second.s_local_wine_path+"/plugs/GeckoX86_64.msi").exists()){
-                ui->checkBox_Gecko->setEnabled(false);
-            }
-            if(a.second.s_local_wine_dxvk.empty()){
-                ui->checkBox_stateDxvk->setEnabled(false);
-                ui->comboBox_dxvkversion->setEnabled(false);
-                ui->checkBox_statedxvkhud->setEnabled(false);
-                ui->lineEdit_dxvkConfigFIle->setEnabled(false);
-            }
+    if(g_vekLocalData.map_wine_list[ui->comboBox_RunWine->currentText()].s_local_wine_mono!=nullptr){
+        if(!QFile(g_vekLocalData.map_wine_list[ui->comboBox_RunWine->currentText()].s_local_wine_path+"/plugs/Mono.msi").exists()){
+            ui->checkBox_Mono->setEnabled(false);
         }
+    }
+    if(g_vekLocalData.map_wine_list[ui->comboBox_RunWine->currentText()].s_local_wine_mono!=nullptr){
+        if(!QFile(g_vekLocalData.map_wine_list[ui->comboBox_RunWine->currentText()].s_local_wine_path+"/plugs/GeckoX86.msi").exists()&&!QFile(g_vekLocalData.map_wine_list[ui->comboBox_RunWine->currentText()].s_local_wine_path+"/plugs/GeckoX86_64.msi").exists()){
+            ui->checkBox_Gecko->setEnabled(false);
+        }
+    }
+    if(g_vekLocalData.map_wine_list[ui->comboBox_RunWine->currentText()].s_local_wine_mono!=nullptr){
+        if(!QFile(g_vekLocalData.map_wine_list[ui->comboBox_RunWine->currentText()].s_local_wine_path+"/plugs/Mono.msi").exists()){
+            ui->checkBox_Mono->setEnabled(false);
+        }
+    }
+    if(g_vekLocalData.map_wine_list[ui->comboBox_RunWine->currentText()].s_local_wine_dxvk.empty()){
+        ui->checkBox_stateDxvk->setEnabled(false);
+        ui->comboBox_dxvkversion->setEnabled(false);
+        ui->checkBox_statedxvkhud->setEnabled(false);
+        ui->lineEdit_dxvkConfigFIle->setEnabled(false);
     }
 }
 void vekAppAddMT::dxvkOptionLinkState(bool cState){
@@ -166,6 +167,34 @@ void vekAppAddMT::dxvkOptionLoad(){
         ui->checkBox_statedxvkhud->setChecked(false);
         ui->checkBox_dxvkConfigState->setChecked(false);
     }
+}
+void vekAppAddMT::wineChanged(){
+    ui->comboBox_dxvkversion->clear();
+    ui->comboBox_dockbit->clear();
+    ui->comboBox_winebit->clear();
+    if(!g_vekLocalData.map_wine_list[ui->comboBox_RunWine->currentText()].s_local_wine_dxvk.empty()){
+        for(auto& dx:g_vekLocalData.map_wine_list[ui->comboBox_RunWine->currentText()].s_local_wine_dxvk){
+            ui->comboBox_dxvkversion->addItem(dx);
+        }
+    }
+    //deepin
+    QStringList dWin;
+    QStringList dWine;
+    //winehq
+    QStringList dWinhq;
+    QStringList dWinehq;
+    dWin<<"win32";
+    dWinhq<<"win32"<<"win64";
+    dWine<<"wine";
+    dWinehq<<"wine"<<"wine64";
+    if(ui->comboBox_RunWine->currentText().contains("deepin",Qt::CaseSensitive)){
+        ui->comboBox_dockbit->addItems(dWin);
+        ui->comboBox_winebit->addItems(dWine);
+    }else{
+        ui->comboBox_dockbit->addItems(dWinhq);
+        ui->comboBox_winebit->addItems(dWinehq);
+    }
+
 }
 //SetTable
 void vekAppAddMT::setTableView(QTableView* qtv){

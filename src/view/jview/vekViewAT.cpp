@@ -14,7 +14,7 @@ void vekViewAT::mouseDoubleClickEvent(QMouseEvent *event){
     UNUSED(event);
     int rindex = this->currentIndex().row();
     if(rindex>-1){
-        SappDeployInfo bAppJson=*m_pModel->getItem(rindex);
+        SappDeployInfo* bAppJson=m_pModel->getItem(rindex);
         emit outAppData(bAppJson);
     }
 }

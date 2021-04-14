@@ -99,7 +99,7 @@ p, li { white-space: pre-wrap; }
       <attribute name="title">
        <string>使用须知</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout2">
+      <layout class="QVBoxLayout" name="verticalLayout3">
        <property name="spacing">
         <number>1</number>
        </property>
@@ -145,7 +145,7 @@ p, li { white-space: pre-wrap; }
       <attribute name="title">
        <string>错误解决指南</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout3">
+      <layout class="QVBoxLayout" name="verticalLayout4">
        <property name="spacing">
         <number>1</number>
        </property>
@@ -266,7 +266,7 @@ p, li { white-space: pre-wrap; }
         <number>1</number>
        </property>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout4">
+        <layout class="QVBoxLayout" name="verticalLayout5">
          <item>
           <widget class="QTextEdit" name="textEdit_2">
            <property name="focusPolicy">

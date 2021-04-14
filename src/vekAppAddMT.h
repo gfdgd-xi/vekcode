@@ -48,6 +48,7 @@ signals:
 private slots:
     void objectButton();
     void plugsLoad();
+    void wineChanged();
     void clicked_rightMenu(const QPoint &pos);  //右键信号槽函数
     void onTaskBoxContextMenuEvent();
 };

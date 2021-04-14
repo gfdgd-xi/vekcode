@@ -71,4 +71,5 @@ SappDeployInfo* vekModelAT::getItem( int index )
     {
         return m_ItemDataVec[index];
     }
+    return nullptr;
 }

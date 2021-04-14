@@ -10,7 +10,7 @@ class vekPanelAT: public QComboBox
     Q_OBJECT
 public:
      vekPanelAT(QWidget *parent = 0);
-    ~vekPanelAT();   
+    ~vekPanelAT();
      SappDeployInfo oData;
 private:
     QTabWidget *qTab=nullptr;
@@ -20,7 +20,7 @@ private:
 protected:
     void showPopup();
 public slots:
-    void qComboBoxJsonSet(SappDeployInfo data);
+    void qComboBoxJsonSet(SappDeployInfo* data);
 signals:
     void sigPopup();
 };

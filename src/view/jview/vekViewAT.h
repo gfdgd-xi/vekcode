@@ -17,7 +17,7 @@ private:
     int  m_hitIndex;
     vekModelAT* m_pModel;
 signals:
-    void outAppData(SappDeployInfo);
+    void outAppData(SappDeployInfo*);
 };
 
 #endif // VEKATJSONVIEW_H

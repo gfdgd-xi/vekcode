@@ -2,7 +2,7 @@
 
 objectExtend::objectExtend(QObject *parent) : QThread(parent)
 {
-    parent=nullptr;
+
 }
 objectExtend::~objectExtend(){
     if(m_cmd){
