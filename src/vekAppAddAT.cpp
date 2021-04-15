@@ -13,20 +13,27 @@ vekAppAddAT::~vekAppAddAT()
 {
     emit _unAutoDock();
 }
-void vekAppAddAT::connectDockObject(){
+void vekAppAddAT::connectDockObject(SdockerData _dockeData){
     connect(ui->pushButton_DockDone,&QPushButton::clicked,this,&vekAppAddAT::addAutoApp);
     connect(ui->pushButton_AutoJson,&QPushButton::clicked,this,&vekAppAddAT::SetObject);
     connect(ui->pushButton_AutoDockPath,&QPushButton::clicked,this,&vekAppAddAT::SetObject);
     connect(ui->pushButton_SetExePath,&QPushButton::clicked,this,&vekAppAddAT::SetObject);
-    if(!g_vekLocalData.map_wine_list.empty())
+    if(g_vekLocalData.map_wine_list.empty())
     {
-        for(auto & x :g_vekLocalData.map_wine_list)
-        {
-            ui->comboBox_WinVersion->addItem(x.first);
-        }
-    }else{
         pObject::vekTip("请先安装Wine");
+        return;
         this->close();
+    }else{
+        defalutValue();
+        ui->comboBox_WinVersion->setCurrentText(_dockeData.s_dockers_wine_version);
+        ui->comboBox_DockName->setCurrentText(_dockeData.s_dockers_name);
+        ui->lineEdit_DockPath->setText(_dockeData.s_dockers_path);
+    }
+}
+void vekAppAddAT::defalutValue(){
+    for(auto & x :g_vekLocalData.map_wine_list)
+    {
+        ui->comboBox_WinVersion->addItem(x.first);
     }
 
     for(auto & d:g_vekLocalData.map_app_src_list){

@@ -125,7 +125,8 @@ void vekAppPanel::addAppAuto(){
         vek_app_add_auto->setAttribute(Qt::WA_DeleteOnClose,true);
         //vek_app_add_auto->setWindowFlags(Qt::WindowStaysOnTopHint);
         vek_app_add_auto->setWindowTitle("自动配置容器");
-        vek_app_add_auto->connectDockObject();
+        SdockerData tmpData=pObject::getDockerData(m_pBox->tabText(m_pBox->currentIndex()));
+        vek_app_add_auto->connectDockObject(tmpData);
         vek_app_add_auto->show();
         connect(vek_app_add_auto,&vekAppAddAT::_unAutoDock,this,&vekAppPanel::unAutoDock);
         connect(vek_app_add_auto,SIGNAL(autoObjDock(SdockerData*,SappData*)),this,SLOT(addAppObject(SdockerData*,SappData*)));

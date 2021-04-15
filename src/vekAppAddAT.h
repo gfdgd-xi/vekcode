@@ -15,7 +15,7 @@ class vekAppAddAT : public QWidget
 public:
     explicit vekAppAddAT(QWidget *parent = nullptr);
     ~vekAppAddAT();
-    void connectDockObject();
+    void connectDockObject(SdockerData);
 private:
     Ui::vekAppAddAT *ui;
     SappData* autoAppData=nullptr;
@@ -23,6 +23,7 @@ private:
     void SetObject();
     void addAutoApp();
     void controlState(bool pState);
+    void defalutValue();
 signals:
     void _unAutoDock();
     void autoObjDock(SdockerData*,SappData*);
