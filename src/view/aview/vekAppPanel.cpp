@@ -4,16 +4,17 @@ vekAppPanel::vekAppPanel(QWidget *parent)
     : QWidget(parent)
 {   
     vek_InitTabWidgetListApp();
-    //vekLoadJsonData();
 }
 
 vekAppPanel::~vekAppPanel()
 {
 
 }
+
+QSize icoSize(25,20);
 int cTab=0;
 //初始化容器列表
-void vekAppPanel::vek_InitTabWidgetListApp(){
+void vekAppPanel::vek_InitTabWidgetListApp(){   
     QGridLayout *gridLayout = new QGridLayout(this);
     m_pBox = new QTabWidget(this);
     gridLayout->addWidget(m_pBox);
@@ -30,14 +31,30 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
         pListView->setFlow(QListView::LeftToRight);
         pListView->setResizeMode(QListView::Adjust);
         m_pBox->addTab(pListView,it->first);
-        if(it->second.s_dockers_bit_version=="win32"){
-            QIcon icon(":/res/img/32.png");
-            m_pBox->setTabIcon(cTab,icon);
-            cTab+=1;
+        if(it->second.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
+            if(it->second.s_dockers_bit_version=="win32"){
+                QIcon icon(":/res/img/D32.png");
+                m_pBox->setTabIcon(cTab,icon);
+                m_pBox->setIconSize(icoSize);
+                cTab+=1;
+            }else{
+                QIcon icon(":/res/img/D64.png");
+                m_pBox->setTabIcon(cTab,icon);
+                m_pBox->setIconSize(icoSize);
+                cTab+=1;
+            }
         }else{
-            QIcon icon(":/res/img/64.png");
-            m_pBox->setTabIcon(cTab,icon);
-            cTab+=1;
+            if(it->second.s_dockers_bit_version=="win32"){
+                QIcon icon(":/res/img/H32.png");
+                m_pBox->setTabIcon(cTab,icon);
+                m_pBox->setIconSize(icoSize);
+                cTab+=1;
+            }else{
+                QIcon icon(":/res/img/H64.png");
+                m_pBox->setTabIcon(cTab,icon);
+                m_pBox->setIconSize(icoSize);
+                cTab+=1;
+            }
         }
         if(!it->second.map_dockers_data.empty()){
             for(its=it->second.map_dockers_data.rbegin();its!=it->second.map_dockers_data.rend();its++){
@@ -371,16 +388,32 @@ void vekAppPanel::addAppObject(SdockerData* dcokData,SappData* appData){
     pList->addItem(_tempBaseData);
 }
 void vekAppPanel::upTabIco(){
-    cTab=0;
+    int cTab=0;
     for(auto a:g_vekLocalData.map_docker_list){
-        if(a.second.s_dockers_bit_version=="win32"){
-            QIcon icon(":/res/img/32.png");
-            m_pBox->setTabIcon(cTab,icon);
-            cTab+=1;
+        if(a.second.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
+            if(a.second.s_dockers_bit_version=="win32"){
+                QIcon icon(":/res/img/D32.png");
+                m_pBox->setTabIcon(cTab,icon);
+                m_pBox->setIconSize(icoSize);
+                cTab+=1;
+            }else{
+                QIcon icon(":/res/img/D64.png");
+                m_pBox->setTabIcon(cTab,icon);
+                m_pBox->setIconSize(icoSize);
+                cTab+=1;
+            }
         }else{
-            QIcon icon(":/res/img/64.png");
-            m_pBox->setTabIcon(cTab,icon);
-            cTab+=1;
+            if(a.second.s_dockers_bit_version=="win32"){
+                QIcon icon(":/res/img/H32.png");
+                m_pBox->setTabIcon(cTab,icon);
+                m_pBox->setIconSize(icoSize);
+                cTab+=1;
+            }else{
+                QIcon icon(":/res/img/H64.png");
+                m_pBox->setTabIcon(cTab,icon);
+                m_pBox->setIconSize(icoSize);
+                cTab+=1;
+            }
         }
     }
 }
