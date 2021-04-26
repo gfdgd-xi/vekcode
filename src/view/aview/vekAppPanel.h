@@ -7,11 +7,12 @@
 #include "../../vekAppAddAT.h"
 #include "../../obj/common.h"
 #include "../../obj/objectTray.h"
-
+#include <QStylePainter>
 typedef enum{
     INSTALLAPP,
     INITDOCKER
 }INITTYPE;
+
 class vekAppPanel : public QWidget
 {
     Q_OBJECT

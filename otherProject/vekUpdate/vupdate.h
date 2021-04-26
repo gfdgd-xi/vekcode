@@ -22,12 +22,13 @@ public:
     QString vUrlLogStr;
     QString vUrlFileStr;
     QString vUrlPassWord;
+    QString vUrlFileSHA;
 private:
     Ui::vUpdate *ui;
     bool mDragWindow;
     QPoint mMousePoint;
-    QThread *obj_Thread;
-    datacurl* dcurl;
+    QThread *obj_Thread=nullptr;
+    datacurl* dcurl=nullptr;
     //QString log="https://gitee.com/JackLee02/vekGame/raw/master/upLogs.txt";
     //QString url="https://fancy-brook-66ae.vek.workers.dev/UEK/vek-1.0.1.8.zip";
     int nPos=0;
@@ -35,6 +36,7 @@ private:
     void lableLogShow(QString str);
     void downloadFile();
     void controlSatae(bool);
+    QString fileHash(QString);
 signals:
     void ToThread();
 protected:

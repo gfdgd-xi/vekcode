@@ -93,12 +93,14 @@ bool objectAppAT::objDockerData(){
             pObject::vekError("当前容器Wine版本为:"+baseDockData.s_dockers_wine_exe_version+"配置文件容器Wine版本为:"+_baseAutoSetJson->map_deploy_docker.at(toStr(DockerWineVersion)));
             return false;
         }
+        /*deepin-wine5 json fonmit "win64|win32" or "win64" or "win32"
         if(baseDockData.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
             if(_baseAutoSetJson->map_deploy_docker.at(toStr(DockerVersion))=="win64"){
                 pObject::vekError("当前容器Wine版本为:"+baseDockData.s_dockers_wine_version+"配置文件容器版本为:"+_baseAutoSetJson->map_deploy_docker.at(toStr(DockerVersion))+"\n"+"deepin-wine5不支持64位容器!");
                 return false;
             }
         }
+        */
     }
     baseDockData.s_dockers_wine_path=g_vekLocalData.map_wine_list.at(baseDockData.s_dockers_wine_version).s_local_wine_path;
     QVariant monoState=_baseAutoSetJson->map_deploy_docker.at(toStr(MonoState));

@@ -180,9 +180,15 @@ void vekAppAddMT::wineChanged(){
     //deepin
     QStringList dWin;
     QStringList dWine;
+    dWin<<"win32"<<"win64";
+    dWine<<"wine"<<"wine64";
+    ui->comboBox_dockbit->addItems(dWin);
+    ui->comboBox_winebit->addItems(dWine);
     //winehq
+    /*
     QStringList dWinhq;
     QStringList dWinehq;
+
     dWin<<"win32";
     dWinhq<<"win32"<<"win64";
     dWine<<"wine";
@@ -194,7 +200,7 @@ void vekAppAddMT::wineChanged(){
         ui->comboBox_dockbit->addItems(dWinhq);
         ui->comboBox_winebit->addItems(dWinehq);
     }
-
+    */
 }
 //SetTable
 void vekAppAddMT::setTableView(QTableView* qtv){
@@ -478,12 +484,14 @@ bool vekAppAddMT::checkDocerOption(){
         pObject::vekError("请先安装wine");
         return false;
     }
+    /*
     if(tempDockData->s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
         if(tempDockData->s_dockers_bit_version=="win64"){
             pObject::vekError("Deepin-Wine5不支持64位容器");
             return false;
         }
     }
+    */
     if(tempDockData->s_dockers_path==nullptr)
     {
         pObject::vekError("请设置wine运行容器路径");

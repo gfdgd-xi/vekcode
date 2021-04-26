@@ -1,6 +1,6 @@
 ﻿#include "vek.h"
 #include "ui_common.h"
-
+#include <QCryptographicHash>
 vek::vek(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::vek)
@@ -25,6 +25,7 @@ void vek::connectObject(){
     connect(ui->styleDefault,&QAction::triggered,this,&vek::vekStyle);
     connect(ui->styleDark,&QAction::triggered,this,&vek::vekStyle);
     connect(ui->styleLight,&QAction::triggered,this,&vek::vekStyle);
+    connect(ui->action_SHA256,&QAction::triggered,this,&vek::hFileHash);
     //语言切换
     //connect(ui->langChinese,&QAction::triggered,this,&vek::vekLanguage);
     //connect(ui->langEnglish,&QAction::triggered,this,&vek::vekLanguage);
@@ -35,6 +36,26 @@ void vek::connectObject(){
     loadWinetricksServerJson();
     setAppSize();
     vekStyle();
+}
+void vek::hFileHash()
+{
+    QString curPath=QApplication::applicationDirPath();//获取系统当前目录
+    //获取应用程序的路径
+    QString dlgTitle="选择一个文件";
+    QString filter="所有文件(*.*)";
+    QString aFileName=QFileDialog::getOpenFileName(this,dlgTitle,curPath,filter);
+    if (!aFileName.isEmpty())
+    {
+        QFile file(aFileName);
+        QCryptographicHash Hash(QCryptographicHash::Sha256);
+        if(file.open(QIODevice::ReadOnly)){
+            while(file.atEnd() == false){
+                QByteArray message = file.readAll();
+                Hash.addData(message);
+            }
+            pObject::vekTip("SHA256:"+Hash.result().toHex());
+        }
+    }
 }
 void vek::loadWinetricksServerJson(){
     if(!getWinetricksServerJson()){
@@ -75,6 +96,7 @@ void vek::wCurrentUrl(){
     sWinetrickUrl=winetricks_server_url_list[ui->comboBox_wServer->currentText()];
     qInfo()<<sWinetrickUrl;
 }
+
 void vek::wServerTest(){
     QString wServerUrl=winetricks_server_url_list[ui->comboBox_wServer->currentText()];
     pObject::vekTip("如果浏览器能打开:\n"+wServerUrl+"\n则无需测速和修改hosts当然修改后可能更加适合您的网络环境");

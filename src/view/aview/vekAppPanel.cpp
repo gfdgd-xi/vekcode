@@ -19,6 +19,7 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
     gridLayout->addWidget(m_pBox);
     gridLayout->setContentsMargins(0,0,0,0);
     m_pBox->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
+    //m_pBox->setTabPosition(QTabWidget::West);
     m_pListMap = new std::map<QString,vekAppListView*>();
     std::map<QString,SdockerData>::iterator it;
     std::map<QString,SappData>::reverse_iterator its;
@@ -165,11 +166,12 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
             return;
         }
         //选择容器系统版本
-        if(swVer.contains("deepin",Qt::CaseSensitive)){
-            itemsbit<<"win32";
-        }else{
-            itemsbit<<"win32"<<"win64";
-        }
+        //if(swVer.contains("deepin",Qt::CaseSensitive)){
+        //    itemsbit<<"win32";
+        //}else{
+        //    itemsbit<<"win32"<<"win64";
+        //}
+        itemsbit<<"win32"<<"win64";
         QString dTitle="选择容器系统版本";
         QString dLabel="支持容器列表";
         int     dIndex=0;
@@ -276,6 +278,7 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
             }else{
                 itemsbit<<"win32"<<"win64";
             }
+
             QString dTitle="选择容器系统版本";
             QString dLabel="支持容器列表";
             int     dIndex=0;
@@ -316,9 +319,11 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
                 tempDockerData=g_vekLocalData.map_docker_list.at(dockName);
             }
         }
+        /*
         if(tempDockerData.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
             pObject::vekError("deepin-wine5不支持64位容器,可能部分64位软件安装程序无法运行!");
         }
+        */
         objectExtend* _objectExtend=new objectExtend();
         std::vector<QStringList> _codeAgrs;
         _objectExtend->setDockOptionObjectData(tempDockerData,tempAppData.s_uid,_codeAgrs,_objType,ExtendBootType::object_wineboot_default,ExtendServerType::object_wineserver_default);

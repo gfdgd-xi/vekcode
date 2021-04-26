@@ -2,7 +2,7 @@
 #include "ui_vupdate.h"
 #include <QMouseEvent>
 #include <QMessageBox>
-
+#include <QCryptographicHash>
 vUpdate::vUpdate(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::vUpdate)
@@ -87,11 +87,32 @@ void vUpdate::downloadFile(){
     emit ToThread();
     controlSatae(false);
 }
+QString vUpdate::fileHash(QString srcDir)
+{
+    QFile file(srcDir);
+    QCryptographicHash Hash(QCryptographicHash::Sha256);
+    if(file.open(QIODevice::ReadOnly)){
+        while(file.atEnd() == false){
+            QByteArray message = file.readAll();
+            Hash.addData(message);
+        }
+    }
+    else{
+        return nullptr;
+    }
+    QByteArray HASH256 = Hash.result();
+    return HASH256.toHex();
+}
+
 void vUpdate::overThread(bool tState,bool objTip){
    if(!objTip){
-        QMessageBox::warning(nullptr,"TIP","网络出错请重试!");
+       QMessageBox::warning(nullptr,"TIP","网络出错请重试!");
    }else{
-       upVek();
+       if(fileHash(QApplication::applicationDirPath()+"/tempVek")==vUrlFileSHA){
+           upVek();
+       }else{
+          QMessageBox::warning(nullptr,"TIP","更新文件SHA512出错更新失败");
+       }
    }
    controlSatae(tState);
 }

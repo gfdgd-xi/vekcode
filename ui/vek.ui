@@ -431,6 +431,7 @@
     <property name="title">
      <string>帮助</string>
     </property>
+    <addaction name="action_SHA256"/>
     <addaction name="action_About"/>
    </widget>
    <widget class="QMenu" name="menu_3">
@@ -533,6 +534,11 @@
   <action name="action_Dev">
    <property name="text">
     <string>开发功能测试</string>
+   </property>
+  </action>
+  <action name="action_SHA256">
+   <property name="text">
+    <string>计算文件SHA256</string>
    </property>
   </action>
  </widget>

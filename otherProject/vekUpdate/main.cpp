@@ -11,6 +11,11 @@ int main(int argc, char *argv[])
     w.vUrlLogStr=argv[2];
     w.vUrlFileStr=argv[3];
     w.vUrlPassWord=argv[4];
+    w.vUrlFileSHA=argv[5];
+    qInfo()<<w.vUrlLogStr;
+    qInfo()<<w.vUrlFileStr;
+    qInfo()<<w.vUrlPassWord;
+    qInfo()<<w.vUrlFileSHA;
     w.GetVerInfo();
     w.connectOBject();
     return a.exec();

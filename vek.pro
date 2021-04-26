@@ -3,10 +3,10 @@ QT += widgets
 CONFIG += c++17
 CONFIG += static
 CONFIG += release
-#DEFINES += QT_DEPRECATED_WARNINGS\
-#           QT_NO_WARNING_OUTPUT
-#          QT_NO_DEBUG_OUTPUT
-VERSION = 1.0.2.2
+DEFINES += QT_DEPRECATED_WARNINGS\
+           QT_NO_WARNING_OUTPUT
+           QT_NO_DEBUG_OUTPUT
+VERSION = 1.0.2.3
 DEFINES +=APP_VERSION=\\\"$$VERSION\\\"
 # You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -24,6 +24,7 @@ SOURCES += \
     src/obj/objectNet.cpp \
     src/obj/objectPackage.cpp \
     src/obj/objectProcManage.cpp \
+    src/obj/objectVersionData.cpp \
     src/obj/objectSource.cpp \
     src/obj/objectTray.cpp \
     src/obj/pObject.cpp \
@@ -57,6 +58,7 @@ HEADERS += \
     src/obj/objectNet.h \
     src/obj/objectPackage.h \
     src/obj/objectProcManage.h \
+    src/obj/objectVersionData.h \
     src/obj/objectSource.h \
     src/obj/objectTray.h \
     src/obj/pObject.h \
@@ -123,3 +125,5 @@ DEPENDPATH += $$PWD/3rdparty/json
 LIBS += -L$$PWD/3rdparty/libgit2/lib/ -lgit2 -lpcre -lssl -lcrypto
 INCLUDEPATH += $$PWD/3rdparty/libgit2/include
 DEPENDPATH += $$PWD/3rdparty/libgit2/include
+
+QT_PLUGIN_PATH += $$PWD/libfcitxplatforminputcontextplugin.so

@@ -30,7 +30,7 @@ void objectSource::updateSrcDataObject(){
         if(sdata!="error"){
             _objectJson.unSerializeLocalWineApp(i,QString::fromStdString(sdata),unJsonGameList);
         }else{
-            pObject::vekError("更新游戏源数据失败");
+            pObject::vekError("更新软件源数据失败");
         }
     }
 }
@@ -46,7 +46,7 @@ void objectSource::loadAllData(){
         updateSrcDataObject();
     }else{
         if(_objectJson.unDataSerializeLocalData()){
-            updateSrcDataObject();  
+            updateSrcDataObject();
         }
     }
     _objectJson.WriteLocalData();

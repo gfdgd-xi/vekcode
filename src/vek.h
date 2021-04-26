@@ -60,5 +60,6 @@ private slots:
     void wServerTest();
     void wSetHosts();
     void wCurrentUrl();
+    void hFileHash();
 };
 #endif // VEK_H

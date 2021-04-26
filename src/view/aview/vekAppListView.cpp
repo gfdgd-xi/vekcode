@@ -48,6 +48,7 @@ void vekAppListView::contextMenuEvent( QContextMenuEvent * event )
         pMenu->popup(mapToGlobal(event->pos()));
     }
 }
+
 void vekAppListView::mouseDoubleClickEvent(QMouseEvent * event){
     UNUSED(event);
     int index = this->currentIndex().row();

@@ -10,10 +10,10 @@
         <file>res/vup/vUpdate</file>
         <file>res/img/64.png</file>
         <file>res/img/32.png</file>
-        <file>res/img/aliPay.png</file>
-        <file>res/img/wechat.png</file>
         <file>res/lang/vek_us_EN.ts</file>
         <file>res/lang/vek_zh_CN.qm</file>
         <file>res/lang/vek_zh_CN.ts</file>
+        <file>res/img/HWine.png</file>
+        <file>res/img/DWine.png</file>
     </qresource>
 </RCC>
