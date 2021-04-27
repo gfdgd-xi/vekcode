@@ -61,5 +61,7 @@ private slots:
     void wSetHosts();
     void wCurrentUrl();
     void hFileHash();
+    void changeQTabWidgetStyleWest();
+    void changeQTabWidgetStyleNorth();
 };
 #endif // VEK_H

@@ -201,11 +201,14 @@ void vekAppListView::PackageDeb(){
             SappData bGameData=*m_pModel->getItem(index);
             _vPackage=new vekPackage();
             _vPackage->setAttribute(Qt::WA_DeleteOnClose,true);
-            //_vPackage->setWindowFlags(Qt::WindowStaysOnTopHint);
             _vPackage->setGeometry(this->geometry());
-            _vPackage->vAppData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),bGameData.s_uid);
-            _vPackage->show();
-            connect(_vPackage,&vekPackage::_unPackage,this,&vekAppListView::unPackage);
+            if(_vPackage->vAppData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),bGameData.s_uid)){
+                _vPackage->show();
+                connect(_vPackage,&vekPackage::_unPackage,this,&vekAppListView::unPackage);
+            }else{
+                delete _vPackage;
+                _vPackage=nullptr;
+            }
         }
     }
 }

@@ -73,6 +73,7 @@ HEADERS += \
     src/vekPackage.h \
     src/vekSourceEdit.h \
     src/vekWineOption.h \
+    src/view/aview/vekAppCustomBarStyle.h \
     src/view/aview/vekAppData.h \
     src/view/aview/vekAppListView.h \
     src/view/aview/vekAppPanel.h \

@@ -464,7 +464,15 @@
      <addaction name="styleDark"/>
      <addaction name="styleLight"/>
     </widget>
+    <widget class="QMenu" name="menu_6">
+     <property name="title">
+      <string>切换列表样式</string>
+     </property>
+     <addaction name="action_West"/>
+     <addaction name="action_North"/>
+    </widget>
     <addaction name="menu_5"/>
+    <addaction name="menu_6"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menuWine"/>
@@ -539,6 +547,16 @@
   <action name="action_SHA256">
    <property name="text">
     <string>计算文件SHA256</string>
+   </property>
+  </action>
+  <action name="action_West">
+   <property name="text">
+    <string>横列</string>
+   </property>
+  </action>
+  <action name="action_North">
+   <property name="text">
+    <string>竖列</string>
    </property>
   </action>
  </widget>

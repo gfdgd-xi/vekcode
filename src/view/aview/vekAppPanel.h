@@ -7,7 +7,7 @@
 #include "../../vekAppAddAT.h"
 #include "../../obj/common.h"
 #include "../../obj/objectTray.h"
-#include <QStylePainter>
+#include "vekAppCustomBarStyle.h"
 typedef enum{
     INSTALLAPP,
     INITDOCKER
@@ -26,6 +26,7 @@ public slots:
     void upTabIco();
     void objectRunApp();
     void objInitDocker(INITTYPE);
+    void changeQTwidgetStyle(QTabWidget::TabPosition);
 private:
     QTabWidget *m_pBox;
     vekAppAddMT* vek_app_add=nullptr;

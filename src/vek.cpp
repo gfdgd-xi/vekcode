@@ -26,6 +26,8 @@ void vek::connectObject(){
     connect(ui->styleDark,&QAction::triggered,this,&vek::vekStyle);
     connect(ui->styleLight,&QAction::triggered,this,&vek::vekStyle);
     connect(ui->action_SHA256,&QAction::triggered,this,&vek::hFileHash);
+    connect(ui->action_West,&QAction::triggered,this,&vek::changeQTabWidgetStyleNorth);
+    connect(ui->action_North,&QAction::triggered,this,&vek::changeQTabWidgetStyleWest);
     //语言切换
     //connect(ui->langChinese,&QAction::triggered,this,&vek::vekLanguage);
     //connect(ui->langEnglish,&QAction::triggered,this,&vek::vekLanguage);
@@ -36,6 +38,12 @@ void vek::connectObject(){
     loadWinetricksServerJson();
     setAppSize();
     vekStyle();
+}
+void vek::changeQTabWidgetStyleWest(){
+    ui->tabWidget->changeQTwidgetStyle(QTabWidget::West);
+}
+void vek::changeQTabWidgetStyleNorth(){
+    ui->tabWidget->changeQTwidgetStyle(QTabWidget::North);
 }
 void vek::hFileHash()
 {
@@ -53,7 +61,7 @@ void vek::hFileHash()
                 QByteArray message = file.readAll();
                 Hash.addData(message);
             }
-            pObject::vekTip("SHA256:"+Hash.result().toHex());
+            pObject::vekTip("文件名:"+file.fileName()+"\n"+"SHA256:"+Hash.result().toHex()+"\n");
         }
     }
 }

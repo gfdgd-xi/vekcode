@@ -479,6 +479,7 @@ bool vekAppAddMT::checkAppOption(){
 }
 //检查docker参数
 //2021-3-18增加对deepin-wine5在64位容器的隔离
+//2021-4-25取消对deepin-wine5的隔离且支持deepin-wine5容器
 bool vekAppAddMT::checkDocerOption(){
     if(tempDockData->s_dockers_wine_version==nullptr){
         pObject::vekError("请先安装wine");
@@ -528,6 +529,7 @@ void vekAppAddMT::objectButton(){
             QFileInfo fi = QFileInfo(exePath);
             if(ui->lineEdit_AppName->text()==nullptr){
                 ui->lineEdit_AppName->setText(fi.baseName());
+                ui->lineEdit_MainProcName->setText(fi.fileName());
             }
             ui->lineEdit_AppInstallExe->setText(exePath);
             ui->lineEdit_workPath->setText(fi.path());

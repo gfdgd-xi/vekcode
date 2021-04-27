@@ -12,7 +12,6 @@ vekAppPanel::~vekAppPanel()
 }
 
 QSize icoSize(25,20);
-int cTab=0;
 //初始化容器列表
 void vekAppPanel::vek_InitTabWidgetListApp(){   
     QGridLayout *gridLayout = new QGridLayout(this);
@@ -20,10 +19,13 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
     gridLayout->addWidget(m_pBox);
     gridLayout->setContentsMargins(0,0,0,0);
     m_pBox->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
-    //m_pBox->setTabPosition(QTabWidget::West);
     m_pListMap = new std::map<QString,vekAppListView*>();
     std::map<QString,SdockerData>::iterator it;
     std::map<QString,SappData>::reverse_iterator its;
+    m_pBox->setIconSize(icoSize);
+    QString icoStr;
+    QIcon icon;
+    int cTab=0;
     for(it=g_vekLocalData.map_docker_list.begin();it!=g_vekLocalData.map_docker_list.end();it++){
         vekAppListView *pListView = new vekAppListView();
         pListView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
@@ -33,29 +35,21 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
         m_pBox->addTab(pListView,it->first);
         if(it->second.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
             if(it->second.s_dockers_bit_version=="win32"){
-                QIcon icon(":/res/img/D32.png");
-                m_pBox->setTabIcon(cTab,icon);
-                m_pBox->setIconSize(icoSize);
-                cTab+=1;
+                icoStr=":/res/img/D32.png";
             }else{
-                QIcon icon(":/res/img/D64.png");
-                m_pBox->setTabIcon(cTab,icon);
-                m_pBox->setIconSize(icoSize);
-                cTab+=1;
+                icoStr=":/res/img/D64.png";
             }
         }else{
             if(it->second.s_dockers_bit_version=="win32"){
-                QIcon icon(":/res/img/H32.png");
-                m_pBox->setTabIcon(cTab,icon);
-                m_pBox->setIconSize(icoSize);
-                cTab+=1;
+                icoStr=":/res/img/H32.png";
             }else{
-                QIcon icon(":/res/img/H64.png");
-                m_pBox->setTabIcon(cTab,icon);
-                m_pBox->setIconSize(icoSize);
-                cTab+=1;
+                icoStr=":/res/img/H64.png";
+
             }
         }
+        QIcon icon(icoStr);
+        m_pBox->setTabIcon(cTab,icon);
+        cTab+=1;
         if(!it->second.map_dockers_data.empty()){
             for(its=it->second.map_dockers_data.rbegin();its!=it->second.map_dockers_data.rend();its++){
                 SappData *LID=new SappData();
@@ -69,7 +63,15 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
     }
 
 }
-
+void vekAppPanel::changeQTwidgetStyle(QTabWidget::TabPosition iTab){
+    if(iTab==QTabWidget::West){
+        m_pBox->setTabPosition(QTabWidget::West);
+        m_pBox->tabBar()->setStyle(new vekAppCustomBarStyle);
+    }else{
+        m_pBox->setTabPosition(QTabWidget::North);
+        m_pBox->tabBar()->setStyle(nullptr);
+    }
+}
 void vekAppPanel::contextMenuEvent( QContextMenuEvent * event )
 {
     cindex=m_pBox->tabBar()->tabAt(event->pos());
@@ -166,6 +168,7 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
     QString dockName="vekON1";
     QString dockBit="win32";
     if(iType==INITDOCKER){
+        //init docker
         QString swVer;
         QStringList items;
         QStringList itemsbit;
@@ -248,9 +251,8 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
         tempDockerData.s_dockers_bit_version=dockBit;
         tempDockerData.s_dockers_path=QApplication::applicationDirPath()+"/vekDock";
         tempDockerData.s_dockers_name=dockName;
-        objNewDock->newDock();
-        addGroupSlot(&tempDockerData);
     }else{
+        //install app
         if(g_vekLocalData.map_docker_list.empty()){
             dState=pObject::vekMesg("您的电脑上未发现容器无法安装软件,是否初始化一个容器用于软件安装");
             if(!dState){
@@ -290,12 +292,14 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
             }
             QStringList itemsbit;
             //选择容器系统版本
+            /*
             if(sName.contains("deepin",Qt::CaseSensitive)){
                 itemsbit<<"win32";
             }else{
                 itemsbit<<"win32"<<"win64";
             }
-
+            */
+            itemsbit<<"win32"<<"win64";
             QString dTitle="选择容器系统版本";
             QString dLabel="支持容器列表";
             int     dIndex=0;
@@ -324,8 +328,6 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
             tempDockerData.s_dockers_path=QApplication::applicationDirPath()+"/vekDock";
             tempDockerData.s_dockers_name=dockName;
             tempDockerData.s_dockers_bit_version=dockBit;
-            objNewDock->newDock();
-            addGroupSlot(&tempDockerData);
         }
         else//否则从全局本地配置文件提取容器参数
         {
@@ -341,11 +343,15 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
             pObject::vekError("deepin-wine5不支持64位容器,可能部分64位软件安装程序无法运行!");
         }
         */
+
         objectExtend* _objectExtend=new objectExtend();
         std::vector<QStringList> _codeAgrs;
         _objectExtend->setDockOptionObjectData(tempDockerData,tempAppData.s_uid,_codeAgrs,_objType,ExtendBootType::object_wineboot_default,ExtendServerType::object_wineserver_default);
         _objectExtend->start();
+
     }
+    objNewDock->newDock();
+    addGroupSlot(&tempDockerData);
     delete objNewDock;
     objNewDock=nullptr;
 }
@@ -388,46 +394,40 @@ void vekAppPanel::addAppObject(SdockerData* dcokData,SappData* appData){
     pList->addItem(_tempBaseData);
 }
 void vekAppPanel::upTabIco(){
-    int cTab=0;
-    for(auto a:g_vekLocalData.map_docker_list){
-        if(a.second.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
-            if(a.second.s_dockers_bit_version=="win32"){
-                QIcon icon(":/res/img/D32.png");
-                m_pBox->setTabIcon(cTab,icon);
-                m_pBox->setIconSize(icoSize);
-                cTab+=1;
+    //m_pBox
+    int xTab=m_pBox->count();
+    m_pBox->setIconSize(icoSize);
+    QString icoStr;
+    QIcon icon;
+    for(int i=0;i<=xTab-1;i++){
+        QString dockName=m_pBox->tabText(i);
+        if(g_vekLocalData.map_docker_list[dockName].s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
+            if(g_vekLocalData.map_docker_list[dockName].s_dockers_bit_version=="win32"){
+                icoStr=":/res/img/D32.png";
             }else{
-                QIcon icon(":/res/img/D64.png");
-                m_pBox->setTabIcon(cTab,icon);
-                m_pBox->setIconSize(icoSize);
-                cTab+=1;
+                icoStr=":/res/img/D64.png";
             }
         }else{
-            if(a.second.s_dockers_bit_version=="win32"){
-                QIcon icon(":/res/img/H32.png");
-                m_pBox->setTabIcon(cTab,icon);
-                m_pBox->setIconSize(icoSize);
-                cTab+=1;
+            if(g_vekLocalData.map_docker_list[dockName].s_dockers_bit_version=="win32"){
+                icoStr=":/res/img/H32.png";
             }else{
-                QIcon icon(":/res/img/H64.png");
-                m_pBox->setTabIcon(cTab,icon);
-                m_pBox->setIconSize(icoSize);
-                cTab+=1;
+                icoStr=":/res/img/H64.png";
             }
         }
+        QIcon icon(icoStr);
+        m_pBox->setTabIcon(i,icon);
     }
 }
 void vekAppPanel::addGroupSlot(SdockerData* dcokData)
 {
     if (!dcokData->s_dockers_name.isEmpty())
     {
-        vekAppListView *pListView1 = new vekAppListView(this);
+        vekAppListView *pListView1 = new vekAppListView();
         pListView1->setViewMode(QListView::IconMode);
         pListView1->setFlow(QListView::LeftToRight);
         m_pBox->addTab(pListView1,dcokData->s_dockers_name);
         m_pListMap->insert(std::pair<QString,vekAppListView*>(dcokData->s_dockers_name,pListView1));
     }
-    upTabIco();
     //要确保每个MyListView钟的m_pListMap都是一致的，不然就会有错了。
     //因为弹出的菜单进行转移的时候需要用到
     std::map<QString,vekAppListView*>::iterator it;
@@ -436,6 +436,7 @@ void vekAppPanel::addGroupSlot(SdockerData* dcokData)
         vekAppListView* pList = it->second;
         pList->setListMap(m_pListMap,m_pBox);
     }
+    upTabIco();
 }
 void vekAppPanel::deleteGroupSlot(bool del_static){
     UNUSED(del_static);

@@ -15,7 +15,7 @@ class vekPackage : public QDialog
 public:
     explicit vekPackage(QWidget *parent = nullptr);
     ~vekPackage();
-    void vAppData(SdockerData,QString);
+    bool vAppData(SdockerData,QString);
 private:
     Ui::vekPackage *ui;
     SdockerData dDockerData;
