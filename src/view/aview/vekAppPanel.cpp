@@ -251,6 +251,8 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
         tempDockerData.s_dockers_bit_version=dockBit;
         tempDockerData.s_dockers_path=QApplication::applicationDirPath()+"/vekDock";
         tempDockerData.s_dockers_name=dockName;
+        objNewDock->newDock();
+        addGroupSlot(&tempDockerData);
     }else{
         //install app
         if(g_vekLocalData.map_docker_list.empty()){
@@ -328,6 +330,8 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
             tempDockerData.s_dockers_path=QApplication::applicationDirPath()+"/vekDock";
             tempDockerData.s_dockers_name=dockName;
             tempDockerData.s_dockers_bit_version=dockBit;
+            objNewDock->newDock();
+            addGroupSlot(&tempDockerData);
         }
         else//否则从全局本地配置文件提取容器参数
         {
@@ -343,15 +347,13 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
             pObject::vekError("deepin-wine5不支持64位容器,可能部分64位软件安装程序无法运行!");
         }
         */
-
         objectExtend* _objectExtend=new objectExtend();
         std::vector<QStringList> _codeAgrs;
         _objectExtend->setDockOptionObjectData(tempDockerData,tempAppData.s_uid,_codeAgrs,_objType,ExtendBootType::object_wineboot_default,ExtendServerType::object_wineserver_default);
-        _objectExtend->start();
-
+        _objectExtend->start();       
     }
-    objNewDock->newDock();
-    addGroupSlot(&tempDockerData);
+
+
     delete objNewDock;
     objNewDock=nullptr;
 }
