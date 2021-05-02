@@ -12,7 +12,7 @@ DEFINES +=APP_VERSION=\\\"$$VERSION\\\"
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
-
+TARGET = vek
 SOURCES += \
   main.cpp \
     src/obj/objectAppAT.cpp \
@@ -97,13 +97,22 @@ FORMS += \
 #QMAKE_CXXFLAGS_RELEASE = $$QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO
 #QMAKE_LFLAGS_RELEASE = $$QMAKE_LFLAGS_RELEASE_WITH_DEBUGINFO
 
-#UPX
-#Release:QMAKE_POST_LINK += ./upx -9 $(DESTDIR_TARGET)
 QMAKE_CXXFLAGS_RELEASE += -O3
+
 # Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
+CONFIG(release):DESTDIR = $$OUT_PWD
+
+MOC_DIR=$${DESTDIR}/vekMoc
+OBJECTS_DIR=$${DESTDIR}/vekObjects
+RCC_DIR=$${DESTDIR}/vekRcc
+
+target.path = $$(HOME)/Tvek
+target.files = $${DESTDIR}/vek
+
+INSTALLS += target
+
+#UPX
+#Release:QMAKE_POST_LINK += ./upx -9 $$(HOME)/Tvek/vek
 
 RESOURCES += \
     vek_res.qrc
@@ -126,5 +135,3 @@ DEPENDPATH += $$PWD/3rdparty/json
 LIBS += -L$$PWD/3rdparty/libgit2/lib/ -lgit2 -lpcre -lssl -lcrypto
 INCLUDEPATH += $$PWD/3rdparty/libgit2/include
 DEPENDPATH += $$PWD/3rdparty/libgit2/include
-
-QT_PLUGIN_PATH += $$PWD/libfcitxplatforminputcontextplugin.so
