@@ -34,7 +34,7 @@ typedef struct {
     bool b_default_fonts=false;
     bool b_disable_ass=false;
     std::vector<QString> vec_proc_attach_list={};
-    std::map<QString,QString> map_docker_regs={};
+    std::map<QString,QString> map_docker_envs={};
     std::vector<QString> vec_docker_libs={};
     std::vector<SRegs> vec_docker_regs={};
 }SappData;
@@ -158,6 +158,7 @@ typedef enum{
     object_plugs,
     object_default
 }ExtendType;
+
 typedef enum{
     object_wineboot_e,
     object_wineboot_f,

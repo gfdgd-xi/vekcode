@@ -114,6 +114,8 @@ void vekAppListView::ObjectRun(){
         case object_packageDeb:
             PackageDeb();
             return;
+        default:
+            return;
         }
         if(_objType==object_start){
             startApp(object_start);
@@ -236,7 +238,7 @@ void vekAppListView::setItemSlot(){
             _vek_App_Add->setWindowTitle("Vek软件设置");
             QString currentAppCID=m_pModel->getItem(this->currentIndex().row())->s_uid;
             _vek_App_Add->vekAppAddConnectObject(&g_vekLocalData.map_docker_list.at(mBox->tabText(mBox->currentIndex())),currentAppCID,object_setApp);
-            //_vek_App_Add->setWindowFlags(Qt::WindowStaysOnTopHint);
+            _vek_App_Add->setWindowFlags(Qt::WindowStaysOnTopHint);
             _vek_App_Add->show();
             connect(_vek_App_Add,&vekAppAddMT::_unDiyAppAdd,this,&vekAppListView::unAppAdd);
             connect(_vek_App_Add,SIGNAL(_upData(SdockerData,SappData*,EADEType)),this,SLOT(setUpDelData(SdockerData,SappData*,EADEType)));

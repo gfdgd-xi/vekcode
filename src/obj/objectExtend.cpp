@@ -42,8 +42,8 @@ void objectExtend::executeArgsEnv(){
         if(appData.b_task_log){
             qputenv("WINEDEBUG", "-all");
         }
-        if(!appData.map_docker_regs.empty()){
-            for(auto& [a,u]:appData.map_docker_regs){
+        if(!appData.map_docker_envs.empty()){
+            for(auto& [a,u]:appData.map_docker_envs){
                 qputenv(a.toStdString().c_str(),u.toStdString().c_str());
             }
         }
@@ -129,11 +129,11 @@ void objectExtend::executeWinetricks(ExtendType _wType){
     qputenv("WINE", (dockData.s_dockers_wine_path+"/wine/bin/wine").toStdString().c_str());
     codeArgs.append(dockData.s_dockers_wine_path+"/wine/bin/winetricks");
     switch (_wType) {
-      case object_winetricks_gui:
-        executeWinetricks_gui(codeArgs);
-        break;
     case object_winetricks_cmd_libs:
         executeWinetricks_cmd_libs(codeArgs);
+        break;
+    default:
+        executeWinetricks_gui(codeArgs);
         break;
     }
 }

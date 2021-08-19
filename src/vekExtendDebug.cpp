@@ -102,8 +102,8 @@ void vekExtendDebug::executeArgsEnv(){
     //设置工作目录
     qputenv("PWD", appData.s_work_path.toStdString().c_str());
     qputenv("WINETRICKS_DOWNLOADER", "aria2c");
-    if(!appData.map_docker_regs.empty()){
-        for(auto& [a,u]:appData.map_docker_regs){
+    if(!appData.map_docker_envs.empty()){
+        for(auto& [a,u]:appData.map_docker_envs){
             qputenv(a.toStdString().c_str(),u.toStdString().c_str());
         }
     }

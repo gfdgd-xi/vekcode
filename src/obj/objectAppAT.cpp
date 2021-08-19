@@ -155,7 +155,7 @@ void objectAppAT::objAppData(){
     }
     baseAppData.vec_docker_regs=_baseAutoSetJson->vec_deploy_regs;
     baseAppData.vec_docker_libs=_baseAutoSetJson->vec_deploy_libs;
-    baseAppData.map_docker_regs=_baseAutoSetJson->map_deploy_env;
+    baseAppData.map_docker_envs=_baseAutoSetJson->map_deploy_env;
     baseAppData.s_agrs_code=_baseAutoSetJson->map_deploy_args;
     baseAppData.vec_proc_attach_list=_baseAutoSetJson->vec_deploy_attach_proc;
 

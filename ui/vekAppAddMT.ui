@@ -143,7 +143,7 @@
              <property name="midLineWidth">
               <number>0</number>
              </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,50,10,1,10,10">
+             <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,50,10,1,10,0">
               <property name="spacing">
                <number>3</number>
               </property>
@@ -238,14 +238,8 @@
               </item>
               <item>
                <widget class="QPushButton" name="pushButton_initDock">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
                 <property name="text">
-                 <string>初始化容器</string>
+                 <string>强制初始化</string>
                 </property>
                </widget>
               </item>
@@ -260,7 +254,7 @@
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
              </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="10,10,10,10,10,10,10,0">
+             <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="10,10,0,10,10,10,10,10,0">
               <property name="spacing">
                <number>3</number>
               </property>
@@ -299,6 +293,13 @@
                 </property>
                 <property name="text">
                  <string>内存共享</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkBox">
+                <property name="text">
+                 <string>ICMP支持</string>
                 </property>
                </widget>
               </item>

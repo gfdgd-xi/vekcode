@@ -229,8 +229,8 @@ void vekAppAddMT::loadTableView(QTableView* qtv,SappData* ePdata){
         columnTitles << "环境变量名" << "环境变量值";
 
         if(ePdata!=nullptr){
-            if(!ePdata->map_docker_regs.empty()){
-                for(auto &[k,j]:ePdata->map_docker_regs){
+            if(!ePdata->map_docker_envs.empty()){
+                for(auto &[k,j]:ePdata->map_docker_envs){
                     int x=i++;
                     tableModel->setItem(x,0,new QStandardItem(k));
                     tableModel->setItem(x,1,new QStandardItem(j));
@@ -390,18 +390,18 @@ bool vekAppAddMT::vekAppConfigObj(){
     int envCurRow=ui->tableView_EnvList->model()->rowCount();
     int procCurRow=ui->tableView_ProcList->model()->rowCount();
     int regsCurRow=ui->tableView_RegsList->model()->rowCount();
-    if(envCurRow>0){
-        tempAppData->map_docker_regs.clear();
+    if(envCurRow>=0){
+        tempAppData->map_docker_envs.clear();
         QAbstractItemModel *modelEnv = ui->tableView_EnvList->model();
         for(int i=0;i<=envCurRow-1;i++){
             QString dataTempA = modelEnv->data(modelEnv->index(i,0)).value<QString>();
             QString dataTempB = modelEnv->data(modelEnv->index(i,1)).value<QString>();
             if(dataTempA!=nullptr&&dataTempB!=nullptr){
-                tempAppData->map_docker_regs.insert(pair<QString,QString>(dataTempA,dataTempB));
+                tempAppData->map_docker_envs.insert(pair<QString,QString>(dataTempA,dataTempB));
             }
         }
     }
-    if(procCurRow>0){
+    if(procCurRow>=0){
         tempAppData->vec_proc_attach_list.clear();
         QAbstractItemModel *modelProc = ui->tableView_ProcList->model();
         for(int i=0;i<=procCurRow-1;i++){
@@ -412,7 +412,7 @@ bool vekAppAddMT::vekAppConfigObj(){
             }
         }
     }
-    if(regsCurRow>0){
+    if(regsCurRow>=0){
         tempAppData->vec_docker_regs.clear();
         SRegs _tRegs;
         QAbstractItemModel *modelRegs = ui->tableView_RegsList->model();
@@ -607,6 +607,7 @@ bool vekAppAddMT::vekAppAddObj(bool _forceState){
     }else{
         pObject::addAppDataToJson(*tempDockData,*tempAppData);
     }
+
     if(objType==object_setApp){
         emit _upData(*tempDockData,tempAppData,objType);
     }
