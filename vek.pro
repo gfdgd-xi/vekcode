@@ -30,9 +30,10 @@ SOURCES += \
     src/obj/pObject.cpp \
     src/vek.cpp \
     src/vekAbout.cpp \
-    src/vekAppAddAT.cpp \
-    src/vekAppAddMT.cpp \
-    src/vekAppAddMulti.cpp \
+    src/vekAppAddModel.cpp \
+    src/vekAppAutoOption.cpp \
+    src/vekAppOption.cpp \
+    src/vekDockerOption.cpp \
     src/vekExportJson.cpp \
     src/vekPackage.cpp \
     src/vekSourceEdit.cpp \
@@ -65,9 +66,10 @@ HEADERS += \
     src/ui_common.h \
     src/vek.h \
     src/vekAbout.h \
-    src/vekAppAddAT.h \
-    src/vekAppAddMT.h \
-    src/vekAppAddMulti.h \
+    src/vekAppAddModel.h \
+    src/vekAppAutoOption.h \
+    src/vekAppOption.h \
+    src/vekDockerOption.h \
     src/vekExportJson.h \
     src/vekExtendDebug.h \
     src/vekPackage.h \
@@ -82,9 +84,10 @@ HEADERS += \
     src/view/jview/vekViewAT.h
 
 FORMS += \
-    ui/vekAppAddAT.ui \
-    ui/vekAppAddMT.ui \
-    ui/vekAppAddMulti.ui \
+    ui/vekAppAddModel.ui \
+    ui/vekAppAutoOption.ui \
+    ui/vekAppOption.ui \
+    ui/vekDockerOption.ui \
     ui/vekExportJson.ui \
     ui/vekSourceEdit.ui \
     ui/vek.ui \

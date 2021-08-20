@@ -1,20 +1,20 @@
-#ifndef VEKAPPADDMULTI_H
-#define VEKAPPADDMULTI_H
+#ifndef VEKAPPADDMODEL_H
+#define VEKAPPADDMODEL_H
 
 #include "obj/common.h"
 #include "obj/objectAppMT.h"
 namespace Ui {
-class vekAppAddMulti;
+class vekAppAddModel;
 }
 
-class vekAppAddMulti : public QDialog
+class vekAppAddModel : public QDialog
 {
     Q_OBJECT
 public:
-    explicit vekAppAddMulti(QWidget *parent = nullptr);
-    ~vekAppAddMulti();
+    explicit vekAppAddModel(QWidget *parent = nullptr);
+    ~vekAppAddModel();
 private:
-    Ui::vekAppAddMulti *ui;
+    Ui::vekAppAddModel *ui;
     void connectObject();
     void MultiAppDiy();
     void MultiAppAuto();

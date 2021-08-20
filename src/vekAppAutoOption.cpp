@@ -1,23 +1,23 @@
-#include "vekAppAddAT.h"
+#include "vekAppAutoOption.h"
 #include "ui_common.h"
 #include <QListWidget>
-vekAppAddAT::vekAppAddAT(QWidget *parent) :
+vekAppAutoOption::vekAppAutoOption(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::vekAppAddAT)
+    ui(new Ui::vekAppAutoOption)
 {
     ui->setupUi(this);
     pObject::qwidgetGeometry(this);
 }
 
-vekAppAddAT::~vekAppAddAT()
+vekAppAutoOption::~vekAppAutoOption()
 {
     emit _unAutoDock();
 }
-void vekAppAddAT::connectDockObject(SdockerData _dockeData){
-    connect(ui->pushButton_DockDone,&QPushButton::clicked,this,&vekAppAddAT::addAutoApp);
-    connect(ui->pushButton_AutoJson,&QPushButton::clicked,this,&vekAppAddAT::SetObject);
-    connect(ui->pushButton_AutoDockPath,&QPushButton::clicked,this,&vekAppAddAT::SetObject);
-    connect(ui->pushButton_SetExePath,&QPushButton::clicked,this,&vekAppAddAT::SetObject);
+void vekAppAutoOption::connectDockObject(SdockerData _dockeData){
+    connect(ui->pushButton_DockDone,&QPushButton::clicked,this,&vekAppAutoOption::addAutoApp);
+    connect(ui->pushButton_AutoJson,&QPushButton::clicked,this,&vekAppAutoOption::SetObject);
+    connect(ui->pushButton_AutoDockPath,&QPushButton::clicked,this,&vekAppAutoOption::SetObject);
+    connect(ui->pushButton_SetExePath,&QPushButton::clicked,this,&vekAppAutoOption::SetObject);
     if(g_vekLocalData.map_wine_list.empty())
     {
         pObject::vekTip("请先安装Wine");
@@ -30,7 +30,7 @@ void vekAppAddAT::connectDockObject(SdockerData _dockeData){
         ui->lineEdit_DockPath->setText(_dockeData.s_dockers_path);
     }
 }
-void vekAppAddAT::defalutValue(){
+void vekAppAutoOption::defalutValue(){
     for(auto & x :g_vekLocalData.map_wine_list)
     {
         ui->comboBox_WinVersion->addItem(x.first);
@@ -48,7 +48,7 @@ void vekAppAddAT::defalutValue(){
     }
     ui->lineEdit_DockPath->setText(QApplication::applicationDirPath()+"/vekDock");
 }
-void vekAppAddAT::SetObject(){
+void vekAppAutoOption::SetObject(){
     QObject *object = QObject::sender();
     QPushButton *action_obnject = qobject_cast<QPushButton *>(object);
     QWidget *qwidget = new QWidget();
@@ -73,7 +73,7 @@ void vekAppAddAT::SetObject(){
     }
 
 }
-void vekAppAddAT::addAutoApp(){
+void vekAppAutoOption::addAutoApp(){
     if(ui->comboBox_JsonUrl->currentText()==nullptr){
         pObject::vekTip("请设置Json文件");
         return;
@@ -118,7 +118,7 @@ void vekAppAddAT::addAutoApp(){
     objAutoAddApp->start();
     controlState(false);
 }
-void vekAppAddAT::controlState(bool pState){
+void vekAppAutoOption::controlState(bool pState){
     ui->comboBox_SrcApp->setEnabled(pState);
     ui->comboBox_JsonUrl->setEnabled(pState);
     ui->pushButton_AutoJson->setEnabled(pState);
@@ -130,15 +130,15 @@ void vekAppAddAT::controlState(bool pState){
     ui->pushButton_SetExePath->setEnabled(pState);
     ui->pushButton_DockDone->setEnabled(pState);
 }
-void vekAppAddAT::TipText(QString TipInfo)
+void vekAppAutoOption::TipText(QString TipInfo)
 {
     ui->label_ProgText->setText(TipInfo);
 }
-void vekAppAddAT::ErrorText(QString ErrorInfo,bool cState){
+void vekAppAutoOption::ErrorText(QString ErrorInfo,bool cState){
     ui->label_ProgText->setText(ErrorInfo);
     controlState(cState);
 }
-void vekAppAddAT::ObjDone(SdockerData* _aDockData,SappData* aAppData){
+void vekAppAutoOption::ObjDone(SdockerData* _aDockData,SappData* aAppData){
     pObject::addAppDataToJson(*_aDockData,*aAppData);
     emit autoObjDock(_aDockData,aAppData);
     this->close();

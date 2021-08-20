@@ -1,5 +1,5 @@
-﻿#ifndef VEKAPPADDMT_H
-#define VEKAPPADDMT_H
+﻿#ifndef VEKAPPOPTION_H
+#define VEKAPPOPTION_H
 
 #include "obj/common.h"
 #include "obj/objectJson.h"
@@ -7,18 +7,18 @@
 #include <QTableView>
 #include <QStandardItemModel>
 namespace Ui {
-class vekAppAddMT;
+class vekAppOption;
 }
 
-class vekAppAddMT : public QWidget
+class vekAppOption : public QWidget
 {
     Q_OBJECT
 public:
-    explicit vekAppAddMT(QWidget *parent = nullptr);
+    explicit vekAppOption(QWidget *parent = nullptr);
     void vekAppAddConnectObject(SdockerData*,QString,EADEType);
-    ~vekAppAddMT();
+    ~vekAppOption();
 public:
-    Ui::vekAppAddMT *ui;
+    Ui::vekAppOption *ui;
 private:
     SappData* tempAppData=new SappData();
     SdockerData* tempDockData=new SdockerData();
@@ -27,7 +27,7 @@ private:
     vector<QString> _dockVer={"win32","win64"};
     vector<QString> _dockWineVer={"wine","wine64"};
     void initAppAndDockData(SdockerData* _data,QString _appCID);
-    bool vekAppAddObj(bool _forceState);
+    bool vekAppAddObj();
     bool vekAppConfigObj();
     void loadTableView(QTableView* qtv,SappData*);
     void setTableView(QTableView*);
@@ -48,7 +48,6 @@ signals:
 private slots:
     void objectButton();
     void plugsLoad();
-    void wineChanged();
     void clicked_rightMenu(const QPoint &pos);  //右键信号槽函数
     void onTaskBoxContextMenuEvent();
 };

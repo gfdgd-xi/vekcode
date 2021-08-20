@@ -26,6 +26,13 @@ json objectJson::DataSerialize(json jsonData,const SlocalGloablData _baseLocalDa
             jsonData[toStr(Docker)][ax.first.toStdString()][toStr(DockerWineVersion)]=ax.second.s_dockers_wine_exe_version.toStdString();
             jsonData[toStr(Docker)][ax.first.toStdString()][toStr(MonoState)]=ax.second.s_dockers_mono_state;
             jsonData[toStr(Docker)][ax.first.toStdString()][toStr(GeckoState)]=ax.second.s_dockers_gecko_state;
+            jsonData[toStr(Docker)][ax.first.toStdString()][toStr(DockerTaskLog)]=ax.second.s_dockers_task_log;
+            jsonData[toStr(Docker)][ax.first.toStdString()][toStr(DockerWriteCopy)]=ax.second.s_dockers_writecopy;
+            jsonData[toStr(Docker)][ax.first.toStdString()][toStr(DockerSharedMemory)]=ax.second.s_dockers_sharedmemory;
+            jsonData[toStr(Docker)][ax.first.toStdString()][toStr(DockerRTServer)]=ax.second.s_dockers_rtserver;
+            jsonData[toStr(Docker)][ax.first.toStdString()][toStr(DockerFonts)]=ax.second.s_dockers_default_fonts;
+            jsonData[toStr(Docker)][ax.first.toStdString()][toStr(DockerAss)]=ax.second.s_dockers_disable_ass;
+            jsonData[toStr(Docker)][ax.first.toStdString()][toStr(DockerICMP)]=ax.second.s_dockers_ICMP_state;
             if(ax.second.map_dockers_data.size()>0){
                 for(auto [bx,by]:ax.second.map_dockers_data){
                     jsonData[toStr(Docker)][ax.first.toStdString()][by.s_uid.toStdString()][toStr(AppCID)]=by.s_uid.toStdString();
@@ -46,6 +53,9 @@ json objectJson::DataSerialize(json jsonData,const SlocalGloablData _baseLocalDa
                     jsonData[toStr(Docker)][ax.first.toStdString()][by.s_uid.toStdString()][toStr(RtServer)]=by.b_rtserver;
                     jsonData[toStr(Docker)][ax.first.toStdString()][by.s_uid.toStdString()][toStr(DisableAss)]=by.b_disable_ass;
                     jsonData[toStr(Docker)][ax.first.toStdString()][by.s_uid.toStdString()][toStr(DefaultFonts)]=by.b_default_fonts;
+                    jsonData[toStr(Docker)][ax.first.toStdString()][by.s_uid.toStdString()][toStr(AppMono)]=by.b_mono_state;
+                    jsonData[toStr(Docker)][ax.first.toStdString()][by.s_uid.toStdString()][toStr(AppGecko)]=by.b_gecko_state;
+                    jsonData[toStr(Docker)][ax.first.toStdString()][by.s_uid.toStdString()][toStr(AppICMP)]=by.b_ICMP_state;
                     jsonData[toStr(Docker)][ax.first.toStdString()][by.s_uid.toStdString()][toStr(DxvkConfigFileState)]=by.b_dxvk_config_file_state;
                     if(!by.map_docker_envs.empty()){
                         for(auto&[fa,yz]:by.map_docker_envs){
@@ -190,6 +200,14 @@ bool objectJson::unDataSerializeLocalData(){
                         if(it.value().is_boolean()){
                             baseDockData.s_dockers_mono_state=bx.at(toStr(MonoState)).get<bool>();
                             baseDockData.s_dockers_gecko_state=bx.at(toStr(GeckoState)).get<bool>();
+                            baseDockData.s_dockers_task_log=bx.at(toStr(DockerTaskLog)).get<bool>();
+                            baseDockData.s_dockers_writecopy=bx.at(toStr(DockerWriteCopy)).get<bool>();
+                            baseDockData.s_dockers_sharedmemory=bx.at(toStr(DockerSharedMemory)).get<bool>();
+                            baseDockData.s_dockers_rtserver=bx.at(toStr(DockerRTServer)).get<bool>();
+                            baseDockData.s_dockers_default_fonts=bx.at(toStr(DockerFonts)).get<bool>();
+                            baseDockData.s_dockers_disable_ass=bx.at(toStr(DockerAss)).get<bool>();
+                            baseDockData.s_dockers_ICMP_state=bx.at(toStr(DockerICMP)).get<bool>();
+
                         }
                         if(it.value().is_object())
                         {
@@ -215,6 +233,9 @@ bool objectJson::unDataSerializeLocalData(){
                                 _base_app_data.b_default_fonts=it.value().at("DefaultFonts").get<bool>();
                                 _base_app_data.b_disable_ass=it.value().at("DisableAss").get<bool>();
                                 _base_app_data.b_dxvk_config_file_state=it.value().at("DxvkConfigFileState").get<bool>();
+                                _base_app_data.b_mono_state=it.value().at("AppMono").get<bool>();
+                                _base_app_data.b_gecko_state=it.value().at("AppGecko").get<bool>();
+                                _base_app_data.b_ICMP_state=it.value().at("AppICMP").get<bool>();
                                 _base_app_data.vec_proc_attach_list.clear();
                                 if(it.value().at("AttachProc")!=NULL){
                                     for(auto idx:it.value().at("AttachProc")){

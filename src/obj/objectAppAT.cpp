@@ -173,8 +173,8 @@ void objectAppAT::objectAutoObj(){
         objDiyAddApp=nullptr;
     }
     emit Tips("配置容器中请稍候!");
-    objDiyAddApp=new objectAppMT(&baseAppData,&baseDockData);
-    objDiyAddApp->InitDockObj(false);
+    objectAppMT* objDiyAddApp=new objectAppMT(&baseDockData,&baseAppData);
+    objDiyAddApp->InitDocker(false);
     objDiyAddApp->DockLibsInstall();
     delete objDiyAddApp;
     objDiyAddApp=nullptr;

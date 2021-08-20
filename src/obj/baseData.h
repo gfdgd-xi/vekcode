@@ -33,6 +33,9 @@ typedef struct {
     bool b_rtserver=false;
     bool b_default_fonts=false;
     bool b_disable_ass=false;
+    bool b_mono_state=false;
+    bool b_gecko_state=false;
+    bool b_ICMP_state=false;
     std::vector<QString> vec_proc_attach_list={};
     std::map<QString,QString> map_docker_envs={};
     std::vector<QString> vec_docker_libs={};
@@ -99,6 +102,13 @@ typedef struct{
     QString s_dockers_bit_version="win32";
     bool s_dockers_mono_state=false;
     bool s_dockers_gecko_state=false;
+    bool s_dockers_task_log=false;
+    bool s_dockers_writecopy=false;
+    bool s_dockers_sharedmemory=false;
+    bool s_dockers_rtserver=false;
+    bool s_dockers_default_fonts=false;
+    bool s_dockers_disable_ass=false;
+    bool s_dockers_ICMP_state=false;
 }SdockerData;
 
 typedef struct{
@@ -137,49 +147,62 @@ typedef struct{
 }BaseWtServer;
 
 typedef enum{
-    object_winecfg,
-    object_regedit,
-    object_control,
-    object_uninstall,
-    object_winetricks_gui,
-    object_winetricks_cmd_libs,
-    object_start,
-    object_debugstart,
-    object_setgame,
-    object_exportJson,
-    object_packageDeb,
-    object_forcekill,
-    object_deletegame,
-    object_regobject,
-    object_wineboot,
-    object_wineserver,
-    object_dockSysver,
-    object_disable,
-    object_plugs,
-    object_default
-}ExtendType;
+    object_docker_default,
+    object_docker_winecfg,
+    object_docker_regedit,
+    object_docker_control,
+    object_docker_uninstall,
+    object_docker_winetricks_gui,
+    object_docker_winetricks_cmd_libs,
+    object_docker_allforcekill,
+    object_docker_reggedit_extend,
+    object_docker_wineboot_extend,
+    object_docker_wineserver_extend,
+    object_docker_switch_version,
+    object_docker_plugs_extend
+}Extend_Docker;
 
 typedef enum{
+    object_app_default,
+    object_app_start,
+    object_app_debugstart,
+    object_app_setgame,
+    object_app_exportJson,
+    object_app_packageDeb,
+    object_app_forcekill,
+    object_app_deletegame
+}Extend_App;
+
+typedef enum{
+    object_wineboot_default,
     object_wineboot_e,
     object_wineboot_f,
     object_wineboot_i,
     object_wineboot_k,
     object_wineboot_r,
     object_wineboot_s,
-    object_wineboot_u,
-    object_wineboot_default
-}ExtendBootType;
+    object_wineboot_u
+}Extend_Boot;
+
 typedef enum{
+    object_wineserver_default,
     object_wineserver_k,
     object_wineserver_p,
-    object_wineserver_w,
-    object_wineserver_default
-}ExtendServerType;
+    object_wineserver_w,   
+}Extend_Server;
+
 typedef enum{
     object_delApp,
     object_setApp,
     object_addApp
 }EADEType;
+
+typedef struct{
+     Extend_Docker ex_docker;
+     Extend_App ex_app;
+     Extend_Boot ex_boot;
+     Extend_Server ex_Server;
+}ExtendType;
 
 extern SlocalGloablData g_vekLocalData;
 extern std::map<QString,QString> winetricks_server_url_list;

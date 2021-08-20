@@ -53,7 +53,7 @@ void vekAppListView::mouseDoubleClickEvent(QMouseEvent * event){
     UNUSED(event);
     int index = this->currentIndex().row();
     if(index>-1){
-        startApp(object_start);
+        startApp(object_app_start);
     }
 }
 void vekAppListView::ObjectRun(){
@@ -62,85 +62,50 @@ void vekAppListView::ObjectRun(){
     {
         QObject *object = QObject::sender();
         QAction *action_obnject = qobject_cast<QAction *>(object);
-        int object_int=object_start;
+        int object_int=object_app_start;
         if(action_obnject!=nullptr){
             object_int= action_obnject->objectName().toInt();
         }
         objectExtend* _objectExtend=new objectExtend();
-        ExtendType _objType=object_default;
+        ExtendType _objType;
+        _objType.ex_app=object_app_start;
         std::vector<QStringList> _codeAgrs;
         switch(object_int)
         {
-        case object_winecfg:
-            _objType=object_winecfg;
+        case object_app_start:
+            _objType.ex_app=object_app_start;
             break;
-        case object_regedit:
-            _objType=object_regedit;
+        case object_app_forcekill:
+            _objType.ex_app=object_app_forcekill;
             break;
-        case object_control:
-            _objType=object_control;
-            break;
-        case object_uninstall:
-            _objType=object_uninstall;
-            break;
-        case object_winetricks_gui:
-            _objType=object_winetricks_gui;
-            break;
-        case object_winetricks_cmd_libs:
-            _objType=object_winetricks_cmd_libs;
-            _codeAgrs=vekWinetricks_cArgs();
-            if(_codeAgrs.empty()){
-                return;
-            }
-            break;
-        case object_start:
-            _objType=object_start;
-            break;
-        case object_forcekill:
-            _objType=object_forcekill;
-            break;
-        case object_debugstart:
+        case object_app_debugstart:
             objectExtendApp();
             return;
-        case object_setgame:
+        case object_app_setgame:
             setItemSlot();
             return;
-        case object_deletegame:
+        case object_app_deletegame:
             setUpDelData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),m_pModel->getItem(index),object_delApp);
             return;
-        case object_exportJson:
+        case object_app_exportJson:
             ExportJson();
             return;
-        case object_packageDeb:
+        case object_app_packageDeb:
             PackageDeb();
             return;
         default:
             return;
         }
-        if(_objType==object_start){
-            startApp(object_start);
+        if(_objType.ex_app==object_app_start){
+            startApp(object_app_start);
         }else{
-            _objectExtend->setDockOptionObjectData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),m_pModel->getItem(index)->s_uid,_codeAgrs,_objType,ExtendBootType::object_wineboot_default,ExtendServerType::object_wineserver_default);
+            _objectExtend->setDockOptionObjectData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),m_pModel->getItem(index)->s_uid,_codeAgrs,_objType);
             _objectExtend->start();
         }
     }
 }
-std::vector<QStringList> vekAppListView::vekWinetricks_cArgs(){
-    QString dlgTitle="winetricks命令框";
-    QString txtLabel="直接输入功能,多个库和功能空格隔开\n例如:vcrun2012 vcrun2015\n命令:--self-update 可以在线更新winetricks";
-    QString defaultInput;
-    QLineEdit::EchoMode echoMode=QLineEdit::Normal;//正常文字输入
-    bool ok=false;
-    QString arg = QInputDialog::getText(nullptr, dlgTitle,txtLabel, echoMode,defaultInput, &ok);
-    std::vector<QStringList> args;
-    if (ok && !arg.isEmpty())
-    {
-        QStringList _args=arg.split(" ");
-        args.push_back(_args);
-    }
-    return args;
-}
-void vekAppListView::startApp(ExtendType _objType){
+
+void vekAppListView::startApp(Extend_App _objTypes){
     std::vector<QStringList> _codeAgrs;
     int index = this->currentIndex().row();
     if(index>-1){
@@ -165,11 +130,13 @@ void vekAppListView::startApp(ExtendType _objType){
             auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
             connect(_objectExtend, SIGNAL(objexitTray(bool)), pObjectVek, SLOT(exitTray(bool)));
             emit _startTray();
-            objectAppMT* oAMT=new objectAppMT(appData,&dockData);
-            oAMT->sObjectInstall();
+            objectAppMT* oAMT=new objectAppMT(&dockData,appData);
+            oAMT->InstallDXVK();
             delete oAMT;
             oAMT=nullptr;
-            _objectExtend->setDockOptionObjectData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),appData->s_uid,_codeAgrs,_objType,ExtendBootType::object_wineboot_default,ExtendServerType::object_wineserver_default);
+            ExtendType _objType;
+            _objType.ex_app=_objTypes;
+            _objectExtend->setDockOptionObjectData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),appData->s_uid,_codeAgrs,_objType);
             _objectExtend->start();
         }
     }
@@ -231,17 +198,17 @@ void vekAppListView::setItemSlot(){
     int index = this->currentIndex().row();
     if (index > -1)
     {
-        if(!_vek_App_Add){
+        if(!_vek_App_option){
             //绑定传参槽
-            _vek_App_Add=new vekAppAddMT();
-            _vek_App_Add->setAttribute(Qt::WA_DeleteOnClose,true);
-            _vek_App_Add->setWindowTitle("Vek软件设置");
+            _vek_App_option=new vekAppOption();
+            _vek_App_option->setAttribute(Qt::WA_DeleteOnClose,true);
+            _vek_App_option->setWindowTitle("Vek软件设置");
             QString currentAppCID=m_pModel->getItem(this->currentIndex().row())->s_uid;
-            _vek_App_Add->vekAppAddConnectObject(&g_vekLocalData.map_docker_list.at(mBox->tabText(mBox->currentIndex())),currentAppCID,object_setApp);
-            _vek_App_Add->setWindowFlags(Qt::WindowStaysOnTopHint);
-            _vek_App_Add->show();
-            connect(_vek_App_Add,&vekAppAddMT::_unDiyAppAdd,this,&vekAppListView::unAppAdd);
-            connect(_vek_App_Add,SIGNAL(_upData(SdockerData,SappData*,EADEType)),this,SLOT(setUpDelData(SdockerData,SappData*,EADEType)));
+            _vek_App_option->vekAppAddConnectObject(&g_vekLocalData.map_docker_list.at(mBox->tabText(mBox->currentIndex())),currentAppCID,object_setApp);
+            _vek_App_option->setWindowFlags(Qt::WindowStaysOnTopHint);
+            _vek_App_option->show();
+            connect(_vek_App_option,&vekAppOption::_unDiyAppAdd,this,&vekAppListView::unAppAdd);
+            connect(_vek_App_option,SIGNAL(_upData(SdockerData,SappData*,EADEType)),this,SLOT(setUpDelData(SdockerData,SappData*,EADEType)));
         }
     }
 }
@@ -302,7 +269,7 @@ void vekAppListView::unPackage(){
     _vPackage=nullptr;
 }
 void vekAppListView::unAppAdd(){
-    _vek_App_Add=nullptr;
+    _vek_App_option=nullptr;
 }
 void vekAppListView::unExportJson(){
     _vExportJson=nullptr;

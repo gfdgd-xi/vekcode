@@ -2,7 +2,7 @@
 #define VEK_H
 #include "vekWineOption.h"
 #include "vekAbout.h"
-#include "vekAppAddMT.h"
+#include "vekAppOption.h"
 #include "view/aview/vekAppListView.h"
 #include "obj/common.h"
 #include "vekExtendDebug.h"

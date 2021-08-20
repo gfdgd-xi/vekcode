@@ -76,79 +76,124 @@ void vekAppPanel::contextMenuEvent( QContextMenuEvent * event )
 {
     cindex=m_pBox->tabBar()->tabAt(event->pos());
     if(cindex>-1){
-        QMenu *pMenu = new QMenu(this);
-        QAction *pAddGroupAct = new QAction(tr("删除容器"),pMenu);
-        pAddGroupAct->setObjectName(m_pBox->tabText(cindex));
-        pMenu->addAction(pAddGroupAct);
-        connect(pAddGroupAct,SIGNAL(triggered (bool)),this,SLOT(deleteGroupSlot(bool)));
+        pMenu = new QMenu(this);
+        for(int i=0;i<=dockerops.size()-1;i++){
+            QAction *pObject=new QAction(dockerops[i],pMenu);
+            pMenu->addAction(pObject);
+            pObject->setObjectName(QString::number(i, 10));
+            connect(pObject,SIGNAL(triggered (bool)),this,SLOT(DockerObject()));
+        }
         pMenu->exec(QCursor::pos());
         QList<QAction*> list = pMenu->actions();
         foreach (QAction* pAction, list) delete pAction;
         delete pMenu;
     }
 }
-
-//读取数据to容器列表
-void vekAppPanel::vekLoadJsonData(){
-    if(g_vekLocalData.map_docker_list.empty()){
+void vekAppPanel::DockerObject(){
+    QObject *object = QObject::sender();
+    QAction *action_obnject = qobject_cast<QAction *>(object);
+    int object_int=action_obnject->objectName().toInt();
+    objectExtend* _objectExtend=new objectExtend();
+    ExtendType _objType;
+    std::vector<QStringList> _codeAgrs;
+    switch(object_int){
+    case 0:
+        setDockerSlot();
         return;
-    }else{
-        for(auto& y:g_vekLocalData.map_docker_list){
-            for(auto z:y.second.map_dockers_data){
-                vekAppListView* pList= new vekAppListView();
-                QString nowTabName=y.first;
-                SappData *LID=new SappData();
-                *LID=z.second;
-                for(std::map<QString,vekAppListView*>::iterator it = m_pListMap->begin();it!=m_pListMap->end();it++)
-                {
-                    if(it->first==nowTabName){
-                        pList=it->second;
-                        break;
-                    }
-                }
-                pList->setViewMode(QListView::IconMode);
-                pList->setFlow(QListView::LeftToRight);
-                connect(pList, SIGNAL(_startTray()), this->parentWidget()->parentWidget(), SLOT(startTray()));
-                pList->addItem(LID);
-            }
+    case 1:
+        _objType.ex_docker=object_docker_winecfg;
+        break;
+    case 2:
+        _objType.ex_docker=object_docker_regedit;
+        break;
+    case 3:
+        _objType.ex_docker=object_docker_control;
+        break;
+    case 4:
+        _objType.ex_docker=object_docker_uninstall;
+        break;
+    case 5:
+        deleteGroupSlot(true);
+        return;
+    case 6:
+        _objType.ex_docker=object_docker_winetricks_gui;
+        break;
+    case 7:
+        _objType.ex_docker=object_docker_winetricks_cmd_libs;
+        _codeAgrs=vekWinetricks_cArgs();
+        if(_codeAgrs.empty()){
+            return;
         }
+        break;
+    }
+    _objectExtend->setDockOptionObjectData(pObject::getDockerData(m_pBox->tabText(m_pBox->currentIndex())),_codeAgrs,_objType);
+    _objectExtend->start();
+}
+std::vector<QStringList> vekAppPanel::vekWinetricks_cArgs(){
+    QString dlgTitle="winetricks命令框";
+    QString txtLabel="直接输入功能,多个库和功能空格隔开\n例如:vcrun2012 vcrun2015\n命令:--self-update 可以在线更新winetricks";
+    QString defaultInput;
+    QLineEdit::EchoMode echoMode=QLineEdit::Normal;//正常文字输入
+    bool ok=false;
+    QString arg = QInputDialog::getText(nullptr, dlgTitle,txtLabel, echoMode,defaultInput, &ok);
+    std::vector<QStringList> args;
+    if (ok && !arg.isEmpty())
+    {
+        QStringList _args=arg.split(" ");
+        args.push_back(_args);
+    }
+    return args;
+}
+//设置选项
+void vekAppPanel::setDockerSlot(){
+    if(vek_docker_option==nullptr){
+        //绑定传参槽
+        vek_docker_option=new vekDockerOption();
+        vek_docker_option->setAttribute(Qt::WA_DeleteOnClose,true);
+        vek_docker_option->setWindowTitle("Docker设置");
+        SdockerData tmpData=pObject::getDockerData(m_pBox->tabText(m_pBox->currentIndex()));
+        vek_docker_option->vekAppAddConnectObject(tmpData);
+        vek_docker_option->setWindowFlags(Qt::WindowStaysOnTopHint);
+        vek_docker_option->show();
+        connect(vek_docker_option,&vekDockerOption::_unOption,this,&vekAppPanel::unDockOption);
+        //connect(vek_docker_option,SIGNAL(_upData(SdockerData,SappData*,EADEType)),this,SLOT(setUpDelData(SdockerData,SappData*,EADEType)));
     }
 }
 void vekAppPanel::addAppSlot(){
-    if(vek_app_multi_add==nullptr){
-        vek_app_multi_add=new vekAppAddMulti();
-        vek_app_multi_add->setAttribute(Qt::WA_DeleteOnClose,true);
-        vek_app_multi_add->setWindowFlags(Qt::WindowStaysOnTopHint);
-        vek_app_multi_add->setWindowTitle("Vek游戏增加方式选择");
-        connect(vek_app_multi_add,&vekAppAddMulti::_unMultAppAdd,this,&vekAppPanel::unMultAppAdd);
-        connect(vek_app_multi_add,&vekAppAddMulti::_MultiAppDiy,this,&vekAppPanel::addAppDiy);
-        connect(vek_app_multi_add,&vekAppAddMulti::_MultiAppAuto,this,&vekAppPanel::addAppAuto);
-        vek_app_multi_add->show();
+    if(vek_app_add_model==nullptr){
+        vek_app_add_model=new vekAppAddModel();
+        vek_app_add_model->setAttribute(Qt::WA_DeleteOnClose,true);
+        vek_app_add_model->setWindowFlags(Qt::WindowStaysOnTopHint);
+        vek_app_add_model->setWindowTitle("Vek游戏增加方式选择");
+        connect(vek_app_add_model,&vekAppAddModel::_unMultAppAdd,this,&vekAppPanel::unMultAppAdd);
+        connect(vek_app_add_model,&vekAppAddModel::_MultiAppDiy,this,&vekAppPanel::AddAppDiyType);
+        connect(vek_app_add_model,&vekAppAddModel::_MultiAppAuto,this,&vekAppPanel::AddAppAutoType);
+        vek_app_add_model->show();
     }
 }
-void vekAppPanel::addAppDiy(){
+void vekAppPanel::AddAppDiyType(){
     if(vek_app_add==nullptr){
-        vek_app_add=new vekAppAddMT();
+        vek_app_add=new vekAppOption();
         vek_app_add->setAttribute(Qt::WA_DeleteOnClose,true);
         vek_app_add->setWindowFlags(Qt::WindowStaysOnTopHint);
         vek_app_add->setWindowTitle("Vek软件增加");
         SdockerData tmpData=pObject::getDockerData(m_pBox->tabText(m_pBox->currentIndex()));
         vek_app_add->vekAppAddConnectObject(&tmpData,nullptr,object_addApp);
         vek_app_add->show();
-        connect(vek_app_add,&vekAppAddMT::_unDiyAppAdd,this,&vekAppPanel::unDiyAppAdd);
+        connect(vek_app_add,&vekAppOption::_unDiyAppAdd,this,&vekAppPanel::unDiyAppAdd);
         connect(vek_app_add,SIGNAL(doneAddApp(SdockerData*,SappData*)), this, SLOT(addAppObject(SdockerData*,SappData*)));
     }
 }
-void vekAppPanel::addAppAuto(){
+void vekAppPanel::AddAppAutoType(){
     if(vek_app_add_auto==nullptr){
-        vek_app_add_auto=new vekAppAddAT();
+        vek_app_add_auto=new vekAppAutoOption();
         vek_app_add_auto->setAttribute(Qt::WA_DeleteOnClose,true);
         vek_app_add_auto->setWindowFlags(Qt::WindowStaysOnTopHint);
         vek_app_add_auto->setWindowTitle("自动配置容器");
         SdockerData tmpData=pObject::getDockerData(m_pBox->tabText(m_pBox->currentIndex()));
         vek_app_add_auto->connectDockObject(tmpData);
         vek_app_add_auto->show();
-        connect(vek_app_add_auto,&vekAppAddAT::_unAutoDock,this,&vekAppPanel::unAutoDock);
+        connect(vek_app_add_auto,&vekAppAutoOption::_unAutoDock,this,&vekAppPanel::unAutoDock);
         connect(vek_app_add_auto,SIGNAL(autoObjDock(SdockerData*,SappData*)),this,SLOT(addAppObject(SdockerData*,SappData*)));
     }
 }
@@ -159,10 +204,11 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
     }
     bool dState=false;
     SdockerData tempDockerData;
-    SappData  tempAppData;
-    ExtendType _objType=object_default;
-    objectAppMT* objNewDock=new objectAppMT(&tempAppData,&tempDockerData);
-    tempAppData.b_default_fonts=false;
+    SappData tempAppData;
+    ExtendType _objType;
+    _objType.ex_boot=object_wineboot_i;
+    objectAppMT* objNewDock=new objectAppMT(&tempDockerData,&tempAppData);
+    tempDockerData.s_dockers_default_fonts=false;
     tempDockerData.s_dockers_mono_state=false;
     tempDockerData.s_dockers_gecko_state=false;
     QString dockName="vekON1";
@@ -185,12 +231,6 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
         if(!w_ok){
             return;
         }
-        //选择容器系统版本
-        //if(swVer.contains("deepin",Qt::CaseSensitive)){
-        //    itemsbit<<"win32";
-        //}else{
-        //    itemsbit<<"win32"<<"win64";
-        //}
         itemsbit<<"win32"<<"win64";
         QString dTitle="选择容器系统版本";
         QString dLabel="支持容器列表";
@@ -229,7 +269,7 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
         bool font_stste=pObject::vekMesg("是否安装默认字体");
         if(font_stste)
         {
-            tempAppData.b_default_fonts=true;
+            tempDockerData.s_dockers_default_fonts=true;
         }
         bool mono_stste=pObject::vekMesg("是否安装Mono组件");
         if(mono_stste)
@@ -251,7 +291,7 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
         tempDockerData.s_dockers_bit_version=dockBit;
         tempDockerData.s_dockers_path=QApplication::applicationDirPath()+"/vekDock";
         tempDockerData.s_dockers_name=dockName;
-        objNewDock->newDock();
+        objNewDock->InitDocker(true);
         addGroupSlot(&tempDockerData);
     }else{
         //install app
@@ -261,7 +301,7 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
                 return;
             }
         }
-        _objType=object_uninstall;
+        _objType.ex_docker=object_docker_uninstall;
         //判断当前容器数量是否为0;
         if(m_pBox->count()!=0){
             //当前容器目标
@@ -314,7 +354,7 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
             bool font_stste=pObject::vekMesg("是否安装默认字体");
             if(font_stste)
             {
-                tempAppData.b_default_fonts=true;
+                tempDockerData.s_dockers_default_fonts=true;
             }
             bool mono_stste=pObject::vekMesg("是否安装Mono组件");
             if(mono_stste)
@@ -330,7 +370,7 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
             tempDockerData.s_dockers_path=QApplication::applicationDirPath()+"/vekDock";
             tempDockerData.s_dockers_name=dockName;
             tempDockerData.s_dockers_bit_version=dockBit;
-            objNewDock->newDock();
+            objNewDock->InitDocker(true);
             addGroupSlot(&tempDockerData);
         }
         else//否则从全局本地配置文件提取容器参数
@@ -349,11 +389,9 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
         */
         objectExtend* _objectExtend=new objectExtend();
         std::vector<QStringList> _codeAgrs;
-        _objectExtend->setDockOptionObjectData(tempDockerData,tempAppData.s_uid,_codeAgrs,_objType,ExtendBootType::object_wineboot_default,ExtendServerType::object_wineserver_default);
-        _objectExtend->start();       
+        _objectExtend->setDockOptionObjectData(tempDockerData,_codeAgrs,_objType);
+        _objectExtend->start();
     }
-
-
     delete objNewDock;
     objNewDock=nullptr;
 }
@@ -365,8 +403,11 @@ void vekAppPanel::objectRunApp(){
 void vekAppPanel::unAutoDock(){
     vek_app_add_auto=nullptr;
 }
+void vekAppPanel::unDockOption(){
+    vek_docker_option=nullptr;
+}
 void vekAppPanel::unMultAppAdd(){
-    vek_app_multi_add=nullptr;
+    vek_app_add_model=nullptr;
 }
 void vekAppPanel::unDiyAppAdd(){
     vek_app_add=nullptr;
@@ -442,20 +483,21 @@ void vekAppPanel::addGroupSlot(SdockerData* dcokData)
 }
 void vekAppPanel::deleteGroupSlot(bool del_static){
     UNUSED(del_static);
-    QAction *pEven = qobject_cast<QAction *>(this->sender());
-    QString strDockerName=pEven->objectName();
-    SdockerData tDocker=pObject::getDockerData(strDockerName);
+
+    SdockerData tDocker=pObject::getDockerData(m_pBox->tabText(m_pBox->currentIndex()));
     m_pBox->removeTab(cindex);
     qInfo()<<cindex;
-    if(tDocker.s_dockers_path!=nullptr&&strDockerName!=nullptr){
+    qInfo()<<tDocker.s_dockers_path;
+    qInfo()<<tDocker.s_dockers_name;
+    if(tDocker.s_dockers_path!=nullptr&&tDocker.s_dockers_name!=nullptr){
         qInfo()<<tDocker.s_dockers_path;
-        QDir dockPath(tDocker.s_dockers_path+"/"+strDockerName);
+        QDir dockPath(tDocker.s_dockers_path+"/"+tDocker.s_dockers_name);
         if(dockPath.exists()){
             dockPath.removeRecursively();
         }
     }
-    g_vekLocalData.map_docker_list.erase(strDockerName);
+    g_vekLocalData.map_docker_list.erase(tDocker.s_dockers_name);
     objectJson _oJson;
-    _oJson.deleteDockerNodeData(strDockerName);
-    m_pListMap->erase(strDockerName);
+    _oJson.deleteDockerNodeData(tDocker.s_dockers_name);
+    m_pListMap->erase(tDocker.s_dockers_name);
 }

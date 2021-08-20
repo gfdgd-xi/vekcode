@@ -1,23 +1,23 @@
-#ifndef VEKAPPADDAT_H
-#define VEKAPPADDAT_H
+#ifndef VEKAPPAUTOOPTION_H
+#define VEKAPPAUTOOPTION_H
 
 #include "obj/common.h"
 #include "obj/objectJson.h"
 #include "obj/objectAppAT.h"
 #include "view/jview/vekViewAT.h"
 namespace Ui {
-class vekAppAddAT;
+class vekAppAutoOption;
 }
 
-class vekAppAddAT : public QWidget
+class vekAppAutoOption : public QWidget
 {
     Q_OBJECT
 public:
-    explicit vekAppAddAT(QWidget *parent = nullptr);
-    ~vekAppAddAT();
+    explicit vekAppAutoOption(QWidget *parent = nullptr);
+    ~vekAppAutoOption();
     void connectDockObject(SdockerData);
 private:
-    Ui::vekAppAddAT *ui;
+    Ui::vekAppAutoOption *ui;
     SappData* autoAppData=nullptr;
     SdockerData* autoDockData=nullptr;
     void SetObject();

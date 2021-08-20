@@ -4,20 +4,24 @@
 #include "objectJson.h"
 #include "objectExtend.h"
 #include "pObject.h"
+
+typedef enum{
+    CHANGETYPEDOCKER,
+    CHANGETYPTEAPP
+}CHANGETYPE;
 class objectAppMT :public QObject
 {
     Q_OBJECT
 public:
-    objectAppMT(SappData*,SdockerData*);
+    objectAppMT(SdockerData*,SappData*);
     ~objectAppMT();
     QString GetRandomCID();
-    bool InitDockObj(bool);
+    bool InitDocker(bool);
     std::vector<QStringList> argsList;
     void DockLibsInstall();
-    void ExecuteObj(ExtendType,ExtendBootType,ExtendServerType);
-    void newDock();
+    void changeSettings(CHANGETYPE);
     void optionRegs();
-    void sObjectInstall();
+    void InstallDXVK();
 private:
     SappData* appData=new SappData;
     SdockerData* dockData=new SdockerData;
@@ -27,7 +31,7 @@ private:
     void DxvkRegedit(QStringList dxvkFileList);
     void DxvkHUDRegs();
     void s_dxvk_config_file();
-    void DefaultFontsFileInstall();
+    void DefaultFontsFileInstall(CHANGETYPE _type);
     void DefaultFontsRegs();
     void WaitObjectDone(objectExtend*);  
     void DockEditSystemVersion();
@@ -35,6 +39,8 @@ private:
     void installMonoPlugs();
     void installGeckoPlugs();
     void outAppIco();
+    void ExecuteDockerObject(ExtendType);
+    void ExecuteAppObject(ExtendType);
     void b_disable_ass(std::map<QString,std::map<QString,QString>>);
 };
 
