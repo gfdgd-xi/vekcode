@@ -39,8 +39,7 @@ private:
     void installMonoPlugs();
     void installGeckoPlugs();
     void outAppIco();
-    void ExecuteDockerObject(ExtendType);
-    void ExecuteAppObject(ExtendType);
+    void ExecuteObject(ExtendArgs ex_Args,ExtendType ex_Type);
     void b_disable_ass(std::map<QString,std::map<QString,QString>>);
 };
 

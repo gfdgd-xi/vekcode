@@ -170,9 +170,10 @@ void vekExtendDebug::ExtendApp(){
 void vekExtendDebug::exitDebug(){
     std::vector<QStringList> _codeAgrs;
     objectExtend* _objectExtend=new objectExtend();
-    ExtendType _objType;
-    _objType.ex_docker=object_docker_allforcekill;
-    _objectExtend->setDockOptionObjectData(dockData,appData.s_uid,_codeAgrs,_objType);
+    ExtendType exType=EX_APP;
+    ExtendArgs exArgs;
+    exArgs.ex_app=object_app_forcekill;
+    _objectExtend->setDockOptionObjectData(dockData,appData.s_uid,_codeAgrs,exArgs,exType);
     _objectExtend->start();
     _objectExtend->wait();
     delete _objectExtend;

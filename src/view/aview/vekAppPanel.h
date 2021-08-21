@@ -56,8 +56,8 @@ private:
         "容器控制面板",
         "软件卸载|增加",
         "删除当前容器",
-        "winetricks-GUI",
-        "winetricks-CMD",
+        "winetricks-gui",
+        "winetricks-cmd",
 
     };
 private slots:

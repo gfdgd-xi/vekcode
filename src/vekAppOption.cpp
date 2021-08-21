@@ -503,8 +503,10 @@ bool vekAppOption::vekAppAddObj(){
     objectAppMT* vappAddObj=new objectAppMT(tempDockData,tempAppData);
     vappAddObj->changeSettings(CHANGETYPE::CHANGETYPTEAPP);
     if(objType==object_setApp){
-        emit _upData(*tempDockData,tempAppData,objType);
-    }else{
+        emit _upAppData(*tempDockData,tempAppData,objType);
+    }
+    if(objType==object_addApp){
+        pObject::addAppDataToJson(*tempDockData,*tempAppData);
         emit doneAddApp(tempDockData,tempAppData);
     }
     delete vappAddObj;

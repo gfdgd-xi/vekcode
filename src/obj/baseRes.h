@@ -49,4 +49,7 @@ std::map<QString,std::map<QString,QString>> fontRes={
     }
    }
 };
+//kill main proc
+QStringList procList={"explorer.exe","service.exe","rpcss.exe","svchost.exe","plugplay.exe","winedevice.exe","winedbg.exe"};
+
 #endif // BASERES_H

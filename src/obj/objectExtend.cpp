@@ -12,34 +12,23 @@ objectExtend::~objectExtend(){
     }
 }
 //传入容器和APP运行参数
-void objectExtend::setDockOptionObjectData(SdockerData _dockData,std::vector<QStringList> _agrsList,ExtendType ex_type){
+void objectExtend::setDockOptionObjectData(SdockerData _dockData,QString appcid,std::vector<QStringList> _agrsList,ExtendArgs ex_Args,ExtendType ex_Type){
     dockData=_dockData;
     argsList=_agrsList;
-    objType=ex_type;
+    exArgs=ex_Args;
+    exType=ex_Type;
     startArgs=dockData.s_dockers_wine_path+"/wine/bin/"+dockData.s_dockers_wine_exe_version;
-}
-void objectExtend::setDockOptionObjectData(SdockerData _dockData,QString appcid,std::vector<QStringList> _agrsList,ExtendType ex_type){
-    dockData=_dockData;
-    argsList=_agrsList;
-    appData=_dockData.map_dockers_data[appcid];
-    objType=ex_type;
-    startArgs=dockData.s_dockers_wine_path+"/wine/bin/"+dockData.s_dockers_wine_exe_version;
+    if(ex_Type==EX_APP){
+        appData=_dockData.map_dockers_data[appcid];
+    }
 }
 //设置运行环境变量
 void objectExtend::executeDockerEnv(){
-    //wine执行版本: "wine"
-    //容器系统版本: "win7"
-    //Wine版本号: "deepin-wine5"
-    //容器系统位数版本: "win32"
-    qInfo()<<"wine执行版本:"<<dockData.s_dockers_wine_exe_version;
-    qInfo()<<"容器系统版本:"<<dockData.s_dockers_system_version;
-    qInfo()<<"Wine版本号:"<<dockData.s_dockers_wine_version;
-    qInfo()<<"容器系统位数版本:"<<dockData.s_dockers_bit_version;
     qputenv("WINE", (startArgs).toStdString().c_str());
     qputenv("WINEPREFIX", (dockData.s_dockers_path+"/"+dockData.s_dockers_name).toStdString().c_str());
     qputenv("WINEARCH", dockData.s_dockers_bit_version.toStdString().c_str());
     qputenv("WINETRICKS_DOWNLOADER", "aria2c");
-    if(objType.ex_app!=object_app_default){
+    if(exType==EX_APP){
         if(appData.s_work_path!=nullptr){
             //设置工作目录
             qputenv("PWD", appData.s_work_path.toStdString().c_str());
@@ -52,9 +41,11 @@ void objectExtend::executeDockerEnv(){
                 }
             }
         }
+        /*
         for(auto _env:m_cmd->systemEnvironment()){
             qInfo()<<_env;
         }
+        */
     }
 }
 //针对boot的操作
@@ -165,6 +156,7 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
     qInfo()<<"workPath:"+appData.s_work_path;
     qInfo()<<"WineArgs:"+codeArgs.join(" ");
     qInfo()<<"|++++++++++++++++++++++++++++|";
+    qInfo()<<m_cmd->state();
     m_cmd->waitForFinished(-1);
     forcekill();
     waitObjectDone(true);
@@ -177,6 +169,7 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
            break;
         }
     }
+    qInfo()<<m_cmd->state();
 }
 //wintricks和常规命令执行
 void objectExtend::baseExecuteWineCode(QString code,QStringList codeArgs){
@@ -190,7 +183,6 @@ void objectExtend::baseExecuteWineCode(QString code,QStringList codeArgs){
 void objectExtend::extendWineRegeditCode(QString code){
     for(auto regStr:argsList){
         QString mdCode=code+" "+regStr.join(" ");
-        qInfo()<<mdCode;
         m_cmd->start(mdCode,QIODevice::ReadWrite);
         m_cmd->waitForFinished(-1);
     }
@@ -232,7 +224,6 @@ void objectExtend::deepinSwitchSysVerion(SWITCH_SYSTEM_VERSION ssv){
     }
     QString mdCode = codeArgs.join(" ");
     m_cmd->start(mdCode,QIODevice::ReadWrite);
-    qInfo()<<"WineTricks:"<<codeArgs.join(" ");
     m_cmd->waitForFinished(-1);
 }
 
@@ -248,28 +239,28 @@ void objectExtend::waitObjectDone(bool objState){
 //容器基本功能
 void objectExtend::optionExtend(){
     QStringList codeArgs;
-    if(objType.ex_docker==object_docker_winecfg){
+    if(exArgs.ex_docker==object_docker_winecfg){
         codeArgs.append("winecfg");
         baseExecuteWineCode(startArgs,codeArgs);
     }
-    if(objType.ex_docker==object_docker_regedit){
+    if(exArgs.ex_docker==object_docker_regedit){
         codeArgs.append("regedit");
         baseExecuteWineCode(startArgs,codeArgs);
     }
-    if(objType.ex_docker==object_docker_control){
+    if(exArgs.ex_docker==object_docker_control){
         codeArgs.append("control");
         baseExecuteWineCode(startArgs,codeArgs);
     }
-    if(objType.ex_docker==object_docker_uninstall){
+    if(exArgs.ex_docker==object_docker_uninstall){
         codeArgs.append("uninstaller");
         baseExecuteWineCode(startArgs,codeArgs);
     }
-    if(objType.ex_docker==object_docker_winetricks_gui){
+    if(exArgs.ex_docker==object_docker_winetricks_gui){
         codeArgs.append(dockData.s_dockers_wine_path+"/wine/bin/winetricks");
         codeArgs.append("--gui");
         ExtendWinetricksCode(codeArgs,true);
     }
-    if(objType.ex_docker==object_docker_winetricks_cmd_libs){
+    if(exArgs.ex_docker==object_docker_winetricks_cmd_libs){
         codeArgs.append(dockData.s_dockers_wine_path+"/wine/bin/winetricks");
         for(auto d:argsList){
             for(auto x:d){
@@ -278,27 +269,27 @@ void objectExtend::optionExtend(){
         }
        ExtendWinetricksCode(codeArgs,false);
     }
-    if(objType.ex_docker==object_docker_allforcekill){
+    if(exArgs.ex_docker==object_docker_allforcekill){
         forcekill();
     }
-    if(objType.ex_docker==object_docker_reggedit_extend){
+    if(exArgs.ex_docker==object_docker_reggedit_extend){
         qInfo()<<startArgs;
         extendWineRegeditCode(startArgs);
     }
-    if(objType.ex_docker==object_docker_wineboot_extend){
-        executeWineBoot(objType.ex_boot);
+    if(exArgs.ex_docker==object_docker_wineboot_extend){
+        executeWineBoot(exArgs.ex_boot);
     }
-    if(objType.ex_docker==object_docker_wineserver_extend){
-        executeWineServer(objType.ex_Server);
+    if(exArgs.ex_docker==object_docker_wineserver_extend){
+        executeWineServer(exArgs.ex_Server);
     }
-    if(objType.ex_docker==object_docker_switch_version){
+    if(exArgs.ex_docker==object_docker_switch_version){
         if(dockData.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
             switchSysVersion(DOCKER,DEEPIN);
         }else{
             switchSysVersion(DOCKER,WINEHQ);
         }
     }
-    if(objType.ex_docker==object_docker_plugs_extend){
+    if(exArgs.ex_docker==object_docker_plugs_extend){
         extendPlugs();
     }
 
@@ -329,6 +320,14 @@ void objectExtend::extendApp(){
     dyncDxvkRegs(dxvkResLog);
     baseExecuteAppCode(startArgs,codeArgs);
     emit objexitTray(false);
+}
+void objectExtend::extendAppType(){
+    if(exArgs.ex_app==object_app_start){
+        extendApp();
+    }
+    if(exArgs.ex_app==object_app_forcekill){
+        forcekill();
+    }
 }
 //同步dxvk
 void objectExtend::dyncDxvkRegs(std::map<QString,std::map<QString,QString>> dxvkResStr){
@@ -373,12 +372,11 @@ void objectExtend::run(){
     m_cmd=new QProcess();
     executeDockerEnv();
     //base code
-    if(objType.ex_docker!=object_docker_default){
+    if(exType==EX_DOCKER){
         optionExtend();
     }
-
-    if(objType.ex_app!=object_app_default){
-        extendApp();
+    if(exType==EX_APP){
+        extendAppType();
     }
     executeWineBoot(object_wineboot_r);
 }

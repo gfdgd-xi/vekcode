@@ -93,40 +93,42 @@ void vekAppPanel::DockerObject(){
     QObject *object = QObject::sender();
     QAction *action_obnject = qobject_cast<QAction *>(object);
     int object_int=action_obnject->objectName().toInt();
+    qInfo()<<object_int;
     objectExtend* _objectExtend=new objectExtend();
-    ExtendType _objType;
+    ExtendType exType=EX_DOCKER;
+    ExtendArgs exArgs;
     std::vector<QStringList> _codeAgrs;
     switch(object_int){
     case 0:
         setDockerSlot();
         return;
     case 1:
-        _objType.ex_docker=object_docker_winecfg;
+        exArgs.ex_docker=object_docker_winecfg;
         break;
     case 2:
-        _objType.ex_docker=object_docker_regedit;
+        exArgs.ex_docker=object_docker_regedit;
         break;
     case 3:
-        _objType.ex_docker=object_docker_control;
+        exArgs.ex_docker=object_docker_control;
         break;
     case 4:
-        _objType.ex_docker=object_docker_uninstall;
+        exArgs.ex_docker=object_docker_uninstall;
         break;
     case 5:
         deleteGroupSlot(true);
         return;
     case 6:
-        _objType.ex_docker=object_docker_winetricks_gui;
+        exArgs.ex_docker=object_docker_winetricks_gui;
         break;
     case 7:
-        _objType.ex_docker=object_docker_winetricks_cmd_libs;
+        exArgs.ex_docker=object_docker_winetricks_cmd_libs;
         _codeAgrs=vekWinetricks_cArgs();
         if(_codeAgrs.empty()){
             return;
         }
         break;
     }
-    _objectExtend->setDockOptionObjectData(pObject::getDockerData(m_pBox->tabText(m_pBox->currentIndex())),_codeAgrs,_objType);
+    _objectExtend->setDockOptionObjectData(pObject::getDockerData(m_pBox->tabText(m_pBox->currentIndex())),nullptr,_codeAgrs,exArgs,exType);
     _objectExtend->start();
 }
 std::vector<QStringList> vekAppPanel::vekWinetricks_cArgs(){
@@ -205,8 +207,9 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
     bool dState=false;
     SdockerData tempDockerData;
     SappData tempAppData;
-    ExtendType _objType;
-    _objType.ex_boot=object_wineboot_i;
+    ExtendType exType=EX_DOCKER;
+    ExtendArgs exArgs;
+    exArgs.ex_boot=object_wineboot_i;
     objectAppMT* objNewDock=new objectAppMT(&tempDockerData,&tempAppData);
     tempDockerData.s_dockers_default_fonts=false;
     tempDockerData.s_dockers_mono_state=false;
@@ -301,7 +304,7 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
                 return;
             }
         }
-        _objType.ex_docker=object_docker_uninstall;
+        exArgs.ex_docker=object_docker_uninstall;
         //判断当前容器数量是否为0;
         if(m_pBox->count()!=0){
             //当前容器目标
@@ -389,7 +392,7 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
         */
         objectExtend* _objectExtend=new objectExtend();
         std::vector<QStringList> _codeAgrs;
-        _objectExtend->setDockOptionObjectData(tempDockerData,_codeAgrs,_objType);
+        _objectExtend->setDockOptionObjectData(tempDockerData,nullptr,_codeAgrs,exArgs,exType);
         _objectExtend->start();
     }
     delete objNewDock;

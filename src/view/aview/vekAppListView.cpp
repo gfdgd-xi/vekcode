@@ -66,17 +66,16 @@ void vekAppListView::ObjectRun(){
         if(action_obnject!=nullptr){
             object_int= action_obnject->objectName().toInt();
         }
+        qInfo()<<action_obnject->objectName();
         objectExtend* _objectExtend=new objectExtend();
-        ExtendType _objType;
-        _objType.ex_app=object_app_start;
+        ExtendType exType=EX_APP;
+        ExtendArgs exArgs;
+        exArgs.ex_app=object_app_start;
         std::vector<QStringList> _codeAgrs;
         switch(object_int)
         {
         case object_app_start:
-            _objType.ex_app=object_app_start;
-            break;
-        case object_app_forcekill:
-            _objType.ex_app=object_app_forcekill;
+            exArgs.ex_app=object_app_start;
             break;
         case object_app_debugstart:
             objectExtendApp();
@@ -84,22 +83,23 @@ void vekAppListView::ObjectRun(){
         case object_app_setgame:
             setItemSlot();
             return;
-        case object_app_deletegame:
-            setUpDelData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),m_pModel->getItem(index),object_delApp);
-            return;
         case object_app_exportJson:
             ExportJson();
             return;
         case object_app_packageDeb:
             PackageDeb();
             return;
-        default:
-            return;
+        case object_app_forcekill:
+            exArgs.ex_app=object_app_forcekill;
+            break;
+        case object_app_deletegame:
+            setUpDelData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),m_pModel->getItem(index),object_delApp);
+            return;       
         }
-        if(_objType.ex_app==object_app_start){
+        if(exArgs.ex_app==object_app_start){
             startApp(object_app_start);
         }else{
-            _objectExtend->setDockOptionObjectData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),m_pModel->getItem(index)->s_uid,_codeAgrs,_objType);
+            _objectExtend->setDockOptionObjectData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),m_pModel->getItem(index)->s_uid,_codeAgrs,exArgs,exType);
             _objectExtend->start();
         }
     }
@@ -134,9 +134,10 @@ void vekAppListView::startApp(Extend_App _objTypes){
             oAMT->InstallDXVK();
             delete oAMT;
             oAMT=nullptr;
-            ExtendType _objType;
-            _objType.ex_app=_objTypes;
-            _objectExtend->setDockOptionObjectData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),appData->s_uid,_codeAgrs,_objType);
+            ExtendArgs exArgs;
+            ExtendType exType=EX_APP;
+            exArgs.ex_app=_objTypes;
+            _objectExtend->setDockOptionObjectData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),appData->s_uid,_codeAgrs,exArgs,exType);
             _objectExtend->start();
         }
     }
@@ -208,7 +209,7 @@ void vekAppListView::setItemSlot(){
             _vek_App_option->setWindowFlags(Qt::WindowStaysOnTopHint);
             _vek_App_option->show();
             connect(_vek_App_option,&vekAppOption::_unDiyAppAdd,this,&vekAppListView::unAppAdd);
-            connect(_vek_App_option,SIGNAL(_upData(SdockerData,SappData*,EADEType)),this,SLOT(setUpDelData(SdockerData,SappData*,EADEType)));
+            connect(_vek_App_option,SIGNAL(_upAppData(SdockerData,SappData*,EADEType)),this,SLOT(setUpDelData(SdockerData,SappData*,EADEType)));
         }
     }
 }

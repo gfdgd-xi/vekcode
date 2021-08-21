@@ -97,9 +97,9 @@ void objectAppMT::DxvkRegedit(QStringList dxvkFileList){
         QString _rKey=QFileInfo(d).baseName();
         argsList.push_back(pObject::dockerRegeditStr(_rObj,_rPath,_rKey,"REG_SZ",_rValue));
     }
-    ExtendType ext;
-    ext.ex_docker=object_docker_reggedit_extend;
-    ExecuteAppObject(ext);
+    ExtendArgs exArgs;
+    exArgs.ex_docker=object_docker_reggedit_extend;
+    ExecuteObject(exArgs,EX_DOCKER);
 }
 //dxvkHUD注册表操作
 void objectAppMT::DxvkHUDRegs(){
@@ -121,9 +121,9 @@ void objectAppMT::DxvkHUDRegs(){
         _rObj="delete";
     }
     argsList.push_back(pObject::dockerRegeditStr(_rObj,_rPath,_rKey,"REG_SZ",_rValue));
-    ExtendType ext;
-    ext.ex_docker=object_docker_reggedit_extend;
-    ExecuteAppObject(ext);
+    ExtendArgs exArgs;
+    exArgs.ex_docker=object_docker_reggedit_extend;
+    ExecuteObject(exArgs,EX_DOCKER);
 }
 //dxvkConfig注册表增加环境变量
 void objectAppMT::s_dxvk_config_file(){
@@ -144,9 +144,9 @@ void objectAppMT::s_dxvk_config_file(){
         _rObj="delete";
     }
     argsList.push_back(pObject::dockerRegeditStr(_rObj,_rPath,_rKey,"REG_SZ",_rValue));
-    ExtendType ext;
-    ext.ex_docker=object_docker_reggedit_extend;
-    ExecuteAppObject(ext);
+    ExtendArgs exArgs;
+    exArgs.ex_docker=object_docker_reggedit_extend;
+    ExecuteObject(exArgs,EX_DOCKER);
 }
 
 //default fonts
@@ -190,9 +190,9 @@ void objectAppMT::DefaultFontsRegs(){
             argsList.push_back(pObject::dockerRegeditStr("add",_rPath,_rKey,"REG_SZ",_rValue));
         }
     }
-    ExtendType ext;
-    ext.ex_docker=object_docker_reggedit_extend;
-    ExecuteDockerObject(ext);
+    ExtendArgs exArgs;
+    exArgs.ex_docker=object_docker_reggedit_extend;
+    ExecuteObject(exArgs,EX_DOCKER);
 }
 
 void objectAppMT::DockLibsInstall(){
@@ -206,9 +206,9 @@ void objectAppMT::DockLibsInstall(){
                 argsList.push_back(libList);
             }
         }
-        ExtendType ext;
-        ext.ex_docker=object_docker_winetricks_cmd_libs;
-        ExecuteDockerObject(ext);
+        ExtendArgs exArgs;
+        exArgs.ex_docker=object_docker_winetricks_cmd_libs;
+        ExecuteObject(exArgs,EX_DOCKER);
     }
 }
 void objectAppMT::installMonoPlugs(){
@@ -218,9 +218,9 @@ void objectAppMT::installMonoPlugs(){
     if(QFile(fileMono).exists()){
         _tempPlugsList.append(fileMono);
         argsList.push_back(_tempPlugsList);
-        ExtendType ext;
-        ext.ex_docker=object_docker_plugs_extend;
-        ExecuteDockerObject(ext);
+        ExtendArgs exArgs;
+        exArgs.ex_docker=object_docker_plugs_extend;
+        ExecuteObject(exArgs,EX_DOCKER);
     }
 }
 void objectAppMT::installGeckoPlugs(){
@@ -232,9 +232,9 @@ void objectAppMT::installGeckoPlugs(){
         _tempPlugsList.append(fileGeckoX86_64);
         _tempPlugsList.append(fileGeckoX86);
         argsList.push_back(_tempPlugsList);
-        ExtendType ext;
-        ext.ex_docker=object_docker_plugs_extend;
-        ExecuteDockerObject(ext);
+        ExtendArgs exArgs;
+        exArgs.ex_docker=object_docker_plugs_extend;
+        ExecuteObject(exArgs,EX_DOCKER);
     }
 }
 void objectAppMT::optionRegs(){
@@ -243,9 +243,9 @@ void objectAppMT::optionRegs(){
     {
         argsList.push_back(pObject::dockerRegeditStr("add",d.rPath,d.rKey,d.rTValue,d.rValue));
     }
-    ExtendType ext;
-    ext.ex_docker=object_docker_reggedit_extend;
-    ExecuteDockerObject(ext);
+    ExtendArgs exArgs;
+    exArgs.ex_docker=object_docker_reggedit_extend;
+    ExecuteObject(exArgs,EX_DOCKER);
 }
 
 void objectAppMT::InstallDXVK(){
@@ -272,9 +272,9 @@ void objectAppMT::b_disable_ass(std::map<QString,std::map<QString,QString>> regS
         _rObj="delete";
     }
     argsList.push_back(pObject::dockerRegeditStr(_rObj,_rPath,_rKey,"REG_SZ",_rValue));
-    ExtendType ext;
-    ext.ex_docker=object_docker_reggedit_extend;
-    ExecuteDockerObject(ext);
+    ExtendArgs exArgs;
+    exArgs.ex_docker=object_docker_reggedit_extend;
+    ExecuteObject(exArgs,EX_DOCKER);
 }
 void objectAppMT::outAppIco(){
     QString icoCacheDir=QApplication::applicationDirPath()+"/vekCache/";
@@ -307,9 +307,9 @@ void objectAppMT::changeSettings(CHANGETYPE _type){
         b_disable_ass(winemine);
         InstallDXVK();
         outAppIco();
-        ExtendType ext;
-        ext.ex_docker=object_docker_switch_version;
-        ExecuteDockerObject(ext);
+        ExtendArgs exArgs;
+        exArgs.ex_docker=object_docker_switch_version;
+        ExecuteObject(exArgs,EX_DOCKER);
     }
     argsList.clear();
     if(bfonts){
@@ -324,8 +324,8 @@ void objectAppMT::changeSettings(CHANGETYPE _type){
     pObject::saveDockerDataToJson(*dockData,dockData->s_dockers_name);
 }
 void objectAppMT::InitDockDir(bool foceState,QDir _dockPath,QDir _dockDir){
-    ExtendType ext;
-    ext.ex_boot=object_wineboot_i;
+    ExtendArgs exArgs;
+    exArgs.ex_boot=object_wineboot_i;
     if(!_dockPath.exists()){
         _dockDir.mkdir(dockData->s_dockers_path);
     }
@@ -337,10 +337,10 @@ void objectAppMT::InitDockDir(bool foceState,QDir _dockPath,QDir _dockDir){
                 break;
             }
 
-            ExecuteDockerObject(ext);
+            ExecuteObject(exArgs,EX_DOCKER);
         }
     }else{
-        ExecuteDockerObject(ext);
+        ExecuteObject(exArgs,EX_DOCKER);
     }
     QFile systemFile=_dockDir.path()+"/system.reg";
     QFile userFile=_dockDir.path()+"/user.reg";
@@ -383,15 +383,13 @@ void objectAppMT::WaitObjectDone(objectExtend* _waitObject){
     _waitObject=nullptr;
 }
 //执行
-void objectAppMT::ExecuteDockerObject(ExtendType _objType){
+void objectAppMT::ExecuteObject(ExtendArgs ex_Args,ExtendType ex_Type){
     objectExtend* objExtend = new objectExtend();
     if(dockData->s_dockers_path==nullptr||dockData->s_dockers_name==nullptr){return;}
-    objExtend->setDockOptionObjectData(*dockData,argsList,_objType);
-    WaitObjectDone(objExtend);
-}
-void objectAppMT::ExecuteAppObject(ExtendType _objType){
-    objectExtend* objExtend = new objectExtend();
-    if(dockData->s_dockers_path==nullptr||dockData->s_dockers_name==nullptr){return;}
-    objExtend->setDockOptionObjectData(*dockData,appData->s_uid,argsList,_objType);
+    if(ex_Type==EX_APP){
+        objExtend->setDockOptionObjectData(*dockData,appData->s_uid,argsList,ex_Args,ex_Type);
+    }else{
+        objExtend->setDockOptionObjectData(*dockData,nullptr,argsList,ex_Args,ex_Type);
+    }
     WaitObjectDone(objExtend);
 }

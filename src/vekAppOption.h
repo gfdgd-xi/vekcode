@@ -44,7 +44,7 @@ signals:
     void doneAddApp(SdockerData*,SappData*);
     void toObjectArgs(SappData);
     void _unDiyAppAdd();
-    void _upData(SdockerData,SappData*,EADEType);
+    void _upAppData(SdockerData,SappData*,EADEType);
 private slots:
     void objectButton();
     void plugsLoad();

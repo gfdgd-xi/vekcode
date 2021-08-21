@@ -14,6 +14,10 @@ enum SWITCH_WINE_SYSTEM_VERSION{
     WINEHQ,
     DEEPIN
 };
+enum ExtendType{
+    EX_DOCKER,
+    EX_APP
+};
 
 class objectExtend :public QThread
 {
@@ -22,17 +26,18 @@ public:
     explicit objectExtend(QObject *parent = nullptr);
     ~objectExtend();
     QProcess *m_cmd=nullptr;
-    void setDockOptionObjectData(SdockerData,std::vector<QStringList>,ExtendType ex_type);
-    void setDockOptionObjectData(SdockerData,QString,std::vector<QStringList>,ExtendType ex_type);
+    void setDockOptionObjectData(SdockerData,QString,std::vector<QStringList>,ExtendArgs ex_type,ExtendType);
 protected:
     void run();
 private:
     SappData appData;
     SdockerData dockData;
     std::vector<QStringList> argsList;
-    ExtendType objType;
+    ExtendArgs exArgs;
+    ExtendType exType;
     QString startArgs;
     void optionExtend();
+    void extendAppType();
     void extendApp();
     void executeDockerEnv();
     void baseExecuteWineCode(QString,QStringList);

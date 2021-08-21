@@ -163,7 +163,6 @@ typedef enum{
 }Extend_Docker;
 
 typedef enum{
-    object_app_default,
     object_app_start,
     object_app_debugstart,
     object_app_setgame,
@@ -202,7 +201,7 @@ typedef struct{
      Extend_App ex_app;
      Extend_Boot ex_boot;
      Extend_Server ex_Server;
-}ExtendType;
+}ExtendArgs;
 
 extern SlocalGloablData g_vekLocalData;
 extern std::map<QString,QString> winetricks_server_url_list;
