@@ -202,6 +202,8 @@
              <widget class="QComboBox" name="comboBox_wServer"/>
             </item>
            </layout>
+           <zorder>comboBox_wServer</zorder>
+           <zorder>label</zorder>
           </widget>
          </item>
          <item>
@@ -455,9 +457,16 @@
     <addaction name="menu_5"/>
     <addaction name="menu_6"/>
    </widget>
+   <widget class="QMenu" name="menu_7">
+    <property name="title">
+     <string>组件功能</string>
+    </property>
+    <addaction name="action_repair_stalonetray_wineprc_winetricks"/>
+   </widget>
    <addaction name="menu"/>
    <addaction name="menuWine"/>
    <addaction name="menu_3"/>
+   <addaction name="menu_7"/>
    <addaction name="menu_4"/>
    <addaction name="menu_2"/>
   </widget>
@@ -538,6 +547,14 @@
   <action name="action_North">
    <property name="text">
     <string>竖列</string>
+   </property>
+  </action>
+  <action name="action_repair_stalonetray_wineprc_winetricks">
+   <property name="text">
+    <string>一键修复stalonetray_wineprc_winetricks</string>
+   </property>
+   <property name="toolTip">
+    <string>一键修复stalonetray_wineprc_winetricks</string>
    </property>
   </action>
  </widget>

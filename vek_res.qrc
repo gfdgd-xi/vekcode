@@ -15,5 +15,8 @@
         <file>res/img/D64.png</file>
         <file>res/img/H64.png</file>
         <file>res/img/H32.png</file>
+        <file>res/script/stalonetray</file>
+        <file>res/script/wineprc</file>
+        <file>res/script/winetricks</file>
     </qresource>
 </RCC>

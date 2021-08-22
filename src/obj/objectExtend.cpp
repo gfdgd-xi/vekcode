@@ -146,20 +146,29 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
     qInfo()<<"workPath:"+appData.s_work_path;
     qInfo()<<"WineArgs:"+codeArgs.join(" ");
     qInfo()<<"|++++++++++++++++++++++++++++|";  
-    /*
     m_cmd->waitForFinished(-1);
-    forcekill();
+    SappProcData pi;
+    objectProcManage* objProcMangs=new objectProcManage();
+    bool procCheck;
+    pi=forceKillArgs(pi,CHECK);
+    do{
+        objProcMangs->iprocInfo=pi;
+        procCheck=objProcMangs->objMainProcExists();
+        sleep(1);
+    }while(procCheck);
+    forceKill();
     waitObjectDone(true);
     vector<QString>::iterator it;
-    for(it=taskList.begin();it!=taskList.end();)
+    for(it=procManages.begin();it!=procManages.end();)
     {
         if(it->toStdString()==appData.s_main_proc_name.toStdString())
         {
-           taskList.erase(it);
+           procManages.erase(it);
            break;
         }
     }
-    */
+    delete objProcMangs;
+    objProcMangs=nullptr;
 }
 //wintricks和常规命令执行
 void objectExtend::baseExecuteWineCode(QString code,QStringList codeArgs){
@@ -168,6 +177,10 @@ void objectExtend::baseExecuteWineCode(QString code,QStringList codeArgs){
     m_cmd->start(code,codeArgs,QIODevice::ReadWrite);
     m_cmd->waitForFinished(-1);
     waitObjectDone(true);
+}
+void objectExtend::ExtendForceKill(QString code,QStringList codeArgs){
+    m_cmd->start(code,codeArgs,QIODevice::ReadWrite);
+    m_cmd->waitForFinished(-1);
 }
 //执行注册表
 void objectExtend::extendWineRegeditCode(QString code){
@@ -215,7 +228,6 @@ void objectExtend::SwitchSysVerion(SWITCH_SYSTEM_VERSION ssv){
         codeArgs.append(dockData.s_dockers_system_version);
     }
     QString mdCode = codeArgs.join(" ");
-    qInfo()<<mdCode;
     m_cmd->start(mdCode,QIODevice::ReadWrite);
     m_cmd->waitForFinished(-1);
 }
@@ -229,6 +241,7 @@ void objectExtend::waitObjectDone(bool objState){
         m_cmd->kill();
     }
 }
+
 //容器基本功能
 void objectExtend::optionExtend(){
     QStringList codeArgs;
@@ -265,8 +278,8 @@ void objectExtend::optionExtend(){
     if(exArgs.ex_docker==object_docker_allforcekill){
         QString srtArgs=QApplication::applicationDirPath()+"/vekScript/wineprc";
         codeArgs.append("-k");
-        codeArgs.append(dockData.s_dockers_path);
-        baseExecuteWineCode(srtArgs,codeArgs);
+        codeArgs.append(dockData.s_dockers_path+"/"+dockData.s_dockers_name);
+        ExtendForceKill(srtArgs,codeArgs);
     }
     if(exArgs.ex_docker==object_docker_reggedit_extend){
         extendWineRegeditCode(startArgs);
@@ -343,14 +356,25 @@ void objectExtend::extendPlugs(){
         }
     }
 }
+SappProcData objectExtend::forceKillArgs(SappProcData tspd,KillArgsType tkt){
+    if(tkt==KILL){
+        tspd.s_proc_docker_name=dockData.s_dockers_name;
+        tspd.s_proc_docker_path=dockData.s_dockers_path;
+        tspd.s_proc_wine_path=dockData.s_dockers_wine_path;
+        tspd.vec_proc_attach_list=appData.vec_proc_attach_list;
+        tspd.vec_proc_attach_list.push_back(appData.s_main_proc_name);
+    }else{
+        tspd.s_proc_docker_name=dockData.s_dockers_name;
+        tspd.s_proc_docker_path=dockData.s_dockers_path;
+        tspd.s_proc_wine_path=dockData.s_dockers_wine_path;
+        tspd.s_proc_main_name=appData.s_main_proc_name;
+    }
+    return tspd;
+}
 void objectExtend::forceKill(){
     SappProcData pi;
     objectProcManage* objProcMangs=new objectProcManage();
-    pi.s_proc_docker_name=dockData.s_dockers_name;
-    pi.s_proc_docker_path=dockData.s_dockers_path;
-    pi.s_proc_wine_path=dockData.s_dockers_wine_path;
-    pi.vec_proc_attach_list=appData.vec_proc_attach_list;
-    pi.vec_proc_attach_list.push_back(appData.s_main_proc_name);
+    pi=forceKillArgs(pi,KILL);
     objProcMangs->iprocInfo=pi;
     objProcMangs->start();
     objProcMangs->wait();

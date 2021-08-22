@@ -7,6 +7,7 @@ objectProcManage::objectProcManage(QObject *parent) : QThread(parent)
 objectProcManage::~objectProcManage(){
 
 }
+
 QString objectProcManage::objGetProcList(SappProcData pInfo){
     m_cmd=new QProcess();
     //设置通道模式error和out合并
@@ -93,6 +94,13 @@ void objectProcManage::delAttachProc(SappProcData pInfo){
             }
         }
     }
+}
+bool objectProcManage::objMainProcExists(){
+    QString strProc=objGetProcList(iprocInfo);
+    if(strProc.contains(iprocInfo.s_proc_main_name,Qt::CaseSensitive)){
+        return true;
+    }
+    return false;
 }
 void objectProcManage::getAllProc(){
     procAllInfoStr.clear();

@@ -47,6 +47,38 @@ bool objectVersionData::getVersionStr(){
     }
     return vState;
 }
+void objectVersionData::repairFilePerm(QString file){
+    QFile::setPermissions(file,
+                          QFile::ReadOther|
+                          QFile::WriteOther|
+                          QFile::ReadOwner|
+                          QFile::WriteOwner|
+                          QFile::ReadGroup|
+                          QFile::ExeOther|
+                          QFile::ExeUser|
+                          QFile::ExeGroup);
+}
+void objectVersionData::copyFile(QString strFileName){
+    QString fileDir=QApplication::applicationDirPath()+"/vekScript/";
+    QString filePath=QApplication::applicationDirPath()+"/vekScript/"+strFileName;
+    QString strPrefix = ":/res/script/"+strFileName;
+    /*
+    if(QFile(filePath).exists()){
+        QFile(filePath).remove();
+    }
+    */
+    if(!QDir(fileDir).exists()){
+        QDir().mkdir(fileDir);
+    }
+    QFile::copy(strPrefix,filePath);
+}
+void objectVersionData::repair_Wineprc_Stalonetray_Winetricks(){
+    for(auto strName:pFileName){
+        copyFile(strName);
+        repairFilePerm(QApplication::applicationDirPath()+"/vekScript/"+strName);
+    }
+}
+
 bool objectVersionData::upDataVek(){
     bool upStatic=false;
     if(getVersionStr()){
@@ -56,15 +88,7 @@ bool objectVersionData::upDataVek(){
                 QFile(QApplication::applicationDirPath()+"/vUpdate").remove();
             }
             QFile::copy(strPrefix,QApplication::applicationDirPath()+"/vUpdate");
-            QFile::setPermissions(QApplication::applicationDirPath()+"/vUpdate",
-                                  QFile::ReadOther|
-                                  QFile::WriteOther|
-                                  QFile::ReadOwner|
-                                  QFile::WriteOwner|
-                                  QFile::ReadGroup|
-                                  QFile::ExeOther|
-                                  QFile::ExeUser|
-                                  QFile::ExeGroup);
+            repairFilePerm(QApplication::applicationDirPath()+"/vUpdate");
             upStatic=true;
         }
     }

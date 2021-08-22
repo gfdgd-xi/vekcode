@@ -27,6 +27,7 @@ void vek::connectObject(){
     connect(ui->action_SHA256,&QAction::triggered,this,&vek::hFileHash);
     connect(ui->action_West,&QAction::triggered,this,&vek::changeQTabWidgetStyleNorth);
     connect(ui->action_North,&QAction::triggered,this,&vek::changeQTabWidgetStyleWest);
+    connect(ui->action_repair_stalonetray_wineprc_winetricks,&QAction::triggered,this,&vek::repair_Wineprc_Stalonetray_Winetricks);
     //语言切换
     //connect(ui->langChinese,&QAction::triggered,this,&vek::vekLanguage);
     //connect(ui->langEnglish,&QAction::triggered,this,&vek::vekLanguage);
@@ -37,6 +38,11 @@ void vek::connectObject(){
     loadWinetricksServerJson();
     setAppSize();
     vekStyle();
+}
+void vek::repair_Wineprc_Stalonetray_Winetricks(){
+    objectVersionData OBJ_VER;
+    OBJ_VER.repair_Wineprc_Stalonetray_Winetricks();
+    pObject::vekTip("修复完毕!");
 }
 void vek::changeQTabWidgetStyleWest(){
     ui->tabWidget->changeQTwidgetStyle(QTabWidget::West);
@@ -163,6 +169,9 @@ void vek::setProcRow(){
     ui->label_procRow->setText(QString::number(procManages.size()));
 }
 void vek::startTray(){
+    if(!objTray){
+       objTray=new objectTray();
+    }
     objTray->start();
     setProcRow();
 }

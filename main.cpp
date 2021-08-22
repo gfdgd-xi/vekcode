@@ -1,7 +1,6 @@
 ﻿#include "src/vek.h"
 #include "src/obj/baseRes.h"
 #include "src/obj/objectSource.h"
-#include "src/obj/objectVersionData.h"
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -9,13 +8,13 @@ int main(int argc, char *argv[])
     objSource->loadAllData();
     delete objSource;
     objSource=nullptr;
-
     vek vekMainWindows;
     vekMainWindows.show();
     vekMainWindows.connectObject();
     vekMainWindows.on_action_About_triggered();
     vekMainWindows.vekThis=&a;
     objectVersionData OBJ_VER;
+    OBJ_VER.repair_Wineprc_Stalonetray_Winetricks();
     if(OBJ_VER.upDataVek()){
         QProcess* m_cmd=new QProcess();
         m_cmd->setWorkingDirectory(QApplication::applicationDirPath());

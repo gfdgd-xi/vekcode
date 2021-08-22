@@ -9,8 +9,10 @@
 #include "vekSourceEdit.h"
 #include "obj/objectProcManage.h"
 #include "obj/objectTray.h"
+#include "obj/objectVersionData.h"
 #include "QTranslator"
 #include "vekPackage.h"
+
 #include <qdesktopservices.h>
 
 QT_BEGIN_NAMESPACE
@@ -62,5 +64,6 @@ private slots:
     void hFileHash();
     void changeQTabWidgetStyleWest();
     void changeQTabWidgetStyleNorth();
+    void repair_Wineprc_Stalonetray_Winetricks();
 };
 #endif // VEK_H

@@ -10,7 +10,8 @@ class objectProcManage:public QThread
 public:
    explicit objectProcManage(QObject *parent = nullptr);
     SappProcData iprocInfo;
-    ~objectProcManage();    
+    ~objectProcManage();
+    bool objMainProcExists();
 protected:
     void run();
 private:

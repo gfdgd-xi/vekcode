@@ -118,6 +118,7 @@ void vekAppPanel::DockerObject(){
         break;
     case 6:
         exArgs.ex_docker=object_docker_allforcekill;
+        break;
     case 7:
         deleteGroupSlot(true);
         return;
