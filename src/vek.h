@@ -44,7 +44,6 @@ public slots:
     void on_action_About_triggered();
 private slots:
     void vekAddApp();
-    void vekRunApp();
     void on_action_AddApp_triggered();
     void on_action_Exit_triggered();
     void on_action_WineInstall_triggered();

@@ -153,11 +153,10 @@ void vekExtendDebug::ExtendApp(){
     QString codez;
     //deepin-wine5不支持winecfg /v winxp方式切换容器系统版本。顾采用wine winetricks winxp切换容器系统版本
     if(dockData.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
-        codez=dockData.s_dockers_wine_path+"/wine/bin/winetricks "+appData.s_dock_system_version;
+        codez="WINEPREFIX="+dockData.s_dockers_path+"/"+dockData.s_dockers_name+" "+QApplication::applicationDirPath()+"/vekScript/winetricks "+appData.s_dock_system_version;
     }else{
         codez=dockData.s_dockers_wine_path+"/wine/bin/"+dockData.s_dockers_wine_exe_version+" "+"winecfg /v "+appData.s_dock_system_version;
     }
-
     m_cmd->write(codez.toLocal8Bit()+'\n');
     QString codes=codeDebug+" "+dockData.s_dockers_wine_path+"/wine/bin/"+dockData.s_dockers_wine_exe_version+" "+codeArgs.join(" ");
     m_cmd->write(codes.toLocal8Bit()+'\n');

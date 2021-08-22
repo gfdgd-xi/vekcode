@@ -50,15 +50,16 @@ private:
     QMenu *pMenu=nullptr;
     vector<QStringList> vekWinetricks_cArgs();
     QStringList dockerops={
+        "容器增加应用",
         "容器基础设置",
-        "Winecfg设置",
+        "容器Winecfg",
         "容器注册表",
         "容器控制面板",
-        "软件卸载|增加",
+        "容器增加|卸载",
+        "强行关闭所有程序",
         "删除当前容器",
         "winetricks-gui",
-        "winetricks-cmd",
-
+        "winetricks-cmd"
     };
 private slots:
     void deleteGroupSlot(bool);

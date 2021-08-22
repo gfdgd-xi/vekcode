@@ -214,5 +214,5 @@ extern std::map<QString,std::map<QString,QString>> winemine;
 extern std::map<QString,std::map<QString,QString>> dxvkRes;
 extern std::map<QString,std::map<QString,QString>> dxvkResCache;
 extern std::map<QString,std::map<QString,QString>> dxvkResLog;
-extern std::vector<QString> taskList;
+extern std::vector<QString> procManages;
 #endif // BASEDATA_H

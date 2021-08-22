@@ -93,34 +93,38 @@ void vekAppPanel::DockerObject(){
     QObject *object = QObject::sender();
     QAction *action_obnject = qobject_cast<QAction *>(object);
     int object_int=action_obnject->objectName().toInt();
-    qInfo()<<object_int;
     objectExtend* _objectExtend=new objectExtend();
     ExtendType exType=EX_DOCKER;
     ExtendArgs exArgs;
     std::vector<QStringList> _codeAgrs;
     switch(object_int){
     case 0:
+         addAppSlot();
+         return;
+    case 1:
         setDockerSlot();
         return;
-    case 1:
+    case 2:
         exArgs.ex_docker=object_docker_winecfg;
         break;
-    case 2:
+    case 3:
         exArgs.ex_docker=object_docker_regedit;
         break;
-    case 3:
+    case 4:
         exArgs.ex_docker=object_docker_control;
         break;
-    case 4:
+    case 5:
         exArgs.ex_docker=object_docker_uninstall;
         break;
-    case 5:
+    case 6:
+        exArgs.ex_docker=object_docker_allforcekill;
+    case 7:
         deleteGroupSlot(true);
         return;
-    case 6:
+    case 8:
         exArgs.ex_docker=object_docker_winetricks_gui;
         break;
-    case 7:
+    case 9:
         exArgs.ex_docker=object_docker_winetricks_cmd_libs;
         _codeAgrs=vekWinetricks_cArgs();
         if(_codeAgrs.empty()){

@@ -307,9 +307,6 @@ void objectAppMT::changeSettings(CHANGETYPE _type){
         b_disable_ass(winemine);
         InstallDXVK();
         outAppIco();
-        ExtendArgs exArgs;
-        exArgs.ex_docker=object_docker_switch_version;
-        ExecuteObject(exArgs,EX_DOCKER);
     }
     argsList.clear();
     if(bfonts){
@@ -321,6 +318,9 @@ void objectAppMT::changeSettings(CHANGETYPE _type){
     if(bgecko){
         installGeckoPlugs();
     }
+    ExtendArgs exArgs;
+    exArgs.ex_docker=object_docker_switch_version;
+    ExecuteObject(exArgs,EX_DOCKER);
     pObject::saveDockerDataToJson(*dockData,dockData->s_dockers_name);
 }
 void objectAppMT::InitDockDir(bool foceState,QDir _dockPath,QDir _dockDir){

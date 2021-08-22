@@ -10,10 +10,7 @@ enum SWITCH_SYSTEM_VERSION{
     APP,
     DOCKER
 };
-enum SWITCH_WINE_SYSTEM_VERSION{
-    WINEHQ,
-    DEEPIN
-};
+
 enum ExtendType{
     EX_DOCKER,
     EX_APP
@@ -49,12 +46,12 @@ private:
     void executeWinetricks_gui(QStringList);
     void executeWinetricks_cmd_libs(QStringList);
     void ExtendWinetricksCode(QStringList,bool);
-    void switchSysVersion(SWITCH_SYSTEM_VERSION,SWITCH_WINE_SYSTEM_VERSION);
     void waitObjectDone(bool);
     void hqSwitchSysVersion(SWITCH_SYSTEM_VERSION ssv);
-    void deepinSwitchSysVerion(SWITCH_SYSTEM_VERSION ssv);
+    void SwitchSysVerion(SWITCH_SYSTEM_VERSION ssv);
     void extendPlugs();
-    void forcekill();
+    void forceKill();
+    void forceAllKill();
     void dyncDxvkRegs(std::map<QString,std::map<QString,QString>>);
 signals:
     void objexitTray(bool);

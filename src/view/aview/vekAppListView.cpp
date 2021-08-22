@@ -70,13 +70,12 @@ void vekAppListView::ObjectRun(){
         objectExtend* _objectExtend=new objectExtend();
         ExtendType exType=EX_APP;
         ExtendArgs exArgs;
-        exArgs.ex_app=object_app_start;
         std::vector<QStringList> _codeAgrs;
         switch(object_int)
         {
         case object_app_start:
-            exArgs.ex_app=object_app_start;
-            break;
+            startApp(object_app_start);
+            return;
         case object_app_debugstart:
             objectExtendApp();
             return;
@@ -96,9 +95,7 @@ void vekAppListView::ObjectRun(){
             setUpDelData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),m_pModel->getItem(index),object_delApp);
             return;       
         }
-        if(exArgs.ex_app==object_app_start){
-            startApp(object_app_start);
-        }else{
+        if(exArgs.ex_app==object_app_forcekill){
             _objectExtend->setDockOptionObjectData(pObject::getDockerData(mBox->tabText(mBox->currentIndex())),m_pModel->getItem(index)->s_uid,_codeAgrs,exArgs,exType);
             _objectExtend->start();
         }
@@ -126,10 +123,11 @@ void vekAppListView::startApp(Extend_App _objTypes){
                 return;
             }
             objectExtend* _objectExtend=new objectExtend();
-            taskList.push_back(appData->s_main_proc_name);
-            auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
-            connect(_objectExtend, SIGNAL(objexitTray(bool)), pObjectVek, SLOT(exitTray(bool)));
-            emit _startTray();
+            if(!procManages.empty()){
+                auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
+                connect(_objectExtend, SIGNAL(objexitTray(bool)), pObjectVek, SLOT(exitTray(bool)));
+                emit _startTray();
+            }
             objectAppMT* oAMT=new objectAppMT(&dockData,appData);
             oAMT->InstallDXVK();
             delete oAMT;

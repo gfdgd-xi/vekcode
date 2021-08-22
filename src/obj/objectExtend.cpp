@@ -122,7 +122,6 @@ void objectExtend::executeWineServer(Extend_Server objWineServer){
 
 //winetricks执行命令
 void objectExtend::ExtendWinetricksCode(QStringList cArgs,bool wType){
-    executeWineBoot(object_wineboot_r);
     qputenv("WINE", (dockData.s_dockers_wine_path+"/wine/bin/wine").toStdString().c_str());
     if(sWinetrickUrl!=nullptr){
         cArgs.append("--Durl="+sWinetrickUrl);
@@ -131,22 +130,13 @@ void objectExtend::ExtendWinetricksCode(QStringList cArgs,bool wType){
     m_cmd->start(mdCode,QIODevice::ReadWrite);
     qInfo()<<"WineTricks:"<<cArgs.join(" ");
     m_cmd->waitForFinished(-1);
-    if(dockData.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
-        switchSysVersion(DOCKER,DEEPIN);
-    }else{
-        switchSysVersion(DOCKER,WINEHQ);
-    }
+    SwitchSysVerion(DOCKER);
     waitObjectDone(wType);
 }
 //执行运行APP
 void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
-    executeWineBoot(object_wineboot_r);
-    forcekill();
-    if(dockData.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
-        switchSysVersion(DOCKER,DEEPIN);
-    }else{
-        switchSysVersion(DOCKER,WINEHQ);
-    }
+    forceKill();
+    SwitchSysVerion(DOCKER);
     m_cmd->closeReadChannel(QProcess::StandardOutput);
     m_cmd->closeReadChannel(QProcess::StandardError);
     m_cmd->setWorkingDirectory(appData.s_work_path);
@@ -155,8 +145,8 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
     qInfo()<<"writeCode:"+wcode;
     qInfo()<<"workPath:"+appData.s_work_path;
     qInfo()<<"WineArgs:"+codeArgs.join(" ");
-    qInfo()<<"|++++++++++++++++++++++++++++|";
-    qInfo()<<m_cmd->state();
+    qInfo()<<"|++++++++++++++++++++++++++++|";  
+    /*
     m_cmd->waitForFinished(-1);
     forcekill();
     waitObjectDone(true);
@@ -169,7 +159,7 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
            break;
         }
     }
-    qInfo()<<m_cmd->state();
+    */
 }
 //wintricks和常规命令执行
 void objectExtend::baseExecuteWineCode(QString code,QStringList codeArgs){
@@ -188,14 +178,16 @@ void objectExtend::extendWineRegeditCode(QString code){
     }
     waitObjectDone(true);
 }
+/*
 //容器系统版本切换
-void objectExtend::switchSysVersion(SWITCH_SYSTEM_VERSION ssv,SWITCH_WINE_SYSTEM_VERSION swsv){
+void objectExtend::switchSysVersion(SWITCH_SYSTEM_VERSION ssv){
+    SwitchSysVerion(ssv);
     switch(swsv){
     case::WINEHQ:
         hqSwitchSysVersion(ssv);
         break;
     default:
-        deepinSwitchSysVerion(ssv);
+
     }
 }
 //WineHQ容器系统版本切换
@@ -211,18 +203,19 @@ void objectExtend::hqSwitchSysVersion(SWITCH_SYSTEM_VERSION ssv){
 
    baseExecuteWineCode(startArgs,codeArgs);
 }
+*/
 //deepin-wine5容器系统版本切换
-void objectExtend::deepinSwitchSysVerion(SWITCH_SYSTEM_VERSION ssv){
-    executeWineBoot(object_wineboot_r);
+void objectExtend::SwitchSysVerion(SWITCH_SYSTEM_VERSION ssv){
     QStringList codeArgs;
     qputenv("WINE", (dockData.s_dockers_wine_path+"/wine/bin/wine").toStdString().c_str());
-    codeArgs.append(dockData.s_dockers_wine_path+"/wine/bin/winetricks");
+    codeArgs.append(QApplication::applicationDirPath()+"/vekScript/winetricks");
     if(ssv==APP){
         codeArgs.append(appData.s_dock_system_version);
     }else{
         codeArgs.append(dockData.s_dockers_system_version);
     }
     QString mdCode = codeArgs.join(" ");
+    qInfo()<<mdCode;
     m_cmd->start(mdCode,QIODevice::ReadWrite);
     m_cmd->waitForFinished(-1);
 }
@@ -256,12 +249,12 @@ void objectExtend::optionExtend(){
         baseExecuteWineCode(startArgs,codeArgs);
     }
     if(exArgs.ex_docker==object_docker_winetricks_gui){
-        codeArgs.append(dockData.s_dockers_wine_path+"/wine/bin/winetricks");
+        codeArgs.append(QApplication::applicationDirPath()+"/vekScript/winetricks");
         codeArgs.append("--gui");
         ExtendWinetricksCode(codeArgs,true);
     }
     if(exArgs.ex_docker==object_docker_winetricks_cmd_libs){
-        codeArgs.append(dockData.s_dockers_wine_path+"/wine/bin/winetricks");
+        codeArgs.append(QApplication::applicationDirPath()+"/vekScript/winetricks");
         for(auto d:argsList){
             for(auto x:d){
                 codeArgs.append(x);
@@ -270,10 +263,12 @@ void objectExtend::optionExtend(){
        ExtendWinetricksCode(codeArgs,false);
     }
     if(exArgs.ex_docker==object_docker_allforcekill){
-        forcekill();
+        QString srtArgs=QApplication::applicationDirPath()+"/vekScript/wineprc";
+        codeArgs.append("-k");
+        codeArgs.append(dockData.s_dockers_path);
+        baseExecuteWineCode(srtArgs,codeArgs);
     }
     if(exArgs.ex_docker==object_docker_reggedit_extend){
-        qInfo()<<startArgs;
         extendWineRegeditCode(startArgs);
     }
     if(exArgs.ex_docker==object_docker_wineboot_extend){
@@ -283,11 +278,7 @@ void objectExtend::optionExtend(){
         executeWineServer(exArgs.ex_Server);
     }
     if(exArgs.ex_docker==object_docker_switch_version){
-        if(dockData.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
-            switchSysVersion(DOCKER,DEEPIN);
-        }else{
-            switchSysVersion(DOCKER,WINEHQ);
-        }
+        SwitchSysVerion(DOCKER);
     }
     if(exArgs.ex_docker==object_docker_plugs_extend){
         extendPlugs();
@@ -326,7 +317,7 @@ void objectExtend::extendAppType(){
         extendApp();
     }
     if(exArgs.ex_app==object_app_forcekill){
-        forcekill();
+        forceKill();
     }
 }
 //同步dxvk
@@ -352,7 +343,7 @@ void objectExtend::extendPlugs(){
         }
     }
 }
-void objectExtend::forcekill(){
+void objectExtend::forceKill(){
     SappProcData pi;
     objectProcManage* objProcMangs=new objectProcManage();
     pi.s_proc_docker_name=dockData.s_dockers_name;
