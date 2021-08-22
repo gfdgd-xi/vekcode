@@ -23,6 +23,9 @@ private:
     SdockerData dockData;
     bool checkStatic;
     void upDllStr();
+    QString fileDir=QApplication::applicationDirPath()+"/vekDebugLog/";
+    bool writeState=false;
+    QString qStrTime;
     std::vector<QString> dllList={"accel","adpcm","advapi","animate","aspi",
     "atom","avicap","avifile","bidi","bitblt",
     "bitmap","cabinet","capi","caret","cdrom",
@@ -78,6 +81,7 @@ private slots:
     void delDll();
     void startDebug();
     void exitDebug();
+    void onRadioClickFruits();
 signals:
     void _unVekDebug();
 };

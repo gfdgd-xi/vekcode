@@ -10,7 +10,6 @@ vekExtendDebug::vekExtendDebug(QWidget *parent) :
 
 vekExtendDebug::~vekExtendDebug()
 {
-    exitDebug();
     if(m_cmd){
         m_cmd->close();
         delete m_cmd;
@@ -24,6 +23,7 @@ void vekExtendDebug::ConnectDebugObject(QString dockName,QString appCID){
     connect(ui->pushButton_DebugDllAdd,&QPushButton::clicked,this,&vekExtendDebug::addDll);
     connect(ui->pushButton_DebugDllDel,&QPushButton::clicked,this,&vekExtendDebug::delDll);
     connect(ui->pushButton_DebugForceExit,&QPushButton::clicked,this,&vekExtendDebug::exitDebug);
+    connect(ui->radioButton_write_log,SIGNAL(toggled(bool)),this,SLOT(onRadioClickFruits()));
     for(auto xz:dllList){
         ui->comboBox_DebugDllList->addItem(xz);
     }
@@ -38,21 +38,40 @@ void vekExtendDebug::ConnectDebugObject(QString dockName,QString appCID){
             }
         }
     }
-    QStringList logn;
-    logn<<"500"<<"1000"<<"20000"<<"50000";
-    ui->comboBox_logint->addItems(logn);
+
+    if(!QDir(fileDir).exists()){
+        QDir().mkdir(fileDir);
+    }
+    ui->radioButton_write_log->setChecked(writeState);
+}
+void vekExtendDebug::onRadioClickFruits()
+{
+    if (ui->radioButton_write_log->isChecked())
+    {
+        writeState=true;
+    }
+    else
+    {
+        writeState=false;
+    }
 }
 void vekExtendDebug::onReadyRead(){
     QByteArray cmdout = m_cmd->readAllStandardOutput();
-    ui->logTextEdit->document()->setMaximumBlockCount(ui->comboBox_logint->currentText().toInt());
+    ui->logTextEdit->document()->setMaximumBlockCount(1000);
     if(!cmdout.isEmpty()){
         ui->logTextEdit->append(QString::fromLocal8Bit(cmdout));
     }
-    if(ui->radioButton_radiologs->isChecked()){
-        QTextCursor cursor=ui->logTextEdit->textCursor();
-        cursor.movePosition(QTextCursor::End);
-        ui->logTextEdit->setTextCursor(cursor);
+    if(writeState){
+        QFile file(fileDir+appData.s_name+"_"+qStrTime+"_log.txt");
+        file.open(QIODevice::WriteOnly | QIODevice::Append);
+        QTextStream text_stream(&file);
+        text_stream << cmdout << "\r\n";
+        file.flush();
+        file.close();
     }
+    QTextCursor cursor=ui->logTextEdit->textCursor();
+    cursor.movePosition(QTextCursor::End);
+    ui->logTextEdit->setTextCursor(cursor);
 }
 void vekExtendDebug::addDll(){
     QString xData="+"+ui->comboBox_DebugDllList->currentText();
@@ -86,6 +105,8 @@ void vekExtendDebug::delDll(){
     }
 }
 void vekExtendDebug::startDebug(){
+    QDateTime dateTime(QDateTime::currentDateTime());
+    qStrTime=dateTime.toString("yy_MM_dd_hh_mm_ss");
     ExtendApp();
 }
 //运行环境变量设置
@@ -149,15 +170,7 @@ void vekExtendDebug::ExtendApp(){
     m_cmd->start("bash");
     connect(m_cmd,SIGNAL(readyRead()),this,SLOT(onReadyRead()));
     connect(m_cmd,SIGNAL(errorOccurred(QProcess::ProcessError)),this,SLOT(onReadyRead()));
-    connect(m_cmd,SIGNAL(readyReadStandardOutput()),this,SLOT(onReadyRead()));    
-    QString codez;
-    //deepin-wine5不支持winecfg /v winxp方式切换容器系统版本。顾采用wine winetricks winxp切换容器系统版本
-    if(dockData.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
-        codez="WINEPREFIX="+dockData.s_dockers_path+"/"+dockData.s_dockers_name+" "+QApplication::applicationDirPath()+"/vekScript/winetricks "+appData.s_dock_system_version;
-    }else{
-        codez=dockData.s_dockers_wine_path+"/wine/bin/"+dockData.s_dockers_wine_exe_version+" "+"winecfg /v "+appData.s_dock_system_version;
-    }
-    m_cmd->write(codez.toLocal8Bit()+'\n');
+    connect(m_cmd,SIGNAL(readyReadStandardOutput()),this,SLOT(onReadyRead()));
     QString codes=codeDebug+" "+dockData.s_dockers_wine_path+"/wine/bin/"+dockData.s_dockers_wine_exe_version+" "+codeArgs.join(" ");
     m_cmd->write(codes.toLocal8Bit()+'\n');
     qInfo()<<"|++++++++++++++++++++++++++++|";
@@ -169,10 +182,10 @@ void vekExtendDebug::ExtendApp(){
 void vekExtendDebug::exitDebug(){
     std::vector<QStringList> _codeAgrs;
     objectExtend* _objectExtend=new objectExtend();
-    ExtendType exType=EX_APP;
+    ExtendType exType=EX_DOCKER;
     ExtendArgs exArgs;
-    exArgs.ex_app=object_app_forcekill;
-    _objectExtend->setDockOptionObjectData(dockData,appData.s_uid,_codeAgrs,exArgs,exType);
+    exArgs.ex_docker=object_docker_allforcekill;
+    _objectExtend->setDockOptionObjectData(dockData,nullptr,_codeAgrs,exArgs,exType);
     _objectExtend->start();
     _objectExtend->wait();
     delete _objectExtend;
