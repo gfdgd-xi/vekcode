@@ -209,6 +209,7 @@ void vekAppPanel::objInitDocker(INITTYPE iType){
         pObject::vekTip("未发现您的电脑上装有wine请安装wine后重试");
         return;
     }
+    qInfo()<<g_vekLocalData.map_wine_list.size();
     bool dState=false;
     SdockerData tempDockerData;
     SappData tempAppData;

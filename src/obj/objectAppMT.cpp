@@ -153,11 +153,10 @@ void objectAppMT::s_dxvk_config_file(){
 void objectAppMT::DefaultFontsFileInstall(CHANGETYPE _type){
     QString fontsDirStr=dockData->s_dockers_wine_path+"/fonts";
     bool fonts_state;
-
     if(_type==CHANGETYPEDOCKER){
-        fonts_state=appData->b_default_fonts;
-    }else{
         fonts_state=dockData->s_dockers_default_fonts;
+    }else{
+        fonts_state=appData->b_default_fonts;
     }
     QStringList fontsList;
     fontsList.clear();
@@ -253,8 +252,14 @@ void objectAppMT::InstallDXVK(){
     DxvkHUDRegs();
     s_dxvk_config_file();
 }
-void objectAppMT::b_disable_ass(std::map<QString,std::map<QString,QString>> regStr){
+void objectAppMT::b_disable_ass(std::map<QString,std::map<QString,QString>> regStr,CHANGETYPE _type){
     argsList.clear();
+    bool ass_state;
+    if(_type==CHANGETYPEDOCKER){
+        ass_state=dockData->s_dockers_disable_ass;
+    }else{
+        ass_state=appData->b_disable_ass;
+    }
     QString _rPath;
     QString _rKey;
     QString _rValue;
@@ -266,7 +271,7 @@ void objectAppMT::b_disable_ass(std::map<QString,std::map<QString,QString>> regS
         }
     }
     QString _rObj;
-    if(dockData->s_dockers_disable_ass){
+    if(ass_state){
         _rObj="add";
     }else{
         _rObj="delete";
@@ -290,21 +295,22 @@ void objectAppMT::outAppIco(){
     }
 }
 void objectAppMT::changeSettings(CHANGETYPE _type){
-    bool bfonts,bmono,bgecko;
+    bool bfonts,bmono,bgecko,ass;
 
     if(_type==CHANGETYPEDOCKER){
         bfonts=dockData->s_dockers_default_fonts;
         bmono=dockData->s_dockers_mono_state;
         bgecko=dockData->s_dockers_gecko_state;
+        ass=dockData->s_dockers_disable_ass;
     }else{
         bfonts=appData->b_default_fonts;
         bmono=appData->b_mono_state;
         bgecko=appData->b_gecko_state;
+        ass=appData->b_disable_ass;
         if(!appData->vec_docker_regs.empty()){
             optionRegs();
         }
-        b_disable_ass(winebuilder);
-        b_disable_ass(winemine);
+
         InstallDXVK();
         outAppIco();
     }
@@ -317,6 +323,10 @@ void objectAppMT::changeSettings(CHANGETYPE _type){
     }
     if(bgecko){
         installGeckoPlugs();
+    }
+    if(ass){
+        b_disable_ass(winebuilder,_type);
+        b_disable_ass(winemine,_type);
     }
     ExtendArgs exArgs;
     exArgs.ex_docker=object_docker_switch_version;
@@ -369,8 +379,8 @@ bool objectAppMT::InitDocker(bool _forceState){
     if(dockData->s_dockers_gecko_state){
         installGeckoPlugs();
     }
-    b_disable_ass(winebuilder);
-    b_disable_ass(winemine);
+    b_disable_ass(winebuilder,CHANGETYPEDOCKER);
+    b_disable_ass(winemine,CHANGETYPEDOCKER);
     pObject::saveDockerDataToJson(*dockData,dockData->s_dockers_name);
     return true;
 }

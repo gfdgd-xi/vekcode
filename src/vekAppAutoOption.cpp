@@ -21,8 +21,9 @@ void vekAppAutoOption::connectDockObject(SdockerData _dockeData){
     if(g_vekLocalData.map_wine_list.empty())
     {
         pObject::vekTip("请先安装Wine");
-        return;
         this->close();
+        return;
+
     }else{
         defalutValue();
         ui->comboBox_WinVersion->setCurrentText(_dockeData.s_dockers_wine_version);

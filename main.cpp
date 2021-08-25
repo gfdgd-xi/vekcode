@@ -1,6 +1,7 @@
 ﻿#include "src/vek.h"
 #include "src/obj/baseRes.h"
 #include "src/obj/objectSource.h"
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);

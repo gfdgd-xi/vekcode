@@ -1,31 +1,31 @@
 ﻿#ifndef VEKEXTENDDEBUG_H
 #define VEKEXTENDDEBUG_H
 
-#include "obj/common.h"
-#include "obj/objectExtend.h"
+#include "obj/objectDebug.h"
+#include <QTextEdit>
+
 namespace Ui {
 class vekExtendDebug;
 }
-
 class vekExtendDebug : public QDialog
 {
     Q_OBJECT
-
 public:
-    explicit vekExtendDebug(QWidget *parent = nullptr);
+    vekExtendDebug(QWidget *parent = nullptr);
     ~vekExtendDebug();
     void ConnectDebugObject(QString dockName,QString appCID);
+    void MessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+
 private:
-    Ui::vekExtendDebug *ui;   
+    Ui::vekExtendDebug *ui;
     QStringList DebugDllStr;
-    QProcess *m_cmd=nullptr;
     SappData appData;
     SdockerData dockData;
     bool checkStatic;
     void upDllStr();
     QString fileDir=QApplication::applicationDirPath()+"/vekDebugLog/";
-    bool writeState=false;
     QString qStrTime;
+    bool writeState=false;
     std::vector<QString> dllList={"accel","adpcm","advapi","animate","aspi",
     "atom","avicap","avifile","bidi","bitblt",
     "bitmap","cabinet","capi","caret","cdrom",
@@ -74,14 +74,12 @@ private:
     "wintab32","wnet","x11drv","x11settings","xdnd",
     "xrandr","xrender","xvidmode"};
 private slots:
-    void onReadyRead();
-    void executeArgsEnv();
     void ExtendApp();
     void addDll();
     void delDll();
-    void startDebug();
     void exitDebug();
-    void onRadioClickFruits();
+    void onRadioClickFruits();  
+    void outputMessage(QString);
 signals:
     void _unVekDebug();
 };

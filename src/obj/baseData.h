@@ -5,7 +5,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
-
+#include <QProcess>
 typedef struct{
     QString rPath=nullptr;
     QString rKey=nullptr;

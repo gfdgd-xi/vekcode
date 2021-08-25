@@ -86,9 +86,9 @@ void objectExtend::executeWineBoot(Extend_Boot objWineBootType){
         return;
         //break;
     }
-    m_cmd->start(wineboot.join(""),QIODevice::ReadWrite);
-    qInfo()<<"wineboot:"<<wineboot.join("");
-    m_cmd->waitForFinished(-1);
+    m_cmd->execute(wineboot.join(""));
+    //qInfo()<<"wineboot:"<<wineboot.join("");
+    //m_cmd->waitForFinished(-1);
     waitObjectDone(true);
 }
 //针对Server操作
@@ -113,9 +113,9 @@ void objectExtend::executeWineServer(Extend_Server objWineServer){
         return;
         //break;
     }
-    m_cmd->start(wineserver.join(""),QIODevice::ReadWrite);
-    qInfo()<<"wineServer:"<<wineserver.join("");
-    m_cmd->waitForFinished(-1);
+    m_cmd->execute(wineserver.join(""));
+    //qInfo()<<"wineServer:"<<wineserver.join("");
+    //m_cmd->waitForFinished(-1);
     waitObjectDone(true);
 }
 
@@ -127,9 +127,9 @@ void objectExtend::ExtendWinetricksCode(QStringList cArgs,bool wType){
         cArgs.append("--Durl="+sWinetrickUrl);
     }
     QString mdCode = cArgs.join(" ");
-    m_cmd->start(mdCode,QIODevice::ReadWrite);
-    qInfo()<<"WineTricks:"<<cArgs.join(" ");
-    m_cmd->waitForFinished(-1);
+    m_cmd->execute(mdCode);
+    //qInfo()<<"WineTricks:"<<cArgs.join(" ");
+    //m_cmd->waitForFinished(-1);
     SwitchSysVerion(DOCKER);
     waitObjectDone(wType);
 }
@@ -139,6 +139,7 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
     SwitchSysVerion(DOCKER);
     m_cmd->closeReadChannel(QProcess::StandardOutput);
     m_cmd->closeReadChannel(QProcess::StandardError);
+    m_cmd->setProcessChannelMode(QProcess::ForwardedChannels);
     m_cmd->setWorkingDirectory(appData.s_work_path);
     m_cmd->start(wcode,codeArgs);
     qInfo()<<"|++++++++++++++++++++++++++++|";
@@ -174,50 +175,25 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
 void objectExtend::baseExecuteWineCode(QString code,QStringList codeArgs){
     QString mdCode;
     m_cmd->setReadChannel(QProcess::StandardOutput);
-    m_cmd->start(code,codeArgs,QIODevice::ReadWrite);
-    m_cmd->waitForFinished(-1);
+    m_cmd->execute(code,codeArgs);
+    //m_cmd->waitForFinished(-1);
     waitObjectDone(true);
 }
 void objectExtend::ExtendForceKill(QString code,QStringList codeArgs){
-    m_cmd->start(code,codeArgs,QIODevice::ReadWrite);
-    m_cmd->waitForFinished(-1);
+    m_cmd->execute(code,codeArgs);
+    //m_cmd->waitForFinished(-1);
 }
 //执行注册表
 void objectExtend::extendWineRegeditCode(QString code){
     for(auto regStr:argsList){
         QString mdCode=code+" "+regStr.join(" ");
-        m_cmd->start(mdCode,QIODevice::ReadWrite);
-        m_cmd->waitForFinished(-1);
+        m_cmd->execute(mdCode);
+        //m_cmd->waitForFinished(-1);
     }
     waitObjectDone(true);
 }
-/*
+
 //容器系统版本切换
-void objectExtend::switchSysVersion(SWITCH_SYSTEM_VERSION ssv){
-    SwitchSysVerion(ssv);
-    switch(swsv){
-    case::WINEHQ:
-        hqSwitchSysVersion(ssv);
-        break;
-    default:
-
-    }
-}
-//WineHQ容器系统版本切换
-void objectExtend::hqSwitchSysVersion(SWITCH_SYSTEM_VERSION ssv){
-   QStringList codeArgs;
-   codeArgs.append("winecfg");
-   codeArgs.append("/v");
-   if(ssv==APP){
-       codeArgs.append(appData.s_dock_system_version);
-   }else{
-       codeArgs.append(dockData.s_dockers_system_version);
-   }
-
-   baseExecuteWineCode(startArgs,codeArgs);
-}
-*/
-//deepin-wine5容器系统版本切换
 void objectExtend::SwitchSysVerion(SWITCH_SYSTEM_VERSION ssv){
     QStringList codeArgs;
     qputenv("WINE", (dockData.s_dockers_wine_path+"/wine/bin/wine").toStdString().c_str());
@@ -228,8 +204,8 @@ void objectExtend::SwitchSysVerion(SWITCH_SYSTEM_VERSION ssv){
         codeArgs.append(dockData.s_dockers_system_version);
     }
     QString mdCode = codeArgs.join(" ");
-    m_cmd->start(mdCode,QIODevice::ReadWrite);
-    m_cmd->waitForFinished(-1);
+    m_cmd->execute(mdCode);
+    //m_cmd->waitForFinished(-1);
 }
 
 //等待任务结束

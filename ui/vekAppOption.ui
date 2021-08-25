@@ -393,7 +393,7 @@
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_14" stretch="10,10,0,10,10,10,10,10,0">
+          <layout class="QHBoxLayout" name="horizontalLayout_14" stretch="10,10,10,10,10,10,10,0">
            <property name="spacing">
             <number>3</number>
            </property>
@@ -432,13 +432,6 @@
              </property>
              <property name="text">
               <string>内存共享</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="checkBox_ICMP">
-             <property name="text">
-              <string>ICMP支持</string>
              </property>
             </widget>
            </item>

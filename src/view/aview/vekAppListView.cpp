@@ -66,7 +66,6 @@ void vekAppListView::ObjectRun(){
         if(action_obnject!=nullptr){
             object_int= action_obnject->objectName().toInt();
         }
-        qInfo()<<action_obnject->objectName();
         objectExtend* _objectExtend=new objectExtend();
         ExtendType exType=EX_APP;
         ExtendArgs exArgs;
@@ -180,6 +179,7 @@ void vekAppListView::PackageDeb(){
         }
     }
 }
+
 //调试
 void vekAppListView::objectExtendApp(){
     if(!_vExtendDebug){
@@ -188,6 +188,7 @@ void vekAppListView::objectExtendApp(){
         QString currentTabText =mBox->tabText(mBox->currentIndex());
         QString currentAppCID=m_pModel->getItem(this->currentIndex().row())->s_uid;
         _vExtendDebug->ConnectDebugObject(currentTabText,currentAppCID);
+        //_vExtendDebug->setWindowFlags(Qt::WindowStaysOnTopHint);
         connect(_vExtendDebug,&vekExtendDebug::_unVekDebug,this,&vekAppListView::unDebugApp);
         _vExtendDebug->show();
     }

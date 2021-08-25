@@ -39,8 +39,8 @@ signals:
     void setUpGroupTabIcoSignal();
 private:
     vekAppOption *_vek_App_option=nullptr;
-    vekExtendDebug* _vExtendDebug=nullptr;
     vekExportJson* _vExportJson=nullptr;
+    vekExtendDebug* _vExtendDebug=nullptr;
     vekPackage* _vPackage=nullptr;
     int  m_hitIndex;
     vekAppData* m_pModel;

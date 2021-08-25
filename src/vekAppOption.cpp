@@ -43,6 +43,7 @@ void vekAppOption::vekAppAddConnectObject(SdockerData* _data,QString _appCID,EAD
     }else{
         pObject::vekTip("请先安装Wine");
         this->close();
+        return;
     }
     initAppAndDockData(_data,_appCID);
     //控件缺省设置

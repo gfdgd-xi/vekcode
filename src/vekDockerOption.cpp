@@ -18,8 +18,9 @@ void vekDockerOption::vekAppAddConnectObject(const SdockerData& _data){
     tempDockData=new SdockerData();
     *tempDockData=_data;
     connect(ui->pushButton_Save,&QPushButton::clicked,this,&vekDockerOption::objectButton);
-    connect(ui->pushButton_SetDockPath,&QPushButton::clicked,this,&vekDockerOption::objectButton);    
-    connect(ui->pushButton_initDock,&QPushButton::clicked,this,&vekDockerOption::objectButton);
+    connect(ui->pushButton_SetDockPath,&QPushButton::clicked,this,&vekDockerOption::objectButton);
+    //connect(ui->pushButton_initDock,&QPushButton::clicked,this,&vekDockerOption::objectButton);
+    connect(ui->checkBox_ICMP,SIGNAL(toggled(bool)),this,SLOT(ICMPChanged()));
     ui->comboBox_WinVersion->clear();
     if(!g_vekLocalData.map_wine_list.empty())
     {
@@ -56,6 +57,7 @@ void vekDockerOption::vekAppAddConnectObject(const SdockerData& _data){
     ui->checkBox_wineMemoryOptimization->setChecked(tempDockData->s_dockers_writecopy);
     ui->checkBox_wineRealTimePriority->setChecked(tempDockData->s_dockers_rtserver);
     ui->checkBox_DefaultFonts->setChecked(tempDockData->s_dockers_default_fonts);
+    ui->checkBox_ICMP->setChecked(tempDockData->s_dockers_ICMP_state);
     if(g_vekLocalData.map_wine_list[ui->comboBox_WinVersion->currentText()].s_local_wine_mono!=nullptr){
         if(!QFile(g_vekLocalData.map_wine_list[ui->comboBox_WinVersion->currentText()].s_local_wine_path+"/plugs/Mono.msi").exists()){
             ui->checkBox_Mono->setEnabled(false);
@@ -69,6 +71,25 @@ void vekDockerOption::vekAppAddConnectObject(const SdockerData& _data){
     if(g_vekLocalData.map_wine_list[ui->comboBox_WinVersion->currentText()].s_local_wine_mono!=nullptr){
         if(!QFile(g_vekLocalData.map_wine_list[ui->comboBox_WinVersion->currentText()].s_local_wine_path+"/plugs/Mono.msi").exists()){
             ui->checkBox_Mono->setEnabled(false);
+        }
+    }
+}
+void vekDockerOption::ICMPChanged(){
+    bool b_state=pObject::vekMesg("警告：开启ICMP需要管理员权限，开启后无法关闭");
+    if(b_state){
+        bool dn_ok=false;
+        QString dnTitle="输入授权密码";
+        QString dnLabel="输入错误后果自负";
+        QString mPassword="";
+        QLineEdit::EchoMode echoMode=QLineEdit::Normal;
+        mPassword = QInputDialog::getText(nullptr, dnTitle,dnLabel, echoMode,mPassword, &dn_ok);
+        if(!dn_ok){
+            return;
+        }else{
+           system(("echo "+mPassword+" | sudo -S chmod +x "+tempDockData->s_dockers_wine_path+"/wine/bin/wine-preloader").toLocal8Bit());
+           system(("echo "+mPassword+" | sudo -S chmod +x "+tempDockData->s_dockers_wine_path+"/wine/bin/wine64-preloader").toLocal8Bit());
+           ui->checkBox_ICMP->setChecked(true);
+           tempDockData->s_dockers_ICMP_state=ui->checkBox_ICMP->checkState();
         }
     }
 }
@@ -155,6 +176,7 @@ void vekDockerOption::objectButton(){
         this->close();
     }
     //初始化
+    /*
     if(action_obnject->objectName()=="pushButton_initDock"){
         if(ui->comboBox_dockbit->isEnabled()){
             if(pObject::vekMesg("强制初始化容器会导致部分软件无法运行和适配请慎重!")){
@@ -169,6 +191,7 @@ void vekDockerOption::objectButton(){
             }
         }
     }
+    */
 }
 
 void vekDockerOption::saveOptionData(){

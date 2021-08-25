@@ -40,7 +40,7 @@ private:
     void installGeckoPlugs();
     void outAppIco();
     void ExecuteObject(ExtendArgs ex_Args,ExtendType ex_Type);
-    void b_disable_ass(std::map<QString,std::map<QString,QString>>);
+    void b_disable_ass(std::map<QString,std::map<QString,QString>>,CHANGETYPE);
 };
 
 #endif // VEKGAMEADDOBJECT_H

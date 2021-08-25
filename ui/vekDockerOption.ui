@@ -143,7 +143,7 @@
              <property name="midLineWidth">
               <number>0</number>
              </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,50,10,0,0,1,10,0">
+             <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,50,10,0,0,1,10">
               <property name="spacing">
                <number>3</number>
               </property>
@@ -247,13 +247,6 @@
                 </property>
                 <property name="frame">
                  <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_initDock">
-                <property name="text">
-                 <string>强制初始化</string>
                 </property>
                </widget>
               </item>

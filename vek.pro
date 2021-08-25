@@ -3,11 +3,13 @@ QT += widgets
 CONFIG += c++17
 CONFIG += static
 CONFIG += release
-DEFINES += QT_DEPRECATED_WARNINGS\
-           QT_NO_WARNING_OUTPUT
-           QT_NO_DEBUG_OUTPUT
+CONFIG += console
+#DEFINES += QT_DEPRECATED_WARNINGS\
+#           QT_NO_WARNING_OUTPUT
+#           QT_NO_DEBUG_OUTPUT
 VERSION = 1.0.2.4
 DEFINES +=APP_VERSION=\\\"$$VERSION\\\"
+DEFINES += QT_MESSAGELOGCONTEXT
 # You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
@@ -17,6 +19,7 @@ SOURCES += \
   main.cpp \
     src/obj/objectAppAT.cpp \
     src/obj/objectAppMT.cpp \
+    src/obj/objectDebug.cpp \
     src/obj/objectExtend.cpp \
     src/obj/objectGetCurl.cpp \
     src/obj/objectGitWine.cpp \
@@ -44,7 +47,8 @@ SOURCES += \
     src/view/aview/vekAppPanel.cpp \
     src/view/jview/vekModelAT.cpp \
     src/view/jview/vekPanelAT.cpp \
-    src/view/jview/vekViewAT.cpp
+    src/view/jview/vekViewAT.cpp \
+    src/view/vekMessage.cpp
 
 HEADERS += \
     src/obj/baseData.h \
@@ -52,6 +56,7 @@ HEADERS += \
     src/obj/common.h \
     src/obj/objectAppAT.h \
     src/obj/objectAppMT.h \
+    src/obj/objectDebug.h \
     src/obj/objectExtend.h \
     src/obj/objectGetCurl.h \
     src/obj/objectGitWine.h \
@@ -81,7 +86,8 @@ HEADERS += \
     src/view/aview/vekAppPanel.h \
     src/view/jview/vekModelAT.h \
     src/view/jview/vekPanelAT.h \
-    src/view/jview/vekViewAT.h
+    src/view/jview/vekViewAT.h \
+    src/view/vekMessage.h
 
 FORMS += \
     ui/vekAppAddModel.ui \

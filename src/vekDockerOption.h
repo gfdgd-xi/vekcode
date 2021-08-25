@@ -36,6 +36,7 @@ signals:
 private slots:
     void objectButton();
     void wineChanged();
+    void ICMPChanged();
 };
 
 #endif // VEKADDGAME_H
