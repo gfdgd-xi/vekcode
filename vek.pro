@@ -3,7 +3,6 @@ QT += widgets
 CONFIG += c++17
 CONFIG += static
 CONFIG += release
-CONFIG += console
 #DEFINES += QT_DEPRECATED_WARNINGS\
 #           QT_NO_WARNING_OUTPUT
 #           QT_NO_DEBUG_OUTPUT

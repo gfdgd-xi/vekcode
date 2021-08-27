@@ -188,9 +188,11 @@ void vekAppListView::objectExtendApp(){
         QString currentTabText =mBox->tabText(mBox->currentIndex());
         QString currentAppCID=m_pModel->getItem(this->currentIndex().row())->s_uid;
         _vExtendDebug->ConnectDebugObject(currentTabText,currentAppCID);
-        //_vExtendDebug->setWindowFlags(Qt::WindowStaysOnTopHint);
+        _vExtendDebug->setWindowFlags(Qt::WindowStaysOnTopHint);
+        _vExtendDebug->setWindowFlags(Qt::WindowMinimizeButtonHint|Qt::WindowCloseButtonHint);
         connect(_vExtendDebug,&vekExtendDebug::_unVekDebug,this,&vekAppListView::unDebugApp);
         _vExtendDebug->show();
+        pObject::vekTip("温馨提示:调试模式需要在终端内运行vek进行\n 执行:sudo chmod +x vek\n 执行:./vek");
     }
 }
 //设置选项

@@ -138,7 +138,6 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
     forceKill();
     SwitchSysVerion(DOCKER);
     m_cmd->closeReadChannel(QProcess::StandardOutput);
-    m_cmd->closeReadChannel(QProcess::StandardError);
     m_cmd->setProcessChannelMode(QProcess::ForwardedChannels);
     m_cmd->setWorkingDirectory(appData.s_work_path);
     m_cmd->start(wcode,codeArgs);

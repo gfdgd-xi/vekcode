@@ -18,10 +18,6 @@ private:
     SappData appData;
     SdockerData dockData;
     void executeArgsEnv();
-signals:
-    void outLogEmit(QString);
-private slots:
-    void outEmit();
 };
 
 #endif // OBJECTDEBUG_H

@@ -14,8 +14,6 @@ public:
     vekExtendDebug(QWidget *parent = nullptr);
     ~vekExtendDebug();
     void ConnectDebugObject(QString dockName,QString appCID);
-    void MessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg);
-
 private:
     Ui::vekExtendDebug *ui;
     QStringList DebugDllStr;
@@ -23,9 +21,6 @@ private:
     SdockerData dockData;
     bool checkStatic;
     void upDllStr();
-    QString fileDir=QApplication::applicationDirPath()+"/vekDebugLog/";
-    QString qStrTime;
-    bool writeState=false;
     std::vector<QString> dllList={"accel","adpcm","advapi","animate","aspi",
     "atom","avicap","avifile","bidi","bitblt",
     "bitmap","cabinet","capi","caret","cdrom",
@@ -78,8 +73,6 @@ private slots:
     void addDll();
     void delDll();
     void exitDebug();
-    void onRadioClickFruits();  
-    void outputMessage(QString);
 signals:
     void _unVekDebug();
 };

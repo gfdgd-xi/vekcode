@@ -15,17 +15,10 @@ vekPackage::~vekPackage()
 }
 //传入打包参数
 bool vekPackage::vAppData(SdockerData _data,QString _uid){
-    /*
-    if(!_data.s_dockers_wine_version.contains("deepin",Qt::CaseSensitive)){
-        pObject::vekTip("不支持非Deepin-Wine5容器打包");
+    if(!_data.s_dockers_wine_version.contains("deepin-wine5",Qt::CaseSensitive)){
+        pObject::vekTip("本功能不支持非Deepin-Wine5容器打包");
         return false;
-    }else if(_data.s_dockers_bit_version.contains("64",Qt::CaseSensitive)){
-        pObject::vekTip("不支持Deepin-Wine5 64位容器打包");
-        return false;
-    }else{
-
     }
-    */
     dDockerData=_data;
     dAppUid=_uid;
     vSetDefalut();

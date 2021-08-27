@@ -463,17 +463,11 @@
     </property>
     <addaction name="action_repair_stalonetray_wineprc_winetricks"/>
    </widget>
-   <widget class="QMenu" name="menu_8">
-    <property name="title">
-     <string>后端维护</string>
-    </property>
-   </widget>
    <addaction name="menu"/>
    <addaction name="menuWine"/>
    <addaction name="menu_3"/>
    <addaction name="menu_7"/>
    <addaction name="menu_4"/>
-   <addaction name="menu_8"/>
    <addaction name="menu_2"/>
   </widget>
   <action name="action_AddApp">

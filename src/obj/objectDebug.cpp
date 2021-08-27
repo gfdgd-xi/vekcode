@@ -23,6 +23,9 @@ void objectDebug::executeArgsEnv(){
             qputenv(a.toStdString().c_str(),u.toStdString().c_str());
         }
     }
+    for(auto _env:xProcess->systemEnvironment()){
+        qInfo()<<_env;
+    }
 }
 void objectDebug::exitDebug(){
     std::vector<QStringList> _codeAgrs;
@@ -36,24 +39,21 @@ void objectDebug::exitDebug(){
     delete _objectExtend;
     _objectExtend=nullptr;
 }
-void objectDebug::outEmit(){
-    QByteArray localMsg = xProcess->readAllStandardOutput();
-    emit outLogEmit(localMsg);
-}
 void objectDebug::run(){
-    executeArgsEnv();
-    exitDebug();
     if(xProcess){
         xProcess->close();
         delete xProcess;
         xProcess=nullptr;
     }
     xProcess=new QProcess();
+    executeArgsEnv();
+    exitDebug();   
     QStringList codeArgs;
     QString codeDebug;
     if(!dArgs.empty()){
         codeDebug="WINEDEBUG="+dArgs.join("");
     }
+
     QString gameExe=appData.s_exe;
     if(gameExe.contains(" ",Qt::CaseSensitive)){
         gameExe="\""+gameExe+"\"";
@@ -73,12 +73,8 @@ void objectDebug::run(){
     }   
     xProcess->setWorkingDirectory(appData.s_work_path);
     xProcess->setProcessChannelMode(QProcess::ForwardedChannels);
-    xProcess->setReadChannel(QProcess::StandardOutput);
-    connect(xProcess,SIGNAL(readyReadStandardOutput()),this,SLOT(outEmit()));
-    QString codes=codeDebug+" "+dockData.s_dockers_wine_path+"/wine/bin/"+dockData.s_dockers_wine_exe_version+" "+codeArgs.join(" ");
-    //QString wcode="WINEPREFIX="+dockData.s_dockers_path+"/"+dockData.s_dockers_name;
-    //QString pcode=QApplication::applicationDirPath()+"/vekScript/vekrun";
-    //QString scode=wcode+" "+dockData.s_dockers_wine_path+"/wine/bin/"+dockData.s_dockers_wine_exe_version+" "+codeArgs.join(" ");
+    QString wcode="WINEPREFIX="+dockData.s_dockers_path+"/"+dockData.s_dockers_name;
+    QString codes=dockData.s_dockers_wine_path+"/wine/bin/"+dockData.s_dockers_wine_exe_version+" "+gameExe;
     xProcess->start(codes);
     xProcess->waitForFinished(-1);
     qInfo()<<"|++++++++++++++++++++++++++++|";

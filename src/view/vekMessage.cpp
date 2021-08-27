@@ -2,10 +2,6 @@
 
 #include <QLoggingCategory>
 
-
-Q_DECLARE_LOGGING_CATEGORY(testLogger)
-Q_LOGGING_CATEGORY(testLogger, "ssh.client", QtDebugMsg)
-
 vekMessage::vekMessage(QWidget *parent) : QWidget(parent)
 {
     this->resize(400, 300);
@@ -69,9 +65,6 @@ void vekMessage::start()
         for(int i=0; i<1000000; i++)
         {
             QCoreApplication::processEvents();
-            qCDebug(testLogger)   << ": test ";
-            qDebug()<<QString("This is a Qt log browser").append(QString::number(i, 10));
-
         }
         is_finished = true;
     }
