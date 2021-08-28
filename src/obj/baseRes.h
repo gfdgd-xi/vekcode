@@ -4,7 +4,7 @@
 //全局数据结构
 QString sWinetrickUrl;
 SlocalGloablData g_vekLocalData={};
-std::vector<QString> procManages={};
+objectTray* objTray=nullptr;
 std::map<QString,QString> winetricks_server_url_list={};
 QStringList vekStyles={"Windows", "WindowsXP", "WindowsVista", "Fusion"};
 std::map<QString,std::map<QString,QString>> winebuilder={

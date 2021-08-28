@@ -73,10 +73,28 @@ void objectVersionData::copyFile(QString strFileName){
     QFile::copy(strPrefix,filePath);
 }
 void objectVersionData::repair_Wineprc_Stalonetray_Winetricks(){
-    for(auto strName:pFileName){
-        copyFile(strName);
-        repairFilePerm(QApplication::applicationDirPath()+"/vekScript/"+strName);
-    }
+    repair_Stalonetray();
+    repair_Wineprc();
+    repair_Winetricks();
+}
+void objectVersionData::repair_Stalonetray(){
+    QString strName;
+    strName=pFileName[1];
+    copyFile(strName);
+    repairFilePerm(QApplication::applicationDirPath()+"/vekScript/"+strName);
+}
+void objectVersionData::repair_Wineprc(){
+    QString strName;
+    strName=pFileName[0];
+    copyFile(strName);
+    copyFile(strName);
+    repairFilePerm(QApplication::applicationDirPath()+"/vekScript/"+strName);
+}
+void objectVersionData::repair_Winetricks(){
+    QString strName;
+    strName=pFileName[2];
+    copyFile(strName);
+    repairFilePerm(QApplication::applicationDirPath()+"/vekScript/"+strName);
 }
 
 bool objectVersionData::upDataVek(){

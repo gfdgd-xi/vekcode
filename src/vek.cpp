@@ -10,7 +10,6 @@ vek::vek(QWidget *parent)
 }
 vek::~vek()
 {
-    exitTray(true);
     delete ui;
 }
 void vek::connectObject(){
@@ -27,7 +26,9 @@ void vek::connectObject(){
     connect(ui->action_SHA256,&QAction::triggered,this,&vek::hFileHash);
     connect(ui->action_West,&QAction::triggered,this,&vek::changeQTabWidgetStyleNorth);
     connect(ui->action_North,&QAction::triggered,this,&vek::changeQTabWidgetStyleWest);
-    connect(ui->action_repair_stalonetray_wineprc_winetricks,&QAction::triggered,this,&vek::repair_Wineprc_Stalonetray_Winetricks);
+    connect(ui->action_repair_stalonetray,&QAction::triggered,this,&vek::repair_Stalonetray);
+    connect(ui->action_repair_wineprc,&QAction::triggered,this,&vek::repair_Wineprc);
+    connect(ui->action_repair_winetricks,&QAction::triggered,this,&vek::repair_Winetricks);
     //语言切换
     //connect(ui->langChinese,&QAction::triggered,this,&vek::vekLanguage);
     //connect(ui->langEnglish,&QAction::triggered,this,&vek::vekLanguage);
@@ -39,7 +40,17 @@ void vek::connectObject(){
     setAppSize();
     vekStyle();
 }
-void vek::repair_Wineprc_Stalonetray_Winetricks(){
+void vek::repair_Winetricks(){
+    objectVersionData OBJ_VER;
+    OBJ_VER.repair_Wineprc_Stalonetray_Winetricks();
+    pObject::vekTip("修复完毕!");
+}
+void vek::repair_Wineprc(){
+    objectVersionData OBJ_VER;
+    OBJ_VER.repair_Wineprc_Stalonetray_Winetricks();
+    pObject::vekTip("修复完毕!");
+}
+void vek::repair_Stalonetray(){
     objectVersionData OBJ_VER;
     OBJ_VER.repair_Wineprc_Stalonetray_Winetricks();
     pObject::vekTip("修复完毕!");
@@ -165,35 +176,7 @@ void vek::setAppSize(){
     }
     ui->label_appSizeText->setText(QString::number(approw));
 }
-void vek::setProcRow(){
-    ui->label_procRow->setText(QString::number(procManages.size()));
-}
-void vek::startTray(){
-    if(objTray){
-        delete objTray;
-        objTray=nullptr;
-    }
-    objTray=new objectTray();
-    objTray->start();
-    setProcRow();
-}
-void vek::exitTray(bool trayState){
-    if(trayState){
-        if(objTray){
-            objTray->exitTray();
-        }
-    }else{
-        if(procManages.empty()){
-            objTray->exitTray();
-        }else{
-            return;
-        }
-    }
-    if(!objTray){
-        return;
-    }
-    setProcRow(); 
-}
+
 void vek::installApp(){
     ui->tabWidget->objInitDocker(INSTALLAPP);
 }

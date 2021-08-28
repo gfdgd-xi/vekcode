@@ -1,19 +1,24 @@
 #ifndef OBJECTTRAY_H
 #define OBJECTTRAY_H
 
-#include "common.h"
+#include <QThread>
+#include <QProcess>
+#include <QApplication>
+
 class objectTray:public QThread
 {
     Q_OBJECT
 public:
     explicit objectTray(QObject *parent = nullptr);
     ~objectTray();
-    void exitTray();
+    std::vector<QString> procManages;
 private:
    QProcess* m_cmd=nullptr;
-   void startTray();
+   void StartTray();
 protected:
-    void run();
+   void run();
+public slots:
+    void ExitTray();
 };
 
 #endif // OBJECTTRAY_H

@@ -1,12 +1,13 @@
 #include "objectTray.h"
-
+#include <QDebug>
 objectTray::objectTray(QObject *parent) : QThread(parent)
 {
     parent=nullptr;
 }
 objectTray::~objectTray(){
+
 }
-void objectTray::startTray(){
+void objectTray::StartTray(){
     m_cmd->closeReadChannel(QProcess::StandardOutput);
     m_cmd->closeReadChannel(QProcess::StandardError);
     m_cmd->setProcessChannelMode(QProcess::MergedChannels);
@@ -14,15 +15,16 @@ void objectTray::startTray(){
     m_cmd->start(QApplication::applicationDirPath()+"/vekScript/stalonetray");
     m_cmd->waitForFinished(-1);
 }
-void objectTray::exitTray(){
-    if(m_cmd->state()!=QProcess::Starting){
-        m_cmd->start();
+void objectTray::ExitTray(){
+    if(procManages.empty()){
+        if(m_cmd){
+            m_cmd->write("\x03");
+            m_cmd->close();
+            m_cmd->kill();
+            delete m_cmd;
+            m_cmd=nullptr;
+        }
     }
-    m_cmd->write("\x03");
-    m_cmd->close();
-    m_cmd->kill();
-    delete m_cmd;
-    m_cmd=nullptr;
 }
 void objectTray::run(){
     if(m_cmd){
@@ -30,5 +32,5 @@ void objectTray::run(){
         m_cmd=nullptr;
     }
     m_cmd=new QProcess();
-    startTray();
+    StartTray();
 }

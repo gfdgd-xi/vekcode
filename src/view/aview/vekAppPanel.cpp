@@ -54,7 +54,7 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
             for(its=it->second.map_dockers_data.rbegin();its!=it->second.map_dockers_data.rend();its++){
                 SappData *LID=new SappData();
                 *LID=its->second;
-                connect(pListView, SIGNAL(_startTray()), this->parentWidget()->parentWidget(), SLOT(startTray()));
+                //connect(pListView, SIGNAL(_startTray()), this->parentWidget()->parentWidget(), SLOT(startTray()));
                 pListView->addItem(LID);
             }
         }
@@ -443,7 +443,7 @@ void vekAppPanel::addAppObject(SdockerData* dcokData,SappData* appData){
     }
     pList->setViewMode(QListView::IconMode);
     pList->setFlow(QListView::LeftToRight);
-    connect(pList, SIGNAL(_startTray()), this->parentWidget()->parentWidget(), SLOT(startTray()));
+    //connect(pList, SIGNAL(_startTray()), this->parentWidget()->parentWidget(), SLOT(startTray()));
     pList->addItem(_tempBaseData);
 }
 void vekAppPanel::upTabIco(){

@@ -37,12 +37,9 @@ private:
     vekPackage* _vek_Package=nullptr;
     objectTray* objTray=nullptr;
     QString vek_winetricks_server="https://gitee.com/JackLee02/vekGame/raw/master/vekWinetricksServer.json";
-    void setProcRow(); 
     bool getWinetricksServerJson();
     void loadWinetricksServerJson();
 public slots:
-    void startTray();
-    void exitTray(bool);
     void on_action_About_triggered();
 private slots:
     void vekAddApp();
@@ -64,6 +61,8 @@ private slots:
     void hFileHash();
     void changeQTabWidgetStyleWest();
     void changeQTabWidgetStyleNorth();
-    void repair_Wineprc_Stalonetray_Winetricks();
+    void repair_Stalonetray();
+    void repair_Winetricks();
+    void repair_Wineprc();
 };
 #endif // VEK_H

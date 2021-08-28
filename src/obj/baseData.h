@@ -5,7 +5,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
-#include <QProcess>
+#include "objectTray.h"
 typedef struct{
     QString rPath=nullptr;
     QString rKey=nullptr;
@@ -214,5 +214,5 @@ extern std::map<QString,std::map<QString,QString>> winemine;
 extern std::map<QString,std::map<QString,QString>> dxvkRes;
 extern std::map<QString,std::map<QString,QString>> dxvkResCache;
 extern std::map<QString,std::map<QString,QString>> dxvkResLog;
-extern std::vector<QString> procManages;
+extern objectTray* objTray;
 #endif // BASEDATA_H

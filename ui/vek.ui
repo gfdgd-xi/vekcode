@@ -294,20 +294,7 @@
               <item>
                <widget class="QLabel" name="label_2">
                 <property name="text">
-                 <string>进程总数:</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_procRow">
-                <property name="text">
                  <string/>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
                 </property>
                </widget>
               </item>
@@ -461,7 +448,9 @@
     <property name="title">
      <string>组件功能</string>
     </property>
-    <addaction name="action_repair_stalonetray_wineprc_winetricks"/>
+    <addaction name="action_repair_stalonetray"/>
+    <addaction name="action_repair_wineprc"/>
+    <addaction name="action_repair_winetricks"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menuWine"/>
@@ -549,12 +538,22 @@
     <string>竖列</string>
    </property>
   </action>
-  <action name="action_repair_stalonetray_wineprc_winetricks">
+  <action name="action_repair_stalonetray">
    <property name="text">
-    <string>一键修复stalonetray_wineprc_winetricks</string>
+    <string>修复stalonetray</string>
    </property>
    <property name="toolTip">
-    <string>一键修复stalonetray_wineprc_winetricks</string>
+    <string>修复stalonetray</string>
+   </property>
+  </action>
+  <action name="action_repair_wineprc">
+   <property name="text">
+    <string>修复wineprc</string>
+   </property>
+  </action>
+  <action name="action_repair_winetricks">
+   <property name="text">
+    <string>修复winetricks</string>
    </property>
   </action>
  </widget>

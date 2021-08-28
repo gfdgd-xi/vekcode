@@ -34,7 +34,7 @@ public slots:
 signals:
     void toObjectArgs_ptr(SappData*,EADEType);
     void toObjectArgs_cl(SappData);
-    void _startTray();
+    //void _startTray();
     void setUpDelDataSignal(SdockerData*,SappData*);
     void setUpGroupTabIcoSignal();
 private:

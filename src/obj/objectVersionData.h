@@ -17,6 +17,9 @@ public:
     QString sUrlFilePassword;
     QString sFileSHA512;
     void repair_Wineprc_Stalonetray_Winetricks();
+    void repair_Stalonetray();
+    void repair_Wineprc();
+    void repair_Winetricks();
 private:
     QString vekUpInfo="https://gitee.com/JackLee02/vekGame/raw/master/vekUpdateInfo.json";
     bool getVersionStr();

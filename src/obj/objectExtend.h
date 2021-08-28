@@ -60,7 +60,7 @@ private:
     SappProcData forceKillArgs(SappProcData,KillArgsType);
     void dyncDxvkRegs(std::map<QString,std::map<QString,QString>>);
 signals:
-    void objexitTray(bool);
+    void eTray();
 };
 
 #endif // VEKSTARTOPTINOBJECT_H

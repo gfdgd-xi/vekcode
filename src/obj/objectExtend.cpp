@@ -148,25 +148,27 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
     qInfo()<<"|++++++++++++++++++++++++++++|";  
     m_cmd->waitForFinished(-1);
     SappProcData pi;
-    objectProcManage objProcMangs;
+    objectProcManage* objProcMangs=new objectProcManage();
     bool procCheck;
     pi=forceKillArgs(pi,CHECK);
     do{
-        objProcMangs.iprocInfo=pi;
-        procCheck=objProcMangs.objMainProcExists();
+        objProcMangs->iprocInfo=pi;
+        procCheck=objProcMangs->objMainProcExists();
         sleep(1);
     }while(procCheck);
     forceKill();
     waitObjectDone(true);
     vector<QString>::iterator it;
-    for(it=procManages.begin();it!=procManages.end();)
+    for(it=objTray->procManages.begin();it!=objTray->procManages.end();)
     {
         if(it->toStdString()==appData.s_main_proc_name.toStdString())
         {
-           procManages.erase(it);
+           objTray->procManages.erase(it);
            break;
         }
     }
+    delete objProcMangs;
+    objProcMangs=nullptr;
 }
 //wintricks和常规命令执行
 void objectExtend::baseExecuteWineCode(QString code,QStringList codeArgs){
@@ -297,7 +299,7 @@ void objectExtend::extendApp(){
     dyncDxvkRegs(dxvkResCache);
     dyncDxvkRegs(dxvkResLog);
     baseExecuteAppCode(startArgs,codeArgs);
-    emit objexitTray(false);
+    emit eTray();
 }
 void objectExtend::extendAppType(){
     if(exArgs.ex_app==object_app_start){
@@ -347,12 +349,13 @@ SappProcData objectExtend::forceKillArgs(SappProcData tspd,KillArgsType tkt){
 }
 void objectExtend::forceKill(){
     SappProcData pi;
-    objectProcManage objProcMangs;
+    objectProcManage* objProcMangs=new objectProcManage();
     pi=forceKillArgs(pi,KILL);
-    objProcMangs.iprocInfo=pi;
-    objProcMangs.start();
-    objProcMangs.wait();
-    objProcMangs.exit();
+    objProcMangs->iprocInfo=pi;
+    objProcMangs->start();
+    objProcMangs->wait();
+    delete objProcMangs;
+    objProcMangs=nullptr;
 }
 
 void objectExtend::run(){
