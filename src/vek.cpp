@@ -169,9 +169,11 @@ void vek::setProcRow(){
     ui->label_procRow->setText(QString::number(procManages.size()));
 }
 void vek::startTray(){
-    if(!objTray){
-       objTray=new objectTray();
+    if(objTray){
+        delete objTray;
+        objTray=nullptr;
     }
+    objTray=new objectTray();
     objTray->start();
     setProcRow();
 }
@@ -183,14 +185,14 @@ void vek::exitTray(bool trayState){
     }else{
         if(procManages.empty()){
             objTray->exitTray();
-        }else{return;}
+        }else{
+            return;
+        }
     }
     if(!objTray){
         return;
     }
-    setProcRow();
-    delete objTray;
-    objTray=nullptr;
+    setProcRow(); 
 }
 void vek::installApp(){
     ui->tabWidget->objInitDocker(INSTALLAPP);

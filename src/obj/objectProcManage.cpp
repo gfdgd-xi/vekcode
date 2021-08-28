@@ -9,7 +9,7 @@ objectProcManage::~objectProcManage(){
 }
 
 QString objectProcManage::objGetProcList(SappProcData pInfo){
-    m_cmd=new QProcess();
+    QProcess* m_cmd=new QProcess();
     //设置通道模式error和out合并
     m_cmd->setProcessChannelMode(QProcess::MergedChannels);
     m_cmd->setReadChannel(QProcess::StandardOutput);
@@ -27,7 +27,7 @@ QString objectProcManage::objGetProcList(SappProcData pInfo){
     return procData;
 }
 void objectProcManage::objWineHQKillProc(QString prPid,SappProcData _pInfo){
-    prc=new QProcess();
+    QProcess* prc=new QProcess();
     prc->setProcessChannelMode(QProcess::MergedChannels);
     prc->setReadChannel(QProcess::StandardOutput);
     prc->start("bash",QIODevice::ReadWrite);

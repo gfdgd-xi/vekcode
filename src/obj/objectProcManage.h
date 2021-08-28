@@ -15,8 +15,6 @@ public:
 protected:
     void run();
 private:
-    QProcess *m_cmd=nullptr;
-    QProcess *prc=nullptr;
     //所有当前运行的程序容器的进程列表的表
     std::map<QString,QString> procAllInfoStr;
     void getAllProc();

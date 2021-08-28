@@ -148,12 +148,12 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
     qInfo()<<"|++++++++++++++++++++++++++++|";  
     m_cmd->waitForFinished(-1);
     SappProcData pi;
-    objectProcManage* objProcMangs=new objectProcManage();
+    objectProcManage objProcMangs;
     bool procCheck;
     pi=forceKillArgs(pi,CHECK);
     do{
-        objProcMangs->iprocInfo=pi;
-        procCheck=objProcMangs->objMainProcExists();
+        objProcMangs.iprocInfo=pi;
+        procCheck=objProcMangs.objMainProcExists();
         sleep(1);
     }while(procCheck);
     forceKill();
@@ -167,13 +167,12 @@ void objectExtend::baseExecuteAppCode(QString wcode,QStringList codeArgs){
            break;
         }
     }
-    delete objProcMangs;
-    objProcMangs=nullptr;
 }
 //wintricks和常规命令执行
 void objectExtend::baseExecuteWineCode(QString code,QStringList codeArgs){
     QString mdCode;
     m_cmd->setReadChannel(QProcess::StandardOutput);
+    m_cmd->setProcessChannelMode(QProcess::MergedChannels);
     m_cmd->execute(code,codeArgs);
     //m_cmd->waitForFinished(-1);
     waitObjectDone(true);
@@ -348,14 +347,12 @@ SappProcData objectExtend::forceKillArgs(SappProcData tspd,KillArgsType tkt){
 }
 void objectExtend::forceKill(){
     SappProcData pi;
-    objectProcManage* objProcMangs=new objectProcManage();
+    objectProcManage objProcMangs;
     pi=forceKillArgs(pi,KILL);
-    objProcMangs->iprocInfo=pi;
-    objProcMangs->start();
-    objProcMangs->wait();
-    objProcMangs->exit();
-    delete objProcMangs;
-    objProcMangs=nullptr;
+    objProcMangs.iprocInfo=pi;
+    objProcMangs.start();
+    objProcMangs.wait();
+    objProcMangs.exit();
 }
 
 void objectExtend::run(){
