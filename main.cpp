@@ -16,7 +16,6 @@ int main(int argc, char *argv[])
     vekMainWindows.vekThis=&a;
     objectVersionData OBJ_VER;
     OBJ_VER.repair_Wineprc_Stalonetray_Winetricks();
-    /*
     if(OBJ_VER.upDataVek()){
         QProcess* m_cmd=new QProcess();
         m_cmd->setWorkingDirectory(QApplication::applicationDirPath());
@@ -25,7 +24,6 @@ int main(int argc, char *argv[])
         a.exit();
         return 0;
     }
-    */
     return a.exec();
 }
 
