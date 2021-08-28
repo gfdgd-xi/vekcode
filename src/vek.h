@@ -8,7 +8,6 @@
 #include "vekExtendDebug.h"
 #include "vekSourceEdit.h"
 #include "obj/objectProcManage.h"
-#include "obj/objectTray.h"
 #include "obj/objectVersionData.h"
 #include "QTranslator"
 #include "vekPackage.h"
@@ -28,7 +27,7 @@ public:
     explicit vek(QWidget *parent = nullptr);
     ~vek();
     QApplication* vekThis;
-    void connectObject();
+    void connectObject();   
 private:
     Ui::vek *ui=nullptr;
     vekWineOption *_vek_wine_option=nullptr;
@@ -38,8 +37,9 @@ private:
     objectTray* objTray=nullptr;
     QString vek_winetricks_server="https://gitee.com/JackLee02/vekGame/raw/master/vekWinetricksServer.json";
     bool getWinetricksServerJson();
-    void loadWinetricksServerJson();
+    void loadWinetricksServerJson();  
 public slots:
+    void setProcRow(int);
     void on_action_About_triggered();
 private slots:
     void vekAddApp();

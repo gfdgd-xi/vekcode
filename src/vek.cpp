@@ -10,6 +10,9 @@ vek::vek(QWidget *parent)
 }
 vek::~vek()
 {
+    if(objTray){
+       objTray->ExitTray();
+    }
     delete ui;
 }
 void vek::connectObject(){
@@ -54,6 +57,9 @@ void vek::repair_Stalonetray(){
     objectVersionData OBJ_VER;
     OBJ_VER.repair_Wineprc_Stalonetray_Winetricks();
     pObject::vekTip("修复完毕!");
+}
+void vek::setProcRow(int n){
+    ui->label_Run_Proc->setText(QString::number(n));
 }
 void vek::changeQTabWidgetStyleWest(){
     ui->tabWidget->changeQTwidgetStyle(QTabWidget::West);

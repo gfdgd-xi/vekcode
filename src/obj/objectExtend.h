@@ -57,10 +57,12 @@ private:
     void extendPlugs();
     void forceKill();
     void forceAllKill();
+    void upRowsData();
     SappProcData forceKillArgs(SappProcData,KillArgsType);
     void dyncDxvkRegs(std::map<QString,std::map<QString,QString>>);
 signals:
     void eTray();
+    void setRow(int);
 };
 
 #endif // VEKSTARTOPTINOBJECT_H

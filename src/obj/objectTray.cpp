@@ -2,7 +2,7 @@
 #include <QDebug>
 objectTray::objectTray(QObject *parent) : QThread(parent)
 {
-    parent=nullptr;
+
 }
 objectTray::~objectTray(){
 
@@ -13,7 +13,11 @@ void objectTray::StartTray(){
     m_cmd->setProcessChannelMode(QProcess::MergedChannels);
     m_cmd->setWorkingDirectory(QApplication::applicationDirPath()+"/vekScript");
     m_cmd->start(QApplication::applicationDirPath()+"/vekScript/stalonetray");
-    m_cmd->waitForFinished(-1);
+    //m_cmd->waitForFinished(-1);
+    while(!procManages.empty()){
+        sleep(1);
+    }
+    ExitTray();
 }
 void objectTray::ExitTray(){
     if(procManages.empty()){

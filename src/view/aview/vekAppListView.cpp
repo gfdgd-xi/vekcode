@@ -134,8 +134,9 @@ void vekAppListView::startApp(Extend_App _objTypes){
                 objTray->start();
             }
             objTray->procManages.push_back(appData->s_main_proc_name);
-            //auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
+            auto pObjectVek=this->parentWidget()->parentWidget()->parentWidget()->parentWidget()->parentWidget();
             connect(_objectExtend, SIGNAL(eTray()), objTray, SLOT(ExitTray()));
+            connect(_objectExtend, SIGNAL(setRow(int)), pObjectVek, SLOT(setProcRow(int)));
             objectAppMT* oAMT=new objectAppMT(&dockData,appData);
             oAMT->InstallDXVK();
             delete oAMT;

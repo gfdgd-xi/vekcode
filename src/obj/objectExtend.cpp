@@ -252,6 +252,9 @@ void objectExtend::optionExtend(){
        ExtendWinetricksCode(codeArgs,false);
     }
     if(exArgs.ex_docker==object_docker_allforcekill){
+        if(objTray){
+           objTray->procManages.clear();
+        }
         QString srtArgs=QApplication::applicationDirPath()+"/vekScript/wineprc";
         codeArgs.append("-k");
         codeArgs.append(dockData.s_dockers_path+"/"+dockData.s_dockers_name);
@@ -278,6 +281,7 @@ void objectExtend::optionExtend(){
 void objectExtend::extendApp(){
     QStringList codeArgs;
     QString gameExe=appData.s_exe;
+    upRowsData();
     /*
     if(gameExe.contains(" ",Qt::CaseSensitive)){
         gameExe="\""+gameExe+"\"";
@@ -299,13 +303,24 @@ void objectExtend::extendApp(){
     dyncDxvkRegs(dxvkResCache);
     dyncDxvkRegs(dxvkResLog);
     baseExecuteAppCode(startArgs,codeArgs);
-    emit eTray();
+    upRowsData();
 }
 void objectExtend::extendAppType(){
     if(exArgs.ex_app==object_app_start){
         extendApp();
     }
     if(exArgs.ex_app==object_app_forcekill){
+        if(objTray){
+            vector<QString>::iterator it;
+            for(it=objTray->procManages.begin();it!=objTray->procManages.end();)
+            {
+                if(it->toStdString()==appData.s_main_proc_name.toStdString())
+                {
+                   objTray->procManages.erase(it);
+                   break;
+                }
+            }
+        }
         forceKill();
     }
 }
@@ -346,6 +361,11 @@ SappProcData objectExtend::forceKillArgs(SappProcData tspd,KillArgsType tkt){
         tspd.s_proc_main_name=appData.s_main_proc_name;
     }
     return tspd;
+}
+void objectExtend::upRowsData(){
+    if(objTray){
+        emit setRow(objTray->procManages.size());
+    }
 }
 void objectExtend::forceKill(){
     SappProcData pi;
