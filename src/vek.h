@@ -30,9 +30,8 @@ public:
     void connectObject();   
 private:
     Ui::vek *ui=nullptr;
-    vekWineOption *_vek_wine_option=nullptr;
-    vekAbout* _vek_About=nullptr;
-    vekSourceEdit* _vek_source_esit=nullptr;
+    //vekWineOption *_vek_wine_option=nullptr;
+    //vekAbout* _vek_About=nullptr;
     vekPackage* _vek_Package=nullptr;
     objectTray* objTray=nullptr;
     QString vek_winetricks_server="https://gitee.com/JackLee02/vekGame/raw/master/vekWinetricksServer.json";
@@ -47,10 +46,7 @@ private slots:
     void on_action_Exit_triggered();
     void on_action_WineInstall_triggered();
     void on_action_EditSource_triggered();
-    void unInitWineOption();
-    void unVekAbout();
     void installApp();
-    void unSourceEdit();
     void setAppSize();
     void vekStyle();
     void vekLanguage();

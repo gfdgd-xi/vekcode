@@ -2,9 +2,7 @@
 #include "ui_common.h"
 #include "obj/pObject.h"
 
-vekWineOption::vekWineOption(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::vekWineOption)
+vekWineOption::vekWineOption():ui(new Ui::vekWineOption)
 {
     ui->setupUi(this);
     connect(ui->toolButton_SetInstallDir,&QPushButton::clicked,this,&vekWineOption::on_toolButton);
@@ -13,9 +11,9 @@ vekWineOption::vekWineOption(QWidget *parent) :
 
 vekWineOption::~vekWineOption()
 {
-    delete ui;
-    emit _unInitWineOption();
+
 }
+
 void vekWineOption::loadWineData(){
     loadWineList(ui->tableView_winen);
     loadWineList(ui->tableView_wined);

@@ -190,14 +190,10 @@ void vek::addInitDocker(){
     ui->tabWidget->objInitDocker(INITDOCKER);
 }
 void vek::on_action_EditSource_triggered(){
-    if(!_vek_source_esit){
-        _vek_source_esit=new vekSourceEdit();
-        _vek_source_esit->setAttribute(Qt::WA_DeleteOnClose,true);
-        //_vek_source_esit->setWindowFlags(Qt::WindowStaysOnTopHint);
-        _vek_source_esit->setGeometry(this->geometry());
-        _vek_source_esit->show();
-        connect(_vek_source_esit,&vekSourceEdit::_unSourveEdit,this,&vek::unSourceEdit);
-    }
+    vekSourceEdit& srcOption=vekSourceEdit::get_instance();
+    srcOption.setGeometry(this->geometry());
+    srcOption.setWindowFlags(Qt::WindowStaysOnTopHint);
+    srcOption.show();
 }
 void vek::vekAddApp()
 {   
@@ -210,15 +206,10 @@ void vek::on_action_AddApp_triggered()
 
 void vek::on_action_About_triggered()
 {
-    if(!_vek_About){
-        _vek_About=new vekAbout();
-        _vek_About->setAttribute(Qt::WA_DeleteOnClose,true);
-        _vek_About->setWindowFlags(Qt::WindowStaysOnTopHint);
-        _vek_About->setGeometry(this->geometry());
-        _vek_About->GetVerInfo();
-        _vek_About->show();
-        connect(_vek_About,&vekAbout::_unVekAbout,this,&vek::unVekAbout);
-    }
+    vekAbout& _vekAbout=vekAbout::get_instance();
+    _vekAbout.show();
+    _vekAbout.GetVerInfo();
+
 }
 void vek::on_action_Exit_triggered()
 {
@@ -227,26 +218,14 @@ void vek::on_action_Exit_triggered()
 
 void vek::on_action_WineInstall_triggered()
 {
-    if(!_vek_wine_option){
-        _vek_wine_option=new vekWineOption();
-        _vek_wine_option->setAttribute(Qt::WA_DeleteOnClose,true);
-        _vek_wine_option->setGeometry(this->geometry());
-        //_vek_wine_option->setWindowFlags(Qt::WindowStaysOnTopHint);
-        _vek_wine_option->show();
-        _vek_wine_option->getWineGitInfo();
-        _vek_wine_option->loadWineData();
-        connect(_vek_wine_option,&vekWineOption::_unInitWineOption,this,&vek::unInitWineOption);
-    }
+    vekWineOption& _vekWineOption=vekWineOption::get_instance();
+    _vekWineOption.setGeometry(this->geometry());
+    _vekWineOption.setWindowFlags(Qt::WindowStaysOnTopHint);
+    _vekWineOption.getWineGitInfo();
+    _vekWineOption.loadWineData();
+    _vekWineOption.show();
 }
-void vek::unInitWineOption(){
-    _vek_wine_option=nullptr;
-}
-void vek::unVekAbout(){
-    _vek_About=nullptr;
-};
-void vek::unSourceEdit(){
-    _vek_source_esit=nullptr;
-}
+
 //切换Language
 void vek::vekLanguage(){
     QObject *object = QObject::sender();

@@ -24,7 +24,6 @@ void vekAppPanel::vek_InitTabWidgetListApp(){
     std::map<QString,SappData>::reverse_iterator its;
     m_pBox->setIconSize(icoSize);
     QString icoStr;
-    QIcon icon;
     int cTab=0;
     for(it=g_vekLocalData.map_docker_list.begin();it!=g_vekLocalData.map_docker_list.end();it++){
         vekAppListView *pListView = new vekAppListView();

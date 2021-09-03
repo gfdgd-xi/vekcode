@@ -17,7 +17,12 @@ class vekWineOption : public QWidget
     Q_OBJECT
 
 public:
-    explicit vekWineOption(QWidget *parent = nullptr);
+    vekWineOption(const QWidget)=delete;
+    vekWineOption& operator =(const QWidget&)=delete;
+    static vekWineOption& get_instance(){
+        static vekWineOption instance;
+        return instance;
+    }
     ~vekWineOption();
     void getWineGitInfo();
     void loadWineData();
@@ -30,6 +35,7 @@ private slots:
     void clicked_rightMenu(const QPoint &/*pos*/);
     void onTaskBoxContextMenuEvent();
 private:
+    vekWineOption();
     Ui::vekWineOption *ui;
     QStandardItemModel *ItemModelWine;
     //Wine线程
@@ -40,7 +46,6 @@ private:
 private slots:
     void wineVersionComoboBox();
 signals:
-    void _unInitWineOption();
     void ToThread();
 };
 

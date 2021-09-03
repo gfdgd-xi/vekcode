@@ -1,11 +1,7 @@
 QT += widgets
-#QT += concurrent
 CONFIG += c++17
 CONFIG += static
 CONFIG += release
-#DEFINES += QT_DEPRECATED_WARNINGS\
-#           QT_NO_WARNING_OUTPUT
-#           QT_NO_DEBUG_OUTPUT
 VERSION = 1.0.2.4
 DEFINES +=APP_VERSION=\\\"$$VERSION\\\"
 DEFINES += QT_MESSAGELOGCONTEXT

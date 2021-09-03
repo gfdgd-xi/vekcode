@@ -1,8 +1,6 @@
 #include "vekSourceEdit.h"
 #include "ui_common.h"
-vekSourceEdit::vekSourceEdit(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::vekSourceEdit)
+vekSourceEdit::vekSourceEdit():ui(new Ui::vekSourceEdit)
 {
     ui->setupUi(this);
     loadData();
@@ -10,8 +8,6 @@ vekSourceEdit::vekSourceEdit(QWidget *parent) :
 
 vekSourceEdit::~vekSourceEdit()
 {
-    delete ui;
-    emit _unSourveEdit();
 }
 void vekSourceEdit::loadData(){
     loadSrcDataTableView(ui->tableView_WineSrcList);

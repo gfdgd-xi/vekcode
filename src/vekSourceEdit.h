@@ -19,9 +19,15 @@ class vekSourceEdit : public QDialog
     Q_OBJECT
 
 public:
-    explicit vekSourceEdit(QWidget *parent = nullptr);
+    vekSourceEdit(const QDialog)=delete;
+    vekSourceEdit& operator =(const QDialog&)=delete;
+    static vekSourceEdit& get_instance(){
+        static vekSourceEdit instance;
+        return instance;
+    }
     ~vekSourceEdit();
 private:
+    vekSourceEdit();
     Ui::vekSourceEdit *ui;
     QStandardItemModel *tableModel=nullptr;
     void loadSrcDataTableView(QTableView* qTableView);
