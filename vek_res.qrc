@@ -18,5 +18,6 @@
         <file>res/script/stalonetray</file>
         <file>res/script/wineprc</file>
         <file>res/script/winetricks</file>
+        <file>res/script/.stalonetrayrc</file>
     </qresource>
 </RCC>

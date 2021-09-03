@@ -381,6 +381,7 @@ bool objectAppMT::InitDocker(bool _forceState){
     }
     b_disable_ass(winebuilder,CHANGETYPEDOCKER);
     b_disable_ass(winemine,CHANGETYPEDOCKER);
+    outAppIco();
     pObject::saveDockerDataToJson(*dockData,dockData->s_dockers_name);
     return true;
 }
