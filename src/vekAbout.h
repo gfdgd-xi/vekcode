@@ -11,16 +11,16 @@ class vekAbout : public QDialog
     Q_OBJECT
 
 public:
-    vekAbout(const QDialog)=delete;
-    vekAbout& operator =(const QDialog&)=delete;
-    static vekAbout& get_instance(){
+    static vekAbout& GetInstance(){
         static vekAbout instance;
-        return instance;
+       return instance;
     }
-    ~vekAbout();
     void GetVerInfo();
 private:
     vekAbout();
+    ~vekAbout();
+    vekAbout(const vekAbout& instance);
+    const vekAbout& operator =(const vekAbout& instance);
     Ui::vekAbout *ui;
     QString vekLogShow="https://gitee.com/JackLee02/vekGame/raw/master/vekLogShow.json";
 };

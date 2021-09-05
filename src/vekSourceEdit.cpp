@@ -187,5 +187,6 @@ void vekSourceEdit::objectUpdateSrc(QTableView* qTableView){
 void vekSourceEdit::slotsDone(){
       objectUpdateSrc(ui->tableView_WineSrcList);
       objectUpdateSrc(ui->tableView_GameSrcList);
+      qInfo()<<"Done Object!";
       this->close();
 }

@@ -54,7 +54,6 @@ void vekWineOption::clicked_rightMenu(const QPoint &pos)
 {
     QTableView* signalSrc = (QTableView*)sender();
     QModelIndex index = signalSrc->indexAt(pos);
-    qInfo()<<index.row();
     if(index.row()>-1){
         QMenu *pMenu=nullptr;
         QAction *pTask = nullptr;
@@ -115,7 +114,6 @@ void vekWineOption::wineVersionComoboBox(){
 }
 void vekWineOption::installWine(QString wineName)
 {
-
     if(ui->lineEdit_InstallPath->text()==nullptr){
         pObject::vekTip("请选择Wine安装路径");
         return;

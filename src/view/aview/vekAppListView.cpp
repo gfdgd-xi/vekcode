@@ -118,7 +118,7 @@ void vekAppListView::startApp(Extend_App _objTypes){
                 return;
             }
             if(!QFile(appData->s_exe).exists()){
-                pObject::vekTip(appData->s_name+"应用执行程序不存在!"+"路径:"+appData->s_exe);
+                pObject::vekTip("警告提示:"+appData->s_name+"应用执行程序不存在!\n"+"路径:"+appData->s_exe);
                 return;
             }
             objectExtend* _objectExtend=new objectExtend();

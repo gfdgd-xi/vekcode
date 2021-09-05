@@ -366,6 +366,7 @@ bool objectAppMT::InitDocker(bool _forceState){
     QDir dockPath(dockData->s_dockers_path);
     QDir dockDir(dockData->s_dockers_path+"/"+dockData->s_dockers_name);
     argsList.clear();
+    dockData->s_dockers_disable_ass=true;
     if(dockData->s_dockers_path==nullptr&&dockData->s_dockers_name==nullptr){
         return false;
     }

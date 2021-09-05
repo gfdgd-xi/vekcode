@@ -82,6 +82,11 @@ void objectVersionData::repair_Stalonetray(){
     strName=pFileName[1];
     copyFile(strName);
     repairFilePerm(QApplication::applicationDirPath()+"/vekScript/"+strName);
+    strName=".stalonetrayrc";
+    copyFile(strName);
+    strName=QApplication::applicationDirPath()+"/vekScript/.stalonetrayrc";
+    repairFilePerm(strName);
+    QFile::rename(strName,QDir::homePath()+"/.stalonetrayrc");
 }
 void objectVersionData::repair_Wineprc(){
     QString strName;

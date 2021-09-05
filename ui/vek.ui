@@ -384,6 +384,7 @@
      <string>菜单</string>
     </property>
     <addaction name="action_AddApp"/>
+    <addaction name="action_clear_ico"/>
     <addaction name="action_Exit"/>
    </widget>
    <widget class="QMenu" name="menuWine">
@@ -561,6 +562,11 @@
   <action name="action_repair_winetricks">
    <property name="text">
     <string>修复winetricks</string>
+   </property>
+  </action>
+  <action name="action_clear_ico">
+   <property name="text">
+    <string>清理软件图标</string>
    </property>
   </action>
  </widget>

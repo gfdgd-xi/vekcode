@@ -32,6 +32,7 @@ void vek::connectObject(){
     connect(ui->action_repair_stalonetray,&QAction::triggered,this,&vek::repair_Stalonetray);
     connect(ui->action_repair_wineprc,&QAction::triggered,this,&vek::repair_Wineprc);
     connect(ui->action_repair_winetricks,&QAction::triggered,this,&vek::repair_Winetricks);
+    connect(ui->action_clear_ico,&QAction::triggered,this,&vek::on_action_Clear_Ico);
     //语言切换
     //connect(ui->langChinese,&QAction::triggered,this,&vek::vekLanguage);
     //connect(ui->langEnglish,&QAction::triggered,this,&vek::vekLanguage);
@@ -42,6 +43,10 @@ void vek::connectObject(){
     loadWinetricksServerJson();
     setAppSize();
     vekStyle();
+}
+void vek::on_action_Clear_Ico(){
+    QDesktopServices::openUrl(QUrl(QDir::homePath()+"/.local/share/applications", QUrl::TolerantMode));
+    QDesktopServices::openUrl(QUrl(QDir::homePath()+"/.local/share/desktop-directories", QUrl::TolerantMode));
 }
 void vek::repair_Winetricks(){
     objectVersionData OBJ_VER;
@@ -190,7 +195,7 @@ void vek::addInitDocker(){
     ui->tabWidget->objInitDocker(INITDOCKER);
 }
 void vek::on_action_EditSource_triggered(){
-    vekSourceEdit& srcOption=vekSourceEdit::get_instance();
+    vekSourceEdit& srcOption=vekSourceEdit::GetInstance();
     srcOption.setGeometry(this->geometry());
     srcOption.setWindowFlags(Qt::WindowStaysOnTopHint);
     srcOption.show();
@@ -206,7 +211,7 @@ void vek::on_action_AddApp_triggered()
 
 void vek::on_action_About_triggered()
 {
-    vekAbout& _vekAbout=vekAbout::get_instance();
+    vekAbout& _vekAbout=vekAbout::GetInstance();
     _vekAbout.show();
     _vekAbout.GetVerInfo();
 
@@ -218,7 +223,7 @@ void vek::on_action_Exit_triggered()
 
 void vek::on_action_WineInstall_triggered()
 {
-    vekWineOption& _vekWineOption=vekWineOption::get_instance();
+    vekWineOption& _vekWineOption=vekWineOption::GetInstance();
     _vekWineOption.setGeometry(this->geometry());
     _vekWineOption.setWindowFlags(Qt::WindowStaysOnTopHint);
     _vekWineOption.getWineGitInfo();

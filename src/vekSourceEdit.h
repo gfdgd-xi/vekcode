@@ -19,15 +19,15 @@ class vekSourceEdit : public QDialog
     Q_OBJECT
 
 public:
-    vekSourceEdit(const QDialog)=delete;
-    vekSourceEdit& operator =(const QDialog&)=delete;
-    static vekSourceEdit& get_instance(){
+    static vekSourceEdit& GetInstance(){
         static vekSourceEdit instance;
         return instance;
     }
-    ~vekSourceEdit();
 private:
     vekSourceEdit();
+    ~vekSourceEdit();
+    vekSourceEdit(const vekSourceEdit& instance);
+    const vekSourceEdit& operator =(const vekSourceEdit& instance);
     Ui::vekSourceEdit *ui;
     QStandardItemModel *tableModel=nullptr;
     void loadSrcDataTableView(QTableView* qTableView);
@@ -39,6 +39,8 @@ private:
     void objectUpdateSrc(QTableView*);
     void loadData();
     void saveAllData();
+private:
+
 private slots:
     void clicked_rightMenu(const QPoint &pos);  //右键信号槽函数
     void onTaskBoxContextMenuEvent();
