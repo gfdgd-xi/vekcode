@@ -3,10 +3,18 @@
 
 #include "../../obj/common.h"
 #include "../../obj/objectJson.h"
+#include <QMetaType>
 
+typedef struct {
+    QString iconPath;
+    QString singer;
+    QString songsNb;
+} MuItemData;
 
+Q_DECLARE_METATYPE(MuItemData)
 class vekAppData:public QAbstractListModel
 {
+
     Q_OBJECT
 public:
     vekAppData(QObject *parent = NULL);

@@ -34,7 +34,7 @@
   <property name="windowTitle">
    <string>Vek</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2" rowstretch="1,26">
+  <layout class="QGridLayout" name="gridLayout_2" rowstretch="1,22">
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -383,6 +383,8 @@
     <property name="title">
      <string>菜单</string>
     </property>
+    <addaction name="action_inst_app"/>
+    <addaction name="action_add_docker"/>
     <addaction name="action_AddApp"/>
     <addaction name="action_clear_ico"/>
     <addaction name="action_Exit"/>
@@ -566,7 +568,17 @@
   </action>
   <action name="action_clear_ico">
    <property name="text">
-    <string>清理软件图标</string>
+    <string>清理图标</string>
+   </property>
+  </action>
+  <action name="action_inst_app">
+   <property name="text">
+    <string>安装应用</string>
+   </property>
+  </action>
+  <action name="action_add_docker">
+   <property name="text">
+    <string>增加容器</string>
    </property>
   </action>
  </widget>

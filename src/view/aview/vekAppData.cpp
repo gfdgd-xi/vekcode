@@ -9,7 +9,6 @@ vekAppData::~vekAppData()
 {
 
 }
-
 QVariant vekAppData::data( const QModelIndex & index, int role ) const
 {
     int pIndex=m_ItemDataVec.size();
@@ -40,7 +39,6 @@ QVariant vekAppData::data( const QModelIndex & index, int role ) const
        case Qt::SizeHintRole:
            {
                return QSize(127,100);
-
            }
        }
     }

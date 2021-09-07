@@ -2,9 +2,8 @@ QT += widgets
 CONFIG += c++17
 CONFIG += static
 CONFIG += release
-VERSION = 1.0.2.4
+VERSION = 1.0.2.5
 DEFINES +=APP_VERSION=\\\"$$VERSION\\\"
-DEFINES += QT_MESSAGELOGCONTEXT
 # You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.

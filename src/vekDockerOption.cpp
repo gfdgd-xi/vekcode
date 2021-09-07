@@ -85,7 +85,6 @@ void vekDockerOption::ICMPChanged(){
         if(b_state){
             QString dnTitle="输入授权密码";
             QString dnLabel="输入错误后果自负";
-            QString mPassword="";
             QLineEdit::EchoMode echoMode=QLineEdit::Normal;
             mPassword = QInputDialog::getText(nullptr, dnTitle,dnLabel, echoMode,mPassword, &bn_ok);
         }

@@ -61,5 +61,8 @@ private slots:
     void repair_Stalonetray();
     void repair_Winetricks();
     void repair_Wineprc();
+    void uenginInst();
+    void uengineRun();
+    void uengineInstApp();
 };
 #endif // VEK_H

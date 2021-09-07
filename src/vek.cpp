@@ -21,18 +21,29 @@ void vek::connectObject(){
     connect(ui->pushButton_initDocker,&QPushButton::clicked,this,&vek::addInitDocker);
     connect(ui->pushButton_ServerTest,&QPushButton::clicked,this,&vek::wServerTest);
     connect(ui->pushButton_SetHosts,&QPushButton::clicked,this,&vek::wSetHosts);
-    connect(ui->comboBox_wServer,&QComboBox::currentTextChanged,this,&vek::wCurrentUrl);
+    connect(ui->action_clear_ico,&QAction::triggered,this,&vek::on_action_Clear_Ico);
+    connect(ui->action_inst_app,&QAction::triggered,this,&vek::installApp);
+    connect(ui->action_add_docker,&QAction::triggered,this,&vek::addInitDocker);
+
     //默认样式
     connect(ui->styleDefault,&QAction::triggered,this,&vek::vekStyle);
     connect(ui->styleDark,&QAction::triggered,this,&vek::vekStyle);
     connect(ui->styleLight,&QAction::triggered,this,&vek::vekStyle);
+    //
     connect(ui->action_SHA256,&QAction::triggered,this,&vek::hFileHash);
+    //
     connect(ui->action_West,&QAction::triggered,this,&vek::changeQTabWidgetStyleNorth);
     connect(ui->action_North,&QAction::triggered,this,&vek::changeQTabWidgetStyleWest);
+    //
     connect(ui->action_repair_stalonetray,&QAction::triggered,this,&vek::repair_Stalonetray);
     connect(ui->action_repair_wineprc,&QAction::triggered,this,&vek::repair_Wineprc);
     connect(ui->action_repair_winetricks,&QAction::triggered,this,&vek::repair_Winetricks);
-    connect(ui->action_clear_ico,&QAction::triggered,this,&vek::on_action_Clear_Ico);
+    //
+    connect(ui->comboBox_wServer,&QComboBox::currentTextChanged,this,&vek::wCurrentUrl);
+    //
+    //connect(ui->action_Inst_UEngine,&QAction::triggered,this,&vek::uenginInst);
+    //connect(ui->action_Run_UEngine,&QAction::triggered,this,&vek::uengineRun);
+    //connect(ui->action_InstApp_UEngine,&QAction::triggered,this,&vek::uengineInstApp);
     //语言切换
     //connect(ui->langChinese,&QAction::triggered,this,&vek::vekLanguage);
     //connect(ui->langEnglish,&QAction::triggered,this,&vek::vekLanguage);
@@ -43,6 +54,27 @@ void vek::connectObject(){
     loadWinetricksServerJson();
     setAppSize();
     vekStyle();
+}
+void vek::uenginInst(){
+    bool b_state=pObject::vekMesg("提示:安装UEngine需要管理员权限");
+    bool bn_ok=false;
+    QString mPassword;
+    if(b_state){
+        QString dnTitle="输入授权密码";
+        QString dnLabel="输入错误后果自负";
+        QLineEdit::EchoMode echoMode=QLineEdit::Normal;
+        mPassword = QInputDialog::getText(nullptr, dnTitle,dnLabel, echoMode,mPassword, &bn_ok);
+    }
+    if(b_state&bn_ok){
+        qInfo()<<mPassword;
+        system(("echo "+mPassword+" | sudo -S apt install -f -y uengine").toLocal8Bit());
+    }
+}
+void vek::uengineRun(){
+    system("uengine launch --package=org.anbox.appmgr --component=org.anbox.appmgr.AppViewActivity");
+}
+void vek::uengineInstApp(){
+
 }
 void vek::on_action_Clear_Ico(){
     QDesktopServices::openUrl(QUrl(QDir::homePath()+"/.local/share/applications", QUrl::TolerantMode));
