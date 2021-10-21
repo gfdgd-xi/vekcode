@@ -462,10 +462,21 @@
     <addaction name="action_repair_wineprc"/>
     <addaction name="action_repair_winetricks"/>
    </widget>
+   <widget class="QMenu" name="menuUEngine">
+    <property name="title">
+     <string>UEngine</string>
+    </property>
+    <addaction name="action_Inst_UEngine"/>
+    <addaction name="action_Run_UEngine"/>
+    <addaction name="action_InstApp_UEngine"/>
+    <addaction name="action_UnInst_UEngine"/>
+    <addaction name="action_UEngine_deepin"/>
+   </widget>
    <addaction name="menu"/>
    <addaction name="menuWine"/>
    <addaction name="menu_3"/>
    <addaction name="menu_7"/>
+   <addaction name="menuUEngine"/>
    <addaction name="menu_4"/>
    <addaction name="menu_2"/>
   </widget>
@@ -579,6 +590,31 @@
   <action name="action_add_docker">
    <property name="text">
     <string>增加容器</string>
+   </property>
+  </action>
+  <action name="action_Inst_UEngine">
+   <property name="text">
+    <string>安装UEngine</string>
+   </property>
+  </action>
+  <action name="action_Run_UEngine">
+   <property name="text">
+    <string>启动UEngine</string>
+   </property>
+  </action>
+  <action name="action_InstApp_UEngine">
+   <property name="text">
+    <string>安装APK To UEngine</string>
+   </property>
+  </action>
+  <action name="action_UnInst_UEngine">
+   <property name="text">
+    <string>卸载UEngine</string>
+   </property>
+  </action>
+  <action name="action_UEngine_deepin">
+   <property name="text">
+    <string>警告:该UEngine仅限于deepin系统其他系统未知</string>
    </property>
   </action>
  </widget>

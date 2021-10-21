@@ -64,5 +64,6 @@ private slots:
     void uenginInst();
     void uengineRun();
     void uengineInstApp();
+    void uengineUnInst();
 };
 #endif // VEK_H

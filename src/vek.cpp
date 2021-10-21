@@ -41,9 +41,11 @@ void vek::connectObject(){
     //
     connect(ui->comboBox_wServer,&QComboBox::currentTextChanged,this,&vek::wCurrentUrl);
     //
-    //connect(ui->action_Inst_UEngine,&QAction::triggered,this,&vek::uenginInst);
-    //connect(ui->action_Run_UEngine,&QAction::triggered,this,&vek::uengineRun);
-    //connect(ui->action_InstApp_UEngine,&QAction::triggered,this,&vek::uengineInstApp);
+    connect(ui->action_Inst_UEngine,&QAction::triggered,this,&vek::uenginInst);
+    connect(ui->action_Run_UEngine,&QAction::triggered,this,&vek::uengineRun);
+    connect(ui->action_InstApp_UEngine,&QAction::triggered,this,&vek::uengineInstApp);
+    connect(ui->action_UnInst_UEngine,&QAction::triggered,this,&vek::uengineUnInst);
+
     //语言切换
     //connect(ui->langChinese,&QAction::triggered,this,&vek::vekLanguage);
     //connect(ui->langEnglish,&QAction::triggered,this,&vek::vekLanguage);
@@ -68,13 +70,37 @@ void vek::uenginInst(){
     if(b_state&bn_ok){
         qInfo()<<mPassword;
         system(("echo "+mPassword+" | sudo -S apt install -f -y uengine").toLocal8Bit());
-    }
+        pObject::vekTip("安装成功!");
+    }   
 }
 void vek::uengineRun(){
     system("uengine launch --package=org.anbox.appmgr --component=org.anbox.appmgr.AppViewActivity");
 }
 void vek::uengineInstApp(){
-
+    QWidget *qwidget = new QWidget();
+    QString exePath=QFileDialog::getOpenFileName(qwidget,"选择要安装的APK程序","","apk Files(*.apk)");
+    if(exePath!=nullptr){
+       system(("uengine install --apk="+exePath).toLocal8Bit());
+    }
+    pObject::vekTip("安装成功!");
+}
+void vek::uengineUnInst(){
+    QDir dir("/data/uengine");
+    if(dir.exists()){
+        bool bn_ok=false;
+        QString mPassword;
+        QString dnTitle="输入授权密码";
+        QString dnLabel="输入错误后果自负";
+        QLineEdit::EchoMode echoMode=QLineEdit::Normal;
+        mPassword = QInputDialog::getText(nullptr, dnTitle,dnLabel, echoMode,mPassword, &bn_ok);
+        if(mPassword!=nullptr&bn_ok){
+            system(("echo "+mPassword+" | sudo -S apt --purge remove -f -y uengine").toLocal8Bit());
+            system(("echo "+mPassword+" | sudo -S rm -rf "+dir.path()).toLocal8Bit());
+            pObject::vekTip("卸载成功!");
+        }
+    }else{
+        pObject::vekTip("未安装Uengine!");
+    }
 }
 void vek::on_action_Clear_Ico(){
     QDesktopServices::openUrl(QUrl(QDir::homePath()+"/.local/share/applications", QUrl::TolerantMode));
