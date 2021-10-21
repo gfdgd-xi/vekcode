@@ -81,8 +81,8 @@ void vek::uengineInstApp(){
     QString exePath=QFileDialog::getOpenFileName(qwidget,"选择要安装的APK程序","","apk Files(*.apk)");
     if(exePath!=nullptr){
        system(("uengine install --apk="+exePath).toLocal8Bit());
-    }
-    pObject::vekTip("安装成功!");
+       pObject::vekTip("安装成功!");
+    }    
 }
 void vek::uengineUnInst(){
     QDir dir("/data/uengine");
