@@ -27,7 +27,8 @@ void objectExtend::executeDockerEnv(){
     qputenv("WINE", (startArgs).toStdString().c_str());
     qputenv("WINEPREFIX", (dockData.s_dockers_path+"/"+dockData.s_dockers_name).toStdString().c_str());
     qputenv("WINEARCH", dockData.s_dockers_bit_version.toStdString().c_str());
-    qputenv("WINETRICKS_DOWNLOADER", "aria2c");
+    qputenv("WINETRICKS_DOWNLOADER", dockData.s_dockers_download_engine.toStdString().c_str());
+    qInfo()<<dockData.s_dockers_download_engine;
     if(exType==EX_APP){
         if(appData.s_work_path!=nullptr){
             //设置工作目录

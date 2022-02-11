@@ -55,6 +55,7 @@ private slots:
     void wServerTest();
     void wSetHosts();
     void wCurrentUrl();
+    void wCurrentEngine();
     void hFileHash();
     void changeQTabWidgetStyleWest();
     void changeQTabWidgetStyleNorth();

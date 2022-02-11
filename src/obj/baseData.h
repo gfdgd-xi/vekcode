@@ -100,6 +100,7 @@ typedef struct{
     QString s_dockers_system_version="win7";
     QString s_dockers_wine_exe_version="wine";
     QString s_dockers_bit_version="win32";
+    QString s_dockers_download_engine="wget";
     bool s_dockers_mono_state=false;
     bool s_dockers_gecko_state=false;
     bool s_dockers_task_log=false;

@@ -132,7 +132,8 @@ void vekAppPanel::DockerObject(){
         }
         break;
     }
-    _objectExtend->setDockOptionObjectData(pObject::getDockerData(m_pBox->tabText(m_pBox->currentIndex())),nullptr,_codeAgrs,exArgs,exType);
+    auto tempdock=pObject::getDockerData(m_pBox->tabText(m_pBox->currentIndex()));
+    _objectExtend->setDockOptionObjectData(tempdock,nullptr,_codeAgrs,exArgs,exType);
     _objectExtend->start();
 }
 std::vector<QStringList> vekAppPanel::vekWinetricks_cArgs(){

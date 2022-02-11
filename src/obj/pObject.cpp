@@ -48,12 +48,7 @@ void pObject::deleteWineDataToJson(QString wineName){
 SdockerData pObject::getDockerData(QString dockName){
     SdockerData tempDockData={};
     if(!g_vekLocalData.map_docker_list.empty()){
-        for(auto a:g_vekLocalData.map_docker_list){
-            if(a.first==dockName){
-                tempDockData=a.second;
-                break;
-            }
-        }
+        tempDockData=g_vekLocalData.map_docker_list[dockName];
     }
     return tempDockData;
 }

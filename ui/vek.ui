@@ -97,7 +97,7 @@
         <property name="lineWidth">
          <number>1</number>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="5,5,5,5,5,5,5">
+        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="5,5,5,5,5,5,5,5">
          <property name="spacing">
           <number>1</number>
          </property>
@@ -204,6 +204,46 @@
            </layout>
            <zorder>comboBox_wServer</zorder>
            <zorder>label</zorder>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="fram_dEngine">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="labelEngine">
+              <property name="text">
+               <string>winetricks下载引擎</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBox_dEngine"/>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>

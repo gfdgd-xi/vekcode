@@ -1,6 +1,7 @@
 ﻿#include "vek.h"
 #include "ui_common.h"
 #include <QCryptographicHash>
+#include <QStringList>
 vek::vek(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::vek)
@@ -40,6 +41,7 @@ void vek::connectObject(){
     connect(ui->action_repair_winetricks,&QAction::triggered,this,&vek::repair_Winetricks);
     //
     connect(ui->comboBox_wServer,&QComboBox::currentTextChanged,this,&vek::wCurrentUrl);
+    connect(ui->comboBox_dEngine,&QComboBox::currentTextChanged,this,&vek::wCurrentEngine);
     //
     connect(ui->action_Inst_UEngine,&QAction::triggered,this,&vek::uenginInst);
     connect(ui->action_Run_UEngine,&QAction::triggered,this,&vek::uengineRun);
@@ -57,8 +59,16 @@ void vek::connectObject(){
     setAppSize();
     vekStyle();
 }
+void vek::wCurrentEngine(){
+   if(ui->tabWidget->m_pBox->count()>0){
+       QString dName=ui->tabWidget->m_pBox->tabText(ui->tabWidget->m_pBox->currentIndex());
+       if(!g_vekLocalData.map_docker_list.empty()){
+           g_vekLocalData.map_docker_list[dName].s_dockers_download_engine=ui->comboBox_dEngine->currentText();
+       }
+   }
+}
 void vek::uenginInst(){
-    bool b_state=pObject::vekMesg("提示:安装UEngine需要管理员权限");
+    bool b_state=pObject::vekMesg("提示:安装UEngine需要管理员权限,该功能仅限于deepin系统");
     bool bn_ok=false;
     QString mPassword;
     if(b_state){
@@ -164,9 +174,11 @@ void vek::loadWinetricksServerJson(){
 bool vek::getWinetricksServerJson(){
     objectGetCurl* _vekgetcurl=new objectGetCurl;
     string verInfoStr=_vekgetcurl->vekGetData(vek_winetricks_server.toStdString());
+    QStringList engineStr;
+    engineStr<<"wget"<<"aria2c"<<"curl";
+    ui->comboBox_dEngine->addItems(engineStr);
     try {
         if(verInfoStr!="error"){
-
             json jx=json::parse(verInfoStr);
             for(auto [x,y]:jx.items()){
                 winetricks_server_url_list.insert(pair<QString, QString> (QString::fromStdString(x), QString::fromStdString(y)));

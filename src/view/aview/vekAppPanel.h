@@ -28,8 +28,9 @@ public slots:
     void objectRunApp();
     void objInitDocker(INITTYPE);
     void changeQTwidgetStyle(QTabWidget::TabPosition);
-private:
+public:
     QTabWidget *m_pBox;
+private:    
     vekAppOption* vek_app_add=nullptr;
     vekAppAddModel* vek_app_add_model=nullptr;
     vekAppAutoOption* vek_app_add_auto=nullptr;

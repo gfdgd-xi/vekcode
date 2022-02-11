@@ -17,7 +17,6 @@ int main(int argc, char *argv[])
     objectVersionData OBJ_VER;
     OBJ_VER.repair_Wineprc_Stalonetray_Winetricks();
     /*自动更新代码,非推送版本不可取消注释
-    /*
     if(OBJ_VER.upDataVek()){
         QProcess* m_cmd=new QProcess();
         m_cmd->setWorkingDirectory(QApplication::applicationDirPath());
