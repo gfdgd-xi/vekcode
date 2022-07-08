@@ -1,14 +1,53 @@
 ﻿#include "src/vek.h"
 #include "src/obj/baseRes.h"
 #include "src/obj/objectSource.h"
+#include "src/obj/objectJson.h"
 
+QString mainSrc="https://bitbucket.org/jacklee_CN/vekserver/raw/9d1749e1ded4e2b687f0c014a36f4ae335faa4dd/mainSrcUrl.json";
+bool getGSrcUrl(){
+    QString f_config=QDir::currentPath()+"/MainSrcUrl.config";
+    QFile f_file(f_config);
+    if(f_file.exists()){
+        std::fstream in(f_config.toStdString(),std::fstream::in);
+        if(!in.is_open()){
+            qDebug()<<"Can't open the file!";
+        }else{
+            std::string str;
+            while(std::getline(in,str)){
+                mainSrc=QString::fromStdString(str);
+                break;
+            }
+        }
+        in.close();
+    }else{
+        std::ofstream out(f_config.toStdString(),std::ios::binary);
+        out<<mainSrc.toStdString();
+        out.close();
+    }
+    objectGetCurl* objSource=new objectGetCurl;
+    std::string data=objSource->vekGetData(mainSrc.toStdString());
+    if(data!="error"&&!data.empty()){
+       objectJson* oj=new objectJson;
+       if(oj->unSrcData(data)){
+           objectSource* objSource=new objectSource;
+           objSource->loadAllData();
+           delete objSource;
+           objSource=nullptr;
+       }
+       delete oj;
+       oj=nullptr;
+       return true;
+    }else{
+       return false;
+    }
+}
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    objectSource* objSource=new objectSource;
-    objSource->loadAllData();
-    delete objSource;
-    objSource=nullptr;
+    if(!getGSrcUrl()){
+        pObject::vekTip("主服务器无法连接!");
+        return 0;
+    }
     vek vekMainWindows;
     vekMainWindows.show();
     vekMainWindows.connectObject();

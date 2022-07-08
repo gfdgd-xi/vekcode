@@ -21,7 +21,7 @@ public:
     void repair_Wineprc();
     void repair_Winetricks();
 private:
-    QString vekUpInfo="https://gitee.com/JackLee02/vekGame/raw/master/vekUpdateInfo.json";
+    QString vekUpInfo="https://bitbucket.org/jacklee_CN/vekserver/raw/f446b578a52c64aa0ca26bfe1dfe11cc4976a14c/vekUpdateInfo.json";
     bool getVersionStr();
     bool unVersionData(string vData);
     void copyFile(QString);

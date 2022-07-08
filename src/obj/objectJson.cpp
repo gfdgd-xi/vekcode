@@ -368,7 +368,41 @@ bool objectJson::unDataSerializeLocalData(){
     }
 
 }
-
+bool objectJson::unSrcData(std::string tData){
+    json j3=json::parse(tData);
+    if(j3==nullptr){
+        return false;
+    }
+    for (auto& [k, v] : j3.items()){
+        if(k=="wineUrl"){
+            g_srcUrl.SrcWineUrl=QString::fromStdString(v);
+        }
+        if(k=="appJsonUrl"){
+            g_srcUrl.SrcAppUrl=QString::fromStdString(v);
+        }
+        if(k=="winetrickUrl"){
+            g_srcUrl.SrcWinetrickServerUrl=QString::fromStdString(v);
+        }
+        if(k=="upLogs"){
+            g_srcUrl.SrcUpLogs=QString::fromStdString(v);
+        }
+        if(k=="logShow"){
+            g_srcUrl.SrcLogShow=QString::fromStdString(v);
+        }
+        if(k=="updateInfo"){
+            g_srcUrl.SrcUpInfo=QString::fromStdString(v);
+        }
+    }
+    if(g_srcUrl.SrcAppUrl!=nullptr&&
+            g_srcUrl.SrcUpInfo!=nullptr&&
+            g_srcUrl.SrcUpLogs!=nullptr&&
+            g_srcUrl.SrcLogShow!=nullptr&&
+            g_srcUrl.SrcWineUrl!=nullptr&&
+            g_srcUrl.SrcWinetrickServerUrl!=nullptr){
+        return true;
+    }
+    return false;
+}
 //脚本反序列化
 SappDeployData* objectJson::unDataSerializeScriptData(SappDeployData* _baseAutoSetJson,const QString autoJsonData){
     try {

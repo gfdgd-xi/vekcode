@@ -173,9 +173,10 @@ void vek::loadWinetricksServerJson(){
 }
 bool vek::getWinetricksServerJson(){
     objectGetCurl* _vekgetcurl=new objectGetCurl;
-    string verInfoStr=_vekgetcurl->vekGetData(vek_winetricks_server.toStdString());
+    string verInfoStr=_vekgetcurl->vekGetData(g_srcUrl.SrcWinetrickServerUrl.toStdString());
     QStringList engineStr;
     engineStr<<"wget"<<"aria2c"<<"curl";
+
     ui->comboBox_dEngine->addItems(engineStr);
     try {
         if(verInfoStr!="error"){

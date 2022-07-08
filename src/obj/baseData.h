@@ -204,7 +204,17 @@ typedef struct{
      Extend_Server ex_Server;
 }ExtendArgs;
 
+typedef struct{
+    QString SrcWineUrl;
+    QString SrcAppUrl;
+    QString SrcWinetrickServerUrl;
+    QString SrcUpLogs;
+    QString SrcLogShow;
+    QString SrcUpInfo;
+}GSrcUrl;
+
 extern SlocalGloablData g_vekLocalData;
+extern GSrcUrl g_srcUrl;
 extern std::map<QString,QString> winetricks_server_url_list;
 extern QString sWinetrickUrl;
 extern std::map<QString,std::map<QString,QString>> fontRes;

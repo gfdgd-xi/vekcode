@@ -14,7 +14,7 @@ class objectJson
 {
 public:
     objectJson();
-    ~objectJson();
+    ~objectJson();   
     void updateWineNodeData(SwineData);
     void updateDockerNodeData(SdockerData dockData,QString dockName);
     void deleteDockerNodeData(QString dockName);
@@ -23,6 +23,7 @@ public:
     void updateAppNodeData(SdockerData,SappData);
     void deleteWineNodeData(QString nwineName);
     bool unDataSerializeLocalData();
+    bool unSrcData(std::string tData);
     bool unSerializeLocalWineApp(QString,QString urlData,UNJSONTYPE jsonType);
     void WriteLocalData();
     bool RemoteWineGitInfo(string info);

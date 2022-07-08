@@ -1,11 +1,7 @@
 ﻿#include "objectGitWine.h"
 
-
-objectGitWine *objectGitWine::objGitWine = nullptr;
-
 objectGitWine::objectGitWine(SwineData wineData)
 {
-    objGitWine=this;
     wData={};
     wData=wineData;
     connect(this,SIGNAL(SigDeliverMessStatic(string)),this,SLOT(SlotDeliverMessStatic(string)));
@@ -33,9 +29,11 @@ void objectGitWine::output_progress(progress_data *pd)
             "   idx:   "+std::to_string(index_percent)+"%"+"("+std::to_string(pd->fetch_progress.indexed_objects)+"/"+std::to_string(pd->fetch_progress.total_objects)+")"+
             "   chk:   "+std::to_string(checkout_percent)+"%"+"("+std::to_string(pd->completed_steps)+"/"+std::to_string(pd->total_steps)+")"+
             "   Resolving deltas:   "+"("+std::to_string(pd->fetch_progress.indexed_deltas)+"/"+std::to_string(pd->fetch_progress.total_deltas)+")";
-    emit objGitWine->SigDeliverMessStatic(prlog);
+    auto dc=(objectGitWine*)pd->gw;
+    emit dc->SigDeliverMessStatic(prlog);
+    QThread::msleep(200);
 }
-int i=0;
+
 void objectGitWine::SlotDeliverMessStatic(string str_log)
 {
     emit toPrgStr(QString::fromStdString(str_log));
@@ -46,7 +44,7 @@ int objectGitWine::sideband_progress(const char *str, int len, void *payload)
 {
     (void)payload; /* unused */
     string prlog="remote:"+std::to_string(len)+str;
-    emit objGitWine->SigDeliverMessStatic(prlog);
+    std::cout<<prlog<<endl;
     fflush(stdout);
     return 0;
 }
@@ -76,12 +74,18 @@ int objectGitWine::ssl_cert(git_cert *cert, int valid, const char *host, void *p
     GIT_UNUSED(payload);
     return 1;
 }
-
 void objectGitWine::downWine(){
     emit toPrgStr("Init Repo");
     if(!git_libgit2_init())
         return;
     progress_data pd;
+    pd.gw=this;
+    QByteArray b2,b3;
+    b2.append(wData.s_local_wine_path);
+    const char *path = b2.data();
+    b3.append(wData.s_local_wine_url);
+    const char *url = b3.data();
+    qInfo()<<url;
     //初始化git_repository
     git_repository *cloned_repo=nullptr;
     git_clone_options clone_opts = GIT_CLONE_OPTIONS_INIT;
@@ -94,11 +98,9 @@ void objectGitWine::downWine(){
     clone_opts.fetch_opts.callbacks.transfer_progress = &fetch_progress;
     clone_opts.fetch_opts.callbacks.certificate_check = ssl_cert;
     clone_opts.fetch_opts.callbacks.payload = &pd;
-    QByteArray b2,b3;
-    b2.append(wData.s_local_wine_path);
-    const char *path = b2.data();
-    b3.append(wData.s_local_wine_url);
-    const char *url = b3.data();
+    clone_opts.bare=0;
+    clone_opts.checkout_branch="master";
+    clone_opts.version=1;
     emit toPrgStr("clone:"+wData.s_local_wine_name);
     git_clone(&cloned_repo, url, path, &clone_opts);
     git_repository_free(cloned_repo);
@@ -115,7 +117,6 @@ void objectGitWine::gitWine(){
             dir.removeRecursively();
         }
         downWine();
-        dir.mkdir(wData.s_local_wine_path+"/plugs");
         objectJson* _objectJson=new objectJson() ;
         _objectJson->updateWineNodeData(wData);
         emit toPrgStr("wine安装完毕!");

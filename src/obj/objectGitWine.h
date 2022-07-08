@@ -7,11 +7,13 @@
 #include "objectGetCurl.h"
 #include <QTextEdit>
 #include <QMetaObject>
+
 typedef struct progress_data {
     git_indexer_progress fetch_progress;
     size_t completed_steps;
     size_t total_steps;
     const char *path;
+    void* gw;
 } progress_data;
 
 class objectGitWine : public QObject
@@ -25,7 +27,6 @@ private slots:
 private:
     SwineData wData;
     QTextEdit* qTextEdit;
-    static objectGitWine *objGitWine;
     void downWine();
     static void output_progress(progress_data* pd);
     static void checkout_progress(const char *path, size_t cur, size_t tot, void *payload);

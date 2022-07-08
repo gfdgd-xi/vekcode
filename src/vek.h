@@ -34,7 +34,6 @@ private:
     //vekAbout* _vek_About=nullptr;
     vekPackage* _vek_Package=nullptr;
     objectTray* objTray=nullptr;
-    QString vek_winetricks_server="https://gitee.com/JackLee02/vekGame/raw/master/vekWinetricksServer.json";
     bool getWinetricksServerJson();
     void loadWinetricksServerJson();
 public slots:
