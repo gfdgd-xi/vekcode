@@ -8,6 +8,7 @@ objectSource::~objectSource()
 {
 
 }
+//获取数据
 string objectSource::GetReData(QString url){
     objectGetCurl* _vekgetcurl=new objectGetCurl();
     string sdata=_vekgetcurl->vekGetData(url.toStdString());
@@ -15,6 +16,7 @@ string objectSource::GetReData(QString url){
     _vekgetcurl=nullptr;
     return sdata;
 }
+//更新源数据
 void objectSource::updateSrcDataObject(){
     objectJson _objectJson;
     for(auto &[d,k]:g_vekLocalData.map_wine_src_list){
@@ -33,7 +35,18 @@ void objectSource::updateSrcDataObject(){
             pObject::vekError("更新软件源数据失败");
         }
     }
+    //更新和获取winetricksServer数据
+    std::string swdata=GetReData(g_srcUrl.SrcWinetrickServerUrl);
+    if(swdata!="error"){
+        json jx=json::parse(swdata);
+        for(auto [x,y]:jx.items()){
+            winetricks_server_url_list.insert(pair<QString, QString> (QString::fromStdString(x), QString::fromStdString(y)));
+        }
+    }else{
+        pObject::vekError("获取winetricks上游服务器列表失败,winetricks将以默认服务器为你提供下载服务");
+    }
 }
+//加载所有数据
 void objectSource::loadAllData(){
     QString jsonPath=QApplication::applicationDirPath()+"/data.json";
     objectJson _objectJson;

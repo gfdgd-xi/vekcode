@@ -36,6 +36,7 @@ private:
     objectTray* objTray=nullptr;
     bool getWinetricksServerJson();
     void loadWinetricksServerJson();
+    void loadWinetricksDownloadEngineType();
 public slots:
     void setProcRow(int);
     void on_action_About_triggered();

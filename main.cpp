@@ -2,8 +2,10 @@
 #include "src/obj/baseRes.h"
 #include "src/obj/objectSource.h"
 #include "src/obj/objectJson.h"
-//
+
+//默认主服务器，MainSrcUrl.config文件不存在则使用
 QString mainSrc="https://codeberg.org/jacklee_cn/vekserver/raw/branch/master/mainSrcUrl.json";
+
 bool getGSrcUrl(){
     QString f_config=QDir::currentPath()+"/MainSrcUrl.config";
     QFile f_file(f_config);
@@ -45,7 +47,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     if(!getGSrcUrl()){
-        pObject::vekTip("主服务器无法连接!");
+        pObject::vekTip("主服务器无法连接!如果多次无法连接请检查网络，或者如果您有自己的主服务器请修改MainSrcUrl.config文件地址为自己的服务仓库");
         return 0;
     }
     vek vekMainWindows;

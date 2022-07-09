@@ -55,6 +55,7 @@ void vek::connectObject(){
     QString vStr="Vek-";
     vStr.append(APP_VERSION);
     this->setWindowTitle(vStr);
+    loadWinetricksDownloadEngineType();
     loadWinetricksServerJson();
     setAppSize();
     vekStyle();
@@ -160,43 +161,28 @@ void vek::hFileHash()
         }
     }
 }
+void vek::loadWinetricksDownloadEngineType(){
+    QStringList engineStr;
+    engineStr<<"wget"<<"aria2c"<<"curl";
+    ui->comboBox_dEngine->addItems(engineStr);
+}
 void vek::loadWinetricksServerJson(){
-    if(!getWinetricksServerJson()){
-        pObject::vekTip("获取winetricks上游服务器列表失败,winetricks将以默认服务器为你提供下载服务!");
+    if(winetricks_server_url_list.empty()){
+        ui->comboBox_wServer->setEnabled(false);
         ui->pushButton_ServerTest->setEnabled(false);
         ui->pushButton_SetHosts->setEnabled(false);
         ui->comboBox_wServer->setEnabled(false);
     }else{
+        QStringList sList;
+        for(const auto &name:winetricks_server_url_list){
+            qInfo()<<name.first;
+            sList<<name.first;
+        }
+        if(!sList.empty()){
+            ui->comboBox_wServer->addItems(sList);
+        }
         wCurrentUrl();
     }
-
-}
-bool vek::getWinetricksServerJson(){
-    objectGetCurl* _vekgetcurl=new objectGetCurl;
-    string verInfoStr=_vekgetcurl->vekGetData(g_srcUrl.SrcWinetrickServerUrl.toStdString());
-    QStringList engineStr;
-    engineStr<<"wget"<<"aria2c"<<"curl";
-
-    ui->comboBox_dEngine->addItems(engineStr);
-    try {
-        if(verInfoStr!="error"){
-            json jx=json::parse(verInfoStr);
-            for(auto [x,y]:jx.items()){
-                winetricks_server_url_list.insert(pair<QString, QString> (QString::fromStdString(x), QString::fromStdString(y)));
-            }
-            QStringList sList;
-            for(const auto &name:winetricks_server_url_list){
-                qInfo()<<name.first;
-                sList<<name.first;
-            }
-            ui->comboBox_wServer->addItems(sList);
-        }else{
-            return false;
-        }
-    }  catch (...) {
-        return false;
-    }
-    return true;
 }
 void vek::wCurrentUrl(){
     sWinetrickUrl=winetricks_server_url_list[ui->comboBox_wServer->currentText()];
