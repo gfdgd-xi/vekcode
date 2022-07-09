@@ -1,10 +1,10 @@
-prefix="/home/jacklee/libgit2build"
-libdir="/home/jacklee/libgit2build/lib"
-includedir="/home/jacklee/libgit2build/include"
+prefix="/home/jacklee/libgit2"
+libdir="/home/jacklee/libgit2/lib"
+includedir="/home/jacklee/libgit2/include"
 
 Name: libgit2
 Description: The git library, take 2
-Version: 1.0.0
+Version: 1.5.0
 Libs: -L${libdir} -lgit2
 Libs.private: -lrt -lpthread
 Requires.private: openssl libpcre zlib

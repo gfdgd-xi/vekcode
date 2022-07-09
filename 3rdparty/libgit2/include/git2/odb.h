@@ -22,6 +22,17 @@
  */
 GIT_BEGIN_DECL
 
+/** Flags controlling the behavior of ODB lookup operations */
+typedef enum {
+	/**
+	 * Don't call `git_odb_refresh` if the lookup fails. Useful when doing
+	 * a batch of lookup operations for objects that may legitimately not
+	 * exist. When using this flag, you may wish to manually call
+	 * `git_odb_refresh` before processing a batch of objects.
+	 */
+	GIT_ODB_LOOKUP_NO_REFRESH = (1 << 0)
+} git_odb_lookup_flags_t;
+
 /**
  * Function type for callbacks from git_odb_foreach.
  */
@@ -70,7 +81,7 @@ GIT_EXTERN(int) git_odb_open(git_odb **out, const char *objects_dir);
  *
  * @param odb database to add the backend to
  * @param path path to the objects folder for the alternate
- * @return 0 on success; error code otherwise
+ * @return 0 on success, error code otherwise
  */
 GIT_EXTERN(int) git_odb_add_disk_alternate(git_odb *odb, const char *path);
 
@@ -94,9 +105,8 @@ GIT_EXTERN(void) git_odb_free(git_odb *db);
  * @param out pointer where to store the read object
  * @param db database to search for the object in.
  * @param id identity of the object to read.
- * @return
- * - 0 if the object was read;
- * - GIT_ENOTFOUND if the object is not in the database.
+ * @return 0 if the object was read, GIT_ENOTFOUND if the object is
+ *         not in the database.
  */
 GIT_EXTERN(int) git_odb_read(git_odb_object **out, git_odb *db, const git_oid *id);
 
@@ -122,10 +132,9 @@ GIT_EXTERN(int) git_odb_read(git_odb_object **out, git_odb *db, const git_oid *i
  * @param db database to search for the object in.
  * @param short_id a prefix of the id of the object to read.
  * @param len the length of the prefix
- * @return
- * - 0 if the object was read;
- * - GIT_ENOTFOUND if the object is not in the database.
- * - GIT_EAMBIGUOUS if the prefix is ambiguous (several objects match the prefix)
+ * @return 0 if the object was read, GIT_ENOTFOUND if the object is not in the
+ *         database. GIT_EAMBIGUOUS if the prefix is ambiguous
+ *         (several objects match the prefix)
  */
 GIT_EXTERN(int) git_odb_read_prefix(git_odb_object **out, git_odb *db, const git_oid *short_id, size_t len);
 
@@ -143,9 +152,8 @@ GIT_EXTERN(int) git_odb_read_prefix(git_odb_object **out, git_odb *db, const git
  * @param type_out pointer where to store the type
  * @param db database to search for the object in.
  * @param id identity of the object to read.
- * @return
- * - 0 if the object was read;
- * - GIT_ENOTFOUND if the object is not in the database.
+ * @return 0 if the object was read, GIT_ENOTFOUND if the object is not
+ *         in the database.
  */
 GIT_EXTERN(int) git_odb_read_header(size_t *len_out, git_object_t *type_out, git_odb *db, const git_oid *id);
 
@@ -154,11 +162,20 @@ GIT_EXTERN(int) git_odb_read_header(size_t *len_out, git_object_t *type_out, git
  *
  * @param db database to be searched for the given object.
  * @param id the object to search for.
- * @return
- * - 1, if the object was found
- * - 0, otherwise
+ * @return 1 if the object was found, 0 otherwise
  */
 GIT_EXTERN(int) git_odb_exists(git_odb *db, const git_oid *id);
+
+/**
+ * Determine if the given object can be found in the object database, with
+ * extended options.
+ *
+ * @param db database to be searched for the given object.
+ * @param id the object to search for.
+ * @param flags flags affecting the lookup (see `git_odb_lookup_flags_t`)
+ * @return 1 if the object was found, 0 otherwise
+ */
+GIT_EXTERN(int) git_odb_exists_ext(git_odb *db, const git_oid *id, unsigned int flags);
 
 /**
  * Determine if an object can be found in the object database by an
@@ -197,12 +214,13 @@ typedef struct git_odb_expand_id {
 
 /**
  * Determine if one or more objects can be found in the object database
- * by their abbreviated object ID and type.  The given array will be
- * updated in place:  for each abbreviated ID that is unique in the
- * database, and of the given type (if specified), the full object ID,
- * object ID length (`GIT_OID_HEXSZ`) and type will be written back to
- * the array.  For IDs that are not found (or are ambiguous), the
- * array entry will be zeroed.
+ * by their abbreviated object ID and type.
+ *
+ * The given array will be updated in place: for each abbreviated ID that is
+ * unique in the database, and of the given type (if specified),
+ * the full object ID, object ID length (`GIT_OID_HEXSZ`) and type will be
+ * written back to the array. For IDs that are not found (or are ambiguous),
+ * the array entry will be zeroed.
  *
  * Note that since this function operates on multiple objects, the
  * underlying database will not be asked to be reloaded if an object is
@@ -305,7 +323,7 @@ GIT_EXTERN(int) git_odb_open_wstream(git_odb_stream **out, git_odb *db, git_obje
  * @param stream the stream
  * @param buffer the data to write
  * @param len the buffer's length
- * @return 0 if the write succeeded; error code otherwise
+ * @return 0 if the write succeeded, error code otherwise
  */
 GIT_EXTERN(int) git_odb_stream_write(git_odb_stream *stream, const char *buffer, size_t len);
 
@@ -320,7 +338,7 @@ GIT_EXTERN(int) git_odb_stream_write(git_odb_stream *stream, const char *buffer,
  *
  * @param out pointer to store the resulting object's id
  * @param stream the stream
- * @return 0 on success; an error code otherwise
+ * @return 0 on success, an error code otherwise
  */
 GIT_EXTERN(int) git_odb_stream_finalize_write(git_oid *out, git_odb_stream *stream);
 
@@ -328,6 +346,11 @@ GIT_EXTERN(int) git_odb_stream_finalize_write(git_oid *out, git_odb_stream *stre
  * Read from an odb stream
  *
  * Most backends don't implement streaming reads
+ *
+ * @param stream the stream
+ * @param buffer a user-allocated buffer to store the data in.
+ * @param len the buffer's length
+ * @return 0 if the read succeeded, error code otherwise
  */
 GIT_EXTERN(int) git_odb_stream_read(git_odb_stream *stream, char *buffer, size_t len);
 
@@ -362,7 +385,7 @@ GIT_EXTERN(void) git_odb_stream_free(git_odb_stream *stream);
  * @param type pointer where to store the type of the object
  * @param db object database where the stream will read from
  * @param oid oid of the object the stream will read from
- * @return 0 if the stream was created; error code otherwise
+ * @return 0 if the stream was created, error code otherwise
  */
 GIT_EXTERN(int) git_odb_open_rstream(
 	git_odb_stream **out,
@@ -388,12 +411,28 @@ GIT_EXTERN(int) git_odb_open_rstream(
  * Be aware that this is called inline with network and indexing operations,
  * so performance may be affected.
  * @param progress_payload payload for the progress callback
+ * @return 0 or an error code.
  */
 GIT_EXTERN(int) git_odb_write_pack(
 	git_odb_writepack **out,
 	git_odb *db,
 	git_indexer_progress_cb progress_cb,
 	void *progress_payload);
+
+/**
+ * Write a `multi-pack-index` file from all the `.pack` files in the ODB.
+ *
+ * If the ODB layer understands pack files, then this will create a file called
+ * `multi-pack-index` next to the `.pack` and `.idx` files, which will contain
+ * an index of all objects stored in `.pack` files. This will allow for
+ * O(log n) lookup for n objects (regardless of how many packfiles there
+ * exist).
+ *
+ * @param db object database where the `multi-pack-index` file will be written.
+ * @return 0 or an error code.
+ */
+GIT_EXTERN(int) git_odb_write_multi_pack_index(
+	git_odb *db);
 
 /**
  * Determine the object-ID (sha1 hash) of a data buffer
@@ -501,7 +540,7 @@ GIT_EXTERN(git_object_t) git_odb_object_type(git_odb_object *object);
  * @param odb database to add the backend to
  * @param backend pointer to a git_odb_backend instance
  * @param priority Value for ordering the backends queue
- * @return 0 on success; error code otherwise
+ * @return 0 on success, error code otherwise
  */
 GIT_EXTERN(int) git_odb_add_backend(git_odb *odb, git_odb_backend *backend, int priority);
 
@@ -522,7 +561,7 @@ GIT_EXTERN(int) git_odb_add_backend(git_odb *odb, git_odb_backend *backend, int 
  * @param odb database to add the backend to
  * @param backend pointer to a git_odb_backend instance
  * @param priority Value for ordering the backends queue
- * @return 0 on success; error code otherwise
+ * @return 0 on success, error code otherwise
  */
 GIT_EXTERN(int) git_odb_add_alternate(git_odb *odb, git_odb_backend *backend, int priority);
 
@@ -540,9 +579,24 @@ GIT_EXTERN(size_t) git_odb_num_backends(git_odb *odb);
  * @param out output pointer to ODB backend at pos
  * @param odb object database
  * @param pos index into object database backend list
- * @return 0 on success; GIT_ENOTFOUND if pos is invalid; other errors < 0
+ * @return 0 on success, GIT_ENOTFOUND if pos is invalid, other errors < 0
  */
 GIT_EXTERN(int) git_odb_get_backend(git_odb_backend **out, git_odb *odb, size_t pos);
+
+/**
+ * Set the git commit-graph for the ODB.
+ *
+ * After a successful call, the ownership of the cgraph parameter will be
+ * transferred to libgit2, and the caller should not free it.
+ *
+ * The commit-graph can also be unset by explicitly passing NULL as the cgraph
+ * parameter.
+ *
+ * @param odb object database
+ * @param cgraph the git commit-graph
+ * @return 0 on success; error code otherwise
+ */
+GIT_EXTERN(int) git_odb_set_commit_graph(git_odb *odb, git_commit_graph *cgraph);
 
 /** @} */
 GIT_END_DECL

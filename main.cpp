@@ -2,8 +2,8 @@
 #include "src/obj/baseRes.h"
 #include "src/obj/objectSource.h"
 #include "src/obj/objectJson.h"
-
-QString mainSrc="https://bitbucket.org/jacklee_CN/vekserver/raw/9d1749e1ded4e2b687f0c014a36f4ae335faa4dd/mainSrcUrl.json";
+//
+QString mainSrc="https://codeberg.org/jacklee_cn/vekserver/raw/branch/master/mainSrcUrl.json";
 bool getGSrcUrl(){
     QString f_config=QDir::currentPath()+"/MainSrcUrl.config";
     QFile f_file(f_config);
