@@ -4,7 +4,8 @@
 #include "src/obj/objectJson.h"
 
 //默认主服务器，MainSrcUrl.config文件不存在则使用
-QString mainSrc="https://codeberg.org/jacklee_cn/vekserver/raw/branch/master/mainSrcUrl.json";
+//QString mainSrc="https://codeberg.org/jacklee_cn/vekserver/raw/branch/master/mainSrcUrl.json";
+QString mainSrc="http:///config.vek.gfdgdxi.top/mainSrcUrl.json";
 
 bool getGSrcUrl(){
     QString f_config=QDir::currentPath()+"/MainSrcUrl.config";
