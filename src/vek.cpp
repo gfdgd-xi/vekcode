@@ -59,6 +59,12 @@ void vek::connectObject(){
     loadWinetricksServerJson();
     setAppSize();
     vekStyle();
+    // 检测 UEngine 是否存在
+    if(system("which uengine")){
+        // 不存在
+        ui->action_Run_UEngine->setDisabled(1);
+        ui->action_InstApp_UEngine->setDisabled(1);
+    }
 }
 void vek::wCurrentEngine(){
    if(ui->tabWidget->m_pBox->count()>0){

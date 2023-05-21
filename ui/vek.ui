@@ -511,6 +511,7 @@
     <addaction name="action_InstApp_UEngine"/>
     <addaction name="action_UnInst_UEngine"/>
     <addaction name="action_UEngine_deepin"/>
+    <addaction name="action_UEngine_Runner_Get"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menuWine"/>
@@ -655,6 +656,11 @@
   <action name="action_UEngine_deepin">
    <property name="text">
     <string>警告:该UEngine仅限于deepin系统其他系统未知</string>
+   </property>
+  </action>
+  <action name="action_UEngine_Runner_Get">
+   <property name="text">
+    <string>获取 UEngine 运行器以获得更好的体验</string>
    </property>
   </action>
  </widget>

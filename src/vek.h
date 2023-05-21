@@ -1,5 +1,6 @@
 ﻿#ifndef VEK_H
 #define VEK_H
+#include "ui_common.h"
 #include "vekWineOption.h"
 #include "vekAbout.h"
 #include "vekAppOption.h"

@@ -47,6 +47,10 @@ bool getGSrcUrl(){
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    // 清理缓存
+    if(QFile::exists(QCoreApplication::applicationDirPath() + "/data.json")){
+        QFile::remove(QCoreApplication::applicationDirPath() + "/data.json");
+    }
     if(!getGSrcUrl()){
         pObject::vekTip("主服务器无法连接!如果多次无法连接请检查网络\n或者如果您有自己的主服务器请修改MainSrcUrl.config文件地址为自己的服务仓库");
         return 0;
