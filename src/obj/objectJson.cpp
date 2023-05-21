@@ -1,6 +1,7 @@
 ﻿#include "objectJson.h"
 #include <iomanip>
 #include <mutex>
+#include <QString>
 
 std::mutex josn_mutex;
 objectJson::objectJson()
